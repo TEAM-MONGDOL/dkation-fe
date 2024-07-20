@@ -40,6 +40,10 @@ const config: Config = {
         h2: '32px',
         h3: '24px',
       },
+      transitionProperty: {
+        height: 'height',
+        maxHeight: 'max-height',
+      },
     },
   },
   plugins: [
