@@ -15,25 +15,26 @@ interface ButtonProps {
  * @param children - 버튼에 표시될 내용
  */
 
+const getButtonType = (
+  buttonType: 'yellow' | 'dark' | 'red' | undefined,
+): string => {
+  switch (buttonType) {
+    case 'yellow':
+      return 'bg-primary text-sub-400';
+    case 'dark':
+      return 'bg-cus-300 text-white';
+    case 'red':
+      return 'bg-negative text-white';
+    default:
+      return '';
+  }
+};
+
 const ButtonAtom = ({ flexGrow, width, buttonType, children }: ButtonProps) => {
   const baseClasses =
     'inline-flex items-center justify-center text-3 h-[50px] font-semibold rounded-[5px]';
   const flexGrowClasses = flexGrow ? 'flex-grow' : '';
-
-  let buttonTypeClasses = '';
-  switch (buttonType) {
-    case 'yellow':
-      buttonTypeClasses = 'bg-primary text-sub-400';
-      break;
-    case 'dark':
-      buttonTypeClasses = 'bg-cus-300 text-white';
-      break;
-    case 'red':
-      buttonTypeClasses = 'bg-negative text-white';
-      break;
-    default:
-      buttonTypeClasses = '';
-  }
+  const buttonTypeClasses = getButtonType(buttonType);
 
   return (
     <button
