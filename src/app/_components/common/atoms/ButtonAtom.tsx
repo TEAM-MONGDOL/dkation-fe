@@ -4,6 +4,7 @@ interface ButtonProps {
   flexGrow?: boolean;
   width?: string;
   buttonType?: 'yellow' | 'dark' | 'red';
+  onClick?: () => void;
   children: ReactNode;
 }
 
@@ -13,6 +14,7 @@ interface ButtonProps {
  * @param width - 버튼의 width를 px 단위로 지정하는 string 값 (width="48")
  * @param buttonType - 버튼의 배경색과 글자색 스타일 지정 ('yellow', 'dark', 'red')
  * @param children - 버튼에 표시될 내용
+ * @param onClick - 버튼 클릭 시 동작
  */
 
 const getButtonType = (
@@ -30,7 +32,13 @@ const getButtonType = (
   }
 };
 
-const ButtonAtom = ({ flexGrow, width, buttonType, children }: ButtonProps) => {
+const ButtonAtom = ({
+  flexGrow,
+  width,
+  buttonType,
+  children,
+  onClick,
+}: ButtonProps) => {
   const baseClasses =
     'inline-flex items-center justify-center text-3 h-[50px] font-semibold rounded-[5px]';
   const flexGrowClasses = flexGrow ? 'flex-grow' : '';
@@ -39,6 +47,7 @@ const ButtonAtom = ({ flexGrow, width, buttonType, children }: ButtonProps) => {
   return (
     <button
       type="button"
+      onClick={onClick}
       className={`${baseClasses} ${flexGrowClasses} ${buttonTypeClasses}`}
       style={width ? { width: `${width}px` } : undefined}
     >
