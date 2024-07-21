@@ -15,7 +15,7 @@ const Pagination = () => {
 
   return (
     <div className="flex">
-      <div className="rounded-l-[8px] w-12 h-12 border border-stroke-100 flex items-center justify-center">
+      <div className="rounded-l-lg w-12 h-12 border border-stroke-100 flex items-center justify-center">
         <Image src={LeftArrowEmptyIcon} alt="LeftArrowEmptyIcon" />
       </div>
       <div className="flex">
