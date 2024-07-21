@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { ClickedCheckBox, UnClickedCheckBox } from '@/_assets/icons';
 
-const CheckboxAtom: React.FC = () => {
+const CheckboxAtom = () => {
   const [isChecked, setIsChecked] = useState<boolean>(false);
 
   const handleClick = () => {
