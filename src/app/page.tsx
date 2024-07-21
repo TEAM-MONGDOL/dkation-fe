@@ -1,11 +1,5 @@
-import Pagination from '@/_components/common/modules/Pagination';
-
 const Home = () => {
-  return (
-    <div>
-      <Pagination />
-    </div>
-  );
+  return <div>main page</div>;
 };
 
 export default Home;
