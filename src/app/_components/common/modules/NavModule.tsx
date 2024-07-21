@@ -10,18 +10,9 @@ interface TitleProps {
   icon: StaticImageData;
   title: string;
   content?: string;
-  content1: string;
-  content2?: string;
-  content3?: string;
+  contents: string[];
 }
-const NavModule = ({
-  icon,
-  title,
-  content,
-  content1,
-  content2,
-  content3,
-}: TitleProps) => {
+const NavModule = ({ icon, title, content, contents }: TitleProps) => {
   const [isVisible, setIsVisible] = useState(true);
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
@@ -36,9 +27,10 @@ const NavModule = ({
       />
       {isVisible && (
         <>
-          <NavSub content={content1} />
-          {content2 && <NavSub content={content2} />}
-          {content3 && <NavSub content={content3} />}
+          {contents.map((contentItem, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <NavSub key={index} content={contentItem} />
+          ))}
           {content && <NavPlus content={content} />}
         </>
       )}

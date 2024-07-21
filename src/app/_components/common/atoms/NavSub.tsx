@@ -1,5 +1,3 @@
-import { StaticImageData } from 'next/image';
-
 interface SubTitleProps {
   content: string | undefined;
 }

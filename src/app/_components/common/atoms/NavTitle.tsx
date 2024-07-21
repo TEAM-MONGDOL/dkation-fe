@@ -12,7 +12,7 @@ const NavTitle = ({ icon, title, onIconClick, isVisible }: TitleProps) => {
   return (
     <div className="py-2 flex justify-between">
       <div className="flex">
-        <Image className="mr-3" src={icon} alt="icon" />
+        <Image className="mr-3" src={icon} alt={title} />
         <p className="text-3 font-semibold">{title}</p>
       </div>
       <Image
