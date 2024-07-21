@@ -16,7 +16,7 @@ const NavTitle = ({ icon, title, onIconClick, isVisible }: TitleProps) => {
         <p className="text-3 font-semibold">{title}</p>
       </div>
       <Image
-        className={`cursor-pointer ${isVisible ? '' : 'rotate-180'}`}
+        className={`cursor-pointer ${isVisible ? 'rotate-180' : ''}`}
         src={DownArrowIcon}
         alt="downarrowicon"
         onClick={onIconClick}
