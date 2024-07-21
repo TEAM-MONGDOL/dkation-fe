@@ -8,14 +8,10 @@ interface SidebarAtomProps {
   to: string;
 }
 
-const SidebarAtom: React.FC<SidebarAtomProps> = ({ title, to }) => {
+const SidebarAtom = ({ title, to }: SidebarAtomProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const isActive = pathname === to; // 현재 경로와 일치하는지 확인
-
-  const handleClick = () => {
-    router.push(to);
-  };
 
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
