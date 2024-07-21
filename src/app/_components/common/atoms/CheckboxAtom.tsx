@@ -9,15 +9,12 @@ const CheckboxAtom: React.FC = () => {
 
   const handleClick = () => {
     setIsChecked((prevChecked) => {
-      const newCheckedState = !prevChecked;
-      console.log(newCheckedState ? 'Checked' : 'Unchecked!');
-      return newCheckedState;
+      return !prevChecked;
     });
   };
 
   return (
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
-    <div onClick={handleClick} style={{ display: 'inline-block' }}>
+    <div onClick={handleClick} className="inline-block" role="presentation">
       <Image
         src={isChecked ? ClickedCheckBox : UnClickedCheckBox}
         alt={isChecked ? 'Checked' : 'Unchecked'}
