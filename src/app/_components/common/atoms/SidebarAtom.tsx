@@ -21,7 +21,7 @@ const SidebarAtom: React.FC<SidebarAtomProps> = ({ title, to }) => {
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
     <div
       onClick={() => router.push(to)}
-      className={`w-full py-3 pl-4 flex-grow cursor-pointer text-cus-300 text-3 ${isActive ? 'font-bold' : ''}`}
+      className={`w-full py-3.5 pl-4 flex-grow cursor-pointer text-cus-300 text-3 ${isActive ? 'font-bold' : ''}`}
     >
       {title}
     </div>
