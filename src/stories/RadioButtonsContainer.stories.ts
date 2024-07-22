@@ -2,7 +2,7 @@ import RadioButtonsContainer from '@/_components/common/containers/RadioButtonsC
 import { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof RadioButtonsContainer> = {
-  title: 'RadioButtonsContainer',
+  title: 'Common/RadioButtonsContainer',
   component: RadioButtonsContainer,
   parameters: {
     layout: 'centered',

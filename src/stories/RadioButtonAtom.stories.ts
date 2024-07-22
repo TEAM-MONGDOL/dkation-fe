@@ -2,7 +2,7 @@ import RadioButtonAtom from '@/_components/common/atoms/RadioButtonAtom';
 import { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof RadioButtonAtom> = {
-  title: 'Example/RadioButtonAtom',
+  title: 'Common/RadioButtonAtom',
   component: RadioButtonAtom,
   parameters: {
     layout: 'centered',
