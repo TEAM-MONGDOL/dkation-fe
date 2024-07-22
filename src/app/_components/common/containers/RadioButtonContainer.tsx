@@ -5,7 +5,7 @@ import RadioButtonModule from '../modules/RadioButtonModule';
 import AccordionHeaderModule from '../modules/AccordionHeaderModule';
 import AccordionBodyModule from '../modules/AccordionBodyModule';
 
-const RadioButtonsContainer = ({
+const RadioButtonContainer = ({
   title,
   options,
   selectedOption,
@@ -39,4 +39,4 @@ const RadioButtonsContainer = ({
   );
 };
 
-export default RadioButtonsContainer;
+export default RadioButtonContainer;
