@@ -1,5 +1,3 @@
-// src/app/_components/common/atoms/container/SidebarContainer.tsx
-
 import React from 'react';
 import SidebarAtom from '@/_components/common/atoms/SidebarAtom';
 
