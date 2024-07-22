@@ -6,7 +6,7 @@ import { ClickedRadioButton, UnClickedRadioButton } from '@/_assets/icons';
 
 const RadioButtonAtom = ({ isChecked }: { isChecked: boolean }) => {
   return (
-    <div style={{ display: 'inline-block' }}>
+    <div className="inline-block" role="presentation">
       <Image
         src={isChecked ? ClickedRadioButton : UnClickedRadioButton}
         alt={isChecked ? 'Checked' : 'Unchecked'}
