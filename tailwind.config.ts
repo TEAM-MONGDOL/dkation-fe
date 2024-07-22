@@ -23,19 +23,19 @@ const config: Config = {
         'sub-100': '#D9D9D9',
         'sub-200': '#9A9998',
         'sub-300': '#666666',
-        'sub-400': '#000000',
+        'sub-400': '#111111',
         'cus-100': '#F4F6FA',
         'cus-200': '#374553',
         'cus-300': '#323232',
         'stroke-100': '#DBDBDB',
       },
       fontSize: {
-        '0': '10px',
-        '1': '12px',
-        '2': '14px',
+        '1': '20px',
+        '2': '18px',
         '3': '16px',
-        '4': '18px',
-        '5': '20px',
+        '4': '14px',
+        '5': '12px',
+        '6': '10px',
         h1: '42px',
         h2: '32px',
         h3: '24px',
@@ -48,7 +48,7 @@ const config: Config = {
   },
   plugins: [
     // eslint-disable-next-line global-require,import/no-extraneous-dependencies
-    require('@tailwindcss/line-clamp'),
+    require('tailwind-scrollbar-hide'),
   ],
 };
 export default config;
