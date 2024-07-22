@@ -12,12 +12,12 @@ const RadioButtonModule = ({
 }) => {
   return (
     <button
-      className="flex items-center justify-start w-full gap-x-2.5 bg-white border-0"
+      className="flex items-center justify-start w-full gap-x-2.5 bg-white"
       onClick={onClick}
     >
       <RadioButtonAtom isChecked={isClicked} />
       <div
-        className={`text-2 ${isClicked ? 'font-medium text-sub-300' : 'font-normal text-sub-200'}`}
+        className={`text-2 ${isClicked ? 'font-medium text-sub-300' : 'text-sub-200'}`}
       >
         {option}
       </div>
