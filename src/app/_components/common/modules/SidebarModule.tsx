@@ -7,7 +7,7 @@ interface SidebarModuleProps {
 
 const SidebarModule = ({ items }: SidebarModuleProps) => {
   return (
-    <div className="flex flex-col w-full bg-white border border-stroke-100 rounded-[5px]">
+    <div className="flex flex-col w-full bg-white border border-stroke-100 rounded-regular">
       {items.map((item, index) => (
         <div
           key={item.id}
