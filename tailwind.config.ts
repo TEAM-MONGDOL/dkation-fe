@@ -40,6 +40,9 @@ const config: Config = {
         h2: '32px',
         h3: '24px',
       },
+      borderRadius: {
+        regular: '5px',
+      },
     },
   },
   plugins: [
