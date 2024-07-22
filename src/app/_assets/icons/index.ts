@@ -1,5 +1,6 @@
 export { default as ClickedRadioButton } from './clickedRadioButton.svg';
 export { default as UnClickedRadioButton } from './unClickedRadioButton.svg';
+export { default as KeyboardArrowDown } from './keyboardArrowDown.svg';
 export { default as ClickedCheckBox } from './clickedCheckBox.svg';
 export { default as UnClickedCheckBox } from './unClickedCheckBox.svg';
 export { default as InfoIcon } from './info.svg';

@@ -4,17 +4,9 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { ClickedRadioButton, UnClickedRadioButton } from '@/_assets/icons';
 
-const RadioButtonAtom = () => {
-  const [isChecked, setIsChecked] = useState<boolean>(false);
-
-  const handleClick = () => {
-    setIsChecked((prevChecked) => {
-      return !prevChecked;
-    });
-  };
-
+const RadioButtonAtom = ({ isChecked }: { isChecked: boolean }) => {
   return (
-    <div onClick={handleClick} className="inline-block" role="presentation">
+    <div className="inline-block" role="presentation">
       <Image
         src={isChecked ? ClickedRadioButton : UnClickedRadioButton}
         alt={isChecked ? 'Checked' : 'Unchecked'}
