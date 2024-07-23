@@ -6,6 +6,7 @@ import DatePickersModule from '@/_components/common/modules/DatePickersModule';
 import DatePickerTagListModule from '@/_components/common/modules/DatePickerTagListModule';
 
 interface DatePickerContainerProps {
+  title?: string;
   selectedTag: DatePickerTagType | null;
   setSelectedTag: (selected: DatePickerTagType | null) => void;
   startDate: Date | null;
@@ -15,6 +16,7 @@ interface DatePickerContainerProps {
 }
 
 const DatePickerContainer = ({
+  title = '날짜',
   selectedTag,
   setSelectedTag,
   startDate,
@@ -62,7 +64,7 @@ const DatePickerContainer = ({
   return (
     <div className="flex w-full flex-col px-3 py-2.5">
       <AccordionHeaderModule
-        title="날짜"
+        title={title}
         isExpanded={isExpanded}
         setIsExpanded={setIsExpanded}
       />
