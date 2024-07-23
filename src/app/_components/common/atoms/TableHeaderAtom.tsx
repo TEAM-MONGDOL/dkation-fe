@@ -1,5 +1,3 @@
-// src/app/_components/common/atoms/TableHeaderAtom.tsx
-
 import React from 'react';
 
 interface TableHeadarAtomProps {
@@ -9,7 +7,7 @@ interface TableHeadarAtomProps {
 }
 
 const TableHeaderAtom = ({ title, flexGrow, width }: TableHeadarAtomProps) => {
-  const baseClasses = 'bg-white text-center text-2 text-[#5C5C5C]';
+  const baseClasses = 'bg-white text-center text-2 text-sub-300';
   const flexGrowClass = flexGrow ? 'flex-grow' : '';
 
   return (
