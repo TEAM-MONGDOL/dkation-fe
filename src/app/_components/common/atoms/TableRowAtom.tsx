@@ -8,11 +8,10 @@ interface TableRowAtomProps {
 
 const TableRowAtom = ({ flexGrow, width, content }: TableRowAtomProps) => {
   const baseClasses = 'text-center text-3';
-  const flexGrowClass = flexGrow ? 'flex-grow' : '';
 
   return (
     <div
-      className={`${baseClasses} ${flexGrowClass}`}
+      className={`${baseClasses} ${flexGrow ? 'flex-grow' : ''}`} // 삼항 연산자를 사용하여 className을 간결하게
       style={width ? { width: `${width}px` } : undefined}
     >
       {content}
