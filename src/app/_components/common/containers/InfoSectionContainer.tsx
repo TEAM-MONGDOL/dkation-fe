@@ -6,13 +6,11 @@ interface SubTitleProps {
   image?: StaticImageData;
   subtitles: string[];
   contents: string[];
-  place?: boolean;
   row?: boolean;
 }
 const InfoSectionContainer = ({
   subtitles,
   contents,
-  place,
   image,
   title,
   row,
@@ -28,11 +26,7 @@ const InfoSectionContainer = ({
             className={`${row ? 'w-[300px]' : 'w-full'}`}
           />
         )}
-        <InfoSectionModule
-          subtitles={subtitles}
-          contents={contents}
-          place={place}
-        />
+        <InfoSectionModule subtitles={subtitles} contents={contents} />
       </div>
     </div>
   );
