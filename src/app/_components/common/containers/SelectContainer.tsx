@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import SelectModule from '@/_components/common/modules/SelectModule';
 import CheckboxAtom from '../atoms/CheckboxAtom';
 
@@ -37,7 +36,7 @@ const SelectContainer = ({
   };
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-[225px] h-[200px]">
       <div className="border border-stroke-100 px-5 py-2.5 rounded-t-regular">
         <button
           className="flex items-center justify-start w-full gap-x-10 bg-white text-2 text-sub-300"
@@ -47,7 +46,7 @@ const SelectContainer = ({
           <div>{title}</div>
         </button>
       </div>
-      <div className="border border-stroke-100 border-t-0 rounded-b-regular px-5 py-2.5 flex flex-col gap-2">
+      <div className="overflow-y-auto border border-stroke-100 border-t-0 rounded-b-regular px-5 py-2.5 flex flex-col gap-2">
         {options.map((option) => (
           <SelectModule
             key={option}
