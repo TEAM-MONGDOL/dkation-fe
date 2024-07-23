@@ -4,7 +4,7 @@ export type DatePickerTagType =
   | '1_MONTH'
   | '3_MONTH'
   | '6_MONTH'
-  | 'YEAR';
+  | '1_YEAR';
 
 export const datePickerTagList: { [key in DatePickerTagType]: string } = {
   ALL: '전체',
@@ -12,5 +12,5 @@ export const datePickerTagList: { [key in DatePickerTagType]: string } = {
   '1_MONTH': '1개월',
   '3_MONTH': '3개월',
   '6_MONTH': '6개월',
-  YEAR: '1년',
+  '1_YEAR': '1년',
 };
