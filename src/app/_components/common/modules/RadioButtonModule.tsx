@@ -1,5 +1,4 @@
-import React from 'react';
-import RadioButtonAtom from '../atoms/RadioButtonAtom';
+import RadioButtonAtom from '@/_components/common/atoms/RadioButtonAtom';
 
 const RadioButtonModule = ({
   option,

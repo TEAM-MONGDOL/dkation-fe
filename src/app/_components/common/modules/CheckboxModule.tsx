@@ -1,4 +1,4 @@
-import CheckboxAtom from '../atoms/CheckboxAtom';
+import CheckboxAtom from '@/_components/common/atoms/CheckboxAtom';
 
 interface CheckboxModuleProps {
   option: string;
