@@ -8,7 +8,7 @@ interface TitleProps {
   isVisible: boolean;
 }
 
-const NavTitle = ({ icon, title, onIconClick, isVisible }: TitleProps) => {
+const NavTitleAtom = ({ icon, title, onIconClick, isVisible }: TitleProps) => {
   return (
     <div className="py-2 flex justify-between">
       <div className="flex">
@@ -25,4 +25,4 @@ const NavTitle = ({ icon, title, onIconClick, isVisible }: TitleProps) => {
   );
 };
 
-export default NavTitle;
+export default NavTitleAtom;
