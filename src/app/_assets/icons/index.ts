@@ -21,3 +21,5 @@ export { default as Delete } from './delete.svg';
 export { default as Download } from './download.svg';
 export { default as AddFile } from './addfileButton.svg';
 export { default as SearchingGlasses } from './searchingGlasses.svg';
+export { default as FilterListIcon } from './filterList.svg';
+export { default as RefreshIcon } from './refresh.svg';
