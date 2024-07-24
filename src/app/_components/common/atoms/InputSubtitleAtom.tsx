@@ -7,9 +7,12 @@ const InputSubtitleAtom = ({ subtitle, status, message }: SubtitleProps) => {
   return (
     <div className="flex justify-between items-center">
       <p className="text-3 font-semibold">{subtitle}</p>
-      {status === 'error' && <p className="text-negative text-5">{message}</p>}
-      {status === 'correct' && (
-        <p className="text-positive text-5">{message}</p>
+      {(status === 'error' || status === 'correct') && (
+        <p
+          className={`text-5 ${status === 'error' ? 'text-negative' : 'text-positive'}`}
+        >
+          {message}
+        </p>
       )}
     </div>
   );
