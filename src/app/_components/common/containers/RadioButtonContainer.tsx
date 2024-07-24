@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import RadioButtonModule from '@/_components/common/modules/RadioButtonModule';
 import AccordionHeaderModule from '@/_components/common/modules/AccordionHeaderModule';

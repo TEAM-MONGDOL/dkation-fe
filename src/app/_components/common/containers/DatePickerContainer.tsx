@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import { datePickerTagList, DatePickerTagType } from '@/_types/commonType';
 import AccordionHeaderModule from '@/_components/common/modules/AccordionHeaderModule';
@@ -83,6 +85,7 @@ const DatePickerContainer = ({
             endDate={endDate}
             setEndDate={setEndDate}
           />
+          <p className="text-5 text-sub-200">* 최대 1년 조회 가능</p>
         </div>
       </AccordionBodyModule>
     </div>

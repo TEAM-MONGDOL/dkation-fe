@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import AccordionHeaderModule from '@/_components/common/modules/AccordionHeaderModule';
 import CheckboxModule from '@/_components/common/modules/CheckboxModule';
