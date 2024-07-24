@@ -12,7 +12,7 @@ const NavBarContainer = () => {
       <NavModule
         icon={ProfileIcon}
         title="회원 관리"
-        contents={['회원 목록']}
+        contents={['회원 목록', '페널티 내역']}
       />
       <hr className="opacity-50" />
       <NavModule
