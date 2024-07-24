@@ -6,13 +6,13 @@ import {
   WorkationIcon,
 } from '@/_assets/icons';
 
-const NavBar = () => {
+const NavBarContainer = () => {
   return (
     <div className="pt-1 text-white w-[203px] bg-sub-400 h-screen">
       <NavModule
         icon={ProfileIcon}
         title="회원 관리"
-        contents={['회원 목록']}
+        contents={['회원 목록', '페널티 내역']}
       />
       <hr className="opacity-50" />
       <NavModule
@@ -38,4 +38,4 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+export default NavBarContainer;
