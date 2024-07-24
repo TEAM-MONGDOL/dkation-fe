@@ -17,3 +17,7 @@ export { default as LeftArrowIcon } from './leftarrow.svg';
 export { default as XCircleIcon } from './xcircle.svg';
 export { default as NavigateNext } from './navigateNext.svg';
 export { default as NavigateBefore } from './navigateBefore.svg';
+export { default as Delete } from './delete.svg';
+export { default as Download } from './download.svg';
+export { default as AddFile } from './addfileButton.svg';
+export { default as SearchingGlasses } from './searchingGlasses.svg';

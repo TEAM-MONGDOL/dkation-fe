@@ -1,6 +1,3 @@
-'use client';
-
-import React, { useState } from 'react';
 import Image from 'next/image';
 import { ClickedCheckBox, UnClickedCheckBox } from '@/_assets/icons';
 
@@ -18,5 +15,4 @@ const CheckboxAtom = ({ isChecked }: CheckboxAtomProps) => {
     </div>
   );
 };
-
 export default CheckboxAtom;

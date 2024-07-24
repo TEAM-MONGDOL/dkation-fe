@@ -1,11 +1,11 @@
 'use client';
 
-import PaginationButton from '@/_components/common/atoms/PaginationButton';
+import PaginationButtonAtom from '@/_components/common/atoms/PaginationButtonAtom';
 import { useState } from 'react';
 import Image from 'next/image';
 import { LeftArrowEmptyIcon, RightArrowEmptyIcon } from '@/_assets/icons';
 
-const Pagination = () => {
+const PaginationModule = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 5; // 리스트 개수 받아와서 페이지수 계산
 
@@ -20,7 +20,7 @@ const Pagination = () => {
       </div>
       <div className="flex">
         {Array.from({ length: totalPages }, (_, index) => (
-          <PaginationButton
+          <PaginationButtonAtom
             key={index}
             onPage={index === currentPage - 1}
             page={index + 1}
@@ -35,4 +35,4 @@ const Pagination = () => {
   );
 };
 
-export default Pagination;
+export default PaginationModule;
