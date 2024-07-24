@@ -10,7 +10,7 @@ const PaginationButtonAtom = ({
 }: ButtonProps) => {
   return (
     <button
-      className={`text-2 border border-stroke-100 w-12 h-12 flex items-center justify-center ${onPage ? 'bg-cus-200 text-white' : 'text-cus-200'}`}
+      className={`text-4 border border-stroke-100 w-12 h-12 flex items-center justify-center ${onPage ? 'bg-cus-200 text-white' : 'text-cus-200'}`}
       onClick={onClick}
     >
       {page}

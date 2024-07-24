@@ -12,7 +12,7 @@ const SearchingBoxModule = ({ filter, placeholder }: BoxProps) => {
     <div className="flex">
       <div className="relative">
         <input
-          className={`pr-10 placeholder-sub-100 border rounded-regular text-4 h-11 outline-0 pl-2 ${filter ? 'w-[312px]' : 'w-[528px]'}`}
+          className={`pr-10 placeholder-sub-100 border rounded-regular text-3 h-11 outline-0 pl-2 ${filter ? 'w-[312px]' : 'w-[528px]'}`}
           placeholder={placeholder}
         />
         <Image
