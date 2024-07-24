@@ -1,7 +1,9 @@
+'use client';
+
 import { useState } from 'react';
-import AccordionHeaderModule from '../modules/AccordionHeaderModule';
-import CheckboxModule from '../modules/CheckboxModule';
-import AccordionBodyModule from '../modules/AccordionBodyModule';
+import AccordionHeaderModule from '@/_components/common/modules/AccordionHeaderModule';
+import CheckboxModule from '@/_components/common/modules/CheckboxModule';
+import AccordionBodyModule from '@/_components/common/modules/AccordionBodyModule';
 
 interface CheckboxContainerProps {
   title: string;

@@ -1,9 +1,9 @@
-import { KeyboardArrowDown } from '@/_assets/icons';
-import Image from 'next/image';
+'use client';
+
 import { useState } from 'react';
-import RadioButtonModule from '../modules/RadioButtonModule';
-import AccordionHeaderModule from '../modules/AccordionHeaderModule';
-import AccordionBodyModule from '../modules/AccordionBodyModule';
+import RadioButtonModule from '@/_components/common/modules/RadioButtonModule';
+import AccordionHeaderModule from '@/_components/common/modules/AccordionHeaderModule';
+import AccordionBodyModule from '@/_components/common/modules/AccordionBodyModule';
 
 const RadioButtonContainer = ({
   title,

@@ -12,8 +12,10 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.51.5",
+    "dayjs": "^1.11.12",
     "next": "14.2.5",
     "react": "^18",
+    "react-datepicker": "^7.3.0",
     "react-dom": "^18",
     "tailwind-scrollbar-hide": "^1.1.7",
     "zod": "^3.23.8"
