@@ -3,7 +3,6 @@ import TableHeaderAtom from '@/_components/common/atoms/TableHeaderAtom'; // Adj
 
 interface TableHeaderModuleProps {
   headers: Array<{
-    id: string;
     title: string;
     flexGrow?: boolean;
     width?: string;
@@ -13,9 +12,9 @@ interface TableHeaderModuleProps {
 const TableHeaderModule = ({ headers }: TableHeaderModuleProps) => {
   return (
     <div className="flex">
-      {headers.map((header, index) => (
+      {headers.map((header) => (
         <TableHeaderAtom
-          key={header.id}
+          key={header.title}
           title={header.title}
           flexGrow={header.flexGrow}
           width={header.width}
