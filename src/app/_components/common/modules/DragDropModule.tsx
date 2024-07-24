@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import AddFIleCommentAtom from '@/_components/common/atoms/AddfileComment';
+import AddFIleCommentAtom from '@/_components/common/atoms/AddfileCommentAtom';
 import AddFIleButtonAtom from '@/_components/common/atoms/AddfileButtonAtom';
 import { DragDropContent } from '@/_constants/common';
 

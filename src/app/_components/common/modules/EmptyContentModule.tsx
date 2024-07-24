@@ -2,7 +2,7 @@ import { XCircleIcon } from '@/_assets/icons';
 import { EmptyContainer } from '@/_constants/common';
 import Image from 'next/image';
 
-const EmptyContent = () => {
+const EmptyContentModule = () => {
   return (
     <div className="flex flex-col items-center">
       <Image src={XCircleIcon} alt="xcircleicon" />
@@ -13,4 +13,4 @@ const EmptyContent = () => {
   );
 };
 
-export default EmptyContent;
+export default EmptyContentModule;

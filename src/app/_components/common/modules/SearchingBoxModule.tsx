@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { SearchingGlasses } from '@/_assets/icons';
-import FilteringButton from '@/_components/common/atoms/FilteringButton';
+import FilteringButtonAtom from '@/_components/common/atoms/FilteringButtonAtom';
 
 interface BoxProps {
   filter?: boolean;
@@ -21,7 +21,7 @@ const SearchingBoxModule = ({ filter, placeholder }: BoxProps) => {
           alt="SearchingGlasses"
         />
       </div>
-      <div className="ml-5">{filter && <FilteringButton />}</div>
+      <div className="ml-5">{filter && <FilteringButtonAtom />}</div>
     </div>
   );
 };
