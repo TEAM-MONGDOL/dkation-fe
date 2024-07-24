@@ -4,13 +4,11 @@ import InfoSectionModule from '@/_components/common/modules/InfoSectionModule';
 interface InfoSectionContainerProps {
   title?: string;
   image?: StaticImageData;
-  subtitles: string[];
-  contents: string[];
+  data: { subtitle: string; content: string }[];
   row?: boolean;
 }
 const InfoSectionContainer = ({
-  subtitles,
-  contents,
+  data,
   image,
   title,
   row,
@@ -26,7 +24,7 @@ const InfoSectionContainer = ({
             className={`${row ? 'w-[300px]' : 'w-full'}`}
           />
         )}
-        <InfoSectionModule subtitles={subtitles} contents={contents} />
+        <InfoSectionModule data={data} />
       </div>
     </div>
   );

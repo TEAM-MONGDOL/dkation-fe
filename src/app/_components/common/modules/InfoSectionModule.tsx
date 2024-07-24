@@ -1,16 +1,13 @@
-import Image from 'next/image';
 import InfoContentAtom from '@/_components/common/atoms/InfoContentAtom';
 
-interface SubTitleProps {
-  subtitles: string[];
-  contents: string[];
+interface InfoSectionModuleProps {
+  data: { subtitle: string; content: string }[];
 }
-const InfoSectionModule = ({ subtitles, contents }: SubTitleProps) => {
+const InfoSectionModule = ({ data }: InfoSectionModuleProps) => {
   return (
     <div className="flex flex-col gap-5">
-      {subtitles.map((subtitle, index) => (
-        // eslint-disable-next-line react/jsx-key
-        <InfoContentAtom subtitle={subtitle} content={contents[index]} />
+      {data.map((item, index) => (
+        <InfoContentAtom key={`data-${item}`} data={item} />
       ))}
     </div>
   );

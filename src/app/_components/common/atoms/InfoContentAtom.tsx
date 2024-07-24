@@ -1,9 +1,10 @@
 interface InfoContentAtomProps {
-  subtitle: string;
-  content: string;
+  data: { subtitle: string; content: string };
 }
 
-const InfoContentAtom = ({ subtitle, content }: InfoContentAtomProps) => {
+const InfoContentAtom = ({
+  data: { subtitle, content },
+}: InfoContentAtomProps) => {
   return (
     <div className="flex gap-1">
       <p className="w-24 flex-shrink-0 text-cus-300 text-4 font-bold">
