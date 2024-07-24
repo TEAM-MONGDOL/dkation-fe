@@ -14,7 +14,7 @@ const meta = {
     setIsExpanded: { action: 'setIsExpanded' },
   },
   args: {
-    title: 'Accordion Header Module',
+    title: 'Accordion HeaderModule Module',
     isExpanded: false,
   },
 } satisfies Meta<typeof AccordionHeaderModule>;
@@ -24,7 +24,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    title: 'Accordion Header Module',
+    title: 'Accordion HeaderModule Module',
     isExpanded: false,
     setIsExpanded(prev) {
       return !prev;

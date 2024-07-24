@@ -1,9 +1,9 @@
 'use client';
 
 import { useRef, useState } from 'react';
-// import { DragDropContent } from '@/_constants/common';
-// import AddFIleCommentAtom from '@/_components/common/atoms/AddfileComment';
-// import AddFIleButtonAtom from '@/_components/common/atoms/AddfileButtonAtom';
+import AddFIleCommentAtom from '@/_components/common/atoms/AddfileCommentAtom';
+import AddFIleButtonAtom from '@/_components/common/atoms/AddfileButtonAtom';
+import { DragDropContent } from '@/_constants/common';
 
 interface DragDropModuleProps {
   onFileAdd: (files: File[]) => void;
@@ -71,6 +71,12 @@ const DragDropModule = ({ onFileAdd }: DragDropModuleProps) => {
           ref={fileInputRef}
           onChange={handleFileSelect}
           multiple
+        />
+
+        <AddFIleButtonAtom onClick={handleButtonClick} />
+        <AddFIleCommentAtom
+          comment={DragDropContent.COMMENT}
+          subComment={DragDropContent.SUBCOMMENT}
         />
       </label>
     </div>

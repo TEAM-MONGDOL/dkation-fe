@@ -5,7 +5,7 @@ interface TypeProps {
   type?: 'LEFT' | 'RIGHT';
   title: string;
 }
-const TitleBar = ({ type, title }: TypeProps) => {
+const TitleBarModule = ({ type, title }: TypeProps) => {
   return (
     <div className="flex gap-4">
       {type === 'LEFT' && <Image src={LeftArrowIcon} alt="leftarrowicon" />}
@@ -15,4 +15,4 @@ const TitleBar = ({ type, title }: TypeProps) => {
   );
 };
 
-export default TitleBar;
+export default TitleBarModule;
