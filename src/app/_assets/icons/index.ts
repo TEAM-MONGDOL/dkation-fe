@@ -15,5 +15,7 @@ export { default as FilterIcon } from './filter.svg';
 export { default as RightArrowIcon } from './rightarrow.svg';
 export { default as LeftArrowIcon } from './leftarrow.svg';
 export { default as XCircleIcon } from './xcircle.svg';
+export { default as Delete } from './delete.svg';
+export { default as Download } from './download.svg';
 export { default as AddFile } from './addfileButton.svg';
 export { default as SearchingGlasses } from './searchingGlasses.svg';

@@ -72,6 +72,7 @@ const DragDropModule = ({ onFileAdd }: DragDropModuleProps) => {
           onChange={handleFileSelect}
           multiple
         />
+
         <AddFIleButtonAtom onClick={handleButtonClick} />
         <AddFIleCommentAtom
           comment={DragDropContent.COMMENT}
