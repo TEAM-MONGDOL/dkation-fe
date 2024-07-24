@@ -1,7 +1,7 @@
 import Image, { StaticImageData } from 'next/image';
 import InfoSectionModule from '@/_components/common/modules/InfoSectionModule';
 
-interface SubTitleProps {
+interface InfoSectionContainerProps {
   title?: string;
   image?: StaticImageData;
   subtitles: string[];
@@ -14,7 +14,7 @@ const InfoSectionContainer = ({
   image,
   title,
   row,
-}: SubTitleProps) => {
+}: InfoSectionContainerProps) => {
   return (
     <div className="rounded-regular py-5 px-4 w-full bg-cus-100 border border-stroke-100">
       {title && <p className="text-1 font-bold mb-7">{title}</p>}

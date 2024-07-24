@@ -1,9 +1,9 @@
-interface SubTitleProps {
+interface InfoContentAtomProps {
   subtitle: string;
   content: string;
 }
 
-const InfoContentAtom = ({ subtitle, content }: SubTitleProps) => {
+const InfoContentAtom = ({ subtitle, content }: InfoContentAtomProps) => {
   return (
     <div className="flex gap-1">
       <p className="w-24 text-cus-300 text-4 font-bold">{subtitle}</p>
