@@ -6,11 +6,13 @@ interface InputProps {
   placeholder?: string;
   status?: 'error' | 'correct' | 'readonly' | 'disabled';
   value?: string;
+  textCount?: number;
 }
 const InputAreaAtom = ({
   placeholder,
   status,
   value: initialValue = '',
+  textCount,
 }: InputProps) => {
   const [value, setValue] = useState(initialValue);
 
@@ -30,7 +32,7 @@ const InputAreaAtom = ({
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value.length <= 20) {
+    if (textCount !== undefined && e.target.value.length <= textCount) {
       setValue(e.target.value);
     }
   };
@@ -44,9 +46,9 @@ const InputAreaAtom = ({
         value={value || ''}
         onChange={handleChange}
       />
-      {(status == null || status === 'error' || status === 'correct') && (
+      {textCount && (
         <div className="absolute bottom-3.5 right-3.5 text-4 text-sub-200">
-          {value.length}/20
+          {value.length}/{textCount}
         </div>
       )}
     </div>

@@ -7,6 +7,7 @@ interface InputProps {
   value?: string;
   subtitle: string;
   message?: string;
+  textCount?: number;
 }
 const InputModule = ({
   placeholder,
@@ -14,6 +15,7 @@ const InputModule = ({
   value,
   subtitle,
   message,
+  textCount,
 }: InputProps) => {
   return (
     <div className="flex flex-col gap-3">
@@ -22,7 +24,12 @@ const InputModule = ({
         status={status}
         subtitle={subtitle}
       />
-      <InputAreaAtom placeholder={placeholder} status={status} value={value} />
+      <InputAreaAtom
+        placeholder={placeholder}
+        status={status}
+        value={value}
+        textCount={textCount}
+      />
     </div>
   );
 };
