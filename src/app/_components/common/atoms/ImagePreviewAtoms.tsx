@@ -12,7 +12,7 @@ const ImagePreviewAtom = ({ src }: ImagePreviewProps) => {
         alt="preview"
         width={80}
         height={48}
-        className="w-20 h-12 rounded-lg object-cover"
+        className="rounded-lg object-cover"
       />
     </div>
   );
