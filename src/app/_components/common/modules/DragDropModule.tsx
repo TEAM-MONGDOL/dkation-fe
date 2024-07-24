@@ -55,7 +55,7 @@ const DragDropModule = ({ onFileAdd }: DragDropModuleProps) => {
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label
         className={`flex flex-col w-full gap-2.5 p-5 border border-dashed rounded-regular items-center justify-center cursor-pointer ${
-          isDragging ? 'border-blue-500 bg-blue-100' : 'border-stroke-100'
+          isDragging ? 'border-primary bg-primary/20' : 'border-stroke-100'
         }`}
         htmlFor="fileUpload"
         ref={dragRef}
