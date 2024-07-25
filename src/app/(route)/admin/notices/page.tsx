@@ -53,7 +53,7 @@ const NoticesListPage = () => {
   const [sortOption, setSortOption] = useState('최신 순');
   const [categoryOptions, setCategoryOptions] = useState<string[]>(['전체']);
   const [selectedTag, setSelectedTag] = useState<DatePickerTagType | null>(
-    null,
+    'ALL',
   );
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
