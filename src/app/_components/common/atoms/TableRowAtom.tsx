@@ -6,13 +6,15 @@ interface TableRowAtomProps {
   flexGrow?: boolean;
 }
 
-const TableRowAtom = ({ content, width, flexGrow }: TableRowAtomProps) => (
-  <div
-    style={{ width, flexGrow: flexGrow ? 1 : 0 }}
-    className="flex justify-center items-center text-3"
-  >
-    {content}
-  </div>
-);
+const TableRowAtom = ({ content, width, flexGrow }: TableRowAtomProps) => {
+  return (
+    <div
+      style={{ width, flexGrow: flexGrow ? 1 : 0 }}
+      className="flex justify-center items-center text-3"
+    >
+      {content}
+    </div>
+  );
+};
 
 export default TableRowAtom;
