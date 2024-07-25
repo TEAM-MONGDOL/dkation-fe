@@ -68,9 +68,7 @@ const NoticesListPage = () => {
     setIsFilteringBarOpen(true);
   };
 
-  const handleRefresh = () => {
-    // Add your refresh logic here
-  };
+  const handleRefresh = () => {};
 
   return (
     <div className="w-full">
