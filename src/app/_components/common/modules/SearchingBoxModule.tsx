@@ -4,10 +4,11 @@ import FilteringButtonAtom from '@/_components/common/atoms/FilteringButtonAtom'
 
 interface BoxProps {
   filter?: boolean;
+  onClick: () => void;
   placeholder: string;
 }
 
-const SearchingBoxModule = ({ filter, placeholder }: BoxProps) => {
+const SearchingBoxModule = ({ filter, onClick, placeholder }: BoxProps) => {
   return (
     <div className="flex">
       <div className="relative">
@@ -21,7 +22,9 @@ const SearchingBoxModule = ({ filter, placeholder }: BoxProps) => {
           alt="SearchingGlasses"
         />
       </div>
-      <div className="ml-5">{filter && <FilteringButtonAtom />}</div>
+      <div className="ml-5">
+        {filter && <FilteringButtonAtom onClick={onClick} />}
+      </div>
     </div>
   );
 };
