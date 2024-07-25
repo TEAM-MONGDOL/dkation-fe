@@ -3,9 +3,9 @@
 import { useRouter } from 'next/navigation';
 import SearchingBoxModule from '@/_components/common/modules/SearchingBoxModule';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
-import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import TableContainer from '@/_components/common/containers/TableContainer';
+import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 
 const headers = [
   { title: '번호', width: '60' },
@@ -58,13 +58,15 @@ const NoticesListPage = () => {
         </div>
       </div>
       <TableContainer headers={headers} data={data} />
-      <div className="flex items-center">
-        <div className="flex-1 flex justify-center">
+      <div className="relative mt-8">
+        <div className="flex justify-center">
           <PaginationModule />
         </div>
-        <ButtonAtom buttonType="yellow" onClick={moveToWritePage}>
-          글쓰기
-        </ButtonAtom>
+        <div className="absolute right-0 top-0">
+          <ButtonAtom buttonType="yellow" onClick={moveToWritePage}>
+            글쓰기
+          </ButtonAtom>
+        </div>
       </div>
     </div>
   );
