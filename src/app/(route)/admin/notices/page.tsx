@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation'; // Import the useRouter hook
+import { useRouter } from 'next/navigation';
 import SearchingBoxModule from '@/_components/common/modules/SearchingBoxModule';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
@@ -27,12 +27,19 @@ const data = [
   {
     id: 2,
     번호: '2',
-    구분: '이벤트',
+    구분: '이벤트 안내',
     제목: '이벤트 안내',
     작성일: '2024-07-21',
     상세보기: '상세보기',
   },
-  // 더 많은 데이터
+  {
+    id: 3,
+    번호: '3',
+    구분: '결과 발표',
+    제목: '8월 3주차 워케이션 결과 발표 : 양양',
+    작성일: '2024-07-21',
+    상세보기: '상세보기',
+  },
 ];
 
 const NoticesListPage = () => {
