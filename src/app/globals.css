@@ -17,6 +17,23 @@ img {
   display: block;
 }
 
+.thumb,
+.thumb::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* For Chrome */
+.thumb::-webkit-slider-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: white;
+  border: 1px solid #dbdbdb;
+  cursor: pointer;
+  pointer-events: all;
+}
+
 .react-datepicker-wrapper {
   width: 100%;
 }
