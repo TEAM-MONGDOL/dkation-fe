@@ -1,11 +1,17 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import SearchingBoxModule from '@/_components/common/modules/SearchingBoxModule';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import TableContainer from '@/_components/common/containers/TableContainer';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
+import FilteringBarContainer from '@/_components/common/containers/FilteringBarContainer';
+import RadioButtonContainer from '@/_components/common/containers/RadioButtonContainer';
+import CheckboxContainer from '@/_components/common/containers/CheckboxContainer';
+import DatePickerContainer from '@/_components/common/containers/DatePickerContainer';
+import { DatePickerTagType } from '@/_types/commonType';
 
 const headers = [
   { title: '번호', width: '60' },
@@ -43,10 +49,27 @@ const data = [
 ];
 
 const NoticesListPage = () => {
+  const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
+  const [sortOption, setSortOption] = useState('최신 순');
+  const [categoryOptions, setCategoryOptions] = useState<string[]>(['전체']);
+  const [selectedTag, setSelectedTag] = useState<DatePickerTagType | null>(
+    null,
+  );
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+
   const router = useRouter();
 
   const moveToWritePage = () => {
     router.push('/admin/notices/write');
+  };
+
+  const handleFilteringBar = () => {
+    setIsFilteringBarOpen(true);
+  };
+
+  const handleRefresh = () => {
+    // Add your refresh logic here
   };
 
   return (
@@ -54,9 +77,43 @@ const NoticesListPage = () => {
       <div className="flex justify-between items-center mb-12">
         <TitleBarModule title="공지사항 목록" />
         <div className="flex items-center space-x-4 ml-auto">
-          <SearchingBoxModule placeholder="이름을 검색하세요" filter />
+          <SearchingBoxModule
+            placeholder="이름을 검색하세요"
+            filter
+            onClick={handleFilteringBar}
+          />
         </div>
       </div>
+      {isFilteringBarOpen && (
+        <FilteringBarContainer
+          isOpen={isFilteringBarOpen}
+          setIsOpen={setIsFilteringBarOpen}
+          refreshHandler={handleRefresh}
+        >
+          <RadioButtonContainer
+            title="정렬"
+            options={['최신 순', '오래된 순']}
+            selectedOption={sortOption}
+            setSelectedOption={setSortOption}
+          />
+          <hr />
+          <CheckboxContainer
+            title="분류"
+            options={['전체', '공지', '결과 발표', '이벤트 안내']}
+            selectedOptions={categoryOptions}
+            setSelectedOptions={setCategoryOptions}
+          />
+          <hr />
+          <DatePickerContainer
+            selectedTag={selectedTag}
+            setSelectedTag={setSelectedTag}
+            startDate={startDate}
+            setStartDate={setStartDate}
+            endDate={endDate}
+            setEndDate={setEndDate}
+          />
+        </FilteringBarContainer>
+      )}
       <TableContainer headers={headers} data={data} />
       <div className="relative mt-8">
         <div className="flex justify-center">
