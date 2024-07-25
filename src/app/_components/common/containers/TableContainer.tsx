@@ -20,15 +20,11 @@ interface TableContainerProps {
 }
 
 const TableContainer = ({ headers, data }: TableContainerProps) => {
-  const widthType = headers.reduce(
-    (acc, header) => {
-      acc[header.title] = {
-        width: header.width,
-        flexGrow: header.flexGrow,
-      };
-      return acc;
-    },
-    {} as { [key: string]: { width?: string; flexGrow?: boolean } },
+  const widthType = Object.fromEntries(
+    headers.map((header) => [
+      header.title,
+      { width: header.width, flexGrow: header.flexGrow },
+    ]),
   );
 
   return (
