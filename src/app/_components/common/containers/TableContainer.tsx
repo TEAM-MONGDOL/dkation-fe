@@ -1,5 +1,6 @@
 import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
 import TableRowModule from '@/_components/common/modules/TableRowModule';
+import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 
 interface TableContent {
   id: number;
@@ -33,7 +34,11 @@ const TableContainer = ({ headers, data }: TableContainerProps) => {
   return (
     <div>
       <TableHeaderModule headers={headers} />
-      <TableRowModule data={data} widthType={widthType} />
+      {data.length > 0 ? (
+        <TableRowModule data={data} widthType={widthType} />
+      ) : (
+        <EmptyContainer />
+      )}
     </div>
   );
 };
