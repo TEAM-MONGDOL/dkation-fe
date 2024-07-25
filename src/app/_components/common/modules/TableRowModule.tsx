@@ -25,7 +25,7 @@ const TableRowModule = ({ data, widthType }: TableRowModuleProps) => {
       {data.map((item) => (
         <div
           key={item.id}
-          className="w-full flex border py-3.5 mb-2.5 rounded-[5px] border-stroke-100"
+          className="w-full flex border py-3.5 mb-2.5 rounded-[5px] border-stroke-100 gap-10 px-5"
         >
           {headers.map((key) => (
             <TableRowAtom

@@ -11,7 +11,7 @@ interface TableHeaderModuleProps {
 
 const TableHeaderModule = ({ headers }: TableHeaderModuleProps) => {
   return (
-    <div className="flex">
+    <div className="flex px-5 gap-10 mb-2.5">
       {headers.map((header) => (
         <TableHeaderAtom
           key={header.title}
