@@ -14,11 +14,11 @@ import DatePickerContainer from '@/_components/common/containers/DatePickerConta
 import { DatePickerTagType } from '@/_types/commonType';
 
 const headers = [
-  { title: '번호', width: '60' },
-  { title: '구분', width: '100' },
+  { title: '번호', width: '60px' },
+  { title: '구분', width: '100px' },
   { title: '제목', flexGrow: true },
-  { title: '작성일', width: '200' },
-  { title: '상세보기', width: '80' },
+  { title: '작성일', width: '150px' },
+  { title: '', width: '120px' },
 ];
 
 const data = [
@@ -28,7 +28,6 @@ const data = [
     구분: '공지사항',
     제목: '공지입니다',
     작성일: '2024-07-20',
-    상세보기: '상세보기',
   },
   {
     id: 2,
@@ -36,7 +35,6 @@ const data = [
     구분: '이벤트 안내',
     제목: '이벤트 안내',
     작성일: '2024-07-21',
-    상세보기: '상세보기',
   },
   {
     id: 3,
@@ -44,7 +42,6 @@ const data = [
     구분: '결과 발표',
     제목: '8월 3주차 워케이션 결과 발표 : 양양',
     작성일: '2024-07-21',
-    상세보기: '상세보기',
   },
 ];
 
