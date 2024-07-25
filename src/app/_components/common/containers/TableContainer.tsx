@@ -1,6 +1,7 @@
-import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
+import React from 'react';
 import TableRowModule from '@/_components/common/modules/TableRowModule';
 import EmptyContainer from '@/_components/common/containers/EmptyContainer';
+import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
 
 interface TableContent {
   id: number;
@@ -20,21 +21,28 @@ interface TableContainerProps {
 }
 
 const TableContainer = ({ headers, data }: TableContainerProps) => {
-  const widthType = Object.fromEntries(
-    headers.map((header) => [
-      header.title,
-      { width: header.width, flexGrow: header.flexGrow },
-    ]),
-  );
+  const handleDetails = (row: TableContent) => {};
+
+  const hasData = data.length > 0;
 
   return (
-    <div>
-      <TableHeaderModule headers={headers} />
-      {data.length > 0 ? (
-        <TableRowModule data={data} widthType={widthType} />
-      ) : (
-        <EmptyContainer />
-      )}
+    <div className="min-w-full">
+      <div className="min-w-full">
+        <TableHeaderModule headers={headers} />
+        <div className="bg-white">
+          {hasData
+            ? data.map((row, rowIndex) => (
+                <TableRowModule
+                  key={row.id}
+                  row={row}
+                  headers={headers}
+                  onDetailsClick={handleDetails}
+                />
+              ))
+            : null}
+        </div>
+      </div>
+      {!hasData && <EmptyContainer />}
     </div>
   );
 };
