@@ -7,7 +7,7 @@ interface TableHeadarAtomProps {
 }
 
 const TableHeaderAtom = ({ title, flexGrow, width }: TableHeadarAtomProps) => {
-  const baseClasses = 'bg-white text-center text-2 text-sub-300';
+  const baseClasses = 'bg-white text-center text-4 text-sub-300';
   const flexGrowClass = flexGrow ? 'flex-grow' : '';
 
   return (
