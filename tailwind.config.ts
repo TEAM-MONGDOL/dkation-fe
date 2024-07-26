@@ -47,6 +47,9 @@ const config: Config = {
         height: 'height',
         maxHeight: 'max-height',
       },
+      padding: {
+        15: '3.75rem',
+      },
     },
   },
   plugins: [
