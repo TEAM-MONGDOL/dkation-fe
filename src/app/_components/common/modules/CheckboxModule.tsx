@@ -18,7 +18,7 @@ const CheckboxModule = ({
     >
       <CheckboxAtom isChecked={isChecked} />
       <div
-        className={`text-2 ${isChecked ? 'font-medium text-sub-300' : 'text-sub-200'}`}
+        className={`text-4 ${isChecked ? 'font-medium text-sub-300' : 'text-sub-200'}`}
       >
         {option}
       </div>

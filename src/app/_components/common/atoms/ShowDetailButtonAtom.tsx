@@ -3,14 +3,14 @@
 import React from 'react';
 
 interface ShowDetailButtonAtomProps {
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const ShowDetailButtonAtom = ({ onClick }: ShowDetailButtonAtomProps) => {
   return (
     <button
       onClick={onClick}
-      className="bg-cus-100 font-bold text-sub-300 text-2 px-4 py-2 rounded-full"
+      className="bg-cus-100 font-bold text-sub-300 text-4 px-3.5 py-2 rounded-full"
     >
       상세보기
     </button>

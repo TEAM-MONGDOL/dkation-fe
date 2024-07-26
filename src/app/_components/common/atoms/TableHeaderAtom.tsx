@@ -1,19 +1,14 @@
-import React from 'react';
-
-interface TableHeadarAtomProps {
+interface TableHeaderAtomProps {
   title: string;
-  flexGrow?: boolean;
   width?: string;
+  flexGrow?: boolean;
 }
 
-const TableHeaderAtom = ({ title, flexGrow, width }: TableHeadarAtomProps) => {
-  const baseClasses = 'bg-white text-center text-2 text-sub-300';
-  const flexGrowClass = flexGrow ? 'flex-grow' : '';
-
+const TableHeaderAtom = ({ title, width, flexGrow }: TableHeaderAtomProps) => {
   return (
     <div
-      className={`${baseClasses} ${flexGrowClass}`}
-      style={width ? { width: `${width}px` } : undefined}
+      style={{ width, flexGrow: flexGrow ? 1 : 0 }}
+      className="flex justify-center items-center text-4 font-normal text-sub-300"
     >
       {title}
     </div>

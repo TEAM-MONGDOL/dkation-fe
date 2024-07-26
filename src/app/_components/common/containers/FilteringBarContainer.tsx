@@ -1,7 +1,6 @@
 import { FilterListIcon, RefreshIcon } from '@/_assets/icons';
 import Image from 'next/image';
-import { ReactNode, useState } from 'react';
-import RadioButtonsContainer from './RadioButtonsContainer';
+import { ReactNode } from 'react';
 
 interface FilteringBarContainerProps {
   isOpen: boolean;

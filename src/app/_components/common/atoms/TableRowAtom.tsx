@@ -1,18 +1,16 @@
 import React from 'react';
 
 interface TableRowAtomProps {
-  flexGrow?: boolean;
+  content: React.ReactNode;
   width?: string;
-  content: string;
+  flexGrow?: boolean;
 }
 
-const TableRowAtom = ({ flexGrow, width, content }: TableRowAtomProps) => {
-  const baseClasses = 'text-center text-3';
-
+const TableRowAtom = ({ content, width, flexGrow }: TableRowAtomProps) => {
   return (
     <div
-      className={`${baseClasses} ${flexGrow ? 'flex-grow' : ''}`} // 삼항 연산자를 사용하여 className을 간결하게
-      style={width ? { width: `${width}px` } : undefined}
+      style={{ width, flexGrow: flexGrow ? 1 : 0 }}
+      className="flex justify-center items-center text-3"
     >
       {content}
     </div>
