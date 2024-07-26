@@ -1,23 +1,42 @@
-'use client';
-
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FileModule from '@/_components/common/modules/FileModule';
 import DragDropModule from '@/_components/common/modules/DragDropModule';
 
-const FileContainer = () => {
+interface FileContainerProps {
+  onFileChange?: (files: File[]) => void;
+}
+
+const FileContainer = ({ onFileChange }: FileContainerProps) => {
   const [files, setFiles] = useState<File[]>([]);
 
   const handleFileAdd = (newFiles: File[]) => {
-    setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+    setFiles((prevFiles) => {
+      const updatedFiles = [...prevFiles, ...newFiles];
+      onFileChange?.(updatedFiles);
+      return updatedFiles;
+    });
   };
 
   const handleDeleteFile = (fileToDelete: File) => {
-    setFiles((prevFiles) => prevFiles.filter((file) => file !== fileToDelete));
+    setFiles((prevFiles) => {
+      const updatedFiles = prevFiles.filter((file) => file !== fileToDelete);
+      onFileChange?.(updatedFiles);
+      return updatedFiles;
+    });
   };
 
   const getFileType = (file: File): 'image' | 'other' => {
     return file.type.startsWith('image/') ? 'image' : 'other';
   };
+
+  useEffect(() => {
+    // Clean up
+    return () => {
+      files.forEach((file) => {
+        URL.revokeObjectURL(URL.createObjectURL(file));
+      });
+    };
+  }, [files]);
 
   return (
     <div className="flex flex-col w-full">
