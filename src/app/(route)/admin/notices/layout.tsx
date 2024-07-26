@@ -8,9 +8,9 @@ interface Props {
 
 function AdminNoticesLayout({ children }: Props) {
   return (
-    <div className="flex-col">
+    <div className="flex flex-col h-screen">
       <HeaderModule />
-      <div className="flex">
+      <div className="grow flex">
         <NavBarContainer />
         <main className="flex-1 px-20 py-16">{children}</main>
       </div>
