@@ -39,6 +39,7 @@ const TextAreaModule = ({
         size={size}
         value={text}
         onChange={handleChange}
+        sizeClass={sizeClass}
       />
       <div className="absolute bottom-3.5 right-3.5 text-4 text-sub-200">
         <TextCountAtom text={text} maxLength={maxLength} />
