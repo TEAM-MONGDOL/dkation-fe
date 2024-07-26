@@ -79,36 +79,34 @@ const NoticesListPage = () => {
           />
         </div>
       </div>
-      {isFilteringBarOpen && (
-        <FilteringBarContainer
-          isOpen={isFilteringBarOpen}
-          setIsOpen={setIsFilteringBarOpen}
-          refreshHandler={handleRefresh}
-        >
-          <RadioButtonContainer
-            title="정렬"
-            options={['최신 순', '오래된 순']}
-            selectedOption={sortOption}
-            setSelectedOption={setSortOption}
-          />
-          <hr />
-          <CheckboxContainer
-            title="분류"
-            options={['전체', '공지', '결과 발표', '이벤트 안내']}
-            selectedOptions={categoryOptions}
-            setSelectedOptions={setCategoryOptions}
-          />
-          <hr />
-          <DatePickerContainer
-            selectedTag={selectedTag}
-            setSelectedTag={setSelectedTag}
-            startDate={startDate}
-            setStartDate={setStartDate}
-            endDate={endDate}
-            setEndDate={setEndDate}
-          />
-        </FilteringBarContainer>
-      )}
+      <FilteringBarContainer
+        isOpen={isFilteringBarOpen}
+        setIsOpen={setIsFilteringBarOpen}
+        refreshHandler={handleRefresh}
+      >
+        <RadioButtonContainer
+          title="정렬"
+          options={['최신 순', '오래된 순']}
+          selectedOption={sortOption}
+          setSelectedOption={setSortOption}
+        />
+        <hr />
+        <CheckboxContainer
+          title="분류"
+          options={['전체', '공지', '결과 발표', '이벤트 안내']}
+          selectedOptions={categoryOptions}
+          setSelectedOptions={setCategoryOptions}
+        />
+        <hr />
+        <DatePickerContainer
+          selectedTag={selectedTag}
+          setSelectedTag={setSelectedTag}
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
+        />
+      </FilteringBarContainer>
       <TableContainer headers={headers} data={data} />
       <div className="relative mt-8">
         <div className="flex justify-center">
