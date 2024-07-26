@@ -6,6 +6,7 @@ import FileContainer from '@/_components/common/containers/FileContainer';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import DropdownModule from '@/_components/common/modules/DropdownModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
+import { NoticeOptions } from '@/_constants/common';
 
 const WriteNoticesPage = () => {
   const handleSelect = (option: string) => {};
@@ -17,7 +18,7 @@ const WriteNoticesPage = () => {
         <p className="text-3 font-bold mb-4">제목</p>
         <div className="flex gap-4">
           <DropdownModule
-            options={['공지사항', '결과 발표', '이벤트 안내']}
+            options={NoticeOptions}
             onSelect={handleSelect}
             placeholder="구분 선택"
           />
