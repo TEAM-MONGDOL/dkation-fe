@@ -34,7 +34,7 @@ const TableContainer = ({ headers, data }: TableContainerProps) => {
             data.map((row, rowIndex) => (
               <TableRowModule
                 key={row.id}
-                row={row}
+                row={{ ...row, 번호: rowIndex + 1 }}
                 headers={headers}
                 onDetailsClick={handleDetails}
               />
