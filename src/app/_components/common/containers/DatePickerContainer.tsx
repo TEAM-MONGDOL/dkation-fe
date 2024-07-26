@@ -6,19 +6,20 @@ import AccordionHeaderModule from '@/_components/common/modules/AccordionHeaderM
 import AccordionBodyModule from '@/_components/common/modules/AccordionBodyModule';
 import DatePickersModule from '@/_components/common/modules/DatePickersModule';
 import DatePickerTagListModule from '@/_components/common/modules/DatePickerTagListModule';
+import dayjs from 'dayjs';
 
 interface DatePickerContainerProps {
-  title?: string;
-  selectedTag: DatePickerTagType | null;
-  setSelectedTag: (selected: DatePickerTagType | null) => void;
-  startDate: Date | null;
-  setStartDate: (start: Date | null) => void;
-  endDate: Date | null;
-  setEndDate: (end: Date | null) => void;
+  title: string;
+  selectedTag: DatePickerTagType;
+  setSelectedTag: (selected: DatePickerTagType) => void;
+  startDate: Date;
+  setStartDate: (start: Date) => void;
+  endDate: Date;
+  setEndDate: (end: Date) => void;
 }
 
 const DatePickerContainer = ({
-  title = '날짜',
+  title,
   selectedTag,
   setSelectedTag,
   startDate,
@@ -29,39 +30,31 @@ const DatePickerContainer = ({
   const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
-    if (selectedTag) {
-      const today = new Date();
-      let newStartDate: Date | null = today;
-      let newEndDate: Date | null = new Date();
+    setEndDate(dayjs().toDate());
 
-      switch (selectedTag) {
-        case 'ALL':
-          newStartDate = null;
-          newEndDate = null;
-          break;
-        case '1_WEEK':
-          newStartDate.setDate(today.getDate() - 7);
-          break;
-        case '1_MONTH':
-          newStartDate.setMonth(today.getMonth() - 1);
-          break;
-        case '3_MONTH':
-          newStartDate.setMonth(today.getMonth() - 3);
-          break;
-        case '6_MONTH':
-          newStartDate.setMonth(today.getMonth() - 6);
-          break;
-        case '1_YEAR':
-          newStartDate.setFullYear(today.getFullYear() - 1);
-          break;
-        default:
-          break;
-      }
-
-      setStartDate(newStartDate);
-      setEndDate(newEndDate);
+    switch (selectedTag) {
+      case 'ALL':
+        setStartDate(dayjs().add(-1, 'year').toDate());
+        break;
+      case '1_WEEK':
+        setStartDate(dayjs().add(-1, 'week').toDate());
+        break;
+      case '1_MONTH':
+        setStartDate(dayjs().add(-1, 'month').toDate());
+        break;
+      case '3_MONTH':
+        setStartDate(dayjs().add(-3, 'month').toDate());
+        break;
+      case '6_MONTH':
+        setStartDate(dayjs().add(-6, 'month').toDate());
+        break;
+      case '1_YEAR':
+        setStartDate(dayjs().add(-1, 'year').toDate());
+        break;
+      default:
+        break;
     }
-  }, [selectedTag, setStartDate, setEndDate]);
+  }, [selectedTag]); // setStartDate, setEndDate를 넣으니까 무한루프
 
   return (
     <div className="flex w-full flex-col px-3 py-2.5">
