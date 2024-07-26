@@ -5,10 +5,11 @@ interface InputProps {
   placeholder?: string;
   status?: 'error' | 'correct' | 'readonly' | 'disabled';
   value?: string;
-  subtitle: string;
+  subtitle?: string;
   message?: string;
   textCount?: number;
 }
+
 const InputModule = ({
   placeholder,
   status,
@@ -18,7 +19,7 @@ const InputModule = ({
   textCount,
 }: InputProps) => {
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col">
       <InputSubtitleAtom
         message={message}
         status={status}

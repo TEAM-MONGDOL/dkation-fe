@@ -8,6 +8,7 @@ interface InputProps {
   value?: string;
   textCount?: number;
 }
+
 const InputAreaAtom = ({
   placeholder,
   status,
@@ -40,7 +41,7 @@ const InputAreaAtom = ({
   return (
     <div className="relative">
       <input
-        className={`rounded-regular pl-3 border outline-0 w-full h-12 placeholder-sub-200 text-3 ${getStatus()}`}
+        className={`rounded-regular pl-3 border border-stroke-100 outline-0 w-full py-3.5 placeholder-sub-200 text-4 ${getStatus()}`}
         placeholder={placeholder}
         readOnly={status === 'readonly' || status === 'disabled'}
         value={value || ''}
