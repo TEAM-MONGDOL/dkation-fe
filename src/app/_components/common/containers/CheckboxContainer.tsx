@@ -7,7 +7,7 @@ import AccordionBodyModule from '@/_components/common/modules/AccordionBodyModul
 
 interface CheckboxContainerProps {
   title: string;
-  options: string[];
+  options: [string, string][];
   selectedOptions: string[];
   setSelectedOptions: (prev: string[]) => void;
 }
@@ -20,10 +20,10 @@ const CheckboxContainer = ({
 }: CheckboxContainerProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const handleSelectOption = (option: string) => {
+  const selectedOptionHandler = (option: string) => {
     if (selectedOptions.includes(option)) {
       setSelectedOptions(
-        selectedOptions.filter((selectedOption) => selectedOption !== option),
+        selectedOptions.filter((selected) => selected !== option),
       );
     } else {
       setSelectedOptions([...selectedOptions, option]);
@@ -38,12 +38,12 @@ const CheckboxContainer = ({
         setIsExpanded={setIsExpanded}
       />
       <AccordionBodyModule isExpanded={isExpanded}>
-        {options.map((option) => (
+        {options.map(([check, option]) => (
           <CheckboxModule
-            key={`checkbox-${title}-${option}`}
+            key={`checkbox-${check}`}
             option={option}
-            isChecked={selectedOptions.includes(option)}
-            onClick={() => handleSelectOption(option)}
+            isChecked={selectedOptions.includes(check)}
+            onClick={() => selectedOptionHandler(check)}
           />
         ))}
       </AccordionBodyModule>
