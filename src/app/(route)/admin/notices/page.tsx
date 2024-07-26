@@ -12,6 +12,8 @@ import RadioButtonContainer from '@/_components/common/containers/RadioButtonCon
 import CheckboxContainer from '@/_components/common/containers/CheckboxContainer';
 import DatePickerContainer from '@/_components/common/containers/DatePickerContainer';
 import { DatePickerTagType } from '@/_types/commonType';
+import { noticeList, orderList } from '@/_types/adminType';
+import dayjs from 'dayjs';
 
 const headers = [
   { title: '번호', width: '60px' },
@@ -46,11 +48,11 @@ const NoticesListPage = () => {
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
   const [sortOption, setSortOption] = useState('최신 순');
   const [categoryOptions, setCategoryOptions] = useState<string[]>(['전체']);
-  const [selectedTag, setSelectedTag] = useState<DatePickerTagType | null>(
-    'ALL',
+  const [selectedTag, setSelectedTag] = useState<DatePickerTagType>('ALL');
+  const [startDate, setStartDate] = useState<Date>(
+    dayjs().subtract(1, 'year').toDate(),
   );
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date>(dayjs().toDate());
 
   const router = useRouter();
 
@@ -83,19 +85,20 @@ const NoticesListPage = () => {
       >
         <RadioButtonContainer
           title="정렬"
-          options={['최신 순', '오래된 순']}
+          options={Object.entries(orderList) as [string, string][]}
           selectedOption={sortOption}
           setSelectedOption={setSortOption}
         />
         <hr />
         <CheckboxContainer
           title="분류"
-          options={['전체', '공지', '결과 발표', '이벤트 안내']}
+          options={Object.entries(noticeList) as [string, string][]}
           selectedOptions={categoryOptions}
           setSelectedOptions={setCategoryOptions}
         />
         <hr />
         <DatePickerContainer
+          title="날짜"
           selectedTag={selectedTag}
           setSelectedTag={setSelectedTag}
           startDate={startDate}
