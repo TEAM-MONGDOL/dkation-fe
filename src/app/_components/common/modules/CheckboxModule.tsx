@@ -4,16 +4,18 @@ interface CheckboxModuleProps {
   option: string;
   isChecked: boolean;
   onClick: () => void;
+  gap?: 'sm' | 'md';
 }
 
 const CheckboxModule = ({
   option,
   isChecked,
   onClick,
+  gap = 'sm',
 }: CheckboxModuleProps) => {
   return (
     <button
-      className="flex items-center justify-start w-full gap-x-2.5 bg-white"
+      className={`flex items-center justify-start w-full ${gap === 'sm' ? 'gap-x-2.5' : 'gap-x-10'} bg-white`}
       onClick={onClick}
     >
       <CheckboxAtom isChecked={isChecked} />

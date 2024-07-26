@@ -1,6 +1,6 @@
 'use client';
 
-import SelectModule from '@/_components/common/modules/SelectModule';
+import CheckboxModule from '@/_components/common/modules/CheckboxModule';
 
 interface SelectContainerProps {
   title: string;
@@ -37,19 +37,21 @@ const SelectContainer = ({
   return (
     <div className="flex flex-col w-[225px] h-[200px]">
       <div className="border border-stroke-100 px-5 py-2.5 rounded-t-regular">
-        <SelectModule
+        <CheckboxModule
           option={title}
           isChecked={areAllSelected}
           onClick={handleSelectAllClick}
+          gap="md"
         />
       </div>
       <div className="overflow-y-auto border border-stroke-100 border-t-0 rounded-b-regular px-5 py-2.5 flex flex-col gap-2">
         {options.map((option) => (
-          <SelectModule
+          <CheckboxModule
             key={option}
             option={option}
             isChecked={selectedOptions.includes(option)}
             onClick={() => handleSelectOption(option)}
+            gap="md"
           />
         ))}
       </div>
