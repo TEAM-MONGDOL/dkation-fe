@@ -20,8 +20,9 @@ const TextAreaModule = ({
   const [text, setText] = useState(value || '');
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (e.target.value.length <= maxLength) {
-      setText(e.target.value);
+    const newValue = e.target.value;
+    if (newValue.length <= maxLength) {
+      setText(newValue);
       onChange?.(e);
     }
   };
@@ -36,7 +37,6 @@ const TextAreaModule = ({
     <div className={`relative w-full ${sizeClass}`}>
       <TextAreaAtom
         placeholder={placeholder}
-        size={size}
         value={text}
         onChange={handleChange}
         sizeClass={sizeClass}
