@@ -1,5 +1,11 @@
 import RadioButtonAtom from '@/_components/common/atoms/RadioButtonAtom';
 
+interface RadioButtonModuleProps {
+  option: string;
+  isClicked: boolean;
+  onClick: () => void;
+}
+
 const RadioButtonModule = ({
   option,
   isClicked,
