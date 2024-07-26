@@ -30,19 +30,20 @@ const TableContainer = ({ headers, data }: TableContainerProps) => {
       <div className="min-w-full">
         <TableHeaderModule headers={headers} />
         <div className="bg-white">
-          {hasData
-            ? data.map((row, rowIndex) => (
-                <TableRowModule
-                  key={row.id}
-                  row={row}
-                  headers={headers}
-                  onDetailsClick={handleDetails}
-                />
-              ))
-            : null}
+          {hasData ? (
+            data.map((row, rowIndex) => (
+              <TableRowModule
+                key={row.id}
+                row={row}
+                headers={headers}
+                onDetailsClick={handleDetails}
+              />
+            ))
+          ) : (
+            <EmptyContainer />
+          )}
         </div>
       </div>
-      {!hasData && <EmptyContainer />}
     </div>
   );
 };
