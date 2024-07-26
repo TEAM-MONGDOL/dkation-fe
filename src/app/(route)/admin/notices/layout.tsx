@@ -6,7 +6,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-function AdminNoticesLayout({ children }: Props) {
+const AdminNoticesLayout = ({ children }: Props) => {
   return (
     <div className="flex-col">
       <HeaderModule />
@@ -16,6 +16,6 @@ function AdminNoticesLayout({ children }: Props) {
       </div>
     </div>
   );
-}
+};
 
 export default AdminNoticesLayout;
