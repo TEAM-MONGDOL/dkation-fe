@@ -3,8 +3,8 @@ import { DatePickerTagType } from '@/_types/commonType';
 
 interface DatePickerTagListModuleProps {
   tags: [DatePickerTagType, string][];
-  selectedTag: DatePickerTagType | null;
-  setSelectedTag: (prev: DatePickerTagType | null) => void;
+  selectedTag: DatePickerTagType;
+  setSelectedTag: (prev: DatePickerTagType) => void;
 }
 
 const DatePickerTagListModule = ({
@@ -20,11 +20,7 @@ const DatePickerTagListModule = ({
           text={text}
           isClicked={selectedTag === tag}
           onClick={() => {
-            if (selectedTag === tag) {
-              setSelectedTag(null);
-            } else {
-              setSelectedTag(tag);
-            }
+            setSelectedTag(tag);
           }}
         />
       ))}
