@@ -53,13 +53,12 @@ const WriteNoticesPage = () => {
               placeholder="제목을 입력하세요"
               textCount={20}
               value={title}
-              onChange={handleTitleChange} // Add onChange handler
+              onChange={handleTitleChange}
             />
           </div>
         </div>
         <div className="py-7">
           <FileContainer onFileChange={handleFilesChange} />{' '}
-          {/* Add onFileChange handler */}
         </div>
         <p className="text-3 font-bold mb-4">내용</p>
         <TextAreaModule
@@ -67,7 +66,7 @@ const WriteNoticesPage = () => {
           size="LARGE"
           maxLength={2000}
           value={content}
-          onChange={handleContentChange} // Add onChange handler
+          onChange={handleContentChange}
         />
         <div className="flex justify-end pt-14">
           <ButtonAtom buttonType="yellow" onClick={handleClick}>

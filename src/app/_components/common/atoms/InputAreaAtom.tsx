@@ -7,7 +7,7 @@ interface InputProps {
   status?: 'error' | 'correct' | 'readonly' | 'disabled';
   value?: string;
   textCount?: number;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; // Add onChange prop
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const InputAreaAtom = ({
