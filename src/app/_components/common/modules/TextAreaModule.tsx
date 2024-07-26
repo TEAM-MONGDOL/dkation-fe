@@ -6,18 +6,23 @@ interface TextboxModuleProps {
   placeholder: string;
   size: 'SMALL' | 'MEDIUM' | 'LARGE';
   maxLength: number;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 const TextAreaModule = ({
   placeholder,
   size,
   maxLength,
+  value,
+  onChange,
 }: TextboxModuleProps) => {
-  const [text, setText] = useState('');
+  const [text, setText] = useState(value || '');
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (e.target.value.length <= maxLength) {
       setText(e.target.value);
+      onChange?.(e);
     }
   };
 

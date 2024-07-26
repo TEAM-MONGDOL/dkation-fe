@@ -1,3 +1,4 @@
+import React from 'react';
 import InputSubtitleAtom from '@/_components/common/atoms/InputSubtitleAtom';
 import InputAreaAtom from '@/_components/common/atoms/InputAreaAtom';
 
@@ -8,6 +9,7 @@ interface InputProps {
   subtitle?: string;
   message?: string;
   textCount?: number;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const InputModule = ({
@@ -17,6 +19,7 @@ const InputModule = ({
   subtitle,
   message,
   textCount,
+  onChange,
 }: InputProps) => {
   return (
     <div className="flex flex-col">
@@ -30,6 +33,7 @@ const InputModule = ({
         status={status}
         value={value}
         textCount={textCount}
+        onChange={onChange}
       />
     </div>
   );

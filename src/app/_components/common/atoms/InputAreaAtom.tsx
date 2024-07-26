@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface InputProps {
   placeholder?: string;
   status?: 'error' | 'correct' | 'readonly' | 'disabled';
   value?: string;
   textCount?: number;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; // Add onChange prop
 }
 
 const InputAreaAtom = ({
@@ -14,6 +15,7 @@ const InputAreaAtom = ({
   status,
   value: initialValue = '',
   textCount,
+  onChange,
 }: InputProps) => {
   const [value, setValue] = useState(initialValue);
 
@@ -32,9 +34,14 @@ const InputAreaAtom = ({
     }
   };
 
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (textCount !== undefined && e.target.value.length <= textCount) {
       setValue(e.target.value);
+      onChange?.(e);
     }
   };
 
