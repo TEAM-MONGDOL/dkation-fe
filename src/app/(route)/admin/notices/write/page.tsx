@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import InputModule from '@/_components/common/modules/InputModule';
 import FileContainer from '@/_components/common/containers/FileContainer';
@@ -9,8 +10,12 @@ import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import { NoticeOptions } from '@/_constants/common';
 
 const WriteNoticesPage = () => {
+  const router = useRouter();
   const handleSelect = (option: string) => {};
 
+  const handleClick = () => {
+    router.push('/admin/notices'); // 추후 수정 예정
+  };
   return (
     <div>
       <TitleBarModule title="공지 글쓰기" type="LEFT" />
@@ -36,7 +41,9 @@ const WriteNoticesPage = () => {
           maxLength={2000}
         />
         <div className="flex justify-end pt-14">
-          <ButtonAtom buttonType="yellow">글쓰기</ButtonAtom>
+          <ButtonAtom buttonType="yellow" onClick={handleClick}>
+            등록
+          </ButtonAtom>
         </div>
       </div>
     </div>
