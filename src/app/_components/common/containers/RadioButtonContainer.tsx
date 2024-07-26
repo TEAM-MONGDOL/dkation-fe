@@ -5,17 +5,19 @@ import RadioButtonModule from '@/_components/common/modules/RadioButtonModule';
 import AccordionHeaderModule from '@/_components/common/modules/AccordionHeaderModule';
 import AccordionBodyModule from '@/_components/common/modules/AccordionBodyModule';
 
+interface RadioButtonContainerProps {
+  title: string;
+  options: [string, string][];
+  selectedOption: string;
+  setSelectedOption: (value: string) => void;
+}
+
 const RadioButtonContainer = ({
   title,
   options,
   selectedOption,
   setSelectedOption,
-}: {
-  title: string;
-  options: string[];
-  selectedOption: string;
-  setSelectedOption: (value: string) => void;
-}) => {
+}: RadioButtonContainerProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -26,12 +28,12 @@ const RadioButtonContainer = ({
         setIsExpanded={setIsExpanded}
       />
       <AccordionBodyModule isExpanded={isExpanded}>
-        {options.map((option) => (
+        {options.map(([radio, option]) => (
           <RadioButtonModule
-            key={`radio-button-${title}-${option}`}
+            key={`radio-button-${radio}`}
             option={option}
-            isClicked={selectedOption === option}
-            onClick={() => setSelectedOption(option)}
+            isClicked={selectedOption === radio}
+            onClick={() => setSelectedOption(radio)}
           />
         ))}
       </AccordionBodyModule>
