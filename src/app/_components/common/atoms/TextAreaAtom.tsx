@@ -2,7 +2,6 @@ import React from 'react';
 
 interface TextboxAtomProps {
   placeholder: string;
-  size: 'SMALL' | 'MEDIUM' | 'LARGE';
   value: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   sizeClass: string;
@@ -10,7 +9,6 @@ interface TextboxAtomProps {
 
 const TextAreaAtom = ({
   placeholder,
-  size,
   value,
   onChange,
   sizeClass,
