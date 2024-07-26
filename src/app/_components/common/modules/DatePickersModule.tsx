@@ -1,10 +1,11 @@
 import DatePickerAtom from '@/_components/common/atoms/DatePickerAtom';
+import dayjs from 'dayjs';
 
 interface DatePickersModuleProps {
-  startDate: Date | null;
-  setStartDate: (prev: Date | null) => void;
-  endDate: Date | null;
-  setEndDate: (prev: Date | null) => void;
+  startDate: Date;
+  setStartDate: (prev: Date) => void;
+  endDate: Date;
+  setEndDate: (prev: Date) => void;
 }
 
 const DatePickersModule = ({
@@ -15,7 +16,11 @@ const DatePickersModule = ({
 }: DatePickersModuleProps) => {
   return (
     <div className="w-full flex items-center gap-x-1">
-      <DatePickerAtom selectedDate={startDate} setSelectedDate={setStartDate} />
+      <DatePickerAtom
+        selectedDate={startDate}
+        setSelectedDate={setStartDate}
+        minDate={dayjs().add(-1, 'year').toDate()}
+      />
       <span className="font-medium text-sub-100">-</span>
       <DatePickerAtom
         selectedDate={endDate}
