@@ -68,8 +68,8 @@ const NoticeDetailPage = () => {
                   fileName={file.name}
                   fileType={file.type}
                   fileUrl={file.url}
-                  buttonType="edit"
-                  onEdit={() => console.log(`Edit ${file.name}`)} // 추후 수정 예정
+                  buttonType="download"
+                  onDownload={() => console.log(`Edit ${file.name}`)} // 추후 수정 예정
                 />
               ))}
             </div>
