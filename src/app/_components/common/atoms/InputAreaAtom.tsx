@@ -7,12 +7,17 @@ interface InputProps {
   status?: 'error' | 'correct' | 'readonly' | 'disabled';
   value?: string;
   textCount?: number;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  name?: string;
 }
+
 const InputAreaAtom = ({
   placeholder,
   status,
   value: initialValue = '',
   textCount,
+  onChange,
+  name,
 }: InputProps) => {
   const [value, setValue] = useState(initialValue);
 
@@ -34,17 +39,19 @@ const InputAreaAtom = ({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (textCount !== undefined && e.target.value.length <= textCount) {
       setValue(e.target.value);
+      onChange?.(e);
     }
   };
 
   return (
     <div className="relative">
       <input
-        className={`rounded-regular pl-3 border outline-0 w-full h-12 placeholder-sub-200 text-3 ${getStatus()}`}
+        className={`rounded-regular pl-3 border border-stroke-100 outline-0 w-full py-3.5 placeholder-sub-200 text-4 ${getStatus()}`}
         placeholder={placeholder}
         readOnly={status === 'readonly' || status === 'disabled'}
         value={value || ''}
         onChange={handleChange}
+        name={name}
       />
       {textCount && (
         <div className="absolute bottom-3.5 right-3.5 text-4 text-sub-200">
