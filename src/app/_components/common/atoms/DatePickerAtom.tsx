@@ -6,22 +6,16 @@ import Image from 'next/image';
 import { useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 
-const findMinDate = (minDate: Date | null | undefined) => {
-  const today = new Date();
-  const lastYear = new Date(today);
-  lastYear.setFullYear(today.getFullYear() - 1);
-
-  if (minDate) {
-    return dayjs(lastYear).isAfter(minDate) ? lastYear : minDate;
-  }
-
-  return lastYear;
+const findMinDate = (minDate: Date) => {
+  const lastYear = new Date();
+  lastYear.setFullYear(lastYear.getFullYear() - 1);
+  return dayjs(lastYear).isAfter(minDate) ? lastYear : minDate;
 };
 
 interface DatePickerAtomProps {
-  selectedDate: Date | null;
-  setSelectedDate: (prev: Date | null) => void;
-  minDate?: Date | null;
+  selectedDate: Date;
+  setSelectedDate: (prev: Date) => void;
+  minDate: Date;
 }
 
 const DatePickerAtom = ({
@@ -29,17 +23,11 @@ const DatePickerAtom = ({
   setSelectedDate,
   minDate,
 }: DatePickerAtomProps) => {
-  useEffect(() => {
-    if (minDate && selectedDate && selectedDate < minDate) {
-      setSelectedDate(minDate);
-    }
-  }, [minDate, selectedDate, setSelectedDate]);
-
   return (
     <DatePicker
       className="flex w-full text-4 text-center items-center justify-center border border-sub-100 bg-white text-sub-400 px-4 py-1 rounded-lg focus:outline-primary"
       selected={selectedDate}
-      onChange={(date) => setSelectedDate(date)}
+      onChange={(date) => setSelectedDate(date || selectedDate)}
       dateFormat="yyyy.MM.dd"
       minDate={findMinDate(minDate)}
       maxDate={new Date()}

@@ -5,31 +5,35 @@ import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAto
 interface TableRowModuleProps {
   row: { [key: string]: any };
   headers: { title: string; width?: string; flexGrow?: boolean }[];
-  onDetailsClick: (row: any) => void;
 }
 
-const TableRowModule = ({
-  row,
-  headers,
-  onDetailsClick,
-}: TableRowModuleProps) => {
+const TableRowModule = ({ row, headers }: TableRowModuleProps) => {
+  const getContent = (header: string, colIndex: number) => {
+    if (typeof row[header] === 'object') {
+      if (
+        header === '' &&
+        colIndex === headers.length - 1 &&
+        row[header].onClick
+      ) {
+        return <ShowDetailButtonAtom onClick={row[header].onClick} />;
+      }
+      return row[header].text;
+    }
+    return row[header];
+  };
+
   return (
-    <div className="flex gap-10 px-5 py-3.5 border border-stroke-100 rounded-regular mb-2.5">
+    <tr className="h-[60px] border border-stroke-100">
       {headers.map((header, colIndex) => (
         <TableRowAtom
           key={header.title}
-          width={header.width}
-          flexGrow={header.flexGrow}
-          content={
-            header.title === '' && colIndex === headers.length - 1 ? (
-              <ShowDetailButtonAtom onClick={() => onDetailsClick(row)} />
-            ) : (
-              row[header.title] || ''
-            )
+          color={
+            typeof row[header.title] === 'object' ? row[header.title].color : ''
           }
+          content={getContent(header.title, colIndex)}
         />
       ))}
-    </div>
+    </tr>
   );
 };
 

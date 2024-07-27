@@ -5,7 +5,6 @@ import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
 
 interface TableContent {
   id: number;
-
   [key: string]: any;
 }
 
@@ -21,30 +20,27 @@ interface TableContainerProps {
 }
 
 const TableContainer = ({ headers, data }: TableContainerProps) => {
-  const handleDetails = (row: TableContent) => {};
-
   const hasData = data.length > 0;
 
   return (
-    <div className="min-w-full">
-      <div className="min-w-full">
+    <table className="min-w-full table-fixed border-separate border-spacing-y-2.5">
+      <thead>
         <TableHeaderModule headers={headers} />
-        <div className="bg-white">
-          {hasData ? (
-            data.map((row, rowIndex) => (
-              <TableRowModule
-                key={row.id}
-                row={{ ...row, 번호: rowIndex + 1 }}
-                headers={headers}
-                onDetailsClick={handleDetails}
-              />
-            ))
-          ) : (
-            <EmptyContainer />
-          )}
-        </div>
-      </div>
-    </div>
+      </thead>
+      <tbody className="bg-white">
+        {hasData ? (
+          data.map((row, rowIndex) => (
+            <TableRowModule
+              key={row.id}
+              row={{ 번호: rowIndex + 1, ...row }}
+              headers={headers}
+            />
+          ))
+        ) : (
+          <EmptyContainer />
+        )}
+      </tbody>
+    </table>
   );
 };
 

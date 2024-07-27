@@ -8,7 +8,7 @@ import {
 
 const NavBarContainer = () => {
   return (
-    <div className="pt-1 text-white w-[203px] bg-sub-400 h-screen">
+    <div className="pt-1 text-white w-[203px] bg-sub-400 h-full">
       <NavModule
         icon={ProfileIcon}
         title="회원 관리"
