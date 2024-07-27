@@ -16,8 +16,8 @@ interface FileItem {
 
 const noticeExample = {
   id: 1,
-  title: '',
-  content: '',
+  title: '제목입니다',
+  content: '내용입니다 !!!!!!!!!!!!!',
   files: [
     {
       name: '첨부파일1.pdf',
@@ -53,7 +53,6 @@ const NoticeDetailPage = () => {
             <InputModule
               name="title"
               placeholder="제목이 존재하지 않습니다."
-              textCount={20}
               status="readonly"
               value={noticeExample.title}
             />
