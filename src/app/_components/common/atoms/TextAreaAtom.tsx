@@ -5,6 +5,7 @@ interface TextboxAtomProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   sizeClass: string;
+  name: string;
 }
 
 const TextAreaAtom = ({
@@ -12,6 +13,7 @@ const TextAreaAtom = ({
   value,
   onChange,
   sizeClass,
+  name,
 }: TextboxAtomProps) => {
   return (
     <textarea
@@ -19,6 +21,7 @@ const TextAreaAtom = ({
       placeholder={placeholder}
       value={value}
       onChange={onChange}
+      name={name}
     />
   );
 };

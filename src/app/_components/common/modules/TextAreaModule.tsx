@@ -8,6 +8,7 @@ interface TextboxModuleProps {
   maxLength: number;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  name: string;
 }
 
 const TextAreaModule = ({
@@ -16,6 +17,7 @@ const TextAreaModule = ({
   maxLength,
   value,
   onChange,
+  name,
 }: TextboxModuleProps) => {
   const [text, setText] = useState(value || '');
 
@@ -40,6 +42,7 @@ const TextAreaModule = ({
         value={text}
         onChange={handleChange}
         sizeClass={sizeClass}
+        name={name}
       />
       <div className="absolute bottom-3.5 right-3.5 text-4 text-sub-200">
         <TextCountAtom text={text} maxLength={maxLength} />
