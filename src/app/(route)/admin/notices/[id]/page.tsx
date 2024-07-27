@@ -16,8 +16,8 @@ interface FileItem {
 
 const noticeExample = {
   id: 1,
-  title: '공지사항 안내',
-  content: '공지사항 내용입니다아아아',
+  title: '',
+  content: '',
   files: [
     {
       name: '첨부파일1.pdf',
@@ -52,7 +52,7 @@ const NoticeDetailPage = () => {
           <div className="w-full">
             <InputModule
               name="title"
-              placeholder="제목을 입력하세요"
+              placeholder="제목이 존재하지 않습니다."
               textCount={20}
               status="readonly"
               value={noticeExample.title}
@@ -80,7 +80,7 @@ const NoticeDetailPage = () => {
         <p className="text-3 font-bold mb-4">내용</p>
         <TextAreaModule
           name="content"
-          placeholder="상세 내용을 입력하세요."
+          placeholder="내용이 존재하지 않습니다."
           size="LARGE"
           readonly
           value={noticeExample.content}
