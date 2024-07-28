@@ -10,6 +10,7 @@ import dayjs from 'dayjs';
 import RadioButtonContainer from '@/_components/common/containers/RadioButtonContainer';
 import DatePickerContainer from '@/_components/common/containers/DatePickerContainer';
 import FilteringBarContainer from '@/_components/common/containers/FilteringBarContainer';
+import { PointYellowIcon } from '@/_assets/icons';
 import SubtitleModule from '@/_components/common/modules/SubtitleModule';
 
 const headers = [
@@ -37,7 +38,7 @@ const data = [
   },
 ];
 
-const AdminMembersListPage = () => {
+const AdminMembersPointHistoryPage = () => {
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
   const [selectedDateTag, setSelectedDateTag] =
     useState<DatePickerTagType>('ALL');
@@ -121,4 +122,4 @@ const AdminMembersListPage = () => {
   );
 };
 
-export default AdminMembersListPage;
+export default AdminMembersPointHistoryPage;
