@@ -5,6 +5,7 @@ import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 interface ModalModuleProps {
   title: string;
   content: React.ReactNode;
+  children: React.ReactNode;
   onConfirm: () => void;
   onCancel: () => void;
   confirmText?: string;
@@ -16,6 +17,7 @@ interface ModalModuleProps {
 const ModalModule = ({
   title,
   content,
+  children,
   onConfirm,
   onCancel,
   confirmText = '확인',
@@ -28,7 +30,7 @@ const ModalModule = ({
       <div className="flex text-center pb-10">
         <ModalTitleAtom title={title} />
       </div>
-      <div className="w-full text-center">{content}</div>
+      <div className="w-full text-center">{children}</div>
       <div className="flex w-full gap-2 pt-10">
         <ButtonAtom buttonType={cancelButtonType} flexGrow onClick={onCancel}>
           {cancelText}
