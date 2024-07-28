@@ -42,3 +42,31 @@ export const membersOrderList: { [key in MembersOrderType]: string } = {
   HIGHEST: '보유 포인트 높은순',
   LOWEST: '보유 포인트 낮은순',
 };
+
+export type PointOrderType = 'POINT_HIGHEST' | 'POINT_LOWEST';
+
+export const pointOrderList: { [key in PointOrderType]: string } = {
+  POINT_HIGHEST: '배팅 포인트 높은 순',
+  POINT_LOWEST: '배팅 포인트 낮은 순',
+};
+
+export type StatusType =
+  | 'APPLIED'
+  | 'DRAW_WAITING'
+  | 'FAIL'
+  | 'CONFIRMED_WAITING'
+  | 'CANCEL'
+  | 'CONFIRM'
+  | 'WAITING'
+  | 'COMPLETED';
+
+export const statusList: { [key in StatusType]: string } = {
+  APPLIED: '신청완료',
+  DRAW_WAITING: '추첨대기',
+  FAIL: '미당첨',
+  CONFIRMED_WAITING: '확정대기',
+  CANCEL: '당첨취소',
+  CONFIRM: '당첨확정',
+  WAITING: '대기',
+  COMPLETED: '일정종료',
+};
