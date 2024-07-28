@@ -42,3 +42,10 @@ export const membersOrderList: { [key in MembersOrderType]: string } = {
   HIGHEST: '보유 포인트 높은순',
   LOWEST: '보유 포인트 낮은순',
 };
+
+export type PointChangeType = 'INCREASE' | 'DECREASE';
+
+export const pointChangeList: { [key in PointChangeType]: string } = {
+  INCREASE: '포인트 증가',
+  DECREASE: '포인트 감소',
+};
