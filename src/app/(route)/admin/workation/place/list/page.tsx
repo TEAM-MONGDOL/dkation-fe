@@ -8,6 +8,12 @@ import imsyPlace from '@/_assets/images/place_impy.png';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import EmptyContainer from '@/_components/common/containers/EmptyContainer';
+import RadioButtonContainer from '@/_components/common/containers/RadioButtonContainer';
+import { LocationList, noticeList, orderList } from '@/_types/adminType';
+import CheckboxContainer from '@/_components/common/containers/CheckboxContainer';
+import DatePickerContainer from '@/_components/common/containers/DatePickerContainer';
+import FilteringBarContainer from '@/_components/common/containers/FilteringBarContainer';
+import dayjs from 'dayjs';
 
 const data = [
   { subtitle: '이름', content: '양양 쏠비치' },
@@ -23,7 +29,36 @@ const data = [
 ];
 const AdminWorkationPlaceListPage = () => {
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
-
+  const [param, setParam] = useState<{
+    order: string;
+    type: string[];
+  }>({
+    order: 'RECENT',
+    type: [
+      'SEOUL',
+      'GANGWON',
+      'CHUNGCEOUNG',
+      'JEONLA',
+      'GYEONGSANG',
+      'JEJU',
+      'ABROAD',
+    ],
+  });
+  const refreshHandler = () => {
+    setParam({
+      ...param,
+      order: 'RECENT',
+      type: [
+        'SEOUL',
+        'GANGWON',
+        'CHUNGCEOUNG',
+        'JEONLA',
+        'GYEONGSANG',
+        'JEJU',
+        'ABROAD',
+      ],
+    });
+  };
   return (
     <div>
       <div className="w-full flex justify-between items-center mb-10">
@@ -51,6 +86,26 @@ const AdminWorkationPlaceListPage = () => {
           <ButtonAtom buttonType="yellow">장소 추가</ButtonAtom>
         </div>
       </div>
+      <FilteringBarContainer
+        isOpen={isFilteringBarOpen}
+        setIsOpen={setIsFilteringBarOpen}
+        refreshHandler={refreshHandler}
+      >
+        <RadioButtonContainer
+          title="정렬"
+          options={Object.entries(orderList) as [string, string][]}
+          selectedOption={param.order}
+          setSelectedOption={(order: string) => setParam({ ...param, order })}
+        />
+        <hr />
+        <CheckboxContainer
+          title="지역"
+          options={Object.entries(LocationList) as [string, string][]}
+          selectedOptions={param.type}
+          setSelectedOptions={(type: string[]) => setParam({ ...param, type })}
+        />
+        <hr />
+      </FilteringBarContainer>
     </div>
   );
 };
