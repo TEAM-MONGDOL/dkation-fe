@@ -11,6 +11,7 @@ import { PlaceOptions } from '@/_constants/common';
 const WorkationNew = () => {
   const [values, setValues] = useState({
     title: '',
+    person: '',
     category: '',
   });
   const handleChange = (
@@ -51,12 +52,12 @@ const WorkationNew = () => {
               <InputModule
                 subtitle="모집 인원"
                 placeholder="0"
-                value={values.title}
+                value={values.person}
                 onChange={handleChange}
               />
             </div>
           </div>
-          <div className="mt-4 flex flex-col w-full">
+          <div className="mt-6 flex flex-col w-full gap-4">
             <p className="text-3 font-semibold">장소</p>
             <DropdownModule
               options={PlaceOptions}
