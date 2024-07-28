@@ -42,3 +42,13 @@ export const membersOrderList: { [key in MembersOrderType]: string } = {
   HIGHEST: '보유 포인트 높은순',
   LOWEST: '보유 포인트 낮은순',
 };
+
+export type PointRequestStatusType = 'WAITING' | 'REJECTED' | 'ACCEPTED';
+
+export const pointRequestStatusList: {
+  [key in PointRequestStatusType]: string;
+} = {
+  WAITING: '대기',
+  REJECTED: '반려',
+  ACCEPTED: '승인',
+};
