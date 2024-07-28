@@ -19,3 +19,11 @@ export const noticeList: { [key in NoticeType]: string } = {
   RESULT: '결과 발표',
   EVENT: '이벤트 안내',
 };
+
+export type ResultType = 'NAME' | 'LOWEST' | 'HIGHEST';
+
+export const resultList: { [key in ResultType]: string } = {
+  NAME: '가나다순',
+  LOWEST: '확률 낮은 순',
+  HIGHEST: '확률 높은 순',
+};
