@@ -40,7 +40,7 @@ const NoticeDetailPage = () => {
   const router = useRouter();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const handleEdit = () => {
-    router.push(`/admin/notices/edit/${noticeExample.id}`); // 추후 수정 예정
+    router.push(`/admin/notices/${noticeExample.id}/edit`);
   };
 
   const handleDelete = () => {
