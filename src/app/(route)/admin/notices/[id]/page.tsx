@@ -7,6 +7,10 @@ import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import FileModule from '@/_components/common/modules/FileModule';
 import EmptyContainer from '@/_components/common/containers/EmptyContainer';
+import { useState } from 'react';
+import ModalModule from '@/_components/common/modules/ModalModule';
+import logo from '@/_assets/images/logo_imsy.png';
+import Image from 'next/image';
 
 interface FileItem {
   name: string;
@@ -34,13 +38,13 @@ const noticeExample = {
 
 const NoticeDetailPage = () => {
   const router = useRouter();
-
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const handleEdit = () => {
     router.push(`/admin/notices/edit/${noticeExample.id}`); // 추후 수정 예정
   };
 
   const handleDelete = () => {
-    router.push('/admin/notices'); // 추후 수정 예정
+    setIsDeleteModalOpen(true);
   };
 
   return (
@@ -92,6 +96,29 @@ const NoticeDetailPage = () => {
             수정
           </ButtonAtom>
         </div>
+        {isDeleteModalOpen && (
+          <ModalModule
+            title="해당 게시글을 삭제하시겠습니까?"
+            cancelText="취소"
+            confirmText="삭제"
+            confirmButtonType="red"
+            onClick={() => {
+              setIsDeleteModalOpen(false);
+            }}
+            onCancel={() => {
+              setIsDeleteModalOpen(false);
+            }}
+            onConfirm={() => {
+              // 삭제 로직 위치
+              setIsDeleteModalOpen(false);
+              router.push('/admin/notices');
+            }}
+          >
+            <div className="flex justify-center">
+              <Image className="h-5 w-24" src={logo} alt="logo" />
+            </div>
+          </ModalModule>
+        )}
       </div>
     </div>
   );
