@@ -6,7 +6,7 @@ interface Props {
   children: ReactNode;
 }
 
-const AdminPointsLayout = ({ children }: Props) => {
+const AdminWorkationLayout = ({ children }: Props) => {
   return (
     <div className="flex flex-col h-screen">
       <HeaderModule />
@@ -18,4 +18,4 @@ const AdminPointsLayout = ({ children }: Props) => {
   );
 };
 
-export default AdminPointsLayout;
+export default AdminWorkationLayout;
