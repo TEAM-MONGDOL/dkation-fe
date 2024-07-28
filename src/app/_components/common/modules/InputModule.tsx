@@ -24,7 +24,7 @@ const InputModule = ({
   onChange,
 }: InputProps) => {
   return (
-    <div className="flex flex-col">
+    <div className={`flex flex-col ${subtitle && 'gap-4'}`}>
       <InputSubtitleAtom
         message={message}
         status={status}
