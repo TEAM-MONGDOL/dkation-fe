@@ -16,46 +16,41 @@ import { useState } from 'react';
 
 const headers = [
   { title: '번호', width: '80px' },
-  { title: '분류', width: '110px' },
-  { title: '구분', flexGrow: true },
+  { title: '구분', width: '150px' },
+  { title: '분류', flexGrow: true },
   { title: '이름', flexGrow: true },
-  { title: '지급일', flexGrow: true },
-  { title: '포인트', width: '110px' },
+  { title: '지급일', width: '200px' },
   { title: '', width: '160px' },
 ];
 
 const data = [
   {
     id: 1,
-    분류: { text: '개인', color: 'red' },
-    구분: '자기계발',
+    구분: { text: '개인', color: 'red' },
+    분류: '자기계발',
     이름: '김철수',
     지급일: '2024-07-20',
-    포인트: 100,
   },
   {
     id: 2,
-    분류: { text: '개인', color: 'red' },
-    구분: '봉사활동',
+    구분: { text: '개인', color: 'red' },
+    분류: '봉사활동',
     이름: '이영희',
     지급일: '2024-07-21',
-    포인트: 200,
   },
   {
     id: 3,
-    분류: { text: '단체', color: 'blue' },
-    구분: '이벤트',
+    구분: { text: '단체', color: 'blue' },
+    분류: '이벤트',
     이름: '박민수',
     지급일: '2024-07-21',
-    포인트: 300,
   },
   {
     id: 4,
-    분류: { text: '단체', color: 'blue' },
-    구분: '자기계발',
+    구분: { text: '단체', color: 'blue' },
+    분류: '자기계발',
     이름: '김철수 외 3명',
     지급일: '2024-07-21',
-    포인트: 400,
   },
 ];
 
