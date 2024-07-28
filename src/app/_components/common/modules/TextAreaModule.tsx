@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import TextAreaAtom from '@/_components/common/atoms/TextAreaAtom';
 import TextCountAtom from '@/_components/common/atoms/TextCountAtom';
