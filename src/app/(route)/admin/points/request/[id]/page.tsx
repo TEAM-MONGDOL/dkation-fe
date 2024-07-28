@@ -3,8 +3,10 @@
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import FileModule from '@/_components/common/modules/FileModule';
 import InputModule from '@/_components/common/modules/InputModule';
+import ModalModule from '@/_components/common/modules/ModalModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
+import { useState } from 'react';
 
 const waitingData = {
   id: 1,
@@ -48,9 +50,12 @@ const rejectedData = {
   fileUrl: 'www.naver.com',
 };
 
-const data = waitingData;
+const data = rejectedData;
 
 const AdminPointsRequestDetailPage = () => {
+  const [isModalOpen, setIsModalOpen] = useState<'accept' | 'reject' | null>(
+    null,
+  );
   return (
     <div className="w-full flex flex-col gap-y-10 overflow-y-auto">
       <TitleBarModule title="포인트 신청 내역 상세" type="LEFT" />
@@ -103,13 +108,53 @@ const AdminPointsRequestDetailPage = () => {
         </div>
         <div className="w-full flex items-center justify-end gap-x-5 pt-[30px]">
           {/* TODO : 좀 더 길게 버튼 길이 고정 필요 */}
-          <ButtonAtom buttonType="dark" onClick={() => {}}>
+          <ButtonAtom
+            buttonType="dark"
+            onClick={() => {
+              setIsModalOpen('reject');
+            }}
+          >
             반려
           </ButtonAtom>
-          <ButtonAtom buttonType="yellow" onClick={() => {}}>
+          <ButtonAtom
+            buttonType="yellow"
+            onClick={() => {
+              setIsModalOpen('accept');
+            }}
+          >
             승인
           </ButtonAtom>
         </div>
+        {isModalOpen &&
+          (isModalOpen === 'accept' ? (
+            <ModalModule
+              title="포인트 신청 승인"
+              content="해당 신청을 승인하시겠습니까?"
+              onCancel={() => {
+                setIsModalOpen(null);
+              }}
+              onConfirm={() => {
+                // API 호출 필요
+                alert('승인');
+              }}
+            >
+              해당 신청을 승인하시겠습니까?
+            </ModalModule>
+          ) : (
+            <ModalModule
+              title="포인트 신청 반려"
+              content="해당 신청을 반려하시겠습니까?"
+              onCancel={() => {
+                setIsModalOpen(null);
+              }}
+              onConfirm={() => {
+                // API 호출 필요
+                alert('반려');
+              }}
+            >
+              해당 신청을 반려하시겠습니까?
+            </ModalModule>
+          ))}
       </section>
     </div>
   );
