@@ -47,7 +47,7 @@ const data = [
   },
 ];
 
-const AdminMembersListPage = () => {
+const AdminMembersWkHistoryPage = () => {
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
   const [selectedDateTag, setSelectedDateTag] =
     useState<DatePickerTagType>('ALL');
@@ -128,4 +128,4 @@ const AdminMembersListPage = () => {
   );
 };
 
-export default AdminMembersListPage;
+export default AdminMembersWkHistoryPage;
