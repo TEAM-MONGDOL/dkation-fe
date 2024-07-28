@@ -27,12 +27,12 @@ const AdminMembersLayout = ({ children, params }: Props) => {
     {
       id: '2',
       title: '포인트 사용 내역',
-      url: `/admin/members/${memberId}/points`,
+      url: `/admin/members/${memberId}/point-history`,
     },
     {
       id: '3',
       title: '패널티 내역',
-      url: `/admin/members/${memberId}/penalties`,
+      url: `/admin/members/${memberId}/penalty-history`,
     },
   ];
 
