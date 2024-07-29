@@ -80,14 +80,16 @@ const NoticeDetailPage = () => {
             <EmptyContainer />
           )}
         </div>
-        <p className="text-3 font-bold mb-4">내용</p>
-        <TextAreaModule
-          name="content"
-          placeholder="내용이 존재하지 않습니다."
-          size="LARGE"
-          readonly
-          value={noticeExample.content}
-        />
+        <div>
+          <p className="text-3 font-bold mb-4">내용</p>
+          <TextAreaModule
+            name="content"
+            placeholder="내용이 존재하지 않습니다."
+            size="LARGE"
+            readonly
+            value={noticeExample.content}
+          />
+        </div>
         <div className="flex justify-end pt-14 gap-5">
           <ButtonAtom buttonStyle="red" onClick={handleDelete}>
             삭제
