@@ -1,5 +1,3 @@
-'use client';
-
 interface InputProps {
   placeholder?: string;
   status?: 'error' | 'correct' | 'readonly' | 'disabled';
