@@ -40,7 +40,7 @@ const ButtonAtom = ({
   type = 'button',
 }: ButtonProps) => {
   const baseClasses =
-    'inline-flex items-center justify-center text-3 py-3.5 font-semibold rounded-regular';
+    'inline-flex items-center justify-center text-3 h-12 font-semibold rounded-regular';
   const flexGrowClasses = flexGrow ? 'flex-grow' : 'px-10';
   const buttonTypeClasses = getButtonType(buttonStyle);
 
