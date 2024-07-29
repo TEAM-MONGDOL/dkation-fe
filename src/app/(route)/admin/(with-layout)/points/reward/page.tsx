@@ -122,9 +122,7 @@ const AdminPointsRewardPage = () => {
         </thead>
         <tbody>
           {data.length <= 0 ? (
-            <td colSpan={6}>
-              <EmptyContainer />
-            </td>
+            <EmptyContainer colSpan={headers.length} />
           ) : (
             data.map((item, index) => (
               <TableBodyModule key={item.id}>

@@ -1,10 +1,16 @@
 import EmptyContentModule from '@/_components/common/modules/EmptyContentModule';
 
-const EmptyContainer = () => {
+interface EmptyContainerProps {
+  colSpan?: number;
+}
+
+const EmptyContainer = ({ colSpan }: EmptyContainerProps) => {
   return (
-    <div className="w-full h-40 bg-cus-100 content-center">
-      <EmptyContentModule />
-    </div>
+    <td colSpan={colSpan}>
+      <div className="w-full h-40 bg-cus-100 content-center">
+        <EmptyContentModule />
+      </div>
+    </td>
   );
 };
 
