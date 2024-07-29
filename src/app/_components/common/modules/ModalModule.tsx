@@ -38,7 +38,6 @@ const ModalModule = ({
           <ButtonAtom buttonType={cancelButtonType} flexGrow onClick={onCancel}>
             {cancelText}
           </ButtonAtom>
-
           <ButtonAtom
             buttonType={confirmButtonType}
             flexGrow
