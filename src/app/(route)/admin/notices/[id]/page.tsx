@@ -89,10 +89,10 @@ const NoticeDetailPage = () => {
           value={noticeExample.content}
         />
         <div className="flex justify-end pt-14 gap-5">
-          <ButtonAtom buttonType="red" onClick={handleDelete}>
+          <ButtonAtom buttonStyle="red" onClick={handleDelete}>
             삭제
           </ButtonAtom>
-          <ButtonAtom buttonType="dark" onClick={handleEdit}>
+          <ButtonAtom buttonStyle="dark" onClick={handleEdit}>
             수정
           </ButtonAtom>
         </div>
