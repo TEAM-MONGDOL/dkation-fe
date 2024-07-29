@@ -11,6 +11,7 @@ import RadioButtonContainer from '@/_components/common/containers/RadioButtonCon
 import DatePickerContainer from '@/_components/common/containers/DatePickerContainer';
 import FilteringBarContainer from '@/_components/common/containers/FilteringBarContainer';
 import { PointYellowIcon } from '@/_assets/icons';
+import CheckboxContainer from '@/_components/common/containers/CheckboxContainer';
 import SubtitleModule from '@/_components/common/modules/SubtitleModule';
 
 const headers = [
@@ -50,11 +51,11 @@ const AdminMembersPointHistoryPage = () => {
   const [param, setParam] = useState<{
     order: string;
     type: string[];
-    point: string;
+    point: string[];
   }>({
     order: 'RECENT',
     type: [],
-    point: '',
+    point: ['INCREASE', 'DECREASE'],
   });
 
   const refreshHandler = () => {
@@ -62,7 +63,7 @@ const AdminMembersPointHistoryPage = () => {
       ...param,
       order: 'RECENT',
       type: [],
-      point: '',
+      point: ['INCREASE', 'DECREASE'],
     });
     setSelectedDateTag('ALL');
     setStartDate(dayjs().subtract(1, 'year').toDate());
@@ -111,11 +112,13 @@ const AdminMembersPointHistoryPage = () => {
           setEndDate={(end: Date) => setEndDate(end)}
         />
         <hr />
-        <RadioButtonContainer
+        <CheckboxContainer
           title="포인트 변동"
           options={Object.entries(pointChangeList) as [string, string][]}
-          selectedOption={param.point}
-          setSelectedOption={(point: string) => setParam({ ...param, point })}
+          selectedOptions={param.point}
+          setSelectedOptions={(point: string[]) =>
+            setParam({ ...param, point })
+          }
         />
       </FilteringBarContainer>
     </div>
