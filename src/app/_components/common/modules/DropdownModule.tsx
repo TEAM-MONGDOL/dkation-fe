@@ -40,7 +40,7 @@ const DropdownModule = ({
       <div>
         <button
           type="button"
-          className={`inline-flex items-center w-full justify-between px-4 py-3.5 text-4 text-sub-300 border border-stroke-100 ${fixed ? 'w-52' : 'w-full'} ${isOpen ? 'rounded-t-regular' : 'rounded-regular'}`}
+          className={`inline-flex items-center justify-between px-4 py-3.5 text-4 text-sub-300 border border-stroke-100 ${fixed ? 'w-52' : 'w-full'} ${isOpen ? 'rounded-t-regular' : 'rounded-regular'}`}
           onClick={() => setIsOpen(!isOpen)}
         >
           <span className="text-sub-200">{selectedOption || placeholder}</span>
