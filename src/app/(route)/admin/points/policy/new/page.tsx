@@ -5,14 +5,16 @@ import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import InputAreaAtom from '@/_components/common/atoms/InputAreaAtom';
 import InfoSectionContainer from '@/_components/common/containers/InfoSectionContainer';
 import InputModule from '@/_components/common/modules/InputModule';
+import ModalModule from '@/_components/common/modules/ModalModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useState } from 'react';
 
 const AdminPointsPolicyNewPage = () => {
   const router = useRouter();
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
   return (
     <div className="w-full flex flex-col gap-y-10 overflow-y-auto">
@@ -79,14 +81,27 @@ const AdminPointsPolicyNewPage = () => {
           <ButtonAtom
             buttonType="yellow"
             onClick={() => {
-              alert('등록하기');
-              // TODO : API 연동
-              router.push('/admin/points/policy');
+              setIsConfirmModalOpen(true);
             }}
           >
             등록하기
           </ButtonAtom>
         </div>
+        {/* TODO : 머지 후 children에 이미지 넣어야 됨 */}
+        {isConfirmModalOpen && (
+          <ModalModule
+            title="정책을 추가하시겠습니까?"
+            content="정책 추가"
+            onConfirm={() => {
+              alert('등록하기');
+              // TODO : API 연동
+              router.push('/admin/points/policy');
+            }}
+            onCancel={() => {
+              setIsConfirmModalOpen(false);
+            }}
+          />
+        )}
       </section>
     </div>
   );
