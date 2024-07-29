@@ -51,6 +51,16 @@ export const membersOrderList: { [key in MembersOrderType]: string } = {
   LOWEST: '보유 포인트 낮은순',
 };
 
+export type PointRequestStatusType = 'WAITING' | 'REJECTED' | 'ACCEPTED';
+
+export const pointRequestStatusList: {
+  [key in PointRequestStatusType]: string;
+} = {
+  WAITING: '대기',
+  REJECTED: '반려',
+  ACCEPTED: '승인',
+};
+
 export type LocationType =
   | 'SEOUL'
   | 'GANGWON'
@@ -59,6 +69,7 @@ export type LocationType =
   | 'GYEONGSANG'
   | 'JEJU'
   | 'ABROAD';
+};
 
 export const LocationList: { [key in LocationType]: string } = {
   SEOUL: '서울',
