@@ -9,5 +9,6 @@ export const AdminListResultSidebar = (id: number) => [
     id: '2',
     title: '결과 통계 및 페널티',
     url: `/admin/workation/list/${id}/result/penalty`,
+   
   },
 ];

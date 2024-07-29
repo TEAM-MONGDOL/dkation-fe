@@ -17,16 +17,16 @@ const data = [
 ];
 const AdminWorkationResultLayout = ({ children, id }: Props) => {
   return (
-    <div className="flex h-full">
-      <div className="flex-col flex gap-10">
-        <TitleBarModule title="결과 및 페널티" type="LEFT" />
+    <div className="flex flex-col h-full gap-10">
+      <TitleBarModule title="결과 및 페널티" type="LEFT" />
+      <div className="flex gap-x-">
         <div className="w-[300px] flex flex-col gap-5">
           <InfoSectionContainer data={data} image={PlaceImsy} />
           <SidebarModule items={AdminListResultSidebar(id)} />
         </div>
-      </div>
-      <div className="grow flex mt-[84px] ml-5">
-        <main className="w-full">{children}</main>
+        <div className="grow flex ml-5">
+          <main className="w-full">{children}</main>
+        </div>
       </div>
     </div>
   );

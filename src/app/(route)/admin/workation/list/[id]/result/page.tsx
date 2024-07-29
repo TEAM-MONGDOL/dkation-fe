@@ -7,9 +7,10 @@ import { ResultIcon } from '@/_assets/icons';
 import TableContainer from '@/_components/common/containers/TableContainer';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
 import RadioButtonContainer from '@/_components/common/containers/RadioButtonContainer';
+import { resultList } from '@/_types/adminType';
 import CheckboxContainer from '@/_components/common/containers/CheckboxContainer';
 import FilteringBarContainer from '@/_components/common/containers/FilteringBarContainer';
-import { resultList } from '@/_types/adminType';
+import RangeContainer from '@/_components/common/containers/RangeContainer';
 
 const headers = [
   { title: '번호', width: '50px' },
