@@ -49,6 +49,22 @@ const config: Config = {
       },
       padding: {
         15: '3.75rem',
+        '3xl': '30px',
+        '4xl': '40px',
+        '5xl': '50px',
+        '6xl': '60px',
+      },
+      gap: {
+        '3xl': '30px',
+        '4xl': '40px',
+        '5xl': '50px',
+        '6xl': '60px',
+      },
+      height: {
+        '3xl': '30px',
+        '4xl': '40px',
+        '5xl': '50px',
+        '6xl': '60px',
       },
     },
   },
