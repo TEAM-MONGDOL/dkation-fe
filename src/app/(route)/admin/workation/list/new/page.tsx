@@ -16,7 +16,7 @@ import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 const WorkationNew = () => {
   const [values, setValues] = useState({
     title: '',
-    person: '',
+    number: '',
     category: '',
   });
   const handleChange = (
@@ -64,7 +64,7 @@ const WorkationNew = () => {
                 <InputModule
                   subtitle="모집 인원"
                   placeholder="0"
-                  value={values.person}
+                  value={values.number}
                   onChange={handleChange}
                 />
               </div>
