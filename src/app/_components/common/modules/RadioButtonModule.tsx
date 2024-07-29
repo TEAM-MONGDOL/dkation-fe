@@ -17,7 +17,7 @@ const RadioButtonModule = ({
 }) => {
   return (
     <button
-      className="flex items-center justify-start w-full gap-x-2.5 bg-white text-4"
+      className="flex items-center justify-start w-full gap-x-2.5 py-[5px] bg-white text-4"
       onClick={onClick}
     >
       <RadioButtonAtom isChecked={isClicked} />
