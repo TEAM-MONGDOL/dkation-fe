@@ -1,7 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-
 interface InputProps {
   placeholder?: string;
   status?: 'error' | 'correct' | 'readonly' | 'disabled';

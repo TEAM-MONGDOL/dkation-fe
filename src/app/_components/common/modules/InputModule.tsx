@@ -18,14 +18,14 @@ interface InputProps {
 const InputModule = ({
   placeholder,
   status,
-  value,
+  value = '',
   subtitle,
   message,
   textCount,
   name,
   onChange,
 }: InputProps) => {
-  const [inputValue, setInputValue] = useState(value || '');
+  const [inputValue, setInputValue] = useState(value);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
     onChange?.(e);
@@ -43,7 +43,7 @@ const InputModule = ({
         value={inputValue}
         textCount={textCount}
         name={name}
-        onChange={onChange}
+        onChange={handleChange}
       />
     </div>
   );
