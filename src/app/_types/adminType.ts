@@ -27,3 +27,26 @@ export const resultList: { [key in ResultType]: string } = {
   LOWEST: '확률 낮은 순',
   HIGHEST: '확률 높은 순',
 };
+
+export type TeamType =
+  | 'MANAGEMENT'
+  | 'SALES'
+  | 'MARKETING'
+  | 'PROMOTION'
+  | 'DEV';
+
+export const teamList: { [key in TeamType]: string } = {
+  MANAGEMENT: '경영팀',
+  SALES: '영업팀',
+  MARKETING: '마케팅팀',
+  PROMOTION: '홍보팀',
+  DEV: '개발팀',
+};
+
+export type MembersOrderType = 'NAME' | 'HIGHEST' | 'LOWEST';
+
+export const membersOrderList: { [key in MembersOrderType]: string } = {
+  NAME: '이름순',
+  HIGHEST: '보유 포인트 높은순',
+  LOWEST: '보유 포인트 낮은순',
+};
