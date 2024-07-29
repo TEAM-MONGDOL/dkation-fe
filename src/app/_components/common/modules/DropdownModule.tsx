@@ -40,7 +40,7 @@ const DropdownModule = ({
       <div>
         <button
           type="button"
-          className={`inline-flex items-center justify-between px-4 py-3.5 text-4 text-sub-300 border border-stroke-100 ${fixed ? 'w-52' : 'w-full'} ${isOpen ? 'rounded-t-regular' : 'rounded-regular'}`}
+          className={`inline-flex items-center justify-between px-4 py-3.5 text-4 text-sub-300 border border-stroke-100 h-5xl ${fixed ? 'w-52' : 'w-full'} ${isOpen ? 'rounded-t-regular' : 'rounded-regular'}`}
           onClick={() => setIsOpen(!isOpen)}
         >
           <span className="text-sub-200">{selectedOption || placeholder}</span>
@@ -50,7 +50,7 @@ const DropdownModule = ({
 
       {isOpen && (
         <div
-          className={`absolute right-0 w-full rounded-b-regular bg-white border border-stroke-100 border-t-0 ${fixed ? 'w-52' : 'w-full'}`}
+          className={`absolute right-0 top-5xl w-full rounded-b-regular bg-white border border-stroke-100 border-t-0 ${fixed ? 'w-52' : 'w-full'}`}
         >
           {options.map((option, index) => (
             <DropdownItemAtom
