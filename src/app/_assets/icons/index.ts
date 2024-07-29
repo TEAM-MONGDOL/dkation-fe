@@ -23,4 +23,5 @@ export { default as AddFile } from './addfileButton.svg';
 export { default as SearchingGlasses } from './searchingGlasses.svg';
 export { default as FilterListIcon } from './filterList.svg';
 export { default as RefreshIcon } from './refresh.svg';
+export { default as ResultIcon } from './resultIcon.svg';
 export { default as PlaceGallery } from './placeGallery.svg';
