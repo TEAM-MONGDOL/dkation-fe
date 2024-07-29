@@ -1,12 +1,17 @@
+'use client';
+
 import Image from 'next/image';
 import { SearchingGlasses } from '@/_assets/icons';
 import FilteringButtonAtom from '@/_components/common/atoms/FilteringButtonAtom';
+import { useState } from 'react';
 
 interface BoxProps {
   filter?: boolean;
   onClick: () => void;
   placeholder: string;
   widthFull?: boolean;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const SearchingBoxModule = ({
@@ -14,7 +19,14 @@ const SearchingBoxModule = ({
   widthFull,
   onClick,
   placeholder,
+  value: initialValue = '',
+  onChange,
 }: BoxProps) => {
+  const [value, setValue] = useState(initialValue);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+    onChange?.(e);
+  };
   let widthClass = '';
 
   if (widthFull) {
@@ -28,6 +40,8 @@ const SearchingBoxModule = ({
         <input
           className={`pr-10 placeholder-sub-100 border rounded-regular text-3 h-11 outline-0 pl-2 ${widthClass}`}
           placeholder={placeholder}
+          value={value || ''}
+          onChange={handleChange}
         />
         <Image
           className="cursor-pointer absolute bottom-3 right-3"
