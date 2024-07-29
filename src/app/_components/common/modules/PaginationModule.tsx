@@ -14,7 +14,7 @@ const PaginationModule = () => {
   };
 
   return (
-    <div className="flex">
+    <div className="flex bg-white">
       <div className="rounded-l-lg w-12 h-12 border border-stroke-100 flex items-center justify-center">
         <Image src={LeftArrowEmptyIcon} alt="LeftArrowEmptyIcon" />
       </div>
