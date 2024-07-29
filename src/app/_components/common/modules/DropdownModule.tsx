@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import DropdownItemAtom from '@/_components/common/atoms/DropdownItemAtom';
-import { DownArrowIcon } from '@/_assets/icons';
+import { KeyboardArrowDown } from '@/_assets/icons';
 
 interface DropdownModuleProps {
   options: string[];
@@ -52,7 +52,7 @@ const DropdownModule = ({
             <span className="text-sub-200">
               {selectedOption || placeholder}
             </span>
-            <Image src={DownArrowIcon} alt="downarrow" />
+            <Image src={KeyboardArrowDown} alt="downarrow" />
           </button>
         </div>
         <div
