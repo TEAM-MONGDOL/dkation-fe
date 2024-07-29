@@ -13,7 +13,6 @@ const AdminWorkationPlaceNewPage = () => {
     address: '',
     maxPeople: '',
     registrationDate: '2024.07.14',
-    details: '',
   });
   const handleChange = (e: any) => {
     const { name, value } = e.target;
