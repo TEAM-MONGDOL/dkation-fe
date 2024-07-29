@@ -13,11 +13,11 @@ const SearchingBoxModule = ({ filter, onClick, placeholder }: BoxProps) => {
     <div className="flex">
       <div className="relative">
         <input
-          className={`pr-10 placeholder-sub-100 border rounded-regular text-3 h-11 outline-0 pl-2 ${filter ? 'w-[312px]' : 'w-[528px]'}`}
+          className={`h-11 rounded-regular border pl-2 pr-10 text-3 placeholder-sub-100 outline-0 ${filter ? 'w-[312px]' : 'w-[528px]'}`}
           placeholder={placeholder}
         />
         <Image
-          className="cursor-pointer absolute bottom-3 right-3"
+          className="absolute bottom-3 right-3 cursor-pointer"
           src={SearchingGlasses}
           alt="SearchingGlasses"
         />
