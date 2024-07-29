@@ -20,7 +20,7 @@ const AdminPointsPolicyDetailPage = () => {
 
   return (
     <div className="w-full flex flex-col gap-y-10 overflow-y-auto">
-      <TitleBarModule title="포인트 정책 추가" type="LEFT" />
+      <TitleBarModule title="포인트 정책 상세" type="LEFT" />
       <section className="w-full flex flex-col gap-y-[60px]">
         <div className="w-full flex flex-col gap-y-[30px]">
           <div className="w-full flex gap-x-[30px] items-center">
