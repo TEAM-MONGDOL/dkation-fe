@@ -57,7 +57,7 @@ const NoticesListPage = () => {
   const router = useRouter();
 
   const moveToWritePage = () => {
-    router.push('/admin/notices/write');
+    router.push('/admin/notices/new');
   };
 
   const handleFilteringBar = () => {
