@@ -50,3 +50,22 @@ export const membersOrderList: { [key in MembersOrderType]: string } = {
   HIGHEST: '보유 포인트 높은순',
   LOWEST: '보유 포인트 낮은순',
 };
+
+export type LocationType =
+  | 'SEOUL'
+  | 'GANGWON'
+  | 'CHUNGCEOUNG'
+  | 'JEONLA'
+  | 'GYEONGSANG'
+  | 'JEJU'
+  | 'ABROAD';
+
+export const LocationList: { [key in LocationType]: string } = {
+  SEOUL: '서울',
+  GANGWON: '강원',
+  CHUNGCEOUNG: '충청',
+  JEONLA: '전라',
+  GYEONGSANG: '경상',
+  JEJU: '제주',
+  ABROAD: '해외',
+};
