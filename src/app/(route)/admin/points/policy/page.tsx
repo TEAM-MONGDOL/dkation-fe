@@ -75,7 +75,12 @@ const AdminPointsPolicyPage = () => {
         <PaginationModule />
         {/* TODO : 높이 맞춰야 됨 */}
         <div className="absolute right-0 top-0 bottom-0">
-          <ButtonAtom buttonType="yellow" onClick={() => {}}>
+          <ButtonAtom
+            buttonType="yellow"
+            onClick={() => {
+              router.push('/admin/points/policy/new');
+            }}
+          >
             정책 추가
           </ButtonAtom>
         </div>
