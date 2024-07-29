@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import FileModule from '@/_components/common/modules/FileModule';
 import DragDropModule from '@/_components/common/modules/DragDropModule';
