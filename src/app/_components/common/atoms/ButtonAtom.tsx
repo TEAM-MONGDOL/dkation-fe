@@ -1,9 +1,7 @@
-import React, { ReactNode } from 'react';
-
 interface ButtonProps {
   buttonStyle: 'yellow' | 'dark' | 'red';
   onClick?: () => void;
-  children: ReactNode;
+  text: string;
   type?: 'button' | 'submit';
   width?: 'fixed' | 'grow';
 }
@@ -11,7 +9,7 @@ interface ButtonProps {
 /**
  * ButtonAtom 컴포넌트
  * @param buttonStyle - 버튼의 배경색과 글자색 스타일 지정 ('yellow', 'dark', 'red')
- * @param children - 버튼에 표시될 내용
+ * @param text - 버튼에 표시될 내용
  * @param onClick - 버튼 클릭 시 동작
  * @param type - 버튼 타입 ('button', 'submit')
  * @param width - 버튼 너비 지정 ('fixed'-150px , grow, 미지정시 px-10)
@@ -45,7 +43,7 @@ const getWidthClasses = (width: 'fixed' | 'grow' | undefined): string => {
 
 const ButtonAtom = ({
   buttonStyle,
-  children,
+  text,
   onClick,
   type = 'button',
   width,
@@ -61,7 +59,7 @@ const ButtonAtom = ({
       onClick={onClick}
       className={`${baseClasses} ${widthClasses} ${buttonTypeClasses}`}
     >
-      {children}
+      {text}
     </button>
   );
 };
