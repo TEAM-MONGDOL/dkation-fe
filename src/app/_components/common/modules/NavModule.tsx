@@ -33,25 +33,24 @@ const NavModule = ({ icon, title, plusContents, contents }: TitleProps) => {
         onIconClick={toggleVisibility}
         isVisible={isVisible}
       />
-      {isVisible && (
-        <>
-          {contents.map((contentItem, index) => (
+      <div
+        className={`
+            transition-max-height duration-300 ease-in-out overflow-hidden ${isVisible ? 'max-h-96' : 'max-h-0'}
+         `}
+      >
+        {contents.map((contentItem, index) => (
+          // eslint-disable-next-line react/jsx-key
+          <NavSubAtom content={contentItem.content} route={contentItem.route} />
+        ))}
+        {plusContents &&
+          plusContents.map((plusContentItem, index) => (
             // eslint-disable-next-line react/jsx-key
-            <NavSubAtom
-              content={contentItem.content}
-              route={contentItem.route}
+            <NavPlusAtom
+              content={plusContentItem.content}
+              route={plusContentItem.route}
             />
-          ))}
-          {plusContents &&
-            plusContents.map((plusContentItem, index) => (
-              // eslint-disable-next-line react/jsx-key
-              <NavPlusAtom
-                content={plusContentItem.content}
-                route={plusContentItem.route}
-              />
-            ))}{' '}
-        </>
-      )}
+          ))}{' '}
+      </div>
     </div>
   );
 };
