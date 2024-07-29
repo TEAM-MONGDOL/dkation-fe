@@ -43,7 +43,6 @@ const ButtonAtom = ({
 
   return (
     <button
-      type="button"
       onClick={onClick}
       className={`${baseClasses} ${flexGrowClasses} ${buttonTypeClasses}`}
     >

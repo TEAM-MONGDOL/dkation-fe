@@ -1,8 +1,9 @@
 interface SubtitleProps {
-  subtitle: string;
+  subtitle?: string;
   status?: string;
   message?: string;
 }
+
 const InputSubtitleAtom = ({ subtitle, status, message }: SubtitleProps) => {
   return (
     <div className="flex justify-between items-center">

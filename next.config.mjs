@@ -7,6 +7,11 @@ const nextConfig = {
         destination: '/admin/points/reward',
         permanent: true,
       },
+      {
+        source: '/admin/members/:id',
+        destination: '/admin/members/:id/wk-history',
+        permanent: true,
+      },
     ];
   },
 };

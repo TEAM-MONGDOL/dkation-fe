@@ -16,16 +16,18 @@ interface DatePickerAtomProps {
   selectedDate: Date;
   setSelectedDate: (prev: Date) => void;
   minDate: Date;
+  className?: string;
 }
 
 const DatePickerAtom = ({
   selectedDate,
   setSelectedDate,
   minDate,
+  className,
 }: DatePickerAtomProps) => {
   return (
     <DatePicker
-      className="flex w-full text-4 text-center items-center justify-center border border-sub-100 bg-white text-sub-400 px-4 py-1 rounded-lg focus:outline-primary"
+      className={`flex w-full text-4 text-center items-center justify-center border border-sub-100 bg-white text-sub-400 px-4 rounded-lg focus:outline-primary ${className ? `${className}` : 'py-1'}`}
       selected={selectedDate}
       onChange={(date) => setSelectedDate(date || selectedDate)}
       dateFormat="yyyy.MM.dd"
