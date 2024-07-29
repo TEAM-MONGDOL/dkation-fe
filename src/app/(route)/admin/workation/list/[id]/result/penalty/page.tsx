@@ -49,8 +49,9 @@ const AdminWorkationListPenaltyPage = () => {
         <div className="flex gap-5">
           <div className="flex flex-col w-full gap-4">
             <p className="text-3 font-bold">경쟁률</p>
-            <div className="w-full py-10 text-center border text-h1 font-bold">
-              30:1
+            <div className="w-full flex flex-col gap-1 py-7 text-center border ">
+              <p className="text-h1 font-bold">30 : 1</p>
+              <p className="text-4 text-sub-300">신청 인원 250명</p>
             </div>
           </div>
           <div className="flex flex-col w-full gap-4">
