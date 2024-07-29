@@ -4,9 +4,11 @@ import PointPolicyInfoModule from '@/_components/admin/points/modules/PointPolic
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import InputAreaAtom from '@/_components/common/atoms/InputAreaAtom';
 import InputModule from '@/_components/common/modules/InputModule';
+import ModalModule from '@/_components/common/modules/ModalModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 const data = {
   id: 1,
@@ -18,6 +20,7 @@ const data = {
 
 const AdminPointsPolicyEditPage = () => {
   const router = useRouter();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   return (
     <div className="w-full flex flex-col gap-y-10 overflow-y-auto">
@@ -65,12 +68,27 @@ const AdminPointsPolicyEditPage = () => {
           <ButtonAtom
             buttonType="yellow"
             onClick={() => {
-              router.push(`/admin/points/policy/${data.id}/edit`);
+              setIsEditModalOpen(true);
             }}
           >
             수정
           </ButtonAtom>
         </div>
+        {/* TODO : 머지 후 children 삽입 필요 */}
+        {isEditModalOpen && (
+          <ModalModule
+            title="정책을 수정하시겠습니까?"
+            content="정책 수정"
+            onConfirm={() => {
+              alert('수정하기');
+              // TODO : API 연동
+              router.push(`/admin/points/policy/${data.id}`);
+            }}
+            onCancel={() => {
+              setIsEditModalOpen(false);
+            }}
+          />
+        )}
       </section>
     </div>
   );
