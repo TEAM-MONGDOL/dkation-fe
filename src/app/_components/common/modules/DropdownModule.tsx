@@ -38,16 +38,16 @@ const DropdownModule = ({
       <div>
         <button
           type="button"
-          className={`inline-flex items-center w-52 justify-between px-4 py-3.5 text-4 text-sub-300 border border-stroke-100 ${isOpen ? 'rounded-t-regular' : 'rounded-regular'}`}
+          className={`inline-flex items-center w-full justify-between px-4 py-3.5 text-4 text-sub-300 border border-stroke-100 ${isOpen ? 'rounded-t-regular' : 'rounded-regular'}`}
           onClick={() => setIsOpen(!isOpen)}
         >
-          <span>{selectedOption || placeholder}</span>
+          <span className="text-sub-200">{selectedOption || placeholder}</span>
           <Image src={DownArrowIcon} alt="downarrow" />
         </button>
       </div>
 
       {isOpen && (
-        <div className="absolute right-0 rounded-b-regular bg-white border border-stroke-100 border-t-0">
+        <div className="absolute right-0 w-full rounded-b-regular bg-white border border-stroke-100 border-t-0">
           {options.map((option, index) => (
             <DropdownItemAtom
               key={option}

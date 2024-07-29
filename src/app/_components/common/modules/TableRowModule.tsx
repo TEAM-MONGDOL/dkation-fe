@@ -11,7 +11,7 @@ const TableRowModule = ({ row, headers }: TableRowModuleProps) => {
   const getContent = (header: string, colIndex: number) => {
     if (typeof row[header] === 'object') {
       if (
-        header === '' &&
+        (header === '' || header === '내용') &&
         colIndex === headers.length - 1 &&
         row[header].onClick
       ) {
