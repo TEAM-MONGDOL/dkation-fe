@@ -16,11 +16,11 @@ import { noticeList, orderList } from '@/_types/adminType';
 import dayjs from 'dayjs';
 
 const headers = [
-  { title: '번호', width: '60px' },
-  { title: '구분', width: '100px' },
+  { title: '번호', width: '80px' },
+  { title: '구분', width: '140px' },
   { title: '제목', flexGrow: true },
-  { title: '작성일', width: '150px' },
-  { title: '', width: '120px' },
+  { title: '작성일', width: '190px' },
+  { title: '', width: '160px' },
 ];
 
 const data = [
@@ -66,6 +66,10 @@ const NoticesListPage = () => {
 
   const handleRefresh = () => {};
 
+  function moveToNoticesDetail(id: number) {
+    router.push(`/admin/notices/${id}`);
+  }
+
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-12">
@@ -107,7 +111,13 @@ const NoticesListPage = () => {
           setEndDate={setEndDate}
         />
       </FilteringBarContainer>
-      <TableContainer headers={headers} data={data} />
+      <TableContainer
+        headers={headers}
+        data={data.map((item) => ({
+          ...item,
+          '': { onClick: () => moveToNoticesDetail(item.id) },
+        }))}
+      />
       <div className="relative mt-8">
         <div className="flex justify-center">
           <PaginationModule />

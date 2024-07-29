@@ -8,3 +8,4 @@ export const DragDropContent = {
 } as const;
 
 export const NoticeOptions = ['공지사항', '결과 발표', '이벤트 안내'];
+export const PlaceOptions = ['양양', '제주도'];

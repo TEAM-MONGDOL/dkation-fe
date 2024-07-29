@@ -7,7 +7,7 @@ interface TypeProps {
 }
 const TitleBarModule = ({ type, title }: TypeProps) => {
   return (
-    <div className="flex gap-4">
+    <div className="flex gap-[5px]">
       {type === 'LEFT' && <Image src={LeftArrowIcon} alt="leftarrowicon" />}
       <p className="text-h2 font-bold">{title}</p>
       {type === 'RIGHT' && <Image src={RightArrowIcon} alt="rightarrowicon" />}

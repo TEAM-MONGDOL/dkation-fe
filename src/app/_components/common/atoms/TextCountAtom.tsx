@@ -1,6 +1,6 @@
 interface TextCountAtomProps {
   text: string;
-  maxLength: number;
+  maxLength?: number;
 }
 
 const TextCountAtom = ({ text, maxLength }: TextCountAtomProps) => {
