@@ -37,7 +37,7 @@ const InputAreaAtom = ({
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (textCount !== undefined && e.target.value.length <= textCount) {
+    if (textCount === undefined || e.target.value.length <= textCount) {
       setValue(e.target.value);
       onChange?.(e);
     }
