@@ -61,7 +61,7 @@ const AdminPointsPolicyDetailPage = () => {
               setIsDeleteModalOpen(true);
             }}
           >
-            닫기
+            삭제
           </ButtonAtom>
           <ButtonAtom
             buttonType="yellow"

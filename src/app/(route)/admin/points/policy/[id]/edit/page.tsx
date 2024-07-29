@@ -79,6 +79,7 @@ const AdminPointsPolicyEditPage = () => {
           <ModalModule
             title="정책을 수정하시겠습니까?"
             content="정책 수정"
+            confirmText="수정"
             onConfirm={() => {
               alert('수정하기');
               // TODO : API 연동
