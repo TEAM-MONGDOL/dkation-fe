@@ -5,6 +5,7 @@ interface ButtonProps {
   buttonType: 'yellow' | 'dark' | 'red';
   onClick?: () => void;
   children: ReactNode;
+  type?: 'button' | 'submit';
 }
 
 /**
@@ -13,6 +14,7 @@ interface ButtonProps {
  * @param buttonType - 버튼의 배경색과 글자색 스타일 지정 ('yellow', 'dark', 'red')
  * @param children - 버튼에 표시될 내용
  * @param onClick - 버튼 클릭 시 동작
+ * @param type - 버튼 타입 ('button', 'submit')
  */
 
 const getButtonType = (
@@ -35,6 +37,7 @@ const ButtonAtom = ({
   buttonType,
   children,
   onClick,
+  type = 'button',
 }: ButtonProps) => {
   const baseClasses =
     'inline-flex items-center justify-center text-3 py-3.5 font-semibold rounded-[5px]';
@@ -43,6 +46,7 @@ const ButtonAtom = ({
 
   return (
     <button
+      type={type}
       onClick={onClick}
       className={`${baseClasses} ${flexGrowClasses} ${buttonTypeClasses}`}
     >
