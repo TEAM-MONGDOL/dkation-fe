@@ -35,6 +35,22 @@ export type TeamType =
   | 'PROMOTION'
   | 'DEV';
 
+
+export const teamList: { [key in TeamType]: string } = {
+  MANAGEMENT: '경영팀',
+  SALES: '영업팀',
+  MARKETING: '마케팅팀',
+  PROMOTION: '홍보팀',
+  DEV: '개발팀',
+};
+
+export type MembersOrderType = 'NAME' | 'HIGHEST' | 'LOWEST';
+
+export const membersOrderList: { [key in MembersOrderType]: string } = {
+  NAME: '이름순',
+  HIGHEST: '보유 포인트 높은순',
+  LOWEST: '보유 포인트 낮은순',
+
 export const resultList: { [key in ResultType]: string } = {
   NAME: '가나다순',
   LOWEST: '확률 낮은 순',

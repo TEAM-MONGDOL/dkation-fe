@@ -2,23 +2,25 @@ import React, { ReactNode } from 'react';
 
 interface ButtonProps {
   flexGrow?: boolean;
-  buttonType: 'yellow' | 'dark' | 'red';
+  buttonStyle: 'yellow' | 'dark' | 'red';
   onClick?: () => void;
   children: ReactNode;
+  type?: 'button' | 'submit';
 }
 
 /**
  * ButtonAtom 컴포넌트
  * @param flexGrow - 버튼의 flex-grow 여부를 결정하는 boolean 값
- * @param buttonType - 버튼의 배경색과 글자색 스타일 지정 ('yellow', 'dark', 'red')
+ * @param buttonStyle - 버튼의 배경색과 글자색 스타일 지정 ('yellow', 'dark', 'red')
  * @param children - 버튼에 표시될 내용
  * @param onClick - 버튼 클릭 시 동작
+ * @param type - 버튼 타입 ('button', 'submit')
  */
 
 const getButtonType = (
-  buttonType: 'yellow' | 'dark' | 'red' | undefined,
+  buttonStyle: 'yellow' | 'dark' | 'red' | undefined,
 ): string => {
-  switch (buttonType) {
+  switch (buttonStyle) {
     case 'yellow':
       return 'bg-primary text-sub-400';
     case 'dark':
@@ -32,17 +34,19 @@ const getButtonType = (
 
 const ButtonAtom = ({
   flexGrow,
-  buttonType,
+  buttonStyle,
   children,
   onClick,
+  type = 'button',
 }: ButtonProps) => {
   const baseClasses =
     'inline-flex items-center justify-center text-3 py-3.5 font-semibold rounded-[5px]';
   const flexGrowClasses = flexGrow ? 'flex-grow' : 'px-10';
-  const buttonTypeClasses = getButtonType(buttonType);
+  const buttonTypeClasses = getButtonType(buttonStyle);
 
   return (
     <button
+      type={type}
       onClick={onClick}
       className={`${baseClasses} ${flexGrowClasses} ${buttonTypeClasses}`}
     >

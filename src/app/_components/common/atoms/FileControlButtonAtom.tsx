@@ -11,7 +11,7 @@ const FileControlButtonAtom = ({
   onClick,
 }: FileControlButtonAtomProps) => {
   return (
-    <button onClick={onClick}>
+    <button type="button" onClick={onClick}>
       {type === 'delete' ? (
         <Image src={Delete} alt="삭제" />
       ) : (
