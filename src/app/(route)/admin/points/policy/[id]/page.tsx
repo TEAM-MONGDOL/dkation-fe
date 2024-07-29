@@ -3,9 +3,11 @@
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import InputAreaAtom from '@/_components/common/atoms/InputAreaAtom';
 import InputModule from '@/_components/common/modules/InputModule';
+import ModalModule from '@/_components/common/modules/ModalModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 const data = {
   id: 1,
@@ -17,6 +19,7 @@ const data = {
 
 const AdminPointsPolicyDetailPage = () => {
   const router = useRouter();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   return (
     <div className="w-full flex flex-col gap-y-10 overflow-y-auto">
@@ -51,16 +54,41 @@ const AdminPointsPolicyDetailPage = () => {
             <InputAreaAtom value={data.content} />
           </div>
         </div>
-        <div className="w-full flex items-center justify-end">
+        <div className="w-full flex items-center justify-end gap-x-5">
           <ButtonAtom
-            buttonType="dark"
+            buttonType="red"
+            onClick={() => {
+              setIsDeleteModalOpen(true);
+            }}
+          >
+            닫기
+          </ButtonAtom>
+          <ButtonAtom
+            buttonType="yellow"
             onClick={() => {
               router.push(`/admin/points/policy/${data.id}/edit`);
             }}
           >
-            수정하기
+            수정
           </ButtonAtom>
         </div>
+        {/* TODO : 머지 후 children 삽입 */}
+        {isDeleteModalOpen && (
+          <ModalModule
+            title="정책을 삭제하시겠습니까?"
+            content="정책 삭제"
+            confirmButtonType="red"
+            confirmText="삭제"
+            onConfirm={() => {
+              alert('삭제하기');
+              // TODO : API 연동
+              router.push(`/admin/points/policy/${data.id}/edit`);
+            }}
+            onCancel={() => {
+              setIsDeleteModalOpen(false);
+            }}
+          />
+        )}
       </section>
     </div>
   );
