@@ -56,7 +56,7 @@ const InputAreaAtom = ({
         name={name}
       />
       {isInteractive && textCount && (
-        <div className="absolute bottom-3.5 right-3.5 text-4 text-sub-200">
+        <div className="absolute bottom-3.5 right-3.5 text-3 text-sub-200">
           {value.length}/{textCount}
         </div>
       )}
