@@ -1,12 +1,39 @@
+import { ReactNode } from 'react';
+import CheckboxAtom from './CheckboxAtom';
+
 interface TableHeaderAtomProps {
-  title: string;
+  children?: ReactNode;
   width?: string;
+  isFirst?: boolean;
+  isLast?: boolean;
+  isBoolean?: boolean;
+  onClickBoolean?: () => void;
 }
 
-const TableHeaderAtom = ({ title, width }: TableHeaderAtomProps) => {
+const TableHeaderAtom = ({
+  children,
+  width,
+  isFirst,
+  isLast,
+  isBoolean,
+  onClickBoolean,
+}: TableHeaderAtomProps) => {
   return (
-    <th style={{ width }} className="text-4 font-normal text-sub-300">
-      {title}
+    <th
+      className={`text-4 align-middle text-center font-normal text-sub-200 px-5 ${isFirst ? 'pl-8' : ''} ${isLast ? 'pr-8' : ''}`}
+      style={{ width }}
+    >
+      {isBoolean !== undefined ? (
+        <div className="w-full h-full flex items-center justify-center">
+          <CheckboxAtom
+            isChecked={isBoolean}
+            onClick={onClickBoolean}
+            size={20}
+          />
+        </div>
+      ) : (
+        children
+      )}
     </th>
   );
 };
