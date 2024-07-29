@@ -9,7 +9,7 @@ interface IconTextModuleProps {
 
 const IconTextModule = ({ iconSrc, iconAlt, text }: IconTextModuleProps) => {
   return (
-    <div className="flex gap-x-2">
+    <div className="flex gap-x-2 items-center">
       <SubtitleIconAtom src={iconSrc} alt={iconAlt} />
       <SubtitleTextAtom text={text} />
     </div>
