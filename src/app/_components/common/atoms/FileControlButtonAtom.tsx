@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { Delete, Download } from '@/_assets/icons';
 
 interface FileControlButtonAtomProps {
-  type: 'delete' | 'edit';
+  type: 'delete' | 'download';
   onClick: () => void;
 }
 
