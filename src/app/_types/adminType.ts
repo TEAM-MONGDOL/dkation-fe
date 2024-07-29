@@ -20,6 +20,14 @@ export const noticeList: { [key in NoticeType]: string } = {
   EVENT: '이벤트 안내',
 };
 
+export type ResultType = 'NAME' | 'LOWEST' | 'HIGHEST';
+
+export const resultList: { [key in ResultType]: string } = {
+  NAME: '가나다순',
+  LOWEST: '확률 낮은 순',
+  HIGHEST: '확률 높은 순',
+};
+
 export type TeamType =
   | 'MANAGEMENT'
   | 'SALES'
@@ -51,4 +59,24 @@ export const pointRequestStatusList: {
   WAITING: '대기',
   REJECTED: '반려',
   ACCEPTED: '승인',
+};
+
+export type LocationType =
+  | 'SEOUL'
+  | 'GANGWON'
+  | 'CHUNGCEOUNG'
+  | 'JEONLA'
+  | 'GYEONGSANG'
+  | 'JEJU'
+  | 'ABROAD';
+};
+
+export const LocationList: { [key in LocationType]: string } = {
+  SEOUL: '서울',
+  GANGWON: '강원',
+  CHUNGCEOUNG: '충청',
+  JEONLA: '전라',
+  GYEONGSANG: '경상',
+  JEJU: '제주',
+  ABROAD: '해외',
 };
