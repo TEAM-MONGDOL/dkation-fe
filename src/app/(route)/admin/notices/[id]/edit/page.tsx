@@ -10,6 +10,9 @@ import DropdownModule from '@/_components/common/modules/DropdownModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import { NoticeOptions } from '@/_constants/common';
 import FileModule from '@/_components/common/modules/FileModule';
+import ModalModule from '@/_components/common/modules/ModalModule';
+import Image from 'next/image';
+import logo from '@/_assets/images/logo_imsy.png';
 
 interface FileItem {
   name: string;
@@ -38,6 +41,7 @@ const data = {
 
 const AdminWriteNoticesEditPage = () => {
   const router = useRouter();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [values, setValues] = useState({
     category: data.category,
     title: data.title,
@@ -77,8 +81,17 @@ const AdminWriteNoticesEditPage = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(values);
-    router.push('/admin/notices'); // 추후 수정 예정
+    setIsEditModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsEditModalOpen(false);
+  };
+
+  const confirmEdit = () => {
+    // 수정 로직 추가 예정
+    setIsEditModalOpen(false);
+    router.push('/admin/notices');
   };
 
   return (
@@ -105,9 +118,9 @@ const AdminWriteNoticesEditPage = () => {
             </div>
           </div>
           <div className="flex flex-col py-7 gap-4">
-            {data.files.length > 0 ? (
+            {values.files.length > 0 ? (
               <div className="flex flex-col gap-2">
-                {data.files.map((file) => (
+                {values.files.map((file) => (
                   <FileModule
                     key={file.url}
                     fileName={file.name}
@@ -121,7 +134,7 @@ const AdminWriteNoticesEditPage = () => {
             ) : (
               ''
             )}
-            <FileContainer onFileChange={handleFilesChange} />{' '}
+            <FileContainer onFileChange={handleFilesChange} />
           </div>
           <p className="text-3 font-bold mb-4">내용</p>
           <TextAreaModule
@@ -139,12 +152,30 @@ const AdminWriteNoticesEditPage = () => {
             >
               취소
             </ButtonAtom>
-            <ButtonAtom buttonStyle="yellow" type="submit">
-              등록
+            <ButtonAtom
+              buttonStyle="yellow"
+              type="button"
+              onClick={() => setIsEditModalOpen(true)}
+            >
+              수정
             </ButtonAtom>
           </div>
         </div>
       </form>
+      {isEditModalOpen && (
+        <ModalModule
+          title="해당 게시글을 수정하시겠습니까?"
+          cancelText="취소"
+          confirmText="확인"
+          onClick={closeModal}
+          onCancel={closeModal}
+          onConfirm={confirmEdit}
+        >
+          <div className="flex justify-center">
+            <Image className="h-5 w-24" src={logo} alt="logo" />
+          </div>
+        </ModalModule>
+      )}
     </div>
   );
 };
