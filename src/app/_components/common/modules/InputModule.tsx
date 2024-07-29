@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import InputSubtitleAtom from '@/_components/common/atoms/InputSubtitleAtom';
 import InputAreaAtom from '@/_components/common/atoms/InputAreaAtom';
 
@@ -23,6 +25,11 @@ const InputModule = ({
   name,
   onChange,
 }: InputProps) => {
+  const [inputValue, setInputValue] = useState(value || '');
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+    onChange?.(e);
+  };
   return (
     <div className={`flex flex-col w-full ${subtitle && 'gap-4'}`}>
       <InputSubtitleAtom
@@ -33,7 +40,7 @@ const InputModule = ({
       <InputAreaAtom
         placeholder={placeholder}
         status={status}
-        value={value}
+        value={inputValue}
         textCount={textCount}
         name={name}
         onChange={onChange}

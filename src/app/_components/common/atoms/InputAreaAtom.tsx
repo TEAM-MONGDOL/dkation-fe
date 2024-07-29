@@ -5,7 +5,7 @@ import { useState } from 'react';
 interface InputProps {
   placeholder?: string;
   status?: 'error' | 'correct' | 'readonly' | 'disabled';
-  value?: string;
+  value: string;
   textCount?: number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   name?: string;
@@ -14,13 +14,11 @@ interface InputProps {
 const InputAreaAtom = ({
   placeholder,
   status,
-  value: initialValue = '',
+  value,
   textCount,
   onChange,
   name,
 }: InputProps) => {
-  const [value, setValue] = useState(initialValue);
-
   const getStatus = () => {
     switch (status) {
       case 'error':
@@ -38,7 +36,6 @@ const InputAreaAtom = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (textCount === undefined || e.target.value.length <= textCount) {
-      setValue(e.target.value);
       onChange?.(e);
     }
   };
