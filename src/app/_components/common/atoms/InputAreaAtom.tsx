@@ -3,7 +3,7 @@ interface InputProps {
   status?: 'error' | 'correct' | 'readonly' | 'disabled';
   value: string;
   textCount?: number;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   name?: string;
 }
 
@@ -50,7 +50,7 @@ const InputAreaAtom = ({
       />
       {isInteractive && textCount && (
         <div className="absolute bottom-3.5 right-3.5 text-3 text-sub-200">
-          {value.length}/{textCount}
+          {value?.length}/{textCount}
         </div>
       )}
     </div>

@@ -7,29 +7,24 @@ import InputAreaAtom from '@/_components/common/atoms/InputAreaAtom';
 interface InputProps {
   placeholder?: string;
   status?: 'error' | 'correct' | 'readonly' | 'disabled';
-  value?: string;
+  value: string;
   subtitle?: string;
   message?: string;
   textCount?: number;
   name?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const InputModule = ({
   placeholder,
   status,
-  value = '',
+  value,
   subtitle,
   message,
   textCount,
   name,
   onChange,
 }: InputProps) => {
-  const [inputValue, setInputValue] = useState(value);
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-    onChange?.(e);
-  };
   return (
     <div className={`flex flex-col w-full ${subtitle && 'gap-4'}`}>
       <InputSubtitleAtom
@@ -40,10 +35,10 @@ const InputModule = ({
       <InputAreaAtom
         placeholder={placeholder}
         status={status}
-        value={inputValue}
+        value={value}
         textCount={textCount}
         name={name}
-        onChange={handleChange}
+        onChange={onChange}
       />
     </div>
   );
