@@ -8,11 +8,12 @@ import { useRouter } from 'next/navigation';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
 import FilteringBarContainer from '@/_components/common/containers/FilteringBarContainer';
 import RadioButtonContainer from '@/_components/common/containers/RadioButtonContainer';
-import { orderList, statusList } from '@/_types/adminType';
+import { orderList } from '@/_types/adminType';
 import DatePickerContainer from '@/_components/common/containers/DatePickerContainer';
 import { DatePickerTagType } from '@/_types/commonType';
 import dayjs from 'dayjs';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
+import CheckboxContainer from '@/_components/common/containers/CheckboxContainer';
 
 const headers = [
   { title: '번호', width: '47px' },
@@ -60,14 +61,12 @@ const WorkationList = () => {
     useState<DatePickerTagType>('ALL');
   const [param, setParam] = useState<{
     order: string;
+    status: string[];
   }>({
     order: 'RECENT',
+    status: ['WILL', 'PROCEED', 'COMPLETE'],
   });
-  const [paramSec, setParamSec] = useState<{
-    order: string;
-  }>({
-    order: 'ALL',
-  });
+
   const [startDate, setStartDate] = useState<Date>(
     dayjs().subtract(1, 'year').toDate(),
   );
@@ -89,10 +88,7 @@ const WorkationList = () => {
     setParam({
       ...param,
       order: 'RECENT',
-    });
-    setParamSec({
-      ...paramSec,
-      order: 'ALL',
+      status: ['WILL', 'PROCEED', 'COMPLETE'],
     });
     setSelectedDateTag('ALL');
     setStartDate(dayjs().subtract(1, 'year').toDate());
@@ -136,12 +132,16 @@ const WorkationList = () => {
           selectedOption={param.order}
           setSelectedOption={(order: string) => setParam({ ...param, order })}
         />
-        <RadioButtonContainer
+        <CheckboxContainer
           title="상태"
-          options={Object.entries(statusList) as [string, string][]}
-          selectedOption={paramSec.order}
-          setSelectedOption={(order: string) =>
-            setParamSec({ ...paramSec, order })
+          options={[
+            ['WILL', '모집 예정'],
+            ['PROCEED', '모집 중'],
+            ['COMPLETE', '모집 완료'],
+          ]}
+          selectedOptions={param.status}
+          setSelectedOptions={(status: string[]) =>
+            setParam({ ...param, status })
           }
         />
         <DatePickerContainer

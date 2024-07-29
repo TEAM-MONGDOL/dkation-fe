@@ -4,14 +4,6 @@ export const orderList: { [key in OrderType]: string } = {
   RECENT: '최신순',
   OLDEST: '오래된순',
 };
-export type StatusType = 'ALL' | 'WILL' | 'PROCEED' | 'COMPLETE';
-
-export const statusList: { [key in StatusType]: string } = {
-  ALL: '전체',
-  WILL: '모집 예정',
-  PROCEED: '모집 중',
-  COMPLETE: '모집 완료',
-};
 
 export type PointRewardType = 'PERSONAL' | 'GROUP';
 
