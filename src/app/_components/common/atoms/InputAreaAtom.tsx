@@ -43,17 +43,19 @@ const InputAreaAtom = ({
     }
   };
 
+  const isInteractive = status !== 'readonly' && status !== 'disabled';
+
   return (
     <div className="relative">
       <input
         className={`rounded-regular pl-3 border border-stroke-100 outline-0 w-full py-3.5 placeholder-sub-200 text-4 ${getStatus()}`}
         placeholder={placeholder}
-        readOnly={status === 'readonly' || status === 'disabled'}
+        readOnly={!isInteractive}
         value={value || ''}
         onChange={handleChange}
         name={name}
       />
-      {textCount && (
+      {isInteractive && textCount && (
         <div className="absolute bottom-3.5 right-3.5 text-4 text-sub-200">
           {value.length}/{textCount}
         </div>
