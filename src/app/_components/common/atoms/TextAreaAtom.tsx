@@ -6,6 +6,7 @@ interface TextboxAtomProps {
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   sizeClass: string;
   name: string;
+  readOnly?: boolean;
 }
 
 const TextAreaAtom = ({
@@ -14,6 +15,7 @@ const TextAreaAtom = ({
   onChange,
   sizeClass,
   name,
+  readOnly,
 }: TextboxAtomProps) => {
   return (
     <textarea
@@ -22,6 +24,7 @@ const TextAreaAtom = ({
       value={value}
       onChange={onChange}
       name={name}
+      readOnly={readOnly}
     />
   );
 };

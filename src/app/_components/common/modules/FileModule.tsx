@@ -8,9 +8,9 @@ interface FileModuleProps {
   fileName: string;
   fileType: 'image' | 'other';
   fileUrl: string;
-  buttonType: 'delete' | 'edit';
+  buttonType: 'delete' | 'download';
   onDelete?: () => void;
-  onEdit?: () => void;
+  onDownload?: () => void;
 }
 
 const FileModule = ({
@@ -19,10 +19,10 @@ const FileModule = ({
   fileUrl,
   buttonType,
   onDelete,
-  onEdit,
+  onDownload,
 }: FileModuleProps) => {
-  const handleClick = buttonType === 'delete' ? onDelete : onEdit;
-  const buttonTypeClass = buttonType === 'delete' ? 'delete' : 'edit';
+  const handleClick = buttonType === 'delete' ? onDelete : onDownload;
+  const buttonTypeClass = buttonType === 'delete' ? 'delete' : 'download';
 
   return (
     <div className="pr-4 rounded-regular flex items-center bg-[#F4F4f4] border border-stroke-100">
