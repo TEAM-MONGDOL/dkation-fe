@@ -98,3 +98,10 @@ export const statusList: { [key in StatusType]: string } = {
   WAITING: '대기',
   COMPLETED: '일정종료',
 };
+
+export type PointChangeType = 'INCREASE' | 'DECREASE';
+
+export const pointChangeList: { [key in PointChangeType]: string } = {
+  INCREASE: '포인트 증가',
+  DECREASE: '포인트 감소',
+};
