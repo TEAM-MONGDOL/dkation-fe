@@ -1,12 +1,18 @@
 'use client';
 
+import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAtom';
+import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
+import TableHeaderAtom from '@/_components/common/atoms/TableHeaderAtom';
 import CheckboxContainer from '@/_components/common/containers/CheckboxContainer';
 import DatePickerContainer from '@/_components/common/containers/DatePickerContainer';
+import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 import FilteringBarContainer from '@/_components/common/containers/FilteringBarContainer';
 import RadioButtonContainer from '@/_components/common/containers/RadioButtonContainer';
 import TableContainer from '@/_components/common/containers/TableContainer';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
 import SearchingBoxModule from '@/_components/common/modules/SearchingBoxModule';
+import TableBodyModule from '@/_components/common/modules/TableBodyModule';
+import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import { orderList, pointRewardList } from '@/_types/adminType';
 import { DatePickerTagType } from '@/_types/commonType';
@@ -89,6 +95,8 @@ const AdminPointsRewardPage = () => {
     router.push(`/admin/points/reward/${id}`);
   };
 
+  const [isChecked, setIsChecked] = useState(false);
+
   return (
     <div className="w-full flex flex-col gap-y-10 overflow-y-auto">
       <div className="w-full flex justify-between items-center">
@@ -99,13 +107,44 @@ const AdminPointsRewardPage = () => {
           onClick={() => setIsFilteringBarOpen(true)}
         />
       </div>
-      <TableContainer
-        headers={headers}
-        data={data.map((item) => ({
-          ...item,
-          '': { onClick: () => onClickRowDetail(item.id) },
-        }))}
-      />
+      <TableContainer>
+        <thead>
+          <TableHeaderModule>
+            <TableHeaderAtom width="80px" isFirst>
+              번호
+            </TableHeaderAtom>
+            <TableHeaderAtom width="150px">구분</TableHeaderAtom>
+            <TableHeaderAtom>분류</TableHeaderAtom>
+            <TableHeaderAtom>이름</TableHeaderAtom>
+            <TableHeaderAtom width="200px">지급일</TableHeaderAtom>
+            <TableHeaderAtom width="160px" isLast />
+          </TableHeaderModule>
+        </thead>
+        <tbody>
+          {data.length <= 0 ? (
+            <td colSpan={6}>
+              <EmptyContainer />
+            </td>
+          ) : (
+            data.map((item, index) => (
+              <TableBodyModule key={item.id}>
+                <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
+                <TableBodyAtom color={item.구분.color}>
+                  {item.구분.text}
+                </TableBodyAtom>
+                <TableBodyAtom>{item.분류}</TableBodyAtom>
+                <TableBodyAtom>{item.이름}</TableBodyAtom>
+                <TableBodyAtom>{item.지급일}</TableBodyAtom>
+                <TableBodyAtom isLast>
+                  <ShowDetailButtonAtom
+                    onClick={() => onClickRowDetail(item.id)}
+                  />
+                </TableBodyAtom>
+              </TableBodyModule>
+            ))
+          )}
+        </tbody>
+      </TableContainer>
       <div className="w-full flex items-center justify-center">
         <PaginationModule />
       </div>
