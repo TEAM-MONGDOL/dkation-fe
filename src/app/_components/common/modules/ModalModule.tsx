@@ -12,8 +12,8 @@ interface ModalModuleProps {
   onCancel: () => void;
   confirmText?: string;
   cancelText?: string;
-  confirmButtonType?: 'yellow' | 'dark' | 'red';
-  cancelButtonType?: 'yellow' | 'dark' | 'red';
+  confirmButtonStyle?: 'yellow' | 'dark' | 'red';
+  cancelButtonStyle?: 'yellow' | 'dark' | 'red';
 }
 
 const ModalModule = ({
@@ -24,8 +24,8 @@ const ModalModule = ({
   onCancel,
   confirmText = '확인',
   cancelText = '취소',
-  confirmButtonType = 'yellow',
-  cancelButtonType = 'dark',
+  confirmButtonStyle = 'yellow',
+  cancelButtonStyle = 'dark',
 }: ModalModuleProps) => {
   return (
     <div className="flex w-screen h-screen fixed top-0 left-0 bg-black/30 z-10 items-center justify-center">
@@ -38,12 +38,16 @@ const ModalModule = ({
         </div>
         {children}
         <div className="flex w-full gap-2 pt-10">
-          <ButtonAtom buttonType={cancelButtonType} flexGrow onClick={onCancel}>
+          <ButtonAtom
+            buttonStyle={confirmButtonStyle}
+            flexGrow
+            onClick={onCancel}
+          >
             {cancelText}
           </ButtonAtom>
 
           <ButtonAtom
-            buttonType={confirmButtonType}
+            buttonStyle={cancelButtonStyle}
             flexGrow
             onClick={onConfirm}
           >
