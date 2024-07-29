@@ -6,13 +6,21 @@ import { StaticImageData } from 'next/image';
 import NavPlusAtom from '@/_components/common/atoms/NavPlusAtom';
 import { useState } from 'react';
 
+interface ContentItem {
+  content: string;
+  route: string;
+}
+interface PlusContentItem {
+  content: string;
+  route: string;
+}
 interface TitleProps {
   icon: StaticImageData;
   title: string;
-  content?: string;
-  contents: string[];
+  plusContents?: PlusContentItem[];
+  contents: ContentItem[];
 }
-const NavModule = ({ icon, title, content, contents }: TitleProps) => {
+const NavModule = ({ icon, title, plusContents, contents }: TitleProps) => {
   const [isVisible, setIsVisible] = useState(true);
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
@@ -28,10 +36,20 @@ const NavModule = ({ icon, title, content, contents }: TitleProps) => {
       {isVisible && (
         <>
           {contents.map((contentItem, index) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <NavSubAtom key={index} content={contentItem} />
+            // eslint-disable-next-line react/jsx-key
+            <NavSubAtom
+              content={contentItem.content}
+              route={contentItem.route}
+            />
           ))}
-          {content && <NavPlusAtom content={content} />}
+          {plusContents &&
+            plusContents.map((plusContentItem, index) => (
+              // eslint-disable-next-line react/jsx-key
+              <NavPlusAtom
+                content={plusContentItem.content}
+                route={plusContentItem.route}
+              />
+            ))}{' '}
         </>
       )}
     </div>
