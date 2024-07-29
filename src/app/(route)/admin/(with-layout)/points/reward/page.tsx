@@ -63,15 +63,15 @@ const AdminPointsRewardPage = () => {
     order: string;
     type: string[];
     reason: string[]; // 포인트 정책 추가가 자유로우니 이는 Type으로 선언 불가
+    startDate: Date | null;
+    endDate: Date | null;
   }>({
     order: 'RECENT',
     type: ['PERSONAL', 'GROUP'],
     reason: ['SELF_STUDY', 'VOLUNTEER', 'EVENT'],
+    startDate: null,
+    endDate: null,
   });
-  const [startDate, setStartDate] = useState<Date>(
-    dayjs().subtract(1, 'year').toDate(),
-  );
-  const [endDate, setEndDate] = useState<Date>(dayjs().toDate());
 
   const refreshHandler = () => {
     setParam({
@@ -79,10 +79,10 @@ const AdminPointsRewardPage = () => {
       order: 'RECENT',
       type: ['PERSONAL', 'GROUP'],
       reason: ['SELF_STUDY', 'VOLUNTEER', 'EVENT'],
+      startDate: null,
+      endDate: null,
     });
     setSelectedDateTag('ALL');
-    setStartDate(dayjs().subtract(1, 'year').toDate());
-    setEndDate(dayjs().toDate());
   };
 
   const onClickRowDetail = (id: number) => {
@@ -142,10 +142,16 @@ const AdminPointsRewardPage = () => {
           title="신청 및 지급 일시"
           selectedTag={selectedDateTag}
           setSelectedTag={setSelectedDateTag}
-          startDate={startDate}
-          setStartDate={(start: Date) => setStartDate(start)}
-          endDate={endDate}
-          setEndDate={(end: Date) => setEndDate(end)}
+          startDate={param.startDate}
+          setStartDate={(start: Date | null) => {
+            setParam({ ...param, startDate: start });
+          }}
+          endDate={param.endDate}
+          setEndDate={(end: Date | null) => {
+            setParam({ ...param, endDate: end });
+          }}
+          startDatePlaceholder="모집 시작일"
+          endDatePlaceholder="모집 마감일"
         />
       </FilteringBarContainer>
     </div>
