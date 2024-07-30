@@ -22,7 +22,7 @@ const AdminWorkationPlaceNewPage = () => {
     }));
   };
   return (
-    <div className="flex flex-col gap-7">
+    <section className="flex flex-col gap-7">
       <TitleBarModule title="장소 추가" type="LEFT" />
       <div className="flex w-full gap-7">
         <InputModule
@@ -80,7 +80,7 @@ const AdminWorkationPlaceNewPage = () => {
           buttonStyle="yellow"
         />
       </form>
-    </div>
+    </section>
   );
 };
 

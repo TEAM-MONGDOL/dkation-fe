@@ -61,7 +61,7 @@ const AdminWorkationPlaceListPage = () => {
     });
   };
   return (
-    <div>
+    <section>
       <div className="mb-10 flex w-full items-center justify-between">
         <TitleBarModule title="워케이션 장소" />
         <SearchingBoxModule
@@ -120,7 +120,7 @@ const AdminWorkationPlaceListPage = () => {
         />
         <hr />
       </FilteringBarContainer>
-    </div>
+    </section>
   );
 };
 
