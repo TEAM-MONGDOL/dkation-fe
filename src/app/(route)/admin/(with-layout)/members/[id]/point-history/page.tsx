@@ -23,14 +23,14 @@ const data = [
     id: 1,
     분류: '워케이션 당첨',
     일시: '2024.07.04',
-    변동: { text: '-380 P', color: 'text-negative' },
+    변동: { text: '-380', color: 'text-negative' },
     총합: 1000,
   },
   {
     id: 2,
     분류: '봉사활동',
     일시: '2024.07.04',
-    변동: { text: '+300 P', color: 'text-positive' },
+    변동: { text: '+300', color: 'text-positive' },
     총합: 1000,
   },
 ];
@@ -96,7 +96,7 @@ const AdminMembersPointHistoryPage = () => {
                 <TableBodyAtom>{item.분류}</TableBodyAtom>
                 <TableBodyAtom>{item.일시}</TableBodyAtom>
                 <TableBodyAtom color={item.변동.color}>
-                  {item.변동.text}
+                  ${item.변동.text} P
                 </TableBodyAtom>
                 <TableBodyAtom>{item.총합}</TableBodyAtom>
               </TableBodyModule>
