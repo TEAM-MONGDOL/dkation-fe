@@ -97,6 +97,7 @@ const WorkationList = () => {
     setStartDateSec(dayjs().subtract(1, 'year').toDate());
     setEndDateSec(dayjs().toDate());
   };
+  const [currentPage, setCurrentPage] = useState(1);
   return (
     <div className="w-full flex flex-col gap-y-10 overflow-y-auto">
       <div className="w-full flex justify-between items-center">
@@ -112,7 +113,11 @@ const WorkationList = () => {
       />
       <div className="relative mt-8">
         <div className="flex justify-center">
-          <PaginationModule />
+          <PaginationModule
+            totalPages={6}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
         </div>
         <div className="absolute right-0 top-0">
           <ButtonAtom buttonType="yellow" onClick={moveToWritePage}>

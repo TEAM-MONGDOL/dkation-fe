@@ -1,8 +1,13 @@
 import EmptyContentModule from '@/_components/common/modules/EmptyContentModule';
 
-const EmptyContainer = () => {
+interface HeightProps {
+  heightFull?: boolean;
+}
+const EmptyContainer = ({ heightFull = false }: HeightProps) => {
   return (
-    <div className="w-full h-40 bg-cus-100 content-center">
+    <div
+      className={`w-full ${heightFull ? 'h-full' : ' h-40'} bg-cus-100 content-center`}
+    >
       <EmptyContentModule />
     </div>
   );

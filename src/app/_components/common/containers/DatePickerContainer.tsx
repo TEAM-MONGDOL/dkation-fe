@@ -1,21 +1,24 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { datePickerTagList, DatePickerTagType } from '@/_types/commonType';
 import AccordionHeaderModule from '@/_components/common/modules/AccordionHeaderModule';
 import AccordionBodyModule from '@/_components/common/modules/AccordionBodyModule';
 import DatePickersModule from '@/_components/common/modules/DatePickersModule';
 import DatePickerTagListModule from '@/_components/common/modules/DatePickerTagListModule';
 import dayjs from 'dayjs';
+import { set } from 'zod';
 
 interface DatePickerContainerProps {
   title: string;
   selectedTag: DatePickerTagType;
   setSelectedTag: (selected: DatePickerTagType) => void;
-  startDate: Date;
-  setStartDate: (start: Date) => void;
-  endDate: Date;
-  setEndDate: (end: Date) => void;
+  startDate: Date | null;
+  setStartDate: (start: Date | null) => void;
+  endDate: Date | null;
+  setEndDate: (end: Date | null) => void;
+  startDatePlaceholder?: string;
+  endDatePlaceholder?: string;
 }
 
 const DatePickerContainer = ({
@@ -26,35 +29,43 @@ const DatePickerContainer = ({
   setStartDate,
   endDate,
   setEndDate,
+  startDatePlaceholder,
+  endDatePlaceholder,
 }: DatePickerContainerProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
-    setEndDate(dayjs().toDate());
+    const today = new Date();
+    let newStartDate: Date | null = today;
+    let newEndDate: Date | null = new Date();
 
     switch (selectedTag) {
       case 'ALL':
-        setStartDate(dayjs().add(-1, 'year').toDate());
+        newStartDate = null;
+        newEndDate = null;
         break;
       case '1_WEEK':
-        setStartDate(dayjs().add(-1, 'week').toDate());
+        newStartDate.setDate(today.getDate() - 7);
         break;
       case '1_MONTH':
-        setStartDate(dayjs().add(-1, 'month').toDate());
+        newStartDate.setMonth(today.getMonth() - 1);
         break;
       case '3_MONTH':
-        setStartDate(dayjs().add(-3, 'month').toDate());
+        newStartDate.setMonth(today.getMonth() - 3);
         break;
       case '6_MONTH':
-        setStartDate(dayjs().add(-6, 'month').toDate());
+        newStartDate.setMonth(today.getMonth() - 6);
         break;
       case '1_YEAR':
-        setStartDate(dayjs().add(-1, 'year').toDate());
+        newStartDate.setFullYear(today.getFullYear() - 1);
         break;
       default:
         break;
     }
-  }, [selectedTag]); // setStartDate, setEndDate를 넣으니까 무한루프
+
+    setStartDate(newStartDate);
+    setEndDate(newEndDate);
+  }, [selectedTag]);
 
   return (
     <div className="flex w-full flex-col px-3 py-2.5">
@@ -77,8 +88,9 @@ const DatePickerContainer = ({
             setStartDate={setStartDate}
             endDate={endDate}
             setEndDate={setEndDate}
+            startDatePlaceholder={startDatePlaceholder}
+            endDatePlaceholder={endDatePlaceholder}
           />
-          <p className="text-5 text-sub-200">* 최대 1년 조회 가능</p>
         </div>
       </AccordionBodyModule>
     </div>

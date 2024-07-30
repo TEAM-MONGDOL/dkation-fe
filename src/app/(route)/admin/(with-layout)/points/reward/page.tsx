@@ -1,12 +1,18 @@
 'use client';
 
+import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAtom';
+import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
+import TableHeaderAtom from '@/_components/common/atoms/TableHeaderAtom';
 import CheckboxContainer from '@/_components/common/containers/CheckboxContainer';
 import DatePickerContainer from '@/_components/common/containers/DatePickerContainer';
+import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 import FilteringBarContainer from '@/_components/common/containers/FilteringBarContainer';
 import RadioButtonContainer from '@/_components/common/containers/RadioButtonContainer';
 import TableContainer from '@/_components/common/containers/TableContainer';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
 import SearchingBoxModule from '@/_components/common/modules/SearchingBoxModule';
+import TableBodyModule from '@/_components/common/modules/TableBodyModule';
+import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import { orderList, pointRewardList } from '@/_types/adminType';
 import { DatePickerTagType } from '@/_types/commonType';
@@ -63,15 +69,15 @@ const AdminPointsRewardPage = () => {
     order: string;
     type: string[];
     reason: string[]; // 포인트 정책 추가가 자유로우니 이는 Type으로 선언 불가
+    startDate: Date | null;
+    endDate: Date | null;
   }>({
     order: 'RECENT',
     type: ['PERSONAL', 'GROUP'],
     reason: ['SELF_STUDY', 'VOLUNTEER', 'EVENT'],
+    startDate: null,
+    endDate: null,
   });
-  const [startDate, setStartDate] = useState<Date>(
-    dayjs().subtract(1, 'year').toDate(),
-  );
-  const [endDate, setEndDate] = useState<Date>(dayjs().toDate());
 
   const refreshHandler = () => {
     setParam({
@@ -79,15 +85,17 @@ const AdminPointsRewardPage = () => {
       order: 'RECENT',
       type: ['PERSONAL', 'GROUP'],
       reason: ['SELF_STUDY', 'VOLUNTEER', 'EVENT'],
+      startDate: null,
+      endDate: null,
     });
     setSelectedDateTag('ALL');
-    setStartDate(dayjs().subtract(1, 'year').toDate());
-    setEndDate(dayjs().toDate());
   };
 
   const onClickRowDetail = (id: number) => {
     router.push(`/admin/points/reward/${id}`);
   };
+
+  const [isChecked, setIsChecked] = useState(false);
 
   return (
     <div className="w-full flex flex-col gap-y-10 overflow-y-auto">
@@ -99,13 +107,42 @@ const AdminPointsRewardPage = () => {
           onClick={() => setIsFilteringBarOpen(true)}
         />
       </div>
-      <TableContainer
-        headers={headers}
-        data={data.map((item) => ({
-          ...item,
-          '': { onClick: () => onClickRowDetail(item.id) },
-        }))}
-      />
+      <TableContainer>
+        <thead>
+          <TableHeaderModule>
+            <TableHeaderAtom width="80px" isFirst>
+              번호
+            </TableHeaderAtom>
+            <TableHeaderAtom width="150px">구분</TableHeaderAtom>
+            <TableHeaderAtom>분류</TableHeaderAtom>
+            <TableHeaderAtom>이름</TableHeaderAtom>
+            <TableHeaderAtom width="200px">지급일</TableHeaderAtom>
+            <TableHeaderAtom width="160px" isLast />
+          </TableHeaderModule>
+        </thead>
+        <tbody>
+          {data.length <= 0 ? (
+            <EmptyContainer colSpan={headers.length} />
+          ) : (
+            data.map((item, index) => (
+              <TableBodyModule key={item.id}>
+                <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
+                <TableBodyAtom color={item.구분.color}>
+                  {item.구분.text}
+                </TableBodyAtom>
+                <TableBodyAtom>{item.분류}</TableBodyAtom>
+                <TableBodyAtom>{item.이름}</TableBodyAtom>
+                <TableBodyAtom>{item.지급일}</TableBodyAtom>
+                <TableBodyAtom isLast>
+                  <ShowDetailButtonAtom
+                    onClick={() => onClickRowDetail(item.id)}
+                  />
+                </TableBodyAtom>
+              </TableBodyModule>
+            ))
+          )}
+        </tbody>
+      </TableContainer>
       <div className="w-full flex items-center justify-center">
         <PaginationModule />
       </div>
@@ -120,12 +157,14 @@ const AdminPointsRewardPage = () => {
           selectedOption={param.order}
           setSelectedOption={(order: string) => setParam({ ...param, order })}
         />
+        <hr className="w-full border-0 h-[0.5px] bg-sub-100" />
         <CheckboxContainer
           title="분류"
           options={Object.entries(pointRewardList) as [string, string][]}
           selectedOptions={param.type}
           setSelectedOptions={(type: string[]) => setParam({ ...param, type })}
         />
+        <hr className="w-full border-0 h-[0.5px] bg-sub-100" />
         <CheckboxContainer
           title="구분"
           options={[
@@ -138,14 +177,21 @@ const AdminPointsRewardPage = () => {
             setParam({ ...param, reason })
           }
         />
+        <hr className="w-full border-0 h-[0.5px] bg-sub-100" />
         <DatePickerContainer
           title="신청 및 지급 일시"
           selectedTag={selectedDateTag}
           setSelectedTag={setSelectedDateTag}
-          startDate={startDate}
-          setStartDate={(start: Date) => setStartDate(start)}
-          endDate={endDate}
-          setEndDate={(end: Date) => setEndDate(end)}
+          startDate={param.startDate}
+          setStartDate={(start: Date | null) => {
+            setParam({ ...param, startDate: start });
+          }}
+          endDate={param.endDate}
+          setEndDate={(end: Date | null) => {
+            setParam({ ...param, endDate: end });
+          }}
+          startDatePlaceholder="모집 시작일"
+          endDatePlaceholder="모집 마감일"
         />
       </FilteringBarContainer>
     </div>
