@@ -66,7 +66,7 @@ const AdminWorkationPlaceNewPage = () => {
           name="상세내용"
         />
       </div>
-      <div className="flex justify-end gap-5">
+      <form className="flex justify-end gap-5">
         <ButtonAtom
           text="취소"
           type="button"
@@ -79,7 +79,7 @@ const AdminWorkationPlaceNewPage = () => {
           width="fixed"
           buttonStyle="yellow"
         />
-      </div>
+      </form>
     </div>
   );
 };
