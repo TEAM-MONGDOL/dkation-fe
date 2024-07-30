@@ -1,7 +1,7 @@
 'use client';
 
 import PaginationButtonAtom from '@/_components/common/atoms/PaginationButtonAtom';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import Image from 'next/image';
 import {
   LeftArrowBlackIcon,
@@ -11,13 +11,17 @@ import {
 } from '@/_assets/icons';
 
 interface PageProps {
-  pages: number;
+  totalPages: number;
+  currentPage: number;
+  setCurrentPage: Dispatch<SetStateAction<number>>;
 }
 
-const PaginationModule = ({ pages }: PageProps) => {
-  const [currentPage, setCurrentPage] = useState(1);
+const PaginationModule = ({
+  totalPages,
+  currentPage,
+  setCurrentPage,
+}: PageProps) => {
   const [startPage, setStartPage] = useState(1);
-  const totalPages = pages;
   const handlePageClick = (page: number) => {
     setCurrentPage(page);
   };
@@ -58,7 +62,7 @@ const PaginationModule = ({ pages }: PageProps) => {
             onPage={index + startPage === currentPage}
             page={index + startPage}
             onClick={() => handlePageClick(index + startPage)}
-            disabled={index + startPage > pages}
+            disabled={index + startPage > totalPages}
           />
         ))}
       </div>
