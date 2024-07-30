@@ -26,7 +26,7 @@ const DropdownModule = ({
     <div>
       <div
         role="presentation"
-        className={`fixed left-0 top-0 z-10 h-full min-h-screen w-52 ${isOpen ? 'block' : 'hidden'}`}
+        className={`fixed left-0 top-0 z-10 h-full min-h-screen w-full ${isOpen ? 'block' : 'hidden'}`}
         onClick={() => setIsOpen(false)}
       />
       <div
