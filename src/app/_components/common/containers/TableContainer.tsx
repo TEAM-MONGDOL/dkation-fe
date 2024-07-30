@@ -2,13 +2,16 @@ import React, { ReactNode } from 'react';
 
 interface TableContainerProps {
   children: ReactNode;
+  maxHeight?: string;
 }
 
-const TableContainer = ({ children }: TableContainerProps) => {
+const TableContainer = ({ children, maxHeight }: TableContainerProps) => {
   return (
-    <table className="min-w-full table-fixed border-separate border-spacing-y-2.5">
-      {children}
-    </table>
+    <div className={`flex w-full flex-col ${maxHeight || ''} overflow-y-auto`}>
+      <table className="min-w-full table-fixed border-separate border-spacing-y-2.5">
+        {children}
+      </table>
+    </div>
   );
 };
 

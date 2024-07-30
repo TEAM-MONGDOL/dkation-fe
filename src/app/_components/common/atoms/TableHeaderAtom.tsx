@@ -20,11 +20,11 @@ const TableHeaderAtom = ({
 }: TableHeaderAtomProps) => {
   return (
     <th
-      className={`text-4 align-middle text-center font-normal text-sub-200 px-5 ${isFirst ? 'pl-8' : ''} ${isLast ? 'pr-8' : ''}`}
+      className={`px-5 text-center align-middle text-4 font-normal text-sub-200 ${isFirst ? 'pl-8' : ''} ${isLast ? 'pr-8' : ''}`}
       style={{ width }}
     >
       {isBoolean !== undefined ? (
-        <div className="w-full h-full flex items-center justify-center">
+        <div className="flex h-full w-full items-center justify-center">
           <CheckboxAtom
             isChecked={isBoolean}
             onClick={onClickBoolean}
