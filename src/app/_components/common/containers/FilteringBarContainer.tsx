@@ -19,15 +19,15 @@ const FilteringBarContainer = ({
     <>
       <div
         role="presentation"
-        className={`fixed w-screen top-0 left-0 min-h-screen h-full bg-black/10 z-10 ${isOpen ? 'block' : 'hidden'}`}
+        className={`fixed left-0 top-0 z-10 h-full min-h-screen w-screen bg-black/10 ${isOpen ? 'block' : 'hidden'}`}
         onClick={() => setIsOpen(false)}
       />
       <div
         role="presentation"
-        className={`fixed z-20 right-0 top-0 bottom-0 min-h-screen h-full w-[280px] flex flex-col py-5 gap-y-3 rounded-tl-2xl bg-white transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'} shadow-lg`}
+        className={`fixed bottom-0 right-0 top-0 z-20 flex h-full min-h-screen w-[280px] transform flex-col gap-y-3 rounded-tl-2xl bg-white py-5 transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'} shadow-lg`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="w-full flex items-center justify-between px-3 py-2.5 gap-x-2.5">
+        <div className="flex w-full items-center justify-between gap-x-2.5 px-3 py-2.5">
           <div className="flex items-center gap-x-2">
             <Image src={FilterListIcon} alt="filter" width={24} height={24} />
             <p className="font-bold">필터 선택</p>
@@ -41,7 +41,7 @@ const FilteringBarContainer = ({
             onClick={refreshHandler}
           />
         </div>
-        <div className="w-full flex flex-col">{children}</div>
+        <div className="flex w-full flex-col">{children}</div>
       </div>
     </>
   );

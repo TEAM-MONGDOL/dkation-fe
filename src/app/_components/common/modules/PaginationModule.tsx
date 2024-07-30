@@ -15,7 +15,7 @@ const PaginationModule = () => {
 
   return (
     <div className="flex">
-      <div className="rounded-l-lg w-12 h-12 border border-stroke-100 flex items-center justify-center">
+      <div className="flex h-12 w-12 items-center justify-center rounded-l-lg border border-stroke-100">
         <Image src={LeftArrowEmptyIcon} alt="LeftArrowEmptyIcon" />
       </div>
       <div className="flex">
@@ -28,7 +28,7 @@ const PaginationModule = () => {
           />
         ))}
       </div>
-      <div className="rounded-r-[8px] w-12 h-12 border border-stroke-100 flex items-center justify-center">
+      <div className="flex h-12 w-12 items-center justify-center rounded-r-[8px] border border-stroke-100">
         <Image src={RightArrowEmptyIcon} alt="RightArrowEmptyIcon" />
       </div>
     </div>

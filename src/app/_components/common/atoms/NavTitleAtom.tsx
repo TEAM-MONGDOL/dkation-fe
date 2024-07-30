@@ -10,16 +10,15 @@ interface TitleProps {
 
 const NavTitleAtom = ({ icon, title, onIconClick, isVisible }: TitleProps) => {
   return (
-    <div className="py-2 flex justify-between">
+    <div className="py-2 flex justify-between" onClick={onIconClick}>
       <div className="flex">
         <Image className="mr-3" src={icon} alt={title} />
         <p className="text-3 font-semibold">{title}</p>
       </div>
       <Image
-        className={`cursor-pointer ${isVisible ? 'rotate-180' : ''}`}
+        className={`cursor-pointer transform transition-transform duration-300 ${isVisible ? 'rotate-180' : ''}`}
         src={DownArrowIcon}
         alt="downarrowicon"
-        onClick={onIconClick}
       />
     </div>
   );
