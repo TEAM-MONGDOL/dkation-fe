@@ -4,95 +4,142 @@ import { useState } from 'react';
 import TableContainer from '@/_components/common/containers/TableContainer';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
 import FilteringButtonAtom from '@/_components/common/atoms/FilteringButtonAtom';
-import { Puzzle } from '@/_assets/icons';
+import { ExtensionIcon } from '@/_assets/icons';
 import SubtitleModule from '@/_components/common/modules/SubtitleModule';
 import { orderList, pointOrderList, statusList } from '@/_types/adminType';
 import { DatePickerTagType } from '@/_types/commonType';
-import dayjs from 'dayjs';
 import RadioButtonContainer from '@/_components/common/containers/RadioButtonContainer';
 import DatePickerContainer from '@/_components/common/containers/DatePickerContainer';
 import CheckboxContainer from '@/_components/common/containers/CheckboxContainer';
 import FilteringBarContainer from '@/_components/common/containers/FilteringBarContainer';
+import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
+import TableHeaderAtom from '@/_components/common/atoms/TableHeaderAtom';
+import EmptyContainer from '@/_components/common/containers/EmptyContainer';
+import TableBodyModule from '@/_components/common/modules/TableBodyModule';
+import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
 
 const wkHistoryOrderList = {
   ...orderList,
   ...pointOrderList,
 };
 
-const headers = [
-  { title: '번호', width: '90px' },
-  { title: '워케이션', flexGrow: true },
-  { title: '신청일시', width: '190px' },
-  { title: '배팅 포인트', width: '160px' },
-  { title: '확률', width: '160px' },
-  { title: '상태', width: '160px' },
-];
-
 const data = [
   {
     id: 1,
     워케이션: '9월 2주차 워케이션 : 양양',
     신청일시: '2024.07.04',
-    '배팅 포인트': { text: '350 P', color: 'orange' },
-    확률: { text: '3.8%', color: 'orange' },
-    상태: { text: '신청완료', color: 'blue' },
+    배팅포인트: { text: '350 P', color: 'text-primaryDark' },
+    확률: { text: '3.8%', color: 'text-primaryDark' },
+    상태: { text: '신청완료', color: 'text-positive' },
   },
   {
     id: 2,
     워케이션: '9월 2주차 워케이션 : 양양',
     신청일시: '2024.07.04',
-    '배팅 포인트': { text: '350 P', color: 'orange' },
-    확률: { text: '3.8%', color: 'orange' },
-    상태: { text: '추첨대기', color: 'green' },
+    배팅포인트: { text: '350 P', color: 'text-primaryDark' },
+    확률: { text: '3.8%', color: 'text-primaryDark' },
+    상태: { text: '추첨대기', color: 'text-green-700' },
   },
 ];
 
 const AdminMembersWkHistoryPage = () => {
+  const [currentPage, setCurrentPage] = useState(1);
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
   const [selectedDateTag, setSelectedDateTag] =
     useState<DatePickerTagType>('ALL');
-  const [startDate, setStartDate] = useState<Date>(
-    dayjs().subtract(1, 'year').toDate(),
-  );
-  const [endDate, setEndDate] = useState<Date>(dayjs().toDate());
 
   const [param, setParam] = useState<{
     order: string;
     type: string[];
+    startDate: Date | null;
+    endDate: Date | null;
   }>({
     order: 'RECENT',
-    type: [],
+    type: [
+      'APPLIED',
+      'DRAW_WAITING',
+      'FAIL',
+      'CONFIRMED_WAITING',
+      'CANCEL',
+      'CONFIRM',
+      'WAITING',
+      'COMPLETED',
+    ],
+    startDate: null,
+    endDate: null,
   });
 
   const refreshHandler = () => {
     setParam({
       ...param,
       order: 'RECENT',
-      type: [],
+      type: [
+        'APPLIED',
+        'DRAW_WAITING',
+        'FAIL',
+        'CONFIRMED_WAITING',
+        'CANCEL',
+        'CONFIRM',
+        'WAITING',
+        'COMPLETED',
+      ],
+      startDate: null,
+      endDate: null,
     });
     setSelectedDateTag('ALL');
-    setStartDate(dayjs().subtract(1, 'year').toDate());
-    setEndDate(dayjs().toDate());
   };
 
   return (
-    <div className="flex flex-col gap-y-10 w-full">
-      <div className="w-full flex justify-between items-center">
+    <section className="flex w-full flex-col gap-y-10">
+      <div className="flex w-full items-center justify-between">
         <SubtitleModule
-          iconSrc={Puzzle}
-          iconAlt="puzzle"
+          iconSrc={ExtensionIcon}
+          iconAlt="extension"
           text="워케이션 신청 내역"
         />
         <FilteringButtonAtom onClick={() => setIsFilteringBarOpen(true)} />
       </div>
-      <TableContainer
-        headers={headers}
-        data={data.map((item) => ({
-          ...item,
-        }))}
-      />
-      <div className="flex items-center justify-center w-full">
-        <PaginationModule />
+      <TableContainer>
+        <TableHeaderModule>
+          <TableHeaderAtom width="90px">번호</TableHeaderAtom>
+          <TableHeaderAtom>워케이션</TableHeaderAtom>
+          <TableHeaderAtom width="190px">신청일시</TableHeaderAtom>
+          <TableHeaderAtom width="160px">배팅 포인트</TableHeaderAtom>
+          <TableHeaderAtom width="160px">확률</TableHeaderAtom>
+          <TableHeaderAtom width="160px">상태</TableHeaderAtom>
+        </TableHeaderModule>
+
+        <tbody>
+          {data.length <= 0 ? (
+            <td colSpan={6}>
+              <EmptyContainer />
+            </td>
+          ) : (
+            data.map((item, index) => (
+              <TableBodyModule key={item.id}>
+                <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
+                <TableBodyAtom>{item.워케이션}</TableBodyAtom>
+                <TableBodyAtom>{item.신청일시}</TableBodyAtom>
+                <TableBodyAtom color={item.배팅포인트.color}>
+                  {item.배팅포인트.text}
+                </TableBodyAtom>
+                <TableBodyAtom color={item.확률.color}>
+                  {item.확률.text}
+                </TableBodyAtom>
+                <TableBodyAtom color={item.상태.color}>
+                  {item.상태.text}
+                </TableBodyAtom>
+              </TableBodyModule>
+            ))
+          )}
+        </tbody>
+      </TableContainer>
+      <div className="flex w-full items-center justify-center">
+        <PaginationModule
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={Math.ceil(data.length / 10)}
+        />
       </div>
 
       <FilteringBarContainer
@@ -106,17 +153,23 @@ const AdminMembersWkHistoryPage = () => {
           selectedOption={param.order}
           setSelectedOption={(order: string) => setParam({ ...param, order })}
         />
-        <hr />
+        <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         <DatePickerContainer
-          title="날짜"
+          title="등록 일시"
           selectedTag={selectedDateTag}
           setSelectedTag={setSelectedDateTag}
-          startDate={startDate}
-          setStartDate={(start: Date) => setStartDate(start)}
-          endDate={endDate}
-          setEndDate={(end: Date) => setEndDate(end)}
+          startDate={param.startDate}
+          setStartDate={(start: Date | null) => {
+            setParam({ ...param, startDate: start });
+          }}
+          endDate={param.endDate}
+          setEndDate={(end: Date | null) => {
+            setParam({ ...param, endDate: end });
+          }}
+          startDatePlaceholder="시작일 선택"
+          endDatePlaceholder="마감일 선택"
         />
-        <hr />
+        <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         <CheckboxContainer
           title="진행 상태"
           options={Object.entries(statusList) as [string, string][]}
@@ -124,7 +177,7 @@ const AdminMembersWkHistoryPage = () => {
           setSelectedOptions={(type: string[]) => setParam({ ...param, type })}
         />
       </FilteringBarContainer>
-    </div>
+    </section>
   );
 };
 
