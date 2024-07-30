@@ -155,7 +155,7 @@ const AdminMembersWkHistoryPage = () => {
         />
         <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         <DatePickerContainer
-          title="등록 일시"
+          title="날짜"
           selectedTag={selectedDateTag}
           setSelectedTag={setSelectedDateTag}
           startDate={param.startDate}
