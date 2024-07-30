@@ -34,38 +34,31 @@ const DatePickerContainer = ({
 }: DatePickerContainerProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  useEffect(() => {
-    const today = new Date();
-    let newStartDate: Date | null = today;
-    let newEndDate: Date | null = new Date();
-
-    switch (selectedTag) {
-      case 'ALL':
-        newStartDate = null;
-        newEndDate = null;
-        break;
-      case '1_WEEK':
-        newStartDate.setDate(today.getDate() - 7);
-        break;
-      case '1_MONTH':
-        newStartDate.setMonth(today.getMonth() - 1);
-        break;
-      case '3_MONTH':
-        newStartDate.setMonth(today.getMonth() - 3);
-        break;
-      case '6_MONTH':
-        newStartDate.setMonth(today.getMonth() - 6);
-        break;
-      case '1_YEAR':
-        newStartDate.setFullYear(today.getFullYear() - 1);
-        break;
-      default:
-        break;
-    }
-
-    setStartDate(newStartDate);
-    setEndDate(newEndDate);
-  }, [selectedTag]);
+  const handleTagClick = useCallback(
+    (tag: DatePickerTagType) => {
+      setSelectedTag(tag);
+      if (tag === 'ALL') {
+        setStartDate(null);
+        setEndDate(null);
+      } else if (tag === '1_WEEK') {
+        setStartDate(dayjs().subtract(1, 'week').toDate());
+        setEndDate(new Date());
+      } else if (tag === '1_MONTH') {
+        setStartDate(dayjs().subtract(1, 'month').toDate());
+        setEndDate(new Date());
+      } else if (tag === '3_MONTH') {
+        setStartDate(dayjs().subtract(3, 'month').toDate());
+        setEndDate(new Date());
+      } else if (tag === '6_MONTH') {
+        setStartDate(dayjs().subtract(6, 'month').toDate());
+        setEndDate(new Date());
+      } else if (tag === '1_YEAR') {
+        setStartDate(dayjs().subtract(1, 'year').toDate());
+        setEndDate(new Date());
+      }
+    },
+    [setSelectedTag],
+  );
 
   return (
     <div className="flex w-full flex-col px-3 py-2.5">
@@ -81,7 +74,7 @@ const DatePickerContainer = ({
               Object.entries(datePickerTagList) as [DatePickerTagType, string][]
             }
             selectedTag={selectedTag}
-            setSelectedTag={setSelectedTag}
+            setSelectedTag={handleTagClick}
           />
           <DatePickersModule
             startDate={startDate}

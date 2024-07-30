@@ -22,7 +22,7 @@ const DatePickersModule = ({
 }: DatePickersModuleProps) => {
   return (
     <div
-      className={`${className ? `${className}` : 'w-full flex items-center gap-x-1'}`}
+      className={`${className ? `${className}` : 'flex w-full items-center gap-x-1'}`}
     >
       <DatePickerAtom
         className={className}

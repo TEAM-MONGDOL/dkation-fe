@@ -21,9 +21,15 @@ const DatePickerAtom = ({
   className,
   placeholderText,
 }: DatePickerAtomProps) => {
+  useEffect(() => {
+    if (minDate && selectedDate && dayjs(selectedDate).isBefore(minDate)) {
+      setSelectedDate(minDate);
+    }
+  }, [minDate]);
+
   return (
     <DatePicker
-      className={`flex w-full text-4 text-center items-center justify-center border border-sub-100 bg-white text-sub-400 placeholder:text-sub-200 px-4 rounded-lg focus:outline-primary ${className ? `${className}` : 'py-1'}`}
+      className={`flex w-full items-center justify-center rounded-lg border border-sub-100 bg-white px-4 text-center text-4 text-sub-400 placeholder:text-sub-200 focus:outline-primary ${className ? `${className}` : 'py-1'}`}
       placeholderText={placeholderText}
       selected={selectedDate}
       onChange={setSelectedDate}
@@ -34,8 +40,8 @@ const DatePickerAtom = ({
       shouldCloseOnSelect
       popperPlacement="bottom-end"
       renderCustomHeader={({ date, decreaseMonth, increaseMonth }) => (
-        <div className="flex justify-between items-center px-3">
-          <div className="text-white font-bold">
+        <div className="flex items-center justify-between px-3">
+          <div className="font-bold text-white">
             {date.getFullYear()}년 {date.getMonth() + 1}월
           </div>
           <div className="flex items-center gap-1">
