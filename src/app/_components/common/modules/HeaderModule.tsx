@@ -4,8 +4,8 @@ import logo from '@/_assets/images/logo_imsy.png';
 
 const HeaderModule = () => {
   return (
-    <div className="flex items-center justify-between border-2 border-cus-100 px-5 py-3.5">
-      <Image className="h-5 w-24" src={logo} alt="logo" />
+    <div className="flex h-6xl items-center justify-between border-b border-stroke-100 px-5 py-3.5">
+      <Image className="h-full max-w-24 object-contain" src={logo} alt="logo" />
       <LogoutButtonAtom />
     </div>
   );
