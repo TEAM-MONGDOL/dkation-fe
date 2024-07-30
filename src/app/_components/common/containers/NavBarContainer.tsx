@@ -8,31 +8,46 @@ import {
 
 const NavBarContainer = () => {
   return (
-    <div className="pt-1 text-white w-[203px] bg-sub-400 h-full">
+    <div className="h-full w-[203px] bg-sub-400 pt-1 text-white">
       <NavModule
         icon={ProfileIcon}
         title="회원 관리"
-        contents={['회원 목록', '페널티 내역']}
+        contents={[
+          { content: '회원 목록', route: '/admin/members' },
+          { content: '페널티 내역', route: '' },
+        ]}
       />
       <hr className="opacity-50" />
       <NavModule
         icon={PointIcon}
         title="포인트 관리"
-        content="단체 포인트 등록"
-        contents={['포인트 지급 내역', '포인트 신청 내역', '포인트 정책 설정']}
+        plusContents={[
+          { content: '단체 포인트 등록', route: '/admin/points/reward/new' },
+        ]}
+        contents={[
+          { content: '포인트 지급 내역', route: '/admin/points/reward' },
+          { content: '포인트 신청 내역', route: '/admin/points/request' },
+          { content: '포인트 정책 설정', route: '/admin/points/policy' },
+        ]}
       />
       <hr className="opacity-50" />
       <NavModule
         icon={WorkationIcon}
         title="워케이션 관리"
-        contents={['워케이션 목록', '워케이션 장소', '워케이션 후기']}
+        contents={[
+          { content: '워케이션 목록', route: '/admin/workation/list' },
+          { content: '워케이션 장소', route: '/admin/workation/place/list' },
+          { content: '워케이션 후기', route: '/admin/workation/reviews' },
+        ]}
       />
       <hr className="opacity-50" />
       <NavModule
         icon={InfoIcon}
         title="공지 관리"
-        content="공지사항 등록"
-        contents={['공지사항 목록']}
+        plusContents={[
+          { content: '공지사항 등록', route: '/admin/notices/new' },
+        ]}
+        contents={[{ content: '공지사항 목록', route: '/admin/notices' }]}
       />
     </div>
   );

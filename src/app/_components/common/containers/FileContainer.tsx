@@ -41,10 +41,10 @@ const FileContainer = ({ onFileChange }: FileContainerProps) => {
   }, [files]);
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex w-full flex-col">
       <DragDropModule onFileAdd={handleFileAdd} />
 
-      <div className="pt-2 flex flex-col gap-1.5">
+      <div className="flex flex-col gap-1.5 pt-2">
         {files.map((file, index) => (
           <FileModule
             key={`${file.name}-${file.size}`}
