@@ -2,6 +2,9 @@
 
 import { FilterListIcon } from '@/_assets/icons';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
+import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
+import TableHeaderAtom from '@/_components/common/atoms/TableHeaderAtom';
+import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 import InfoSectionContainer from '@/_components/common/containers/InfoSectionContainer';
 import SelectContainer from '@/_components/common/containers/SelectContainer';
 import TableContainer from '@/_components/common/containers/TableContainer';
@@ -9,77 +12,52 @@ import DropdownModule from '@/_components/common/modules/DropdownModule';
 import InputModule from '@/_components/common/modules/InputModule';
 import ModalModule from '@/_components/common/modules/ModalModule';
 import SearchingBoxModule from '@/_components/common/modules/SearchingBoxModule';
+import TableBodyModule from '@/_components/common/modules/TableBodyModule';
+import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-const headers = [
-  // TODO : 체크박스 넣어야됨
-  { title: '이름', width: '100px' },
-  { title: '소속' },
-  { title: '아이디', width: '100px' },
-];
+// TODO : 타입 선언 필요
+type MemberType = {
+  id: number;
+  name: string;
+  team: string;
+  personalId: string;
+};
 
-const data = [
+const data: MemberType[] = [
   {
     id: 1,
-    이름: '김철수',
-    소속: '개발팀',
-    아이디: 'kim123',
+    name: '김철수',
+    team: '개발팀',
+    personalId: 'kim123',
   },
   {
     id: 2,
-    이름: '이영희',
-    소속: '디자인팀',
-    아이디: 'lee123',
+    name: '이영희',
+    team: '디자인팀',
+    personalId: 'lee123',
   },
   {
     id: 3,
-    이름: '박민수',
-    소속: '기획팀',
-    아이디: 'park123',
+    name: '박민수',
+    team: '기획팀',
+    personalId: 'park123',
   },
   {
-    id: 1,
-    이름: '김철수',
-    소속: '개발팀',
-    아이디: 'kim123',
-  },
-  {
-    id: 2,
-    이름: '이영희',
-    소속: '디자인팀',
-    아이디: 'lee123',
-  },
-  {
-    id: 3,
-    이름: '박민수',
-    소속: '기획팀',
-    아이디: 'park123',
-  },
-  {
-    id: 3,
-    이름: '박민수',
-    소속: '기획팀',
-    아이디: 'park123',
-  },
-  {
-    id: 1,
-    이름: '김철수',
-    소속: '개발팀',
-    아이디: 'kim123',
-  },
-  {
-    id: 2,
-    이름: '이영희',
-    소속: '디자인팀',
-    아이디: 'lee123',
+    id: 4,
+    name: '홍길동',
+    team: '개발팀',
+    personalId: 'hong123',
   },
 ];
 
 const AdminPointsRewardNewPage = () => {
   const router = useRouter();
+  const [selectedRequest, setSelectedRequest] = useState<MemberType[]>([]);
+  const [selectedDelete, setSelectedDelete] = useState<MemberType[]>([]);
   const [isConfirmModelOpen, setIsConfirmModelOpen] = useState(false);
   const [isTeamFilterOpen, setIsTeamFilterOpen] = useState(false);
   const [selectedType, setSelectedType] = useState<string>('봉사활동');
@@ -88,28 +66,12 @@ const AdminPointsRewardNewPage = () => {
     '디자인팀',
     '기획팀',
   ]);
-  // TODO : 멤버 타입 선언 필요
-  const [selectedMember, setSelectedMember] = useState<
-    { id: number; name: string; team: string; personalId: string }[]
-  >([
-    {
-      id: 1,
-      name: '김철수',
-      team: '개발팀',
-      personalId: 'kim123',
-    },
-    {
-      id: 2,
-      name: '이영희',
-      team: '디자인팀',
-      personalId: 'lee123',
-    },
-  ]);
+
   return (
-    <div className="w-full h-full flex flex-col gap-y-10 overflow-y-auto">
+    <div className="flex h-full w-full flex-col gap-y-10 overflow-y-auto">
       <TitleBarModule title="단체 포인트 등록" />
-      <section className="w-full flex flex-col gap-y-[60px]">
-        <div className="w-1/2 flex flex-col gap-y-4">
+      <section className="flex w-full flex-col gap-y-[60px]">
+        <div className="flex w-[200px] flex-col gap-y-4">
           <h3 className="font-bold">분류</h3>
           {/* TODO : 애니메이션 필요 */}
           {/* TODO : Width 조정 필요 (기본, 아이템 모두) */}
@@ -120,23 +82,26 @@ const AdminPointsRewardNewPage = () => {
             placeholder="분류 선택"
           />
         </div>
-        <div className="w-full flex flex-1 gap-x-5">
-          <div className="flex-1 flex flex-col gap-y-4">
+        <div className="flex w-full flex-1 gap-x-5">
+          <div className="flex flex-1 flex-col gap-y-4">
             <h3 className="font-bold">대상 선택</h3>
-            <div className="flex flex-col gap-y-10">
-              <div className="w-full flex items-center gap-x-5">
-                {/* TODO : Width, Height 조정 필요 */}
-                <SearchingBoxModule
-                  placeholder="이름을 검색하세요."
-                  onClick={() => {}}
-                />
+            <div className="flex w-full flex-col gap-y-10">
+              <div className="flex w-full items-center gap-x-5">
+                <div className="grow">
+                  <SearchingBoxModule
+                    placeholder="이름을 검색하세요."
+                    onClick={() => {}}
+                    height="h-5xl"
+                    widthFull
+                  />
+                </div>
                 <div className="relative">
                   <div
                     role="presentation"
-                    className="w-[153px] flex rounded-regular justify-between border border-stroke-100 px-4 py-3.5 cursor-pointer"
+                    className="flex h-5xl cursor-pointer items-center justify-between gap-x-3 rounded-regular border border-stroke-100 px-4 py-3.5"
                     onClick={() => setIsTeamFilterOpen(!isTeamFilterOpen)}
                   >
-                    <p>소속 전체</p>
+                    <p className="text-4">소속 전체</p>
                     <Image
                       src={FilterListIcon}
                       alt="filterlist"
@@ -145,7 +110,7 @@ const AdminPointsRewardNewPage = () => {
                     />
                   </div>
                   {isTeamFilterOpen && (
-                    <div className="absolute right-0 bottom-[-10px] translate-y-full bg-white">
+                    <div className="absolute bottom-[-10px] right-0 translate-y-full bg-white">
                       <SelectContainer
                         title="소속"
                         options={['개발팀', '디자인팀', '기획팀']}
@@ -156,59 +121,154 @@ const AdminPointsRewardNewPage = () => {
                   )}
                 </div>
               </div>
-              <div className="max-h-[500px] overflow-y-scroll">
-                {/* TODO : max-h 를 table body에 넣어도 좋을 듯 */}
-                <TableContainer headers={headers} data={data} />
-              </div>
+              <TableContainer maxHeight="max-h-[500px]">
+                <TableHeaderModule>
+                  <TableHeaderAtom
+                    isFirst
+                    width="100px"
+                    isBoolean={selectedRequest.length === data.length}
+                    onClickBoolean={() => {
+                      if (selectedRequest.length === data.length) {
+                        setSelectedRequest([]);
+                      } else {
+                        setSelectedRequest(data);
+                      }
+                    }}
+                  />
+                  <TableHeaderAtom width="100px">이름</TableHeaderAtom>
+                  <TableHeaderAtom>소속</TableHeaderAtom>
+                  <TableHeaderAtom isLast>아이디</TableHeaderAtom>
+                </TableHeaderModule>
+                <tbody>
+                  {data.length <= 0 ? (
+                    <EmptyContainer colSpan={4} />
+                  ) : (
+                    data.map((item) => (
+                      <TableBodyModule key={item.id}>
+                        <TableBodyAtom
+                          isFirst
+                          isBoolean={selectedRequest.includes(item)}
+                          onClickBoolean={() => [
+                            setSelectedRequest((prev) =>
+                              prev.includes(item)
+                                ? prev.filter((current) => current !== item)
+                                : [...prev, item],
+                            ),
+                          ]}
+                        />
+                        <TableBodyAtom>{item.name}</TableBodyAtom>
+                        <TableBodyAtom>{item.team}</TableBodyAtom>
+                        <TableBodyAtom isLast>{item.personalId}</TableBodyAtom>
+                      </TableBodyModule>
+                    ))
+                  )}
+                </tbody>
+              </TableContainer>
             </div>
           </div>
-          <div className="flex-1 flex flex-col gap-y-4">
-            <h3 className="font-bold">지급 대상({selectedMember.length})</h3>
+          <div className="flex flex-1 flex-col gap-y-4">
+            <h3 className="font-bold">지급 대상({selectedRequest.length})</h3>
             <div className="flex flex-col gap-y-10">
-              <div className="w-full flex items-center gap-x-5">
-                {/* TODO : Width, Height 조정 필요 */}
-                <SearchingBoxModule
-                  placeholder="이름을 검색하세요."
-                  onClick={() => {}}
+              <div className="flex w-full items-center gap-x-5">
+                <div className="grow">
+                  <SearchingBoxModule
+                    placeholder="이름을 검색하세요."
+                    onClick={() => {}}
+                    height="h-5xl"
+                    widthFull
+                  />
+                </div>
+                <ButtonAtom
+                  type="button"
+                  buttonStyle="dark"
+                  text="삭제"
+                  onClick={() => {
+                    setSelectedRequest((prev) =>
+                      prev.filter(
+                        (current) => !selectedDelete.includes(current),
+                      ),
+                    );
+                    setSelectedDelete([]);
+                  }}
                 />
-                <ButtonAtom buttonType="dark" onClick={() => {}}>
-                  삭제
-                </ButtonAtom>
               </div>
-              <div className="max-h-[500px] overflow-y-scroll">
-                {/* TODO : max-h 를 table body에 넣어도 좋을 듯 */}
-                <TableContainer headers={headers} data={data} />
-              </div>
+              <TableContainer maxHeight="max-h-[500px]">
+                <TableHeaderModule>
+                  <TableHeaderAtom
+                    isFirst
+                    width="100px"
+                    isBoolean={
+                      selectedDelete.length === selectedRequest.length &&
+                      selectedRequest.length !== 0
+                    }
+                    onClickBoolean={() => {
+                      if (selectedDelete.length === selectedRequest.length) {
+                        setSelectedDelete([]);
+                      } else {
+                        setSelectedDelete(selectedRequest);
+                      }
+                    }}
+                  />
+                  <TableHeaderAtom width="100px">이름</TableHeaderAtom>
+                  <TableHeaderAtom>소속</TableHeaderAtom>
+                  <TableHeaderAtom isLast>아이디</TableHeaderAtom>
+                </TableHeaderModule>
+                <tbody>
+                  {selectedRequest.length <= 0 ? (
+                    <EmptyContainer colSpan={4} />
+                  ) : (
+                    selectedRequest.map((item) => (
+                      <TableBodyModule key={item.id}>
+                        <TableBodyAtom
+                          isFirst
+                          isBoolean={selectedDelete.includes(item)}
+                          onClickBoolean={() => [
+                            setSelectedDelete((prev) =>
+                              prev.includes(item)
+                                ? prev.filter((current) => current !== item)
+                                : [...prev, item],
+                            ),
+                          ]}
+                        />
+                        <TableBodyAtom>{item.name}</TableBodyAtom>
+                        <TableBodyAtom>{item.team}</TableBodyAtom>
+                        <TableBodyAtom isLast>{item.personalId}</TableBodyAtom>
+                      </TableBodyModule>
+                    ))
+                  )}
+                </tbody>
+              </TableContainer>
             </div>
           </div>
         </div>
-        <div className="w-full flex items-center justify-end">
+        <div className="flex w-full items-center justify-end">
           <ButtonAtom
-            buttonType="yellow"
+            type="submit"
+            buttonStyle="yellow"
             onClick={() => {
               if (selectedType === '') {
                 // TODO : alert 디자인 적용 필요
                 alert('분류를 선택해주세요.');
                 return;
               }
-              if (selectedMember.length === 0) {
+              if (selectedRequest.length === 0) {
                 // TODO : alert 디자인 적용 필요
                 alert('지급 대상을 선택해주세요.');
                 return;
               }
               setIsConfirmModelOpen(true);
             }}
-          >
-            포인트 등록
-          </ButtonAtom>
+            text="포인트 등록"
+          />
         </div>
         {isConfirmModelOpen && (
-          // content 없애고 children으로 대체 필요
           <ModalModule
             title="단체 포인트를 등록하시겠습니까?"
-            content="포인트 정보 안내"
             confirmText="등록"
             cancelText="취소"
+            onClick={() => {
+              setIsConfirmModelOpen(false);
+            }}
             onConfirm={() => {
               //  TODO : 포인트 등록 API 호출
               alert('포인트 등록 완료');
@@ -227,7 +287,10 @@ const AdminPointsRewardNewPage = () => {
                 },
                 {
                   subtitle: '지급 대상',
-                  content: `${selectedMember[0].name} 외 ${selectedMember.length - 1}인`,
+                  content:
+                    selectedRequest.length === 1
+                      ? selectedRequest[0].name
+                      : `${selectedRequest[0].name} 외 ${selectedRequest.length - 1}인`,
                 },
                 {
                   subtitle: '지급 포인트',

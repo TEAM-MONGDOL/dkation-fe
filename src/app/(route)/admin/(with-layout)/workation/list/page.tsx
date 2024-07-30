@@ -14,17 +14,12 @@ import { DatePickerTagType } from '@/_types/commonType';
 import dayjs from 'dayjs';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import CheckboxContainer from '@/_components/common/containers/CheckboxContainer';
-
-const headers = [
-  { title: '번호', width: '47px' },
-  { title: '제목', flexGrow: true },
-  { title: '등록일시', width: '100px' },
-  { title: '모집기간', width: '140px' },
-  { title: '워케이션기간', width: '140px' },
-  { title: '상태', width: '110px' },
-  { title: '결과 및 패널티', width: '130px' },
-  { title: '내용', width: '150px' },
-];
+import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
+import TableHeaderAtom from '@/_components/common/atoms/TableHeaderAtom';
+import EmptyContainer from '@/_components/common/containers/EmptyContainer';
+import TableBodyModule from '@/_components/common/modules/TableBodyModule';
+import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
+import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAtom';
 
 const data = [
   {
@@ -34,6 +29,8 @@ const data = [
     모집기간: '2024.07.03 - 2024.07.03',
     워케이션기간: '2024.07.03 - 2024.07.03',
     상태: { text: '모집 예정' },
+    결과및페널티: '',
+    내용: '',
   },
   {
     id: 2,
@@ -41,7 +38,9 @@ const data = [
     등록일시: '2024.06.05',
     모집기간: '2024.07.03 - 2024.07.03',
     워케이션기간: '2024.07.03 - 2024.07.03',
-    상태: { text: '모집 중', color: 'blue' },
+    상태: { text: '모집 중', color: 'text-positive' },
+    결과및페널티: '',
+    내용: '',
   },
   {
     id: 3,
@@ -49,7 +48,9 @@ const data = [
     등록일시: '2024.06.05',
     모집기간: '2024.07.03 - 2024.07.03',
     워케이션기간: '2024.07.03 - 2024.07.03',
-    상태: { text: '모집 완료', color: 'orange' },
+    상태: { text: '모집 완료', color: 'text-primaryDark' },
+    결과및페널티: '',
+    내용: '',
   },
 ];
 const WorkationList = () => {
@@ -62,11 +63,17 @@ const WorkationList = () => {
   const [param, setParam] = useState<{
     order: string;
     status: string[];
+    startDate: Date | null;
+    endDate: Date | null;
   }>({
     order: 'RECENT',
     status: ['WILL', 'PROCEED', 'COMPLETE'],
+    startDate: null,
+    endDate: null,
   });
-
+  const penaltyRouteButtonClick = (id: number) => {
+    router.push(`/admin/workation/list/${id}/result`);
+  };
   const [startDate, setStartDate] = useState<Date>(
     dayjs().subtract(1, 'year').toDate(),
   );
@@ -99,18 +106,59 @@ const WorkationList = () => {
   };
   const [currentPage, setCurrentPage] = useState(1);
   return (
-    <div className="w-full flex flex-col gap-y-10 overflow-y-auto">
-      <div className="w-full flex justify-between items-center">
+    <section className="flex w-full flex-col gap-y-10 overflow-y-auto">
+      <div className="flex w-full items-center justify-between">
         <TitleBarModule title="워케이션 목록" />
         <FilteringButtonAtom onClick={handleFilteringBar} />
       </div>
-      <TableContainer
-        headers={headers}
-        data={data.map((item) => ({
-          ...item,
-          내용: { onClick: () => onClickRowDetail(item.id) },
-        }))}
-      />
+      <TableContainer>
+        <TableHeaderModule>
+          <TableHeaderAtom width="80px" isFirst>
+            번호
+          </TableHeaderAtom>
+          <TableHeaderAtom>제목</TableHeaderAtom>
+          <TableHeaderAtom width="100px">등록 일시</TableHeaderAtom>
+          <TableHeaderAtom width="140px">모집 기간</TableHeaderAtom>
+          <TableHeaderAtom width="140px">워케이션 기간</TableHeaderAtom>
+          <TableHeaderAtom width="110px">상태</TableHeaderAtom>
+          <TableHeaderAtom width="130px">결과 및 페널티</TableHeaderAtom>
+          <TableHeaderAtom width="150px" isLast>
+            내용
+          </TableHeaderAtom>
+        </TableHeaderModule>
+        <tbody>
+          {data.length <= 0 ? (
+            <EmptyContainer colSpan={8} />
+          ) : (
+            data.map((item, index) => (
+              <TableBodyModule key={item.id}>
+                <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
+                <TableBodyAtom>{item.제목}</TableBodyAtom>
+                <TableBodyAtom>{item.등록일시}</TableBodyAtom>
+                <TableBodyAtom>{item.모집기간}</TableBodyAtom>
+                <TableBodyAtom>{item.워케이션기간}</TableBodyAtom>
+                <TableBodyAtom color={item.상태.color}>
+                  {item.상태.text}
+                </TableBodyAtom>
+                <TableBodyAtom>
+                  <button
+                    onClick={() => penaltyRouteButtonClick(item.id)}
+                    className="rounded-full bg-primary px-6 py-2 text-4 font-semibold text-white"
+                  >
+                    자세히
+                  </button>
+                </TableBodyAtom>
+                <TableBodyAtom isLast>
+                  <ShowDetailButtonAtom
+                    onClick={() => onClickRowDetail(item.id)}
+                  />
+                </TableBodyAtom>
+              </TableBodyModule>
+            ))
+          )}
+        </tbody>
+      </TableContainer>
+
       <div className="relative mt-8">
         <div className="flex justify-center">
           <PaginationModule
@@ -120,9 +168,12 @@ const WorkationList = () => {
           />
         </div>
         <div className="absolute right-0 top-0">
-          <ButtonAtom buttonType="yellow" onClick={moveToWritePage}>
-            워케이션 등록
-          </ButtonAtom>
+          <ButtonAtom
+            text="워케이션 등록"
+            type="button"
+            buttonStyle="yellow"
+            onClick={moveToWritePage}
+          />
         </div>
       </div>
 
@@ -149,26 +200,35 @@ const WorkationList = () => {
             setParam({ ...param, status })
           }
         />
+        {/* 추후 수정 예정 */}
         <DatePickerContainer
           title="모집 기간"
           selectedTag={selectedDateTag}
           setSelectedTag={setSelectedDateTag}
-          startDate={startDate}
-          setStartDate={(start: Date) => setStartDate(start)}
-          endDate={endDate}
-          setEndDate={(end: Date) => setEndDate(end)}
+          startDate={param.startDate}
+          setStartDate={(start: Date | null) => {
+            setParam({ ...param, startDate: start });
+          }}
+          endDate={param.endDate}
+          setEndDate={(end: Date | null) => {
+            setParam({ ...param, endDate: end });
+          }}
         />
         <DatePickerContainer
           title="워케이션 기간"
           selectedTag={selectedDateTagSec}
           setSelectedTag={setSelectedDateTagSec}
           startDate={startDateSec}
-          setStartDate={(start: Date) => setStartDateSec(start)}
+          setStartDate={(start: Date | null) => {
+            setParam({ ...param, startDate: start });
+          }}
           endDate={endDateSec}
-          setEndDate={(end: Date) => setEndDateSec(end)}
+          setEndDate={(end: Date | null) => {
+            setParam({ ...param, endDate: end });
+          }}
         />
       </FilteringBarContainer>
-    </div>
+    </section>
   );
 };
 

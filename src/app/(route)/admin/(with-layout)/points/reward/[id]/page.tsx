@@ -109,7 +109,7 @@ const AdminPointsRewardDetailPage = () => {
               onClick={() => {}}
               widthFull
             />
-            <TableContainer maxHeight="max-h-[400px]">
+            <TableContainer>
               <TableHeaderModule bgColor="bg-cus-100">
                 <TableHeaderAtom width="100px">번호</TableHeaderAtom>
                 <TableHeaderAtom>이름</TableHeaderAtom>
@@ -120,14 +120,19 @@ const AdminPointsRewardDetailPage = () => {
                 {users.length <= 0 ? (
                   <EmptyContainer colSpan={4} />
                 ) : (
-                  users.map((user, idx) => (
-                    <TableBodyModule key={user.id}>
-                      <TableBodyAtom isFirst>{idx + 1}</TableBodyAtom>
-                      <TableBodyAtom>{user['이름']}</TableBodyAtom>
-                      <TableBodyAtom>{user['소속']}</TableBodyAtom>
-                      <TableBodyAtom isLast>{user['아이디']}</TableBodyAtom>
-                    </TableBodyModule>
-                  ))
+                  users
+                    .slice(
+                      (currentPage - 1) * 5,
+                      Math.min(users.length, (currentPage - 1) * 5 + 5),
+                    )
+                    .map((user, idx) => (
+                      <TableBodyModule key={user.id}>
+                        <TableBodyAtom isFirst>{idx + 1}</TableBodyAtom>
+                        <TableBodyAtom>{user['이름']}</TableBodyAtom>
+                        <TableBodyAtom>{user['소속']}</TableBodyAtom>
+                        <TableBodyAtom isLast>{user['아이디']}</TableBodyAtom>
+                      </TableBodyModule>
+                    ))
                 )}
               </tbody>
             </TableContainer>
@@ -137,7 +142,7 @@ const AdminPointsRewardDetailPage = () => {
               <PaginationModule
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
-                totalPages={Math.ceil(users.length / 10)}
+                totalPages={Math.ceil(users.length / 5)}
               />
             </div>
           )}

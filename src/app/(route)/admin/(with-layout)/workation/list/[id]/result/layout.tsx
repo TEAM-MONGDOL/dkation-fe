@@ -3,11 +3,10 @@ import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import PlaceImsy from '@/_assets/images/place_impy.png';
 import InfoSectionContainer from '@/_components/common/containers/InfoSectionContainer';
 import SidebarModule from '@/_components/common/modules/SidebarModule';
-import { AdminListResultSidebar } from '@/_components/_constants/common';
 
 interface Props {
   children: ReactNode;
-  id: number;
+  params: { id: string };
 }
 const data = [
   { subtitle: '모집 기간', content: 'Content 1' },
@@ -15,16 +14,31 @@ const data = [
   { subtitle: '모집 인원', content: 'Content 3' },
   { subtitle: '장소', content: 'Content 3' },
 ];
-const AdminWorkationResultLayout = ({ children, id }: Props) => {
+const AdminWorkationResultLayout = ({ children, params }: Props) => {
+  const resultId = params.id;
+
+  const WkResultDetailSidebar = [
+    {
+      id: '1',
+      title: '추첨 결과',
+      url: `/admin/workation/list/${resultId}/result`,
+    },
+    {
+      id: '2',
+      title: '결과 통계 및 페널티',
+      url: `/admin/workation/list/${resultId}/result/penalty`,
+    },
+  ];
+
   return (
-    <div className="flex flex-col h-full gap-10">
+    <div className="flex h-full flex-col gap-10">
       <TitleBarModule title="결과 및 페널티" type="LEFT" />
-      <div className="flex gap-x-">
-        <div className="w-[300px] flex flex-col gap-5">
+      <div className="flex">
+        <div className="flex w-[300px] flex-col gap-5">
           <InfoSectionContainer data={data} image={PlaceImsy} />
-          <SidebarModule items={AdminListResultSidebar(id)} />
+          <SidebarModule items={WkResultDetailSidebar} />
         </div>
-        <div className="grow flex ml-5">
+        <div className="ml-5 flex grow">
           <main className="w-full">{children}</main>
         </div>
       </div>

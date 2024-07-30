@@ -36,14 +36,17 @@ const NavModule = ({ icon, title, plusContents, contents }: TitleProps) => {
       <div
         className={`transition-max-height overflow-hidden duration-300 ease-in-out ${isVisible ? 'max-h-96' : 'max-h-0'} `}
       >
-        {contents.map((contentItem, index) => (
-          // eslint-disable-next-line react/jsx-key
-          <NavSubAtom content={contentItem.content} route={contentItem.route} />
+        {contents.map((contentItem) => (
+          <NavSubAtom
+            key={contentItem.route}
+            content={contentItem.content}
+            route={contentItem.route}
+          />
         ))}
         {plusContents &&
           plusContents.map((plusContentItem, index) => (
-            // eslint-disable-next-line react/jsx-key
             <NavPlusAtom
+              key={plusContentItem.route}
               content={plusContentItem.content}
               route={plusContentItem.route}
             />
