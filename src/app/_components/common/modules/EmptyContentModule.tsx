@@ -2,7 +2,10 @@ import { EllipseIcon } from '@/_assets/icons';
 import { EmptyContainer } from '@/_constants/common';
 import Image from 'next/image';
 
-const EmptyContentModule = () => {
+interface TextProps {
+  text?: string;
+}
+const EmptyContentModule = ({ text }: TextProps) => {
   return (
     <div className="flex flex-col items-center">
       <Image src={EllipseIcon} alt="xcircleicon" />

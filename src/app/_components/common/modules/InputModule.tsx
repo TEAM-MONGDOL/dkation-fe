@@ -12,7 +12,7 @@ interface InputProps {
   message?: string;
   textCount?: number;
   name?: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const InputModule = ({

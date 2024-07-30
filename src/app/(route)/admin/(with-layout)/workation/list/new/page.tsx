@@ -2,7 +2,7 @@
 
 import InputModule from '@/_components/common/modules/InputModule';
 import React, { useState } from 'react';
-import { PlaceGallery } from '@/_assets/icons';
+import { ImageIcon } from '@/_assets/icons';
 import Image from 'next/image';
 import DropdownModule from '@/_components/common/modules/DropdownModule';
 import { PlaceOptions } from '@/_constants/common';
@@ -14,36 +14,35 @@ import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 
 const WorkationNew = () => {
-  const [values, setValues] = useState({
+  const [formData, setFormData] = useState({
     title: '',
     number: '',
-    category: '',
+    place: '',
   });
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    setValues({
-      ...values,
-      [e.target.name]: e.target.value,
-    });
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
   const handleSelect = (option: string) => {
-    setValues({ ...values, category: option });
+    setFormData({ ...formData, place: option });
   };
   const [selectedDateTag, setSelectedDateTag] =
     useState<DatePickerTagType>('ALL');
-  const [startDate, setStartDate] = useState<Date>(
+  const [startDate, setStartDate] = useState<Date | null>(
     dayjs().subtract(1, 'year').toDate(),
   );
-  const [endDate, setEndDate] = useState<Date>(dayjs().toDate());
+  const [endDate, setEndDate] = useState<Date | null>(dayjs().toDate());
   return (
-    <div className="flex flex-col">
+    <section className="flex flex-col">
       <TitleBarModule title="워케이션 등록" type="LEFT" />
-      <div className="flex flex-col  mt-10 gap-[30px]">
-        <div className="h-52 flex gap-x-8">
-          <div className=" gap-y-2 text-sub-200 w-[550px] bg-cus-100 items-center flex flex-col justify-center">
-            <Image src={PlaceGallery} alt="PlaceGallery" />
-            <p className="text-center mt-2">
+      <div className="mt-10 flex flex-col gap-[30px]">
+        <div className="flex h-52 gap-x-8">
+          <div className="flex w-[550px] flex-col items-center justify-center gap-y-2 bg-cus-100 text-sub-200">
+            <Image src={ImageIcon} alt="PlaceGallery" />
+            <p className="mt-2 text-center">
               장소 선택 시
               <br />
               대표 이미지를 확인할 수 있습니다.
@@ -56,20 +55,22 @@ const WorkationNew = () => {
                   subtitle="제목"
                   placeholder="제목을 입력하세요"
                   textCount={30}
-                  value={values.title}
+                  value={formData.title}
                   onChange={handleChange}
+                  name="title"
                 />
               </div>
               <div className="w-52">
                 <InputModule
                   subtitle="모집 인원"
                   placeholder="0"
-                  value={values.number}
+                  value={formData.number}
                   onChange={handleChange}
+                  name="number"
                 />
               </div>
             </div>
-            <div className="mt-6 flex flex-col w-full gap-4">
+            <div className="mt-6 flex w-full flex-col gap-4">
               <p className="text-3 font-semibold">장소</p>
               <DropdownModule
                 options={PlaceOptions}
@@ -81,28 +82,30 @@ const WorkationNew = () => {
         </div>
         <div className="flex gap-8">
           <div className="w-full">
-            <p className="text-3 mb-3 font-semibold">모집 기간</p>
+            <p className="mb-3 text-3 font-semibold">모집 기간</p>
             <DatePickersModule
+              startDatePlaceholder="모집 시작일"
+              endDatePlaceholder="모집 마감일"
               startDate={startDate}
               setStartDate={setStartDate}
               endDate={endDate}
               setEndDate={setEndDate}
-              className="py-3 flex gap-x-2 items-center"
+              className="flex items-center gap-x-2 py-3"
             />
           </div>
           <div className="w-full">
-            <p className="text-3 mb-3 font-semibold">워케이션 기간</p>
+            <p className="mb-3 text-3 font-semibold">워케이션 기간</p>
             <DatePickersModule
               startDate={startDate}
               setStartDate={setStartDate}
               endDate={endDate}
               setEndDate={setEndDate}
-              className="py-3 flex gap-x-2 items-center"
+              className="flex items-center gap-x-2 py-3"
             />
           </div>
         </div>
         <div className="-mt-4">
-          <p className="text-3 mb-3 font-semibold">내용</p>
+          <p className="mb-3 text-3 font-semibold">내용</p>
           <TextAreaModule
             placeholder="상세내용을 입력해주세요."
             size="LARGE"
@@ -111,11 +114,17 @@ const WorkationNew = () => {
           />
         </div>
       </div>
-
-      <div className="flex justify-end mt-12">
-        <ButtonAtom buttonType="yellow">등록</ButtonAtom>
+      <form className="mt-12 flex justify-end">
+        <ButtonAtom
+          width="fixed"
+          text="등록"
+          type="submit"
+          buttonStyle="yellow"
+        />
       </div>
     </div>
+      </form>
+    </section>
   );
 };
 
