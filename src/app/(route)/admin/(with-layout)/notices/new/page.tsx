@@ -50,22 +50,21 @@ const WriteNoticesPage = () => {
       <form onSubmit={handleSubmit}>
         <div className="pt-10">
           <p className="mb-4 text-3 font-bold">제목</p>
-          <div className="flex gap-4">
+          <div className="flex w-full gap-4">
             <DropdownModule
+              fixed
               options={NoticeOptions}
               onSelect={handleSelect}
               placeholder="구분 선택"
               selectedOption={values.category}
             />
-            <div className="w-full">
-              <InputModule
-                name="title"
-                placeholder="제목을 입력하세요"
-                textCount={20}
-                value={values.title}
-                onChange={handleChange}
-              />
-            </div>
+            <InputModule
+              name="title"
+              placeholder="제목을 입력하세요"
+              textCount={20}
+              value={values.title}
+              onChange={handleChange}
+            />
           </div>
           <div className="py-7">
             <FileContainer onFileChange={handleFilesChange} />{' '}
