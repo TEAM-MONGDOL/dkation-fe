@@ -64,12 +64,9 @@ const AdminMainPage = () => {
             <TableHeaderAtom width="120px">지원자 수</TableHeaderAtom>
             <TableHeaderAtom isLast width="160px" />
           </TableHeaderModule>
-
           <tbody>
             {wkData.length <= 0 ? (
-              <td colSpan={6}>
-                <EmptyContainer />
-              </td>
+              <EmptyContainer colSpan={6} />
             ) : (
               wkData.map((item, index) => (
                 <TableBodyModule key={item.id}>
@@ -108,12 +105,9 @@ const AdminMainPage = () => {
             <TableHeaderAtom width="160px">상태</TableHeaderAtom>
             <TableHeaderAtom isLast width="160px" />
           </TableHeaderModule>
-
           <tbody>
             {pointData.length <= 0 ? (
-              <td colSpan={6}>
-                <EmptyContainer />
-              </td>
+              <EmptyContainer colSpan={6} />
             ) : (
               pointData.map((item, index) => (
                 <TableBodyModule key={item.id}>
