@@ -1,5 +1,7 @@
+'use client';
+
 import Image from 'next/image';
-import React from 'react';
+import React, { useState } from 'react';
 import { ExtensionIcon } from '@/_assets/icons';
 import InfoSectionModule from '@/_components/common/modules/InfoSectionModule';
 import TableContainer from '@/_components/common/containers/TableContainer';
@@ -8,6 +10,10 @@ import TableHeaderAtom from '@/_components/common/atoms/TableHeaderAtom';
 import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
+import ModalModule from '@/_components/common/modules/ModalModule';
+import { useRouter } from 'next/navigation';
+import InputModule from '@/_components/common/modules/InputModule';
+import DropdownModule from '@/_components/common/modules/DropdownModule';
 
 const data = [
   { subtitle: '최대 포인트', content: '350 P' },
@@ -35,6 +41,10 @@ const tabledata = [
 ];
 
 const AdminWorkationListPenaltyPage = () => {
+  const [isConfirmModelOpen, setIsConfirmModelOpen] = useState(false);
+  const router = useRouter();
+  const [selectedType, setSelectedType] = useState<string>('');
+
   return (
     <section className="w-full">
       <div className="mb-8 flex gap-2">
@@ -92,7 +102,10 @@ const AdminWorkationListPenaltyPage = () => {
                     <TableBodyAtom>{item.소속}</TableBodyAtom>
                     <TableBodyAtom>{item.지급일시}</TableBodyAtom>
                     <TableBodyAtom isLast>
-                      <button className="rounded-full bg-primary px-4 py-1.5 text-4">
+                      <button
+                        onClick={() => setIsConfirmModelOpen(true)}
+                        className="rounded-full bg-primary px-4 py-1.5 text-4"
+                      >
                         부여하기
                       </button>
                     </TableBodyAtom>
@@ -103,6 +116,42 @@ const AdminWorkationListPenaltyPage = () => {
           </TableContainer>
         </div>
       </div>
+      {isConfirmModelOpen && (
+        <ModalModule
+          title="선택한 회원에게 페널티를 부여하시겠습니까?"
+          cancelText="취소"
+          confirmText="확인"
+          confirmButtonStyle="dark"
+          cancelButtonStyle="yellow"
+          onClick={() => {
+            setIsConfirmModelOpen(false);
+          }}
+          onConfirm={() => {
+            //  TODO : 페널티 등록 API 호출
+            alert('페널티 등록 완료');
+            setIsConfirmModelOpen(false);
+            router.back();
+          }}
+          onCancel={() => {
+            setIsConfirmModelOpen(false);
+          }}
+        >
+          <InputModule
+            subtitle="해당 워케이션"
+            status="disabled"
+            value="1월 1주차 워케이션"
+          />
+          <div className="mt-4 flex flex-col gap-4">
+            <p className="text-3 font-semibold">분류</p>
+            <DropdownModule
+              options={['노쇼', '고성방가']}
+              onSelect={setSelectedType}
+              placeholder="페널티 사유를 선택하세요."
+              selectedOption={selectedType}
+            />
+          </div>
+        </ModalModule>
+      )}
     </section>
   );
 };

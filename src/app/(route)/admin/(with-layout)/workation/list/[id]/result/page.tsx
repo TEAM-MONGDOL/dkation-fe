@@ -10,18 +10,12 @@ import RadioButtonContainer from '@/_components/common/containers/RadioButtonCon
 import { resultList } from '@/_types/adminType';
 import CheckboxContainer from '@/_components/common/containers/CheckboxContainer';
 import FilteringBarContainer from '@/_components/common/containers/FilteringBarContainer';
-import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
-import TableHeaderAtom from '@/_components/common/atoms/TableHeaderAtom';
-import EmptyContainer from '@/_components/common/containers/EmptyContainer';
-import TableBodyModule from '@/_components/common/modules/TableBodyModule';
-import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
 import RangeContainer from '@/_components/common/containers/RangeContainer';
 import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
 import TableHeaderAtom from '@/_components/common/atoms/TableHeaderAtom';
 import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
-import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAtom';
 
 const data = [
   {
