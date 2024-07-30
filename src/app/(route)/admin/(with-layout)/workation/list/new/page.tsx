@@ -12,12 +12,16 @@ import DatePickersModule from '@/_components/common/modules/DatePickersModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
+import ModalModule from '@/_components/common/modules/ModalModule';
+import InfoSectionContainer from '@/_components/common/containers/InfoSectionContainer';
+import { useRouter } from 'next/navigation';
 
 const WorkationNew = () => {
   const [formData, setFormData] = useState({
     title: '',
     number: '',
     place: '',
+    description: '',
   });
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -35,6 +39,17 @@ const WorkationNew = () => {
     dayjs().subtract(1, 'year').toDate(),
   );
   const [endDate, setEndDate] = useState<Date | null>(dayjs().toDate());
+  const [isConfirmModelOpen, setIsConfirmModelOpen] = useState(false);
+  const router = useRouter();
+  const handleDescriptionChange = (e: any) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      description: e.target.value,
+    }));
+  };
+  const handleSubmit = () => {
+    setIsConfirmModelOpen(true);
+  };
   return (
     <section className="flex flex-col">
       <TitleBarModule title="워케이션 등록" type="LEFT" />
@@ -111,17 +126,60 @@ const WorkationNew = () => {
             size="LARGE"
             maxLength={2000}
             name="워케이션 상세내용"
+            value={formData.description}
+            onChange={handleDescriptionChange}
           />
         </div>
       </div>
-      <form className="mt-12 flex justify-end">
+      <div className="mt-12 flex justify-end">
         <ButtonAtom
           width="fixed"
           text="등록"
-          type="submit"
+          type="button"
           buttonStyle="yellow"
+          onClick={handleSubmit}
         />
-      </form>
+      </div>
+      {isConfirmModelOpen && (
+        <ModalModule
+          title="워케이션을 등록하시겠습니까?"
+          confirmText="확인"
+          cancelText="취소"
+          onClick={() => {
+            setIsConfirmModelOpen(false);
+          }}
+          onConfirm={() => {
+            //  TODO : 워케이션 등록 API 호출
+            alert('워케이션 등록 완료');
+            setIsConfirmModelOpen(false);
+            router.push('/admin/workation/list');
+          }}
+          onCancel={() => {
+            setIsConfirmModelOpen(false);
+          }}
+        >
+          <InfoSectionContainer
+            data={[
+              {
+                subtitle: '제목',
+                content: formData.title,
+              },
+              {
+                subtitle: '장소',
+                content: formData.place,
+              },
+              {
+                subtitle: '모집 기간',
+                content: `${dayjs(startDate).format('YYYY.MM.DD')} - ${dayjs(endDate).format('YYYY.MM.DD')}`,
+              },
+              {
+                subtitle: '워케이션 기간',
+                content: `${dayjs(startDate).format('YYYY.MM.DD')} - ${dayjs(endDate).format('YYYY.MM.DD')}`,
+              },
+            ]}
+          />
+        </ModalModule>
+      )}
     </section>
   );
 };
