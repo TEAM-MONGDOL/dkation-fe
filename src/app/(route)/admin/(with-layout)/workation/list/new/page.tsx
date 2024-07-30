@@ -6,15 +6,14 @@ import { ImageIcon } from '@/_assets/icons';
 import Image from 'next/image';
 import DropdownModule from '@/_components/common/modules/DropdownModule';
 import { PlaceOptions } from '@/_constants/common';
-import { DatePickerTagType } from '@/_types/commonType';
 import dayjs from 'dayjs';
 import DatePickersModule from '@/_components/common/modules/DatePickersModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import ModalModule from '@/_components/common/modules/ModalModule';
-import InfoSectionContainer from '@/_components/common/containers/InfoSectionContainer';
 import { useRouter } from 'next/navigation';
+import InfoSectionContainer from '@/_components/common/containers/InfoSectionContainer';
 
 const WorkationNew = () => {
   const [formData, setFormData] = useState({
@@ -31,25 +30,26 @@ const WorkationNew = () => {
     }));
   };
   const handleSelect = (option: string) => {
-    setFormData({ ...formData, place: option });
-  };
-  const [selectedDateTag, setSelectedDateTag] =
-    useState<DatePickerTagType>('ALL');
-  const [startDate, setStartDate] = useState<Date | null>(
-    dayjs().subtract(1, 'year').toDate(),
-  );
-  const [endDate, setEndDate] = useState<Date | null>(dayjs().toDate());
-  const [isConfirmModelOpen, setIsConfirmModelOpen] = useState(false);
-  const router = useRouter();
-  const handleDescriptionChange = (e: any) => {
     setFormData((prevData) => ({
       ...prevData,
-      description: e.target.value,
+      place: option,
     }));
   };
-  const handleSubmit = () => {
-    setIsConfirmModelOpen(true);
-  };
+  const [startDateRecruitment, setStartDateRecruitment] = useState<Date | null>(
+    dayjs().subtract(1, 'year').toDate(),
+  );
+  const [endDateRecruitment, setEndDateRecruitment] = useState<Date | null>(
+    dayjs().toDate(),
+  );
+
+  const [startDateWorkation, setStartDateWorkation] = useState<Date | null>(
+    dayjs().subtract(1, 'year').toDate(),
+  );
+  const [endDateWorkation, setEndDateWorkation] = useState<Date | null>(
+    dayjs().toDate(),
+  );
+  const [isConfirmModelOpen, setIsConfirmModelOpen] = useState(false);
+  const router = useRouter();
   return (
     <section className="flex flex-col">
       <TitleBarModule title="워케이션 등록" type="LEFT" />
@@ -88,6 +88,7 @@ const WorkationNew = () => {
             <div className="mt-6 flex w-full flex-col gap-4">
               <p className="text-3 font-semibold">장소</p>
               <DropdownModule
+                selectedOption={formData.place}
                 options={PlaceOptions}
                 onSelect={handleSelect}
                 placeholder="장소를 선택해주세요."
@@ -101,20 +102,22 @@ const WorkationNew = () => {
             <DatePickersModule
               startDatePlaceholder="모집 시작일"
               endDatePlaceholder="모집 마감일"
-              startDate={startDate}
-              setStartDate={setStartDate}
-              endDate={endDate}
-              setEndDate={setEndDate}
+              startDate={startDateRecruitment}
+              setStartDate={setStartDateRecruitment}
+              endDate={endDateRecruitment}
+              setEndDate={setEndDateRecruitment}
               className="flex items-center gap-x-2 py-3"
             />
           </div>
           <div className="w-full">
             <p className="mb-3 text-3 font-semibold">워케이션 기간</p>
             <DatePickersModule
-              startDate={startDate}
-              setStartDate={setStartDate}
-              endDate={endDate}
-              setEndDate={setEndDate}
+              startDatePlaceholder="모집 시작일"
+              endDatePlaceholder="모집 마감일"
+              startDate={startDateWorkation}
+              setStartDate={setStartDateWorkation}
+              endDate={endDateWorkation}
+              setEndDate={setEndDateWorkation}
               className="flex items-center gap-x-2 py-3"
             />
           </div>
@@ -126,8 +129,6 @@ const WorkationNew = () => {
             size="LARGE"
             maxLength={2000}
             name="워케이션 상세내용"
-            value={formData.description}
-            onChange={handleDescriptionChange}
           />
         </div>
       </div>
@@ -137,7 +138,7 @@ const WorkationNew = () => {
           text="등록"
           type="button"
           buttonStyle="yellow"
-          onClick={handleSubmit}
+          onClick={() => setIsConfirmModelOpen(true)}
         />
       </div>
       {isConfirmModelOpen && (
@@ -170,11 +171,11 @@ const WorkationNew = () => {
               },
               {
                 subtitle: '모집 기간',
-                content: `${dayjs(startDate).format('YYYY.MM.DD')} - ${dayjs(endDate).format('YYYY.MM.DD')}`,
+                content: `${dayjs(startDateRecruitment).format('YYYY.MM.DD')} - ${dayjs(endDateRecruitment).format('YYYY.MM.DD')}`,
               },
               {
                 subtitle: '워케이션 기간',
-                content: `${dayjs(startDate).format('YYYY.MM.DD')} - ${dayjs(endDate).format('YYYY.MM.DD')}`,
+                content: `${dayjs(startDateWorkation).format('YYYY.MM.DD')} - ${dayjs(endDateWorkation).format('YYYY.MM.DD')}`,
               },
             ]}
           />
