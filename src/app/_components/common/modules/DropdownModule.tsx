@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import DropdownItemAtom from '@/_components/common/atoms/DropdownItemAtom';
 import { KeyboardArrowDownIcon } from '@/_assets/icons';
@@ -9,7 +9,7 @@ interface DropdownModuleProps {
   options: string[];
   onSelect: (option: string) => void;
   placeholder: string;
-  initialSelectedOption?: string;
+  selectedOption: string | undefined;
   fixed?: boolean;
 }
 
@@ -17,23 +17,10 @@ const DropdownModule = ({
   options,
   onSelect,
   placeholder,
-  initialSelectedOption,
+  selectedOption,
   fixed = false,
 }: DropdownModuleProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (initialSelectedOption) {
-      setSelectedOption(initialSelectedOption);
-    }
-  }, [initialSelectedOption]);
-
-  const handleSelect = (option: string) => {
-    setSelectedOption(option);
-    onSelect(option);
-    setIsOpen(false);
-  };
 
   return (
     <>
@@ -64,11 +51,14 @@ const DropdownModule = ({
         >
           {isOpen && (
             <div>
-              {options.map((option, index) => (
+              {options.map((option) => (
                 <DropdownItemAtom
                   key={option}
                   option={option}
-                  onSelect={handleSelect}
+                  onSelect={() => {
+                    onSelect(option);
+                    setIsOpen(false);
+                  }}
                 />
               ))}
             </div>
