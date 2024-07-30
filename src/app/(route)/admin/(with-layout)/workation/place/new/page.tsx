@@ -58,7 +58,7 @@ const AdminWorkationPlaceNewPage = () => {
       </div>
       <FileContainer />
       <div>
-        <p className="text-3 font-bold mb-4">상세 내용</p>
+        <p className="mb-4 text-3 font-bold">상세 내용</p>
         <TextAreaModule
           placeholder="상세 내용을 입력하세요"
           size="MEDIUM"
@@ -67,8 +67,18 @@ const AdminWorkationPlaceNewPage = () => {
         />
       </div>
       <div className="flex justify-end gap-5">
-        <ButtonAtom buttonType="dark">취소</ButtonAtom>
-        <ButtonAtom buttonType="yellow">등록</ButtonAtom>
+        <ButtonAtom
+          text="취소"
+          type="button"
+          width="fixed"
+          buttonStyle="dark"
+        />
+        <ButtonAtom
+          text="등록"
+          type="submit"
+          width="fixed"
+          buttonStyle="yellow"
+        />
       </div>
     </div>
   );
