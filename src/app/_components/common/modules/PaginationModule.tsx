@@ -49,27 +49,29 @@ const PaginationModule = ({
   const endPage = Math.min(startPage + 4, totalPages);
 
   return (
-    <div className="flex bg-white">
-      <div className="flex h-12 w-12 items-center justify-center rounded-l-lg border border-stroke-100">
-        <button onClick={handlePrev} disabled={startPage === 1}>
-          <Image src={getLeftArrowIcon()} alt="LeftArrowIcon" />
-        </button>
-      </div>
-      <div className="flex">
-        {Array.from({ length: endPage - startPage + 1 }, (_, index) => (
-          <PaginationButtonAtom
-            key={index}
-            onPage={index + startPage === currentPage}
-            page={index + startPage}
-            onClick={() => handlePageClick(index + startPage)}
-            disabled={index + startPage > totalPages}
-          />
-        ))}
-      </div>
-      <div className="flex h-12 w-12 items-center justify-center rounded-r-[8px] border border-stroke-100">
-        <button onClick={handleNext} disabled={endPage === totalPages}>
-          <Image src={getRightArrowIcon()} alt="RightArrowIcon" />
-        </button>
+    <div className="flex w-full items-center justify-center">
+      <div className="flex bg-white">
+        <div className="flex h-12 w-12 items-center justify-center rounded-l-lg border border-stroke-100">
+          <button onClick={handlePrev} disabled={startPage === 1}>
+            <Image src={getLeftArrowIcon()} alt="LeftArrowIcon" />
+          </button>
+        </div>
+        <div className="flex">
+          {Array.from({ length: endPage - startPage + 1 }, (_, index) => (
+            <PaginationButtonAtom
+              key={index}
+              onPage={index + startPage === currentPage}
+              page={index + startPage}
+              onClick={() => handlePageClick(index + startPage)}
+              disabled={index + startPage > totalPages}
+            />
+          ))}
+        </div>
+        <div className="flex h-12 w-12 items-center justify-center rounded-r-[8px] border border-stroke-100">
+          <button onClick={handleNext} disabled={endPage === totalPages}>
+            <Image src={getRightArrowIcon()} alt="RightArrowIcon" />
+          </button>
+        </div>
       </div>
     </div>
   );
