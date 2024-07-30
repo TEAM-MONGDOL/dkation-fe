@@ -1,6 +1,6 @@
 import NavModule from '@/_components/common/modules/NavModule';
 import {
-  ControlPointDuplicateIcon,
+  ControlPointIcon,
   ExtensionGrayIcon,
   InfoIcon,
   PersonIcon,
@@ -19,7 +19,7 @@ const NavBarContainer = () => {
       />
       <hr className="opacity-50" />
       <NavModule
-        icon={ControlPointDuplicateIcon}
+        icon={ControlPointIcon}
         title="포인트 관리"
         plusContents={[
           { content: '단체 포인트 등록', route: '/admin/points/reward/new' },

@@ -1,3 +1,4 @@
+export { default as KeyboardArrowDownIcon } from './keyboardArrowDown.svg';
 export { default as RadioButtonCheckedIcon } from './radioButtonChecked.svg';
 export { default as RadioButtonUncheckedIcon } from './radioButtonUnchecked.svg';
 export { default as CheckboxIcon } from './checkBox.svg';
