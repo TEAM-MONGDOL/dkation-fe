@@ -10,6 +10,7 @@ import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
 import TableHeaderAtom from '@/_components/common/atoms/TableHeaderAtom';
 import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
+import { useRouter } from 'next/navigation';
 
 const headers = [
   { title: '번호', width: '90px' },
@@ -45,8 +46,9 @@ const transformCurrentPenaltyData = (penalty: any) => {
 };
 
 const AdminMembersPenaltyHistoryPage = () => {
+  const router = useRouter();
   const moveToNewPenalty = () => {
-    // 추후 추가 예정
+    router.push('/admin/workation/list/null/result/penalty');
   };
 
   const transformedCurrentPenaltyData =
