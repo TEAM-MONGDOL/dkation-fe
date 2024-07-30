@@ -96,7 +96,7 @@ const AdminWriteNoticesEditPage = () => {
 
   return (
     <div>
-      <TitleBarModule title="공지 글쓰기" type="LEFT" />
+      <TitleBarModule title="공지 수정" type="LEFT" />
       <form onSubmit={handleSubmit}>
         <div className="pt-10">
           <p className="mb-4 text-3 font-bold">제목</p>
