@@ -14,9 +14,9 @@ const InfoSectionContainer = ({
   row,
 }: InfoSectionContainerProps) => {
   return (
-    <div className="rounded-regular py-5 px-4 w-full bg-cus-100 border border-stroke-100">
-      {title && <p className="text-1 font-bold mb-7">{title}</p>}
-      <div className={`flex ${row ? 'gap-10 items-center' : 'flex-col gap-7'}`}>
+    <div className="w-full rounded-regular border border-stroke-100 bg-cus-100 px-4 py-5">
+      {title && <p className="mb-7 text-1 font-bold">{title}</p>}
+      <div className={`flex ${row ? 'items-center gap-10' : 'flex-col gap-7'}`}>
         {image && (
           <Image
             src={image}

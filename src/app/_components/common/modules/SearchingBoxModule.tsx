@@ -44,7 +44,7 @@ const SearchingBoxModule = ({
           onChange={handleChange}
         />
         <Image
-          className="cursor-pointer absolute bottom-3 right-3"
+          className="absolute bottom-3 right-3 cursor-pointer"
           src={SearchingGlasses}
           alt="SearchingGlasses"
         />

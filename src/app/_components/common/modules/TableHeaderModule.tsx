@@ -1,22 +1,12 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import TableHeaderAtom from '@/_components/common/atoms/TableHeaderAtom';
 
 interface TableHeaderModuleProps {
-  headers: { title: string; width?: string; flexGrow?: boolean }[];
+  children: ReactNode;
 }
 
-const TableHeaderModule = ({ headers }: TableHeaderModuleProps) => {
-  return (
-    <tr>
-      {headers.map((header, index) => (
-        <TableHeaderAtom
-          key={header.title}
-          title={header.title}
-          width={header.width}
-        />
-      ))}
-    </tr>
-  );
+const TableHeaderModule = ({ children }: TableHeaderModuleProps) => {
+  return <tr>{children}</tr>;
 };
 
 export default TableHeaderModule;
