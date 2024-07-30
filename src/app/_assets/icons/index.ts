@@ -11,6 +11,8 @@ export { default as DownArrowIcon } from './downarrow.svg';
 export { default as PlusRoundIcon } from './plusround.svg';
 export { default as RightArrowEmptyIcon } from './rightarrowempty.svg';
 export { default as LeftArrowEmptyIcon } from './leftarrowempty.svg';
+export { default as RightArrowBlackIcon } from './rightarrowblack.svg';
+export { default as LeftArrowBlackIcon } from './leftarrowblack.svg';
 export { default as FilterIcon } from './filter.svg';
 export { default as RightArrowIcon } from './rightarrow.svg';
 export { default as LeftArrowIcon } from './leftarrow.svg';

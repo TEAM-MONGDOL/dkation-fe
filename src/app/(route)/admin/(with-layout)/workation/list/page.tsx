@@ -112,7 +112,7 @@ const WorkationList = () => {
       />
       <div className="relative mt-8">
         <div className="flex justify-center">
-          <PaginationModule />
+          <PaginationModule pages={6} />
         </div>
         <div className="absolute right-0 top-0">
           <ButtonAtom buttonType="yellow" onClick={moveToWritePage}>
