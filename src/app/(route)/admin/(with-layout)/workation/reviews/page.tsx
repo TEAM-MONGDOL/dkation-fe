@@ -12,6 +12,11 @@ import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
 import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAtom';
+import RadioButtonContainer from '@/_components/common/containers/RadioButtonContainer';
+import { LocationList, orderList, reviewOrderList } from '@/_types/adminType';
+import CheckboxContainer from '@/_components/common/containers/CheckboxContainer';
+import FilteringBarContainer from '@/_components/common/containers/FilteringBarContainer';
+import RangeContainer from '@/_components/common/containers/RangeContainer';
 
 const data = [
   {
@@ -50,6 +55,42 @@ const AdminWorkationReviewsPage = () => {
     setIsFilteringBarOpen(true);
   };
   const [currentPage, setCurrentPage] = useState(1);
+  const [param, setParam] = useState<{
+    order: string;
+    type: string[];
+  }>({
+    order: 'RECENT',
+    type: [
+      'SEOUL',
+      'GANGWON',
+      'CHUNGCEOUNG',
+      'JEONLA',
+      'GYEONGSANG',
+      'JEJU',
+      'ABROAD',
+    ],
+  });
+  const refreshHandler = () => {
+    setParam({
+      ...param,
+      order: 'RECENT',
+      type: [
+        'SEOUL',
+        'GANGWON',
+        'CHUNGCEOUNG',
+        'JEONLA',
+        'GYEONGSANG',
+        'JEJU',
+        'ABROAD',
+      ],
+    });
+  };
+  const handleRangeChange = ({ min, max }: { min: number; max: number }) => {
+    setParam((prevParam) => ({
+      ...prevParam,
+      range: { min, max },
+    }));
+  };
   return (
     <div className="flex flex-col">
       <div className="mb-9 flex items-center justify-between">
@@ -99,6 +140,32 @@ const AdminWorkationReviewsPage = () => {
           totalPages={1}
         />
       </div>
+      <FilteringBarContainer
+        isOpen={isFilteringBarOpen}
+        setIsOpen={setIsFilteringBarOpen}
+        refreshHandler={refreshHandler}
+      >
+        <RadioButtonContainer
+          title="정렬"
+          options={Object.entries(reviewOrderList) as [string, string][]}
+          selectedOption={param.order}
+          setSelectedOption={(order: string) => setParam({ ...param, order })}
+        />
+        <hr />
+        <CheckboxContainer
+          title="지역"
+          options={Object.entries(LocationList) as [string, string][]}
+          selectedOptions={param.type}
+          setSelectedOptions={(type: string[]) => setParam({ ...param, type })}
+        />
+        <hr />
+        <RangeContainer
+          onChange={handleRangeChange}
+          title="평점"
+          min={0}
+          max={5}
+        />
+      </FilteringBarContainer>
     </div>
   );
 };
