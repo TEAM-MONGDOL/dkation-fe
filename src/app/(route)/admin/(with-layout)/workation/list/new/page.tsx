@@ -31,12 +31,12 @@ const WorkationNew = () => {
   };
   const [selectedDateTag, setSelectedDateTag] =
     useState<DatePickerTagType>('ALL');
-  const [startDate, setStartDate] = useState<Date>(
+  const [startDate, setStartDate] = useState<Date | null>(
     dayjs().subtract(1, 'year').toDate(),
   );
-  const [endDate, setEndDate] = useState<Date>(dayjs().toDate());
+  const [endDate, setEndDate] = useState<Date | null>(dayjs().toDate());
   return (
-    <div className="flex flex-col">
+    <section className="flex flex-col">
       <TitleBarModule title="워케이션 등록" type="LEFT" />
       <div className="mt-10 flex flex-col gap-[30px]">
         <div className="flex h-52 gap-x-8">
@@ -123,7 +123,7 @@ const WorkationNew = () => {
           buttonStyle="yellow"
         />
       </div>
-    </div>
+    </section>
   );
 };
 

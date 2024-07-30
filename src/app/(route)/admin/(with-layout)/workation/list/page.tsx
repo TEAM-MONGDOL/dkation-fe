@@ -106,14 +106,14 @@ const WorkationList = () => {
   };
   const [currentPage, setCurrentPage] = useState(1);
   return (
-    <div className="flex w-full flex-col gap-y-10 overflow-y-auto">
+    <section className="flex w-full flex-col gap-y-10 overflow-y-auto">
       <div className="flex w-full items-center justify-between">
         <TitleBarModule title="워케이션 목록" />
         <FilteringButtonAtom onClick={handleFilteringBar} />
       </div>
       <TableContainer>
         <TableHeaderModule>
-          <TableHeaderAtom width="78px" isFirst>
+          <TableHeaderAtom width="80px" isFirst>
             번호
           </TableHeaderAtom>
           <TableHeaderAtom>제목</TableHeaderAtom>
@@ -228,7 +228,7 @@ const WorkationList = () => {
           }}
         />
       </FilteringBarContainer>
-    </div>
+    </section>
   );
 };
 

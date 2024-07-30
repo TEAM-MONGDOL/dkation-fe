@@ -36,7 +36,7 @@ const tabledata = [
 
 const AdminWorkationListPenaltyPage = () => {
   return (
-    <div className="w-full">
+    <section className="w-full">
       <div className="mb-8 flex gap-2">
         <Image src={ExtensionIcon} alt="StatisticsIcon" />
         <p className="text-h3 font-bold">결과 통계 및 페널티</p>
@@ -67,7 +67,7 @@ const AdminWorkationListPenaltyPage = () => {
           <p className="text-3 font-bold">페널티 관리</p>
           <TableContainer>
             <TableHeaderModule>
-              <TableHeaderAtom width="78px" isFirst>
+              <TableHeaderAtom width="80px" isFirst>
                 번호
               </TableHeaderAtom>
               <TableHeaderAtom width="130px">사유</TableHeaderAtom>
@@ -103,7 +103,7 @@ const AdminWorkationListPenaltyPage = () => {
           </TableContainer>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
