@@ -12,6 +12,7 @@ import RadioButtonContainer from '@/_components/common/containers/RadioButtonCon
 import { LocationList, orderList } from '@/_types/adminType';
 import CheckboxContainer from '@/_components/common/containers/CheckboxContainer';
 import FilteringBarContainer from '@/_components/common/containers/FilteringBarContainer';
+import { useRouter } from 'next/navigation';
 
 const data = [
   { subtitle: '이름', content: '양양 쏠비치' },
@@ -26,6 +27,7 @@ const data = [
   },
 ];
 const AdminWorkationPlaceListPage = () => {
+  const router = useRouter();
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [param, setParam] = useState<{
@@ -88,7 +90,14 @@ const AdminWorkationPlaceListPage = () => {
           )}
         </div>
         <div className="absolute right-0 top-0">
-          <ButtonAtom text="장소 추가" buttonStyle="yellow" type="button" />
+          <ButtonAtom
+            onClick={() => {
+              router.push('/admin/workation/place/new');
+            }}
+            text="장소 추가"
+            buttonStyle="yellow"
+            type="button"
+          />
         </div>
       </div>
       <FilteringBarContainer
