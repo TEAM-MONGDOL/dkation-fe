@@ -2,20 +2,17 @@ import Image from 'next/image';
 import React from 'react';
 import { ExtensionIcon } from '@/_assets/icons';
 import InfoSectionModule from '@/_components/common/modules/InfoSectionModule';
+import TableContainer from '@/_components/common/containers/TableContainer';
+import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
+import TableHeaderAtom from '@/_components/common/atoms/TableHeaderAtom';
+import EmptyContainer from '@/_components/common/containers/EmptyContainer';
+import TableBodyModule from '@/_components/common/modules/TableBodyModule';
+import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
 
 const data = [
   { subtitle: '최대 포인트', content: '350 P' },
   { subtitle: '최소 포인트', content: '350 P' },
   { subtitle: '평균 포인트', content: '350 P' },
-];
-const headers = [
-  { title: '번호', width: '50px' },
-  { title: '사유', width: '80px' },
-  { title: '이름', width: '100px' },
-  { title: '아이디', flexGrow: true },
-  { title: '소속', width: '140px' },
-  { title: '지급일시', width: '130px' },
-  { title: '패널티', width: '135px' },
 ];
 
 const tabledata = [
@@ -68,7 +65,40 @@ const AdminWorkationListPenaltyPage = () => {
         </div>
         <div className="flex w-full flex-col">
           <p className="text-3 font-bold">페널티 관리</p>
-          {/* <TableContainer headers={headers} data={tabledata} /> */}
+          <TableContainer>
+            <TableHeaderModule>
+              <TableHeaderAtom width="78px" isFirst>
+                번호
+              </TableHeaderAtom>
+              <TableHeaderAtom width="130px">사유</TableHeaderAtom>
+              <TableHeaderAtom>이름</TableHeaderAtom>
+              <TableHeaderAtom>아이디</TableHeaderAtom>
+              <TableHeaderAtom width="100px">소속</TableHeaderAtom>
+              <TableHeaderAtom width="100px">지급 일시</TableHeaderAtom>
+              <TableHeaderAtom width="130px" isLast>
+                패널티
+              </TableHeaderAtom>
+            </TableHeaderModule>
+            <tbody>
+              {data.length <= 0 ? (
+                <EmptyContainer colSpan={8} />
+              ) : (
+                tabledata.map((item, index) => (
+                  <TableBodyModule key={item.id}>
+                    <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
+                    <TableBodyAtom>{item.사유}</TableBodyAtom>
+                    <TableBodyAtom>{item.이름}</TableBodyAtom>
+                    <TableBodyAtom>{item.아이디}</TableBodyAtom>
+                    <TableBodyAtom>{item.소속}</TableBodyAtom>
+                    <TableBodyAtom>{item.지급일시}</TableBodyAtom>
+                    <TableBodyAtom isLast>
+                      <button>부여하기</button>
+                    </TableBodyAtom>
+                  </TableBodyModule>
+                ))
+              )}
+            </tbody>
+          </TableContainer>
         </div>
       </div>
     </div>
