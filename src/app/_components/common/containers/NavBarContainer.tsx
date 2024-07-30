@@ -8,13 +8,13 @@ import {
 
 const NavBarContainer = () => {
   return (
-    <div className="h-full w-[203px] bg-sub-400 pt-1 text-white">
+    <div className="h-full w-[203px] gap-y-3 bg-sub-400 py-5 text-white">
       <NavModule
         icon={PersonIcon}
         title="회원 관리"
         contents={[{ content: '회원 목록', route: '/admin/members' }]}
       />
-      <hr className="opacity-50" />
+      <hr className="h-[0.5px] border-0 bg-stroke-100 opacity-50" />
       <NavModule
         icon={ControlPointIcon}
         title="포인트 관리"
@@ -27,7 +27,7 @@ const NavBarContainer = () => {
           { content: '포인트 정책 설정', route: '/admin/points/policy' },
         ]}
       />
-      <hr className="opacity-50" />
+      <hr className="h-[0.5px] border-0 bg-stroke-100 opacity-50" />
       <NavModule
         icon={ExtensionGrayIcon}
         title="워케이션 관리"
@@ -37,7 +37,7 @@ const NavBarContainer = () => {
           { content: '워케이션 후기', route: '/admin/workation/reviews' },
         ]}
       />
-      <hr className="opacity-50" />
+      <hr className="h-[0.5px] border-0 bg-stroke-100 opacity-50" />
       <NavModule
         icon={InfoIcon}
         title="공지 관리"
