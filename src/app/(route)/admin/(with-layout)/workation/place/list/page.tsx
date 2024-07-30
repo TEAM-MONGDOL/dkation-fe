@@ -9,11 +9,9 @@ import PaginationModule from '@/_components/common/modules/PaginationModule';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 import RadioButtonContainer from '@/_components/common/containers/RadioButtonContainer';
-import { LocationList, noticeList, orderList } from '@/_types/adminType';
+import { LocationList, orderList } from '@/_types/adminType';
 import CheckboxContainer from '@/_components/common/containers/CheckboxContainer';
-import DatePickerContainer from '@/_components/common/containers/DatePickerContainer';
 import FilteringBarContainer from '@/_components/common/containers/FilteringBarContainer';
-import dayjs from 'dayjs';
 
 const data = [
   { subtitle: '이름', content: '양양 쏠비치' },
@@ -29,6 +27,7 @@ const data = [
 ];
 const AdminWorkationPlaceListPage = () => {
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const [param, setParam] = useState<{
     order: string;
     type: string[];
@@ -61,7 +60,7 @@ const AdminWorkationPlaceListPage = () => {
   };
   return (
     <div>
-      <div className="w-full flex justify-between items-center mb-10">
+      <div className="mb-10 flex w-full items-center justify-between">
         <TitleBarModule title="워케이션 장소" />
         <SearchingBoxModule
           placeholder="장소명 또는 주소를 검색하세요."
@@ -80,10 +79,16 @@ const AdminWorkationPlaceListPage = () => {
       )}
       <div className="relative mt-8">
         <div className="flex justify-center">
-          {data.length !== 0 && <PaginationModule />}
+          {data.length !== 0 && (
+            <PaginationModule
+              totalPages={1}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
+          )}
         </div>
         <div className="absolute right-0 top-0">
-          <ButtonAtom buttonType="yellow">장소 추가</ButtonAtom>
+          <ButtonAtom text="장소 추가" buttonStyle="yellow" type="button" />
         </div>
       </div>
       <FilteringBarContainer
