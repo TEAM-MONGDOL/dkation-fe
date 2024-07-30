@@ -33,10 +33,12 @@ const DropdownModule = ({
         <div>
           <button
             type="button"
-            className={`flex h-5xl items-center justify-between border border-stroke-100 px-4 text-4 text-sub-300 ${fixed ? 'w-52' : 'w-full'} ${isOpen ? 'rounded-t-regular' : 'rounded-regular'}`}
+            className={`flex h-5xl items-center justify-between border border-stroke-100 px-4 text-4 ${fixed ? 'w-52' : 'w-full'} ${isOpen ? 'rounded-t-regular' : 'rounded-regular'}`}
             onClick={() => setIsOpen(!isOpen)}
           >
-            <span className="text-sub-200">
+            <span
+              className={`text-sub-200 ${selectedOption ? 'text-black' : ''}`}
+            >
               {selectedOption || placeholder}
             </span>
             <Image
