@@ -5,7 +5,7 @@ interface InputProps {
   status?: 'error' | 'correct' | 'readonly' | 'disabled';
   value: string;
   textCount?: number;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   name?: string;
 }
 
@@ -24,7 +24,7 @@ const InputAreaAtom = ({
       case 'correct':
         return 'border-positive';
       case 'readonly':
-        return 'border-sub-100';
+        return 'border-sub-100 cursor-not-allowed';
       case 'disabled':
         return 'bg-cus-100 cursor-not-allowed';
       default:
@@ -43,7 +43,7 @@ const InputAreaAtom = ({
   return (
     <div className="relative">
       <input
-        className={`rounded-regular pl-3 border border-stroke-100 outline-0 w-full py-3.5 placeholder-sub-200 text-4 ${getStatus()}`}
+        className={`w-full rounded-regular border border-stroke-100 py-3.5 pl-3 text-4 placeholder-sub-200 outline-0 ${getStatus()}`}
         placeholder={placeholder}
         readOnly={!isInteractive}
         value={value || ''}

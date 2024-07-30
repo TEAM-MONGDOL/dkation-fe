@@ -114,3 +114,12 @@ export const pointChangeList: { [key in PointChangeType]: string } = {
   INCREASE: '포인트 증가',
   DECREASE: '포인트 감소',
 };
+
+export type ReviewOrderType = 'RECENT' | 'OLDEST' | 'HIGHEST' | 'LOWEST';
+
+export const reviewOrderList: { [key in ReviewOrderType]: string } = {
+  RECENT: '최신순 ',
+  OLDEST: '오래된 순',
+  HIGHEST: '별점 높은 순',
+  LOWEST: '별점 낮은 순',
+};

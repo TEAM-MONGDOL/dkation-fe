@@ -6,16 +6,20 @@ import { useRouter } from 'next/navigation';
 
 const AdminWorkationReviewDetailPage = () => {
   const router = useRouter();
-  const moveToWritePage = () => {
+  const blindReview = () => {
     router.push('/admin/notices/write');
   };
   return (
     <div>
       <TitleBarModule title="후기 상세" type="LEFT" />
       <div className="flex justify-end">
-        <ButtonAtom buttonType="red" onClick={moveToWritePage}>
-          블라인드
-        </ButtonAtom>
+        <ButtonAtom
+          text="블라인드"
+          type="submit"
+          width="fixed"
+          buttonStyle="red"
+          onClick={blindReview}
+        />
       </div>
     </div>
   );
