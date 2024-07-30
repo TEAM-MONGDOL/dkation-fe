@@ -72,7 +72,7 @@ const WorkationList = () => {
     endDate: null,
   });
   const penaltyRouteButtonClick = (id: number) => {
-    router.push(`/admin/workation/list/${id}/result`);
+    router.push(`/admin/workation/${id}/result`);
   };
   const [startDate, setStartDate] = useState<Date>(
     dayjs().subtract(1, 'year').toDate(),
@@ -86,10 +86,10 @@ const WorkationList = () => {
     setIsFilteringBarOpen(true);
   };
   const onClickRowDetail = (id: number) => {
-    router.push(`/admin/workation/list/${id}`);
+    router.push(`/admin/workation/${id}`);
   };
   const moveToWritePage = () => {
-    router.push('/admin/workation/list/new');
+    router.push('/admin/workation/new');
   };
   const refreshHandler = () => {
     setParam({

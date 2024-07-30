@@ -153,7 +153,7 @@ const WorkationNew = () => {
             //  TODO : 워케이션 등록 API 호출
             alert('워케이션 등록 완료');
             setIsConfirmModelOpen(false);
-            router.push('/admin/workation/list');
+            router.push('/admin/workation');
           }}
           onCancel={() => {
             setIsConfirmModelOpen(false);

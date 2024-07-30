@@ -36,7 +36,7 @@ const AdminMainPage = () => {
   const router = useRouter();
 
   const moveToWkDetail = (id: number) => {
-    router.push(`/admin/workation/list/${id}/result`);
+    router.push(`/admin/workation/${id}/result`);
   };
 
   const moveToPointsDetail = (id: number) => {
