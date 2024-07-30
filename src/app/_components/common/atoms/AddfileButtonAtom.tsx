@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { AddFile } from '@/_assets/icons';
+import { AddFileIcon } from '@/_assets/icons';
 
 interface AddFIleButtonAtomProps {
   onClick: () => void;
@@ -8,7 +8,7 @@ interface AddFIleButtonAtomProps {
 const AddFIleButtonAtom = ({ onClick }: AddFIleButtonAtomProps) => {
   return (
     <button onClick={onClick}>
-      <Image src={AddFile} alt="파일추가" />
+      <Image src={AddFileIcon} alt="파일추가" />
     </button>
   );
 };
