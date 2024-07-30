@@ -99,13 +99,14 @@ const AdminWriteNoticesEditPage = () => {
       <TitleBarModule title="공지 글쓰기" type="LEFT" />
       <form onSubmit={handleSubmit}>
         <div className="pt-10">
-          <p className="text-3 font-bold mb-4">제목</p>
-          <div className="flex gap-4">
+          <p className="mb-4 text-3 font-bold">제목</p>
+          <div className="flex w-full gap-4">
             <DropdownModule
+              fixed
               options={NoticeOptions}
               onSelect={handleSelect}
               placeholder="구분 선택"
-              initialSelectedOption={values.category}
+              selectedOption={values.category}
             />
             <div className="w-full">
               <InputModule
@@ -117,7 +118,7 @@ const AdminWriteNoticesEditPage = () => {
               />
             </div>
           </div>
-          <div className="flex flex-col py-7 gap-4">
+          <div className="flex flex-col gap-4 py-7">
             {values.files.length > 0 ? (
               <div className="flex flex-col gap-2">
                 {values.files.map((file) => (
@@ -136,7 +137,7 @@ const AdminWriteNoticesEditPage = () => {
             )}
             <FileContainer onFileChange={handleFilesChange} />
           </div>
-          <p className="text-3 font-bold mb-4">내용</p>
+          <p className="mb-4 text-3 font-bold">내용</p>
           <TextAreaModule
             name="content"
             placeholder="상세 내용을 입력하세요."
@@ -145,20 +146,22 @@ const AdminWriteNoticesEditPage = () => {
             value={values.content}
             onChange={handleChange}
           />
-          <div className="flex justify-end pt-14 gap-5">
+          <div className="flex justify-end gap-5 pt-14">
             <ButtonAtom
               buttonStyle="dark"
+              text="취소"
+              type="button"
+              width="fixed"
               onClick={() => BackToNoticesDetail(data.id)}
-            >
-              취소
-            </ButtonAtom>
+            />
+
             <ButtonAtom
               buttonStyle="yellow"
+              text="수정"
               type="button"
+              width="fixed"
               onClick={() => setIsEditModalOpen(true)}
-            >
-              수정
-            </ButtonAtom>
+            />
           </div>
         </div>
       </form>
