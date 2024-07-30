@@ -1,5 +1,5 @@
 import Image, { StaticImageData } from 'next/image';
-import { DownArrowIcon } from '@/_assets/icons';
+import { KeyboardArrowDownIcon } from '@/_assets/icons';
 
 interface TitleProps {
   icon: StaticImageData;
@@ -10,14 +10,18 @@ interface TitleProps {
 
 const NavTitleAtom = ({ icon, title, onIconClick, isVisible }: TitleProps) => {
   return (
-    <div className="py-2 flex justify-between" onClick={onIconClick}>
+    <div
+      role="presentation"
+      className="flex justify-between py-2"
+      onClick={onIconClick}
+    >
       <div className="flex">
         <Image className="mr-3" src={icon} alt={title} />
         <p className="text-3 font-semibold">{title}</p>
       </div>
       <Image
-        className={`cursor-pointer transform transition-transform duration-300 ${isVisible ? 'rotate-180' : ''}`}
-        src={DownArrowIcon}
+        className={`transform cursor-pointer transition-transform duration-300 ${isVisible ? 'rotate-180' : ''}`}
+        src={KeyboardArrowDownIcon}
         alt="downarrowicon"
       />
     </div>
