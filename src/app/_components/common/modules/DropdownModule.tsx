@@ -52,7 +52,11 @@ const DropdownModule = ({
             <span className="text-sub-200">
               {selectedOption || placeholder}
             </span>
-            <Image src={KeyboardArrowDown} alt="downarrow" />
+            <Image
+              src={KeyboardArrowDown}
+              alt="downarrow"
+              className={`transform transition-transform duration-300 ${isOpen ? 'rotate-180' : 'rotate-0'}`}
+            />
           </button>
         </div>
         <div
