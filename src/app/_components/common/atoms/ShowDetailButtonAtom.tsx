@@ -10,7 +10,7 @@ const ShowDetailButtonAtom = ({ onClick }: ShowDetailButtonAtomProps) => {
   return (
     <button
       onClick={onClick}
-      className="bg-cus-100 font-bold text-sub-300 text-4 px-3.5 py-2 rounded-full"
+      className="rounded-full bg-cus-100 px-3.5 py-2 text-4 font-bold text-sub-300"
     >
       상세보기
     </button>
