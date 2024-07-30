@@ -88,9 +88,7 @@ const AdminMembersPointHistoryPage = () => {
 
         <tbody>
           {data.length <= 0 ? (
-            <td colSpan={5}>
-              <EmptyContainer />
-            </td>
+            <EmptyContainer colSpan={5} />
           ) : (
             data.map((item, index) => (
               <TableBodyModule key={item.id}>

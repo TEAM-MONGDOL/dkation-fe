@@ -91,9 +91,7 @@ const AdminMembersPenaltyHistoryPage = () => {
 
           <tbody>
             {pastPenalties.length <= 0 ? (
-              <td colSpan={4}>
-                <EmptyContainer />
-              </td>
+              <EmptyContainer colSpan={4} />
             ) : (
               pastPenalties.map((item, index) => (
                 <TableBodyModule key={item.id}>

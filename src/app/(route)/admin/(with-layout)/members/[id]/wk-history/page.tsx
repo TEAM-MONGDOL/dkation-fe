@@ -111,9 +111,7 @@ const AdminMembersWkHistoryPage = () => {
 
         <tbody>
           {data.length <= 0 ? (
-            <td colSpan={6}>
-              <EmptyContainer />
-            </td>
+            <EmptyContainer colSpan={6} />
           ) : (
             data.map((item, index) => (
               <TableBodyModule key={item.id}>

@@ -94,9 +94,7 @@ const AdminMembersListPage = () => {
 
         <tbody>
           {data.length <= 0 ? (
-            <td colSpan={7}>
-              <EmptyContainer />
-            </td>
+            <EmptyContainer colSpan={7} />
           ) : (
             data.map((item, index) => (
               <TableBodyModule key={item.id}>
