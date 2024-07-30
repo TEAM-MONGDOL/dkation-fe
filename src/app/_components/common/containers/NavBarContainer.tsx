@@ -33,7 +33,7 @@ const NavBarContainer = () => {
         title="워케이션 관리"
         contents={[
           { content: '워케이션 목록', route: '/admin/workation' },
-          { content: '워케이션 장소', route: '/admin/workation/place' },
+          { content: '워케이션 장소', route: '/admin/workation/place/list' },
           { content: '워케이션 후기', route: '/admin/workation/reviews' },
         ]}
       />

@@ -6,6 +6,10 @@ import FileContainer from '@/_components/common/containers/FileContainer';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import React, { useState } from 'react';
+import ModalModule from '@/_components/common/modules/ModalModule';
+import InfoSectionContainer from '@/_components/common/containers/InfoSectionContainer';
+import dayjs from 'dayjs';
+import { useRouter } from 'next/navigation';
 
 const AdminWorkationPlaceNewPage = () => {
   const [formData, setFormData] = useState({
@@ -21,6 +25,8 @@ const AdminWorkationPlaceNewPage = () => {
       [name]: value,
     }));
   };
+  const [isConfirmModelOpen, setIsConfirmModelOpen] = useState(false);
+  const router = useRouter();
   return (
     <section className="flex flex-col gap-7">
       <TitleBarModule title="장소 추가" type="LEFT" />
@@ -66,7 +72,7 @@ const AdminWorkationPlaceNewPage = () => {
           name="상세내용"
         />
       </div>
-      <form className="flex justify-end gap-5">
+      <div className="flex justify-end gap-5">
         <ButtonAtom
           text="취소"
           type="button"
@@ -75,11 +81,50 @@ const AdminWorkationPlaceNewPage = () => {
         />
         <ButtonAtom
           text="등록"
-          type="submit"
+          type="button"
           width="fixed"
           buttonStyle="yellow"
+          onClick={() => setIsConfirmModelOpen(true)}
         />
-      </form>
+      </div>
+      {isConfirmModelOpen && (
+        <ModalModule
+          title="장소를 추가하시겠습니까?"
+          confirmText="확인"
+          cancelText="취소"
+          confirmButtonStyle="dark"
+          cancelButtonStyle="yellow"
+          onClick={() => {
+            setIsConfirmModelOpen(false);
+          }}
+          onConfirm={() => {
+            //  TODO : 워케이션 장소 등록 API 호출
+            alert('워케이션 장소 등록 완료');
+            setIsConfirmModelOpen(false);
+            router.push('/admin/workation/place/list');
+          }}
+          onCancel={() => {
+            setIsConfirmModelOpen(false);
+          }}
+        >
+          <InfoSectionContainer
+            data={[
+              {
+                subtitle: '제목',
+                content: formData.placeName,
+              },
+              {
+                subtitle: '장소',
+                content: formData.address,
+              },
+              {
+                subtitle: '최대인원',
+                content: formData.maxPeople,
+              },
+            ]}
+          />
+        </ModalModule>
+      )}
     </section>
   );
 };
