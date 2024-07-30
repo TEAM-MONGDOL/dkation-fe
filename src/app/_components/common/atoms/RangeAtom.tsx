@@ -42,7 +42,7 @@ const RangeAtom = ({ min, max, onChange, suffix }: RangeAtomProps) => {
 
   useEffect(() => {
     onChange({ min: minVal, max: maxVal });
-  }, [minVal, maxVal, onChange]);
+  }, [minVal, maxVal]);
 
   return (
     <div className="w-full flex flex-col items-center justify-center gap-y-1.5">
