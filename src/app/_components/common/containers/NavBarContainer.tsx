@@ -3,7 +3,9 @@ import {
   ControlPointIcon,
   ExtensionGrayIcon,
   InfoIcon,
+  ControlPointIcon,
   PersonIcon,
+  ExtensionGrayIcon,
 } from '@/_assets/icons';
 
 const NavBarContainer = () => {
