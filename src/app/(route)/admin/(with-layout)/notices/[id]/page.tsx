@@ -6,7 +6,6 @@ import InputModule from '@/_components/common/modules/InputModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import FileModule from '@/_components/common/modules/FileModule';
-import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 import { useState } from 'react';
 import ModalModule from '@/_components/common/modules/ModalModule';
 import logo from '@/_assets/images/logo_imsy.png';
@@ -48,10 +47,10 @@ const NoticeDetailPage = () => {
   };
 
   return (
-    <div>
+    <section>
       <TitleBarModule title="공지 상세" type="LEFT" />
       <div className="pt-10">
-        <p className="text-3 font-bold mb-4">제목</p>
+        <p className="mb-4 text-3 font-bold">제목</p>
         <div className="flex gap-4">
           <div className="w-full">
             <InputModule
@@ -62,26 +61,26 @@ const NoticeDetailPage = () => {
             />
           </div>
         </div>
-        <div className="py-7">
-          {noticeExample.files.length > 0 ? (
-            <div className="flex flex-col gap-2">
-              {noticeExample.files.map((file) => (
-                <FileModule
-                  key={file.url}
-                  fileName={file.name}
-                  fileType={file.type}
-                  fileUrl={file.url}
-                  buttonType="download"
-                  onDownload={() => console.log(`Edit ${file.name}`)} // 추후 수정 예정
-                />
-              ))}
+        <div className="py-4">
+          {noticeExample.files.length > 0 && (
+            <div className="py-2">
+              <div className="flex flex-col gap-2">
+                {noticeExample.files.map((file) => (
+                  <FileModule
+                    key={file.url}
+                    fileName={file.name}
+                    fileType={file.type}
+                    fileUrl={file.url}
+                    buttonType="download"
+                    onDownload={() => console.log(`Edit ${file.name}`)} // 추후 수정 예정
+                  />
+                ))}
+              </div>
             </div>
-          ) : (
-            <EmptyContainer />
           )}
         </div>
         <div>
-          <p className="text-3 font-bold mb-4">내용</p>
+          <p className="mb-4 text-3 font-bold">내용</p>
           <TextAreaModule
             name="content"
             placeholder="내용이 존재하지 않습니다."
@@ -90,20 +89,28 @@ const NoticeDetailPage = () => {
             value={noticeExample.content}
           />
         </div>
-        <div className="flex justify-end pt-14 gap-5">
-          <ButtonAtom buttonStyle="red" onClick={handleDelete}>
-            삭제
-          </ButtonAtom>
-          <ButtonAtom buttonStyle="dark" onClick={handleEdit}>
-            수정
-          </ButtonAtom>
+        <div className="flex justify-end gap-5 pt-14">
+          <ButtonAtom
+            width="fixed"
+            type="button"
+            buttonStyle="red"
+            onClick={handleDelete}
+            text="삭제"
+          />
+          <ButtonAtom
+            width="fixed"
+            type="button"
+            buttonStyle="dark"
+            onClick={handleEdit}
+            text="수정"
+          />
         </div>
         {isDeleteModalOpen && (
           <ModalModule
             title="해당 게시글을 삭제하시겠습니까?"
             cancelText="취소"
             confirmText="삭제"
-            confirmButtonType="red"
+            confirmButtonStyle="red"
             onClick={() => {
               setIsDeleteModalOpen(false);
             }}
@@ -122,7 +129,7 @@ const NoticeDetailPage = () => {
           </ModalModule>
         )}
       </div>
-    </div>
+    </section>
   );
 };
 

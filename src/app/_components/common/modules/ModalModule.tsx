@@ -39,19 +39,19 @@ const ModalModule = ({
         {children}
         <div className="flex w-full gap-2 pt-10">
           <ButtonAtom
-            type="button"
-            buttonStyle={cancelButtonStyle}
+            buttonStyle={confirmButtonStyle}
             width="grow"
             onClick={onCancel}
             text={cancelText}
+            type="button"
           />
 
           <ButtonAtom
-            type="button"
-            buttonStyle={confirmButtonStyle}
+            buttonStyle={cancelButtonStyle}
             width="grow"
             onClick={onConfirm}
             text={confirmText}
+            type="button"
           />
         </div>
       </div>

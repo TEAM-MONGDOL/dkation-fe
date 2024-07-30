@@ -13,15 +13,12 @@ import CheckboxContainer from '@/_components/common/containers/CheckboxContainer
 import DatePickerContainer from '@/_components/common/containers/DatePickerContainer';
 import { DatePickerTagType } from '@/_types/commonType';
 import { noticeList, orderList } from '@/_types/adminType';
-import dayjs from 'dayjs';
-
-const headers = [
-  { title: '번호', width: '80px' },
-  { title: '구분', width: '140px' },
-  { title: '제목', flexGrow: true },
-  { title: '작성일', width: '190px' },
-  { title: '', width: '160px' },
-];
+import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
+import TableHeaderAtom from '@/_components/common/atoms/TableHeaderAtom';
+import EmptyContainer from '@/_components/common/containers/EmptyContainer';
+import TableBodyModule from '@/_components/common/modules/TableBodyModule';
+import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
+import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAtom';
 
 const data = [
   {
@@ -30,29 +27,24 @@ const data = [
     제목: '공지입니다',
     작성일: '2024-07-20',
   },
-  {
-    id: 2,
-    구분: '이벤트 안내',
-    제목: '이벤트 안내',
-    작성일: '2024-07-21',
-  },
-  {
-    id: 3,
-    구분: '결과 발표',
-    제목: '8월 3주차 워케이션 결과 발표 : 양양',
-    작성일: '2024-07-21',
-  },
 ];
 
 const NoticesListPage = () => {
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
-  const [sortOption, setSortOption] = useState('최신 순');
-  const [categoryOptions, setCategoryOptions] = useState<string[]>(['전체']);
-  const [selectedTag, setSelectedTag] = useState<DatePickerTagType>('ALL');
-  const [startDate, setStartDate] = useState<Date>(
-    dayjs().subtract(1, 'year').toDate(),
-  );
-  const [endDate, setEndDate] = useState<Date>(dayjs().toDate());
+  const [selectedDateTag, setSelectedDateTag] =
+    useState<DatePickerTagType>('ALL');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [param, setParam] = useState<{
+    order: string;
+    noticeType: string[];
+    startDate: Date | null;
+    endDate: Date | null;
+  }>({
+    order: 'RECENT',
+    noticeType: ['NOTICE', 'RESULT', 'EVENT'],
+    startDate: null,
+    endDate: null,
+  });
 
   const router = useRouter();
 
@@ -64,17 +56,26 @@ const NoticesListPage = () => {
     setIsFilteringBarOpen(true);
   };
 
-  const handleRefresh = () => {};
+  const handleRefresh = () => {
+    setParam({
+      ...param,
+      order: 'RECENT',
+      noticeType: ['NOTICE', 'RESULT', 'EVENT'],
+      startDate: null,
+      endDate: null,
+    });
+    setSelectedDateTag('ALL');
+  };
 
   function moveToNoticesDetail(id: number) {
     router.push(`/admin/notices/${id}`);
   }
 
   return (
-    <div className="w-full">
-      <div className="flex justify-between items-center mb-12">
+    <section className="w-full">
+      <div className="mb-12 flex items-center justify-between">
         <TitleBarModule title="공지사항 목록" />
-        <div className="flex items-center space-x-4 ml-auto">
+        <div className="ml-auto flex items-center space-x-4">
           <SearchingBoxModule
             placeholder="이름을 검색하세요"
             filter
@@ -90,45 +91,84 @@ const NoticesListPage = () => {
         <RadioButtonContainer
           title="정렬"
           options={Object.entries(orderList) as [string, string][]}
-          selectedOption={sortOption}
-          setSelectedOption={setSortOption}
+          selectedOption={param.order}
+          setSelectedOption={(order: string) => setParam({ ...param, order })}
         />
-        <hr />
+        <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         <CheckboxContainer
           title="분류"
           options={Object.entries(noticeList) as [string, string][]}
-          selectedOptions={categoryOptions}
-          setSelectedOptions={setCategoryOptions}
+          selectedOptions={param.noticeType}
+          setSelectedOptions={(noticeType: string[]) =>
+            setParam({ ...param, noticeType })
+          }
         />
-        <hr />
+        <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         <DatePickerContainer
-          title="날짜"
-          selectedTag={selectedTag}
-          setSelectedTag={setSelectedTag}
-          startDate={startDate}
-          setStartDate={setStartDate}
-          endDate={endDate}
-          setEndDate={setEndDate}
+          title="등록 일시"
+          selectedTag={selectedDateTag}
+          setSelectedTag={setSelectedDateTag}
+          startDate={param.startDate}
+          setStartDate={(start: Date | null) => {
+            setParam({ ...param, startDate: start });
+          }}
+          endDate={param.endDate}
+          setEndDate={(end: Date | null) => {
+            setParam({ ...param, endDate: end });
+          }}
+          startDatePlaceholder="시작일 선택"
+          endDatePlaceholder="마감일 선택"
         />
       </FilteringBarContainer>
-      <TableContainer
-        headers={headers}
-        data={data.map((item) => ({
-          ...item,
-          '': { onClick: () => moveToNoticesDetail(item.id) },
-        }))}
-      />
+      <TableContainer>
+        <TableHeaderModule>
+          <TableHeaderAtom width="80px">번호</TableHeaderAtom>
+          <TableHeaderAtom width="140px">구분</TableHeaderAtom>
+          <TableHeaderAtom>제목</TableHeaderAtom>
+          <TableHeaderAtom width="190px">작성일</TableHeaderAtom>
+          <TableHeaderAtom width="160px" />
+        </TableHeaderModule>
+
+        <tbody>
+          {data.length <= 0 ? (
+            <td colSpan={5}>
+              <EmptyContainer />
+            </td>
+          ) : (
+            data.map((item, index) => (
+              <TableBodyModule key={item.id}>
+                <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
+                <TableBodyAtom>{item.구분}</TableBodyAtom>
+                <TableBodyAtom>{item.제목}</TableBodyAtom>
+                <TableBodyAtom>{item.작성일}</TableBodyAtom>
+                <TableBodyAtom isLast>
+                  <ShowDetailButtonAtom
+                    onClick={() => moveToNoticesDetail(item.id)}
+                  />
+                </TableBodyAtom>
+              </TableBodyModule>
+            ))
+          )}
+        </tbody>
+      </TableContainer>
       <div className="relative mt-8">
         <div className="flex justify-center">
-          <PaginationModule />
+          <PaginationModule
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalPages={Math.ceil(data.length / 10)}
+          />
         </div>
         <div className="absolute right-0 top-0">
-          <ButtonAtom buttonType="yellow" onClick={moveToWritePage}>
-            글쓰기
-          </ButtonAtom>
+          <ButtonAtom
+            type="button"
+            buttonStyle="yellow"
+            onClick={moveToWritePage}
+            text="글쓰기"
+          />
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { DownloadIcon, CloseIcon } from '@/_assets/icons';
+import { CloseIcon, DownloadIcon } from '@/_assets/icons';
 
 interface FileControlButtonAtomProps {
   type: 'delete' | 'download';
