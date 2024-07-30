@@ -1,9 +1,9 @@
 import NavModule from '@/_components/common/modules/NavModule';
 import {
-  InfoIcon,
   ControlPointIcon,
-  PersonIcon,
   ExtensionGrayIcon,
+  InfoIcon,
+  PersonIcon,
 } from '@/_assets/icons';
 
 const NavBarContainer = () => {
