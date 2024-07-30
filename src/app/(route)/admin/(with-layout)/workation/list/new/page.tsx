@@ -114,15 +114,14 @@ const WorkationNew = () => {
           />
         </div>
       </div>
-
-      <div className="mt-12 flex justify-end">
+      <form className="mt-12 flex justify-end">
         <ButtonAtom
           width="fixed"
           text="등록"
           type="submit"
           buttonStyle="yellow"
         />
-      </div>
+      </form>
     </section>
   );
 };
