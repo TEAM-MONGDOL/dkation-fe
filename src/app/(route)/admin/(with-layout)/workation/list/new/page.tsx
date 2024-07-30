@@ -11,7 +11,7 @@ import dayjs from 'dayjs';
 import DatePickersModule from '@/_components/common/modules/DatePickersModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
-import TitleBarModule from '../../../../../../_components/common/modules/TitleBarModule';
+import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 
 const WorkationNew = () => {
   const [values, setValues] = useState({

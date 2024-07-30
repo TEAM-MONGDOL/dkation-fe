@@ -28,12 +28,12 @@ const ModalModule = ({
   cancelButtonStyle = 'dark',
 }: ModalModuleProps) => {
   return (
-    <div className="flex w-screen h-screen fixed top-0 left-0 bg-black/30 z-10 items-center justify-center">
-      <div className="bg-white w-[600px] p-10 rounded-regular overflow-hidden relative">
-        <button className="absolute top-5 right-5" onClick={onClick}>
+    <div className="fixed left-0 top-0 z-10 flex h-screen w-screen items-center justify-center bg-black/30">
+      <div className="relative w-[600px] overflow-hidden rounded-regular bg-white p-10">
+        <button className="absolute right-5 top-5" onClick={onClick}>
           <Image src={Delete} alt="x" />
         </button>
-        <div className="flex text-center pb-10">
+        <div className="flex pb-10 text-center">
           <ModalTitleAtom title={title} />
         </div>
         {children}

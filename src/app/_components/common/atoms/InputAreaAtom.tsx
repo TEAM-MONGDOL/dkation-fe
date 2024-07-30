@@ -1,26 +1,22 @@
-'use client';
-
-import { useState } from 'react';
+import TextCountAtom from '@/_components/common/atoms/TextCountAtom';
 
 interface InputProps {
   placeholder?: string;
   status?: 'error' | 'correct' | 'readonly' | 'disabled';
-  value?: string;
+  value: string;
   textCount?: number;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   name?: string;
 }
 
 const InputAreaAtom = ({
   placeholder,
   status,
-  value: initialValue = '',
+  value,
   textCount,
   onChange,
   name,
 }: InputProps) => {
-  const [value, setValue] = useState(initialValue);
-
   const getStatus = () => {
     switch (status) {
       case 'error':
@@ -38,24 +34,25 @@ const InputAreaAtom = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (textCount === undefined || e.target.value.length <= textCount) {
-      setValue(e.target.value);
       onChange?.(e);
     }
   };
+
+  const isInteractive = status !== 'readonly' && status !== 'disabled';
 
   return (
     <div className="relative">
       <input
         className={`rounded-regular pl-3 border border-stroke-100 outline-0 w-full py-3.5 placeholder-sub-200 text-4 ${getStatus()}`}
         placeholder={placeholder}
-        readOnly={status === 'readonly' || status === 'disabled'}
+        readOnly={!isInteractive}
         value={value || ''}
         onChange={handleChange}
         name={name}
       />
-      {textCount && (
-        <div className="absolute bottom-3.5 right-3.5 text-4 text-sub-200">
-          {value.length}/{textCount}
+      {isInteractive && textCount && (
+        <div className="absolute bottom-3.5 right-3.5">
+          <TextCountAtom text={value} maxLength={textCount} />
         </div>
       )}
     </div>
