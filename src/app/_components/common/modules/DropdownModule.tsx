@@ -56,7 +56,7 @@ const DropdownModule = ({
           </button>
         </div>
         <div
-          className={`absolute left-0 top-5xl w-full rounded-b-regular bg-white border border-stroke-100 border-t-0 transition-transform duration-600 ease-in-out transform z-20 ${fixed ? 'w-52' : 'w-full'} ${isOpen ? 'translate-y-0 opacity-100 border-t-0' : 'translate-y-[-1px] opacity-0'}`}
+          className={`absolute top-5xl w-full rounded-b-regular bg-white border border-stroke-100 border-t-0 transition-transform duration-600 ease-in-out transform z-20 ${fixed ? 'w-52' : 'w-full'} ${isOpen ? 'translate-y-0 opacity-100 border-t-0' : 'translate-y-[-1px] opacity-0'}`}
         >
           {isOpen && (
             <div>
