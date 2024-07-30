@@ -34,9 +34,7 @@ const NavModule = ({ icon, title, plusContents, contents }: TitleProps) => {
         isVisible={isVisible}
       />
       <div
-        className={`
-            transition-max-height duration-300 ease-in-out overflow-hidden ${isVisible ? 'max-h-96' : 'max-h-0'}
-         `}
+        className={`transition-max-height overflow-hidden duration-300 ease-in-out ${isVisible ? 'max-h-96' : 'max-h-0'} `}
       >
         {contents.map((contentItem, index) => (
           // eslint-disable-next-line react/jsx-key
