@@ -31,16 +31,16 @@ const AdminMembersLayout = ({ children, params }: Props) => {
     },
     {
       id: '3',
-      title: '패널티 내역',
+      title: '페널티 내역',
       url: `/admin/members/${memberId}/penalty-history`,
     },
   ];
 
   return (
-    <div className="flex flex-col h-full gap-10">
+    <div className="flex h-full flex-col gap-10">
       <TitleBarModule title="회원 상세" type="LEFT" />
       <div className="flex gap-x-5">
-        <div className="w-[300px] flex flex-col gap-y-5">
+        <div className="flex w-[300px] flex-col gap-y-5">
           <InfoSectionContainer data={data} title="기본 정보" />
           <SidebarModule items={membersDetailSidebar} />
         </div>

@@ -10,16 +10,12 @@ import RadioButtonContainer from '@/_components/common/containers/RadioButtonCon
 import { membersOrderList, teamList } from '@/_types/adminType';
 import CheckboxContainer from '@/_components/common/containers/CheckboxContainer';
 import FilteringBarContainer from '@/_components/common/containers/FilteringBarContainer';
-
-const headers = [
-  { title: '번호', width: '120px' },
-  { title: '이름', width: '190px' },
-  { title: '아이디', width: '190px' },
-  { title: '소속', flexGrow: true },
-  { title: '보유 포인트', width: '140px' },
-  { title: '포인트 신청', width: '120px' },
-  { title: '', width: '160px' },
-];
+import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
+import TableHeaderAtom from '@/_components/common/atoms/TableHeaderAtom';
+import EmptyContainer from '@/_components/common/containers/EmptyContainer';
+import TableBodyModule from '@/_components/common/modules/TableBodyModule';
+import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
+import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAtom';
 
 const data = [
   {
@@ -27,30 +23,15 @@ const data = [
     이름: '홍길동',
     아이디: 'hong.gil',
     소속: '개발팀',
-    '보유 포인트': 300,
-    '포인트 신청': { text: '1건', color: 'orange' },
-  },
-  {
-    id: 2,
-    이름: '김누구',
-    아이디: 'kim.nugunugunu',
-    소속: '기획팀',
-    '보유 포인트': 1000,
-    '포인트 신청': { text: '1건', color: 'orange' },
-  },
-  {
-    id: 3,
-    이름: '이누구',
-    아이디: 'lee.nugu',
-    소속: '개발팀',
-    '보유 포인트': 800,
-    '포인트 신청': { text: '1건', color: 'orange' },
+    보유포인트: 300,
+    포인트신청: { text: '1건', color: 'text-primaryDark' },
   },
 ];
 
 const AdminMembersListPage = () => {
   const router = useRouter();
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const [param, setParam] = useState<{
     order: string;
     type: string[];
@@ -72,8 +53,8 @@ const AdminMembersListPage = () => {
   };
 
   return (
-    <div className="flex flex-col gap-y-10 w-full">
-      <div className="w-full flex justify-between items-center">
+    <section className="flex w-full flex-col gap-y-10">
+      <div className="flex w-full items-center justify-between">
         <TitleBarModule title="회원 목록" />
         <SearchingBoxModule
           placeholder="이름을 검색하세요."
@@ -92,6 +73,7 @@ const AdminMembersListPage = () => {
           selectedOption={param.order}
           setSelectedOption={(order: string) => setParam({ ...param, order })}
         />
+        <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         <CheckboxContainer
           title="소속"
           options={Object.entries(teamList) as [string, string][]}
@@ -99,17 +81,49 @@ const AdminMembersListPage = () => {
           setSelectedOptions={(type: string[]) => setParam({ ...param, type })}
         />
       </FilteringBarContainer>
-      <TableContainer
-        headers={headers}
-        data={data.map((item) => ({
-          ...item,
-          '': { onClick: () => moveToMembersDetail(item.id) },
-        }))}
-      />
-      <div className="flex items-center justify-center w-full">
-        <PaginationModule />
+      <TableContainer>
+        <TableHeaderModule>
+          <TableHeaderAtom width="120px">번호</TableHeaderAtom>
+          <TableHeaderAtom width="190px">이름</TableHeaderAtom>
+          <TableHeaderAtom width="190px">아이디</TableHeaderAtom>
+          <TableHeaderAtom>소속</TableHeaderAtom>
+          <TableHeaderAtom width="140px">보유 포인트</TableHeaderAtom>
+          <TableHeaderAtom width="120px">포인트 신청</TableHeaderAtom>
+          <TableHeaderAtom width="160px" />
+        </TableHeaderModule>
+
+        <tbody>
+          {data.length <= 0 ? (
+            <EmptyContainer colSpan={7} />
+          ) : (
+            data.map((item, index) => (
+              <TableBodyModule key={item.id}>
+                <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
+                <TableBodyAtom>{item.이름}</TableBodyAtom>
+                <TableBodyAtom>{item.아이디}</TableBodyAtom>
+                <TableBodyAtom>{item.소속}</TableBodyAtom>
+                <TableBodyAtom>{item.보유포인트}</TableBodyAtom>
+                <TableBodyAtom color={item.포인트신청.color}>
+                  {item.포인트신청.text}
+                </TableBodyAtom>
+                <TableBodyAtom isLast>
+                  <ShowDetailButtonAtom
+                    onClick={() => moveToMembersDetail(item.id)}
+                  />
+                </TableBodyAtom>
+              </TableBodyModule>
+            ))
+          )}
+        </tbody>
+      </TableContainer>
+      <div className="flex w-full items-center justify-center">
+        <PaginationModule
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={Math.ceil(data.length / 10)}
+        />
       </div>
-    </div>
+    </section>
   );
 };
 
