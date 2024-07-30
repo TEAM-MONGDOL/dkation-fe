@@ -7,7 +7,6 @@ import Image from 'next/image';
 interface ModalModuleProps {
   title: string;
   children: React.ReactNode;
-  onClick: () => void;
   onConfirm: () => void;
   onCancel: () => void;
   confirmText?: string;
@@ -19,7 +18,6 @@ interface ModalModuleProps {
 const ModalModule = ({
   title,
   children,
-  onClick,
   onConfirm,
   onCancel,
   confirmText = '확인',
@@ -29,8 +27,8 @@ const ModalModule = ({
 }: ModalModuleProps) => {
   return (
     <div className="fixed left-0 top-0 z-10 flex h-screen w-screen items-center justify-center bg-black/30">
-      <div className="relative w-[600px] overflow-hidden rounded-regular bg-white p-10">
-        <button className="absolute right-5 top-5" onClick={onClick}>
+      <div className="relative w-[600px] rounded-regular bg-white p-10">
+        <button className="absolute right-5 top-5" onClick={onCancel}>
           <Image src={CloseIcon} alt="x" />
         </button>
         <div className="flex pb-10 text-center">
