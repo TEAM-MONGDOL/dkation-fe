@@ -57,7 +57,7 @@ const AdminPointsRequestDetailPage = () => {
     null,
   );
   return (
-    <div className="flex w-full flex-col gap-y-10 overflow-y-auto">
+    <section className="flex w-full flex-col gap-y-10 overflow-y-auto">
       <TitleBarModule title="포인트 신청 내역 상세" type="LEFT" />
       <section className="flex w-full flex-col gap-y-3xl">
         {data.status !== 'WAITING' && (
@@ -168,7 +168,7 @@ const AdminPointsRequestDetailPage = () => {
             </ModalModule>
           ))}
       </section>
-    </div>
+    </section>
   );
 };
 
