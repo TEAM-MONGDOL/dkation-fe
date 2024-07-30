@@ -50,7 +50,7 @@ const PaginationModule = ({
 
   return (
     <div className="flex bg-white">
-      <div className="rounded-l-lg w-12 h-12 border border-stroke-100 flex items-center justify-center">
+      <div className="flex h-12 w-12 items-center justify-center rounded-l-lg border border-stroke-100">
         <button onClick={handlePrev} disabled={startPage === 1}>
           <Image src={getLeftArrowIcon()} alt="LeftArrowIcon" />
         </button>
@@ -66,7 +66,7 @@ const PaginationModule = ({
           />
         ))}
       </div>
-      <div className="rounded-r-[8px] w-12 h-12 border border-stroke-100 flex items-center justify-center">
+      <div className="flex h-12 w-12 items-center justify-center rounded-r-[8px] border border-stroke-100">
         <button onClick={handleNext} disabled={endPage === totalPages}>
           <Image src={getRightArrowIcon()} alt="RightArrowIcon" />
         </button>

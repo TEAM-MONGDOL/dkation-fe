@@ -1,8 +1,3 @@
-export { default as ClickedRadioButtonIcon } from './clickedRadioButton.svg';
-export { default as UnClickedRadioButtonIcon } from './unClickedRadioButton.svg';
-export { default as KeyboardArrowDownIcon } from './keyboardArrowDown.svg';
-export { default as ClickedCheckBoxIcon } from './clickedCheckBox.svg';
-export { default as UnClickedCheckBoxIcon } from './unClickedCheckBox.svg';
 export { default as RadioButtonCheckedIcon } from './radioButtonChecked.svg';
 export { default as RadioButtonUncheckedIcon } from './radioButtonUnchecked.svg';
 export { default as CheckboxIcon } from './checkBox.svg';

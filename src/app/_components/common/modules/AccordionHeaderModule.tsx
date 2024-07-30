@@ -1,4 +1,4 @@
-import { KeyboardArrowDown } from '@/_assets/icons';
+import { KeyboardArrowDownIcon } from '@/_assets/icons';
 import Image from 'next/image';
 
 interface AccordionHeaderModuleProps {
@@ -15,7 +15,7 @@ const AccordionHeaderModule = ({
   return (
     <div
       role="presentation"
-      className="cursor-pointer w-full flex items-center justify-between py-2 px-3 gap-x-2"
+      className="flex w-full cursor-pointer items-center justify-between gap-x-2 px-3 py-2"
       onClick={() => setIsExpanded(!isExpanded)}
       onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
         if (e.key === 'Enter') {
@@ -23,10 +23,10 @@ const AccordionHeaderModule = ({
         }
       }}
     >
-      <div className="font-bold text-3 text-sub-400">{title}</div>
+      <div className="text-3 font-bold text-sub-400">{title}</div>
       <Image
-        className={`transform transition-transform duration-300 w-5 h-5 ${isExpanded ? 'rotate-180' : 'rotate-0'}`}
-        src={KeyboardArrowDown}
+        className={`h-5 w-5 transform transition-transform duration-300 ${isExpanded ? 'rotate-180' : 'rotate-0'}`}
+        src={KeyboardArrowDownIcon}
         alt="Arrow Down"
       />
     </div>
