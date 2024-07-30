@@ -114,7 +114,7 @@ const AdminWorkationListResultPage = () => {
         </TableHeaderModule>
         <tbody>
           {data.length <= 0 ? (
-            <EmptyContainer colSpan={8} />
+            <EmptyContainer colSpan={6} />
           ) : (
             data.map((item, index) => (
               <TableBodyModule key={item.id}>
