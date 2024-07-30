@@ -4,10 +4,10 @@ import PaginationButtonAtom from '@/_components/common/atoms/PaginationButtonAto
 import { Dispatch, SetStateAction, useState } from 'react';
 import Image from 'next/image';
 import {
-  LeftArrowBlackIcon,
-  LeftArrowEmptyIcon,
-  RightArrowBlackIcon,
-  RightArrowEmptyIcon,
+  ChevronLeftBlackIcon,
+  ChevronLeftEmptyIcon,
+  ChevronRightBlackIcon,
+  ChevronRightEmptyIcon,
 } from '@/_assets/icons';
 
 interface PageProps {
@@ -42,9 +42,9 @@ const PaginationModule = ({
   };
 
   const getLeftArrowIcon = () =>
-    startPage > 1 ? LeftArrowBlackIcon : LeftArrowEmptyIcon;
+    startPage > 1 ? ChevronLeftBlackIcon : ChevronLeftEmptyIcon;
   const getRightArrowIcon = () =>
-    startPage + 5 <= totalPages ? RightArrowBlackIcon : RightArrowEmptyIcon;
+    startPage + 5 <= totalPages ? ChevronRightBlackIcon : ChevronRightEmptyIcon;
 
   const endPage = Math.min(startPage + 4, totalPages);
 
