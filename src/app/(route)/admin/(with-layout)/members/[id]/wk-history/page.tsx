@@ -47,12 +47,11 @@ const AdminMembersWkHistoryPage = () => {
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
   const [selectedDateTag, setSelectedDateTag] =
     useState<DatePickerTagType>('ALL');
-
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
   const [param, setParam] = useState<{
     order: string;
     type: string[];
-    startDate: Date | null;
-    endDate: Date | null;
   }>({
     order: 'RECENT',
     type: [
@@ -65,8 +64,6 @@ const AdminMembersWkHistoryPage = () => {
       'WAITING',
       'COMPLETED',
     ],
-    startDate: null,
-    endDate: null,
   });
 
   const refreshHandler = () => {
@@ -83,10 +80,10 @@ const AdminMembersWkHistoryPage = () => {
         'WAITING',
         'COMPLETED',
       ],
-      startDate: null,
-      endDate: null,
     });
     setSelectedDateTag('ALL');
+    setStartDate(null);
+    setEndDate(null);
   };
 
   return (
@@ -101,12 +98,16 @@ const AdminMembersWkHistoryPage = () => {
       </div>
       <TableContainer>
         <TableHeaderModule>
-          <TableHeaderAtom width="90px">번호</TableHeaderAtom>
+          <TableHeaderAtom isFirst width="80px">
+            번호
+          </TableHeaderAtom>
           <TableHeaderAtom>워케이션</TableHeaderAtom>
-          <TableHeaderAtom width="190px">신청일시</TableHeaderAtom>
+          <TableHeaderAtom width="190px">신청 일시</TableHeaderAtom>
           <TableHeaderAtom width="160px">배팅 포인트</TableHeaderAtom>
           <TableHeaderAtom width="160px">확률</TableHeaderAtom>
-          <TableHeaderAtom width="160px">상태</TableHeaderAtom>
+          <TableHeaderAtom isLast width="160px">
+            상태
+          </TableHeaderAtom>
         </TableHeaderModule>
 
         <tbody>
@@ -124,7 +125,7 @@ const AdminMembersWkHistoryPage = () => {
                 <TableBodyAtom color={item.확률.color}>
                   {item.확률.text}
                 </TableBodyAtom>
-                <TableBodyAtom color={item.상태.color}>
+                <TableBodyAtom isLast color={item.상태.color}>
                   {item.상태.text}
                 </TableBodyAtom>
               </TableBodyModule>
@@ -153,16 +154,16 @@ const AdminMembersWkHistoryPage = () => {
         />
         <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         <DatePickerContainer
-          title="날짜"
+          title="신청 일시"
           selectedTag={selectedDateTag}
           setSelectedTag={setSelectedDateTag}
-          startDate={param.startDate}
+          startDate={startDate}
           setStartDate={(start: Date | null) => {
-            setParam({ ...param, startDate: start });
+            setStartDate(start);
           }}
-          endDate={param.endDate}
+          endDate={endDate}
           setEndDate={(end: Date | null) => {
-            setParam({ ...param, endDate: end });
+            setEndDate(end);
           }}
           startDatePlaceholder="시작일 선택"
           endDatePlaceholder="종료일 선택"
