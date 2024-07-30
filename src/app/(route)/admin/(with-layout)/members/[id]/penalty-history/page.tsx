@@ -11,6 +11,10 @@ import TableHeaderAtom from '@/_components/common/atoms/TableHeaderAtom';
 import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
 import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
+import ModalModule from '@/_components/common/modules/ModalModule';
+import InputModule from '@/_components/common/modules/InputModule';
+import DropdownModule from '@/_components/common/modules/DropdownModule';
 
 const headers = [
   { title: '번호', width: '90px' },
@@ -47,9 +51,8 @@ const transformCurrentPenaltyData = (penalty: any) => {
 
 const AdminMembersPenaltyHistoryPage = () => {
   const router = useRouter();
-  const moveToNewPenalty = () => {
-    router.push('/admin/workation/null/result/penalty');
-  };
+  const [isPenaltyModelOpen, setIsPenaltyModelOpen] = useState(false);
+  const [selectedType, setSelectedType] = useState<string>('');
 
   const transformedCurrentPenaltyData =
     transformCurrentPenaltyData(currentPenalty);
@@ -108,11 +111,47 @@ const AdminMembersPenaltyHistoryPage = () => {
       <div className="flex w-full items-center justify-end">
         <ButtonAtom
           buttonStyle="red"
-          onClick={moveToNewPenalty}
+          onClick={() => setIsPenaltyModelOpen(true)}
           text="페널티 부여"
           type="button"
         />
       </div>
+      {isPenaltyModelOpen && (
+        <ModalModule
+          title="선택한 회원에게 페널티를 부여하시겠습니까?"
+          cancelText="취소"
+          confirmText="확인"
+          confirmButtonStyle="dark"
+          cancelButtonStyle="yellow"
+          onClick={() => {
+            setIsPenaltyModelOpen(false);
+          }}
+          onConfirm={() => {
+            alert('페널티 등록 완료');
+            setIsPenaltyModelOpen(false);
+            router.back();
+          }}
+          onCancel={() => {
+            setIsPenaltyModelOpen(false);
+          }}
+        >
+          <InputModule
+            subtitle="해당 워케이션"
+            status="disabled"
+            placeholder="워케이션 없음"
+            value=""
+          />
+          <div className="mt-4 flex flex-col gap-4">
+            <p className="text-3 font-semibold">분류</p>
+            <DropdownModule
+              options={['노쇼', '고성방가']}
+              onSelect={setSelectedType}
+              placeholder="페널티 사유를 선택하세요."
+              selectedOption={selectedType}
+            />
+          </div>
+        </ModalModule>
+      )}
     </section>
   );
 };
