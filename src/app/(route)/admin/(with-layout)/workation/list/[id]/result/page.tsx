@@ -16,7 +16,6 @@ import TableHeaderAtom from '@/_components/common/atoms/TableHeaderAtom';
 import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
-import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAtom';
 
 const data = [
   {
