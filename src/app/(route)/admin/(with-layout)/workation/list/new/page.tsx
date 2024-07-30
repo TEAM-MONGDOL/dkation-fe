@@ -170,11 +170,11 @@ const WorkationNew = () => {
               },
               {
                 subtitle: '모집 기간',
-                content: `${dayjs(startDate).format('YYYY-MM-DD')} - ${dayjs(endDate).format('YYYY-MM-DD')}`,
+                content: `${dayjs(startDate).format('YYYY.MM.DD')} - ${dayjs(endDate).format('YYYY.MM.DD')}`,
               },
               {
                 subtitle: '워케이션 기간',
-                content: `${dayjs(startDate).format('YYYY-MM-DD')} - ${dayjs(endDate).format('YYYY-MM-DD')}`,
+                content: `${dayjs(startDate).format('YYYY.MM.DD')} - ${dayjs(endDate).format('YYYY.MM.DD')}`,
               },
             ]}
           />
