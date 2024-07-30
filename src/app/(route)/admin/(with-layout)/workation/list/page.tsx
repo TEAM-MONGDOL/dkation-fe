@@ -63,9 +63,13 @@ const WorkationList = () => {
   const [param, setParam] = useState<{
     order: string;
     status: string[];
+    startDate: Date | null;
+    endDate: Date | null;
   }>({
     order: 'RECENT',
     status: ['WILL', 'PROCEED', 'COMPLETE'],
+    startDate: null,
+    endDate: null,
   });
 
   const [startDate, setStartDate] = useState<Date>(
@@ -159,9 +163,12 @@ const WorkationList = () => {
           />
         </div>
         <div className="absolute right-0 top-0">
-          <ButtonAtom buttonType="yellow" onClick={moveToWritePage}>
-            워케이션 등록
-          </ButtonAtom>
+          <ButtonAtom
+            text="워케이션 등록"
+            type="button"
+            buttonStyle="yellow"
+            onClick={moveToWritePage}
+          />
         </div>
       </div>
 
@@ -188,23 +195,32 @@ const WorkationList = () => {
             setParam({ ...param, status })
           }
         />
+        {/* 추후 수정 예정 */}
         <DatePickerContainer
           title="모집 기간"
           selectedTag={selectedDateTag}
           setSelectedTag={setSelectedDateTag}
-          startDate={startDate}
-          setStartDate={(start: Date) => setStartDate(start)}
-          endDate={endDate}
-          setEndDate={(end: Date) => setEndDate(end)}
+          startDate={param.startDate}
+          setStartDate={(start: Date | null) => {
+            setParam({ ...param, startDate: start });
+          }}
+          endDate={param.endDate}
+          setEndDate={(end: Date | null) => {
+            setParam({ ...param, endDate: end });
+          }}
         />
         <DatePickerContainer
           title="워케이션 기간"
           selectedTag={selectedDateTagSec}
           setSelectedTag={setSelectedDateTagSec}
           startDate={startDateSec}
-          setStartDate={(start: Date) => setStartDateSec(start)}
+          setStartDate={(start: Date | null) => {
+            setParam({ ...param, startDate: start });
+          }}
           endDate={endDateSec}
-          setEndDate={(end: Date) => setEndDateSec(end)}
+          setEndDate={(end: Date | null) => {
+            setParam({ ...param, endDate: end });
+          }}
         />
       </FilteringBarContainer>
     </div>
