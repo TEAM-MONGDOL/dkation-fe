@@ -50,40 +50,47 @@ const rejectedData = {
   fileUrl: 'www.naver.com',
 };
 
-const data = rejectedData;
+const data = acceptedData;
 
 const AdminPointsRequestDetailPage = () => {
   const [isModalOpen, setIsModalOpen] = useState<'accept' | 'reject' | null>(
     null,
   );
   return (
-    <div className="w-full flex flex-col gap-y-10 overflow-y-auto">
+    <div className="flex w-full flex-col gap-y-10 overflow-y-auto">
       <TitleBarModule title="포인트 신청 내역 상세" type="LEFT" />
-      <section className="w-full flex flex-col gap-y-[30px]">
+      <section className="flex w-full flex-col gap-y-3xl">
         {data.status !== 'WAITING' && (
           <p
-            className={`py-4 px-5 w-full flex items-center font-semibold rounded-regular ${data.status === 'ACCEPTED' ? 'bg-[#FEEC66] border border-primary' : 'bg-[#E1E1E1] border border-sub-100'}`}
+            className={`flex w-full items-center rounded-regular px-5 py-4 font-semibold ${data.status === 'ACCEPTED' ? 'border border-primary bg-[#FEEC66]' : 'border border-sub-100 bg-[#E1E1E1]'}`}
           >
             {data.status === 'ACCEPTED'
               ? '이미 승인된 내역입니다.'
               : '이미 반려된 내역입니다.'}
           </p>
         )}
-        <div className="w-full flex gap-x-[30px]">
-          <div className="basis-2/5 flex flex-col gap-y-[30px]">
+        <div className="flex w-full flex-col gap-y-3xl">
+          <div className="flex w-full items-center justify-around gap-x-3xl">
             <InputModule
               subtitle="회원 정보"
               value={`${data.name} (${data.personalId})`}
+              status="readonly"
             />
-            <InputModule subtitle="분류" value={data.type} />
-            <InputModule subtitle="신청 일시" value={data.createdAt} />
-            {/* TODO : disable 속성 필요할 듯 */}
+            <InputModule subtitle="분류" value={data.type} status="readonly" />
+          </div>
+          <div className="flex w-full items-center justify-around gap-x-3xl">
+            <InputModule
+              subtitle="신청 일시"
+              value={data.createdAt}
+              status="readonly"
+            />
             <InputModule
               subtitle="지급 일시"
               value={!data.approvedAt ? '-' : data.approvedAt}
+              status="disabled"
             />
           </div>
-          <div className="flex-1 h-full flex flex-col gap-y-[30px]">
+          <div className="flex h-full grow flex-col gap-y-[30px]">
             <div className="flex flex-col gap-y-4">
               <h3 className="font-bold">증빙 서류</h3>
               {/* TODO : 높이 조절 필요 */}
@@ -91,8 +98,8 @@ const AdminPointsRequestDetailPage = () => {
                 fileName={data.fileName}
                 fileType="other"
                 fileUrl={data.fileUrl}
-                buttonType="edit"
-                onEdit={() => {}}
+                buttonType="download"
+                onDownload={() => {}}
               />
             </div>
             {/* TODO : Readonly, 카운트 조건부, height 필요 */}
@@ -103,33 +110,33 @@ const AdminPointsRequestDetailPage = () => {
               value={data.content}
               name="content"
               onChange={() => {}}
+              readonly
             />
           </div>
         </div>
-        <div className="w-full flex items-center justify-end gap-x-5 pt-[30px]">
+        <div className="flex w-full items-center justify-end gap-x-5 pt-[30px]">
           {/* TODO : 좀 더 길게 버튼 길이 고정 필요 */}
           <ButtonAtom
-            buttonType="dark"
+            type="button"
+            buttonStyle="dark"
             onClick={() => {
               setIsModalOpen('reject');
             }}
-          >
-            반려
-          </ButtonAtom>
+            text="반려"
+          />
           <ButtonAtom
-            buttonType="yellow"
+            type="button"
+            buttonStyle="yellow"
             onClick={() => {
               setIsModalOpen('accept');
             }}
-          >
-            승인
-          </ButtonAtom>
+            text="승인"
+          />
         </div>
         {isModalOpen &&
           (isModalOpen === 'accept' ? (
             <ModalModule
               title="포인트 신청 승인"
-              content="해당 신청을 승인하시겠습니까?"
               onCancel={() => {
                 setIsModalOpen(null);
               }}
@@ -137,19 +144,24 @@ const AdminPointsRequestDetailPage = () => {
                 // API 호출 필요
                 alert('승인');
               }}
+              onClick={() => {
+                setIsModalOpen(null);
+              }}
             >
               해당 신청을 승인하시겠습니까?
             </ModalModule>
           ) : (
             <ModalModule
               title="포인트 신청 반려"
-              content="해당 신청을 반려하시겠습니까?"
               onCancel={() => {
                 setIsModalOpen(null);
               }}
               onConfirm={() => {
                 // API 호출 필요
                 alert('반려');
+              }}
+              onClick={() => {
+                setIsModalOpen(null);
               }}
             >
               해당 신청을 반려하시겠습니까?
