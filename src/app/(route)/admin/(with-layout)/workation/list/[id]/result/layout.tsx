@@ -33,7 +33,7 @@ const AdminWorkationResultLayout = ({ children, params }: Props) => {
   return (
     <div className="flex h-full flex-col gap-10">
       <TitleBarModule title="결과 및 페널티" type="LEFT" />
-      <div className="gap-x- flex">
+      <div className="flex">
         <div className="flex w-[300px] flex-col gap-5">
           <InfoSectionContainer data={data} image={PlaceImsy} />
           <SidebarModule items={WkResultDetailSidebar} />

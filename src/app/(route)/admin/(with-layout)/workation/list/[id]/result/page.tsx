@@ -10,6 +10,11 @@ import RadioButtonContainer from '@/_components/common/containers/RadioButtonCon
 import { resultList } from '@/_types/adminType';
 import CheckboxContainer from '@/_components/common/containers/CheckboxContainer';
 import FilteringBarContainer from '@/_components/common/containers/FilteringBarContainer';
+import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
+import TableHeaderAtom from '@/_components/common/atoms/TableHeaderAtom';
+import EmptyContainer from '@/_components/common/containers/EmptyContainer';
+import TableBodyModule from '@/_components/common/modules/TableBodyModule';
+import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
 import RangeContainer from '@/_components/common/containers/RangeContainer';
 import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
 import TableHeaderAtom from '@/_components/common/atoms/TableHeaderAtom';
@@ -90,7 +95,7 @@ const AdminWorkationListResultPage = () => {
     }));
   };
   return (
-    <div>
+    <section>
       <div className="mb-6 flex w-full items-center justify-between">
         <div className="flex gap-2">
           <Image src={ExtensionIcon} alt="ResultIcon" />
@@ -101,7 +106,7 @@ const AdminWorkationListResultPage = () => {
       </div>
       <TableContainer>
         <TableHeaderModule>
-          <TableHeaderAtom width="78px" isFirst>
+          <TableHeaderAtom width="80px" isFirst>
             번호
           </TableHeaderAtom>
           <TableHeaderAtom width="130px">이름</TableHeaderAtom>
@@ -168,15 +173,14 @@ const AdminWorkationListResultPage = () => {
             setParam({ ...param, status })
           }
         />
-        {/* 추후 수정 예정 */}
-        {/* <RangeContainer */}
-        {/*  title="당첨 확률" */}
-        {/*  min={0} */}
-        {/*  max={6} */}
-        {/*  onChange={handleRangeChange} */}
-        {/* /> */}
+        <RangeContainer
+          title="당첨 확률"
+          min={0}
+          max={6}
+          onChange={handleRangeChange}
+        />
       </FilteringBarContainer>
-    </div>
+    </section>
   );
 };
 
