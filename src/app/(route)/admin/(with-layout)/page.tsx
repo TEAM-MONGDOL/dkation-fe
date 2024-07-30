@@ -46,7 +46,11 @@ const AdminMainPage = () => {
   return (
     <div className="flex w-full flex-col gap-y-12 overflow-y-auto">
       <div className="flex w-full flex-col gap-y-6">
-        <TitleBarModule title="워케이션 모집 현황" type="RIGHT" />
+        <TitleBarModule
+          title="워케이션 목록"
+          type="RIGHT"
+          url="/admin/workation"
+        />
         <TableContainer>
           <TableHeaderModule>
             <TableHeaderAtom width="80px">번호</TableHeaderAtom>
@@ -85,7 +89,11 @@ const AdminMainPage = () => {
         </TableContainer>
       </div>
       <div className="flex w-full flex-col gap-y-6">
-        <TitleBarModule title="포인트 신청 내역" type="RIGHT" />
+        <TitleBarModule
+          title="포인트 신청 내역"
+          type="RIGHT"
+          url="/admin/points/request"
+        />
         <TableContainer>
           <TableHeaderModule>
             <TableHeaderAtom width="80px">번호</TableHeaderAtom>
