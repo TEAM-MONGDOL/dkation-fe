@@ -6,17 +6,12 @@ import Image from 'next/image';
 import { useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 
-const findMinDate = (minDate: Date) => {
-  const lastYear = new Date();
-  lastYear.setFullYear(lastYear.getFullYear() - 1);
-  return dayjs(lastYear).isAfter(minDate) ? lastYear : minDate;
-};
-
 interface DatePickerAtomProps {
-  selectedDate: Date;
-  setSelectedDate: (prev: Date) => void;
-  minDate: Date;
+  selectedDate: Date | null;
+  setSelectedDate: (prev: Date | null) => void;
+  minDate?: Date | null;
   className?: string;
+  placeholderText?: string;
 }
 
 const DatePickerAtom = ({
@@ -24,14 +19,16 @@ const DatePickerAtom = ({
   setSelectedDate,
   minDate,
   className,
+  placeholderText,
 }: DatePickerAtomProps) => {
   return (
     <DatePicker
-      className={`flex w-full text-4 text-center items-center justify-center border border-sub-100 bg-white text-sub-400 px-4 rounded-lg focus:outline-primary ${className ? `${className}` : 'py-1'}`}
+      className={`flex w-full text-4 text-center items-center justify-center border border-sub-100 bg-white text-sub-400 placeholder:text-sub-200 px-4 rounded-lg focus:outline-primary ${className ? `${className}` : 'py-1'}`}
+      placeholderText={placeholderText}
       selected={selectedDate}
-      onChange={(date) => setSelectedDate(date || selectedDate)}
+      onChange={setSelectedDate}
       dateFormat="yyyy.MM.dd"
-      minDate={findMinDate(minDate)}
+      minDate={minDate === null ? undefined : minDate}
       maxDate={new Date()}
       formatWeekDay={(nameOfDay) => nameOfDay.substring(0, 1)}
       shouldCloseOnSelect
