@@ -167,7 +167,7 @@ const AdminMembersWkHistoryPage = () => {
             setParam({ ...param, endDate: end });
           }}
           startDatePlaceholder="시작일 선택"
-          endDatePlaceholder="마감일 선택"
+          endDatePlaceholder="종료일 선택"
         />
         <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         <CheckboxContainer
