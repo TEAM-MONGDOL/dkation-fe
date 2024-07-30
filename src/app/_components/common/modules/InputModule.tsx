@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import InputSubtitleAtom from '@/_components/common/atoms/InputSubtitleAtom';
 import InputAreaAtom from '@/_components/common/atoms/InputAreaAtom';
 
@@ -12,7 +12,7 @@ interface InputProps {
   message?: string;
   textCount?: number;
   name?: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const InputModule = ({
@@ -23,7 +23,7 @@ const InputModule = ({
   message,
   textCount,
   name,
-  onChange,
+  onChange = () => {},
 }: InputProps) => {
   return (
     <div className={`flex w-full flex-col ${subtitle && 'gap-4'}`}>
