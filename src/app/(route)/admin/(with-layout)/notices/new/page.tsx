@@ -49,12 +49,13 @@ const WriteNoticesPage = () => {
       <TitleBarModule title="공지 글쓰기" type="LEFT" />
       <form onSubmit={handleSubmit}>
         <div className="pt-10">
-          <p className="text-3 font-bold mb-4">제목</p>
+          <p className="mb-4 text-3 font-bold">제목</p>
           <div className="flex gap-4">
             <DropdownModule
               options={NoticeOptions}
               onSelect={handleSelect}
               placeholder="구분 선택"
+              selectedOption={values.category}
             />
             <div className="w-full">
               <InputModule
@@ -69,7 +70,7 @@ const WriteNoticesPage = () => {
           <div className="py-7">
             <FileContainer onFileChange={handleFilesChange} />{' '}
           </div>
-          <p className="text-3 font-bold mb-4">내용</p>
+          <p className="mb-4 text-3 font-bold">내용</p>
           <TextAreaModule
             name="content"
             placeholder="상세 내용을 입력하세요."
@@ -79,7 +80,7 @@ const WriteNoticesPage = () => {
             onChange={handleChange}
           />
           <div className="flex justify-end pt-14">
-            <ButtonAtom buttonType="yellow">등록</ButtonAtom>
+            <ButtonAtom buttonStyle="yellow" text="등록" type="submit" />
           </div>
         </div>
       </form>
