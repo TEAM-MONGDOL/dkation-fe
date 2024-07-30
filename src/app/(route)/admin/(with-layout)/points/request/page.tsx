@@ -1,12 +1,18 @@
 'use client';
 
+import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAtom';
+import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
+import TableHeaderAtom from '@/_components/common/atoms/TableHeaderAtom';
 import CheckboxContainer from '@/_components/common/containers/CheckboxContainer';
 import DatePickerContainer from '@/_components/common/containers/DatePickerContainer';
+import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 import FilteringBarContainer from '@/_components/common/containers/FilteringBarContainer';
 import RadioButtonContainer from '@/_components/common/containers/RadioButtonContainer';
 import TableContainer from '@/_components/common/containers/TableContainer';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
 import SearchingBoxModule from '@/_components/common/modules/SearchingBoxModule';
+import TableBodyModule from '@/_components/common/modules/TableBodyModule';
+import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import { orderList, pointRequestStatusList } from '@/_types/adminType';
 import { DatePickerTagType } from '@/_types/commonType';
@@ -14,53 +20,51 @@ import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-const headers = [
-  { title: '번호', width: '100px' },
-  { title: '구분', width: '150px' },
-  { title: '이름', widdth: '190px' },
-  { title: '신청 일시', flexGrow: true },
-  { title: '지급 일시', flexGrow: true },
-  { title: '상태', width: '140px' },
-  { title: '', width: '160px' },
-];
-
-const data = [
+const data: {
+  id: number;
+  category: string;
+  name: string;
+  requestedAt: string;
+  rewardAt: string;
+  status: string;
+}[] = [
   {
     id: 1,
-    구분: '자기계발',
-    이름: '김철수',
-    '신청 일시': '2024-07-20',
-    '지급 일시': '-',
-    상태: { text: '대기', color: 'gray' },
+    category: '자기계발',
+    name: '김철수',
+    requestedAt: '2024-07-20',
+    rewardAt: '-',
+    status: 'WAITING',
   },
   {
     id: 2,
-    구분: '봉사활동',
-    이름: '이영희',
-    '신청 일시': '2024-07-21',
-    '지급 일시': '2024-07-22',
-    상태: { text: '지급 완료', color: 'blue' },
+    category: '봉사활동',
+    name: '이영희',
+    requestedAt: '2024-07-21',
+    rewardAt: '2024-07-22',
+    status: 'APPROVED',
   },
   {
     id: 3,
-    구분: '이벤트',
-    이름: '박민수',
-    '신청 일시': '2024-07-21',
-    '지급 일시': '2024-07-22',
-    상태: { text: '반려', color: 'red' },
+    category: '이벤트',
+    name: '박민수',
+    requestedAt: '2024-07-21',
+    rewardAt: '2024-07-22',
+    status: 'WAITING',
   },
   {
     id: 4,
-    구분: '자기계발',
-    이름: '김철수 외 3명',
-    '신청 일시': '2024-07-21',
-    '지급 일시': '-',
-    상태: { text: '대기', color: 'gray' },
+    category: '자기계발',
+    name: '김철수 외 3명',
+    requestedAt: '2024-07-21',
+    rewardAt: '-',
+    status: 'REJECT',
   },
 ];
 
 const AdminPointsRequestPage = () => {
   const router = useRouter();
+  const [page, setPage] = useState(1);
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
   const [param, setParam] = useState<{
     order: string;
@@ -73,10 +77,8 @@ const AdminPointsRequestPage = () => {
   });
   const [selectedDateTag, setSelectedDateTag] =
     useState<DatePickerTagType>('ALL');
-  const [startDate, setStartDate] = useState<Date>(
-    dayjs().subtract(1, 'year').toDate(),
-  );
-  const [endDate, setEndDate] = useState<Date>(dayjs().toDate());
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
 
   const onClickRowDetail = (id: number) => {
     router.push(`/admin/points/request/${id}`);
@@ -94,9 +96,18 @@ const AdminPointsRequestPage = () => {
     setEndDate(dayjs().toDate());
   };
 
+  const getStatusColor = (
+    status: string,
+  ): 'text-sub-200' | 'text-negative' | 'text-positive' | undefined => {
+    if (status === 'WAITING') return 'text-sub-200';
+    if (status === 'REJECT') return 'text-negative';
+    if (status === 'APPROVED') return 'text-positive';
+    return undefined;
+  };
+
   return (
-    <div className="w-full flex flex-col gap-y-10 overflow-y-auto">
-      <div className="w-full flex justify-between items-center">
+    <div className="flex w-full flex-col gap-y-10 overflow-y-auto">
+      <div className="flex w-full items-center justify-between">
         <TitleBarModule title="포인트 신청 내역" />
         <SearchingBoxModule
           placeholder="이름을 검색하세요."
@@ -104,17 +115,50 @@ const AdminPointsRequestPage = () => {
           onClick={() => setIsFilteringBarOpen(true)}
         />
       </div>
-      <TableContainer
-        headers={headers}
-        data={data.map((item) => ({
-          ...item,
-          '': { onClick: () => onClickRowDetail(item.id) },
-        }))}
-      />
-      {/* TODO : 아예 PaginationModule에 가운데정렬 포함이 좋을 듯 */}
-      <div className="w-full flex items-center justify-center">
-        <PaginationModule />
-      </div>
+      <TableContainer>
+        <TableHeaderModule>
+          <TableHeaderAtom isFirst width="100px">
+            번호
+          </TableHeaderAtom>
+          <TableHeaderAtom width="150px">분류</TableHeaderAtom>
+          <TableHeaderAtom width="190px">이름</TableHeaderAtom>
+          <TableHeaderAtom>신청 일시</TableHeaderAtom>
+          <TableHeaderAtom>지급 일시</TableHeaderAtom>
+          <TableHeaderAtom width="140px">상태</TableHeaderAtom>
+          <TableHeaderAtom isLast width="160px" />
+        </TableHeaderModule>
+        {data.length <= 0 ? (
+          <EmptyContainer colSpan={7} />
+        ) : (
+          data.map((item, idx) => (
+            <TableBodyModule key={item.id}>
+              <TableBodyAtom isFirst>{idx}</TableBodyAtom>
+              <TableBodyAtom>{item.category}</TableBodyAtom>
+              <TableBodyAtom>{item.name}</TableBodyAtom>
+              <TableBodyAtom>{item.requestedAt}</TableBodyAtom>
+              <TableBodyAtom>{item.rewardAt}</TableBodyAtom>
+              <TableBodyAtom color={getStatusColor(item.status)}>
+                {item.status === 'WAITING' && '대기'}
+                {item.status === 'REJECT' && '반려'}
+                {item.status === 'APPROVED' && '승인'}
+              </TableBodyAtom>
+              <TableBodyAtom isLast>
+                <ShowDetailButtonAtom
+                  onClick={() => onClickRowDetail(item.id)}
+                />
+              </TableBodyAtom>
+            </TableBodyModule>
+          ))
+        )}
+      </TableContainer>
+      {data.length > 0 && (
+        <PaginationModule
+          currentPage={page}
+          setCurrentPage={setPage}
+          totalPages={Math.ceil(data.length / 10)}
+        />
+      )}
+      <div className="flex w-full items-center justify-center" />
       <FilteringBarContainer
         isOpen={isFilteringBarOpen}
         setIsOpen={setIsFilteringBarOpen}
@@ -127,7 +171,7 @@ const AdminPointsRequestPage = () => {
           setSelectedOption={(order) => setParam({ ...param, order })}
         />
         <CheckboxContainer
-          title="상태"
+          title="분류"
           options={Object.entries(pointRequestStatusList) as [string, string][]}
           selectedOptions={param.state}
           setSelectedOptions={(state: string[]) =>
@@ -135,7 +179,7 @@ const AdminPointsRequestPage = () => {
           }
         />
         <CheckboxContainer
-          title="구분"
+          title="category"
           options={[
             ['SELF_STUDY', '자기계발'],
             ['VOLUNTEER', '봉사활동'],
@@ -149,9 +193,9 @@ const AdminPointsRequestPage = () => {
           selectedTag={selectedDateTag}
           setSelectedTag={setSelectedDateTag}
           startDate={startDate}
-          setStartDate={(start: Date) => setStartDate(start)}
+          setStartDate={(start: Date | null) => setStartDate(start)}
           endDate={endDate}
-          setEndDate={(end: Date) => setEndDate(end)}
+          setEndDate={(end: Date | null) => setEndDate(end)}
         />
       </FilteringBarContainer>
     </div>

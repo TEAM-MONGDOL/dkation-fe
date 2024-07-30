@@ -25,15 +25,15 @@ const FileModule = ({
   const buttonTypeClass = buttonType === 'delete' ? 'delete' : 'download';
 
   return (
-    <div className="pr-4 rounded-regular flex items-center bg-[#F4F4f4] border border-stroke-100">
+    <div className="flex items-center rounded-regular border border-stroke-100 bg-[#F4F4f4] pr-4">
       {fileType === 'image' ? (
-        <div className="pl-2.5 py-2">
+        <div className="py-2 pl-2.5">
           <ImagePreviewAtom src={fileUrl} />
         </div>
       ) : (
         ' '
       )}
-      <div className={`flex-1 ${fileType === 'image' ? 'pl-10' : 'pl-4 py-4'}`}>
+      <div className={`flex-1 ${fileType === 'image' ? 'pl-10' : 'py-4 pl-4'}`}>
         <FileNameAtom fileName={fileName} />
       </div>
       {handleClick && (
