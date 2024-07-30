@@ -121,6 +121,8 @@ const WorkationNew = () => {
           type="submit"
           buttonStyle="yellow"
         />
+      </div>
+    </div>
       </form>
     </section>
   );
