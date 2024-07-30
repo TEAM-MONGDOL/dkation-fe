@@ -1,7 +1,7 @@
 import React from 'react';
 import ModalTitleAtom from '@/_components/common/atoms/ModalTitleAtom';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
-import { Delete } from '@/_assets/icons';
+import { CloseIcon } from '@/_assets/icons';
 import Image from 'next/image';
 
 interface ModalModuleProps {
@@ -31,7 +31,7 @@ const ModalModule = ({
     <div className="fixed left-0 top-0 z-10 flex h-screen w-screen items-center justify-center bg-black/30">
       <div className="relative w-[600px] overflow-hidden rounded-regular bg-white p-10">
         <button className="absolute right-5 top-5" onClick={onClick}>
-          <Image src={Delete} alt="x" />
+          <Image src={CloseIcon} alt="x" />
         </button>
         <div className="flex pb-10 text-center">
           <ModalTitleAtom title={title} />
@@ -40,19 +40,19 @@ const ModalModule = ({
         <div className="flex w-full gap-2 pt-10">
           <ButtonAtom
             buttonStyle={confirmButtonStyle}
-            flexGrow
+            width="grow"
             onClick={onCancel}
-          >
-            {cancelText}
-          </ButtonAtom>
+            text={cancelText}
+            type="button"
+          />
 
           <ButtonAtom
             buttonStyle={cancelButtonStyle}
-            flexGrow
+            width="grow"
             onClick={onConfirm}
-          >
-            {confirmText}
-          </ButtonAtom>
+            text={confirmText}
+            type="button"
+          />
         </div>
       </div>
     </div>
