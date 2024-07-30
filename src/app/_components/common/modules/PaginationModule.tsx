@@ -4,10 +4,9 @@ import PaginationButtonAtom from '@/_components/common/atoms/PaginationButtonAto
 import { Dispatch, SetStateAction, useState } from 'react';
 import Image from 'next/image';
 import {
-  LeftArrowBlackIcon,
-  LeftArrowEmptyIcon,
-  RightArrowBlackIcon,
-  RightArrowEmptyIcon,
+  ChevronLeftBlackIcon,
+  ChevronRightBlackIcon,
+  ChevronRightEmptyIcon,
 } from '@/_assets/icons';
 
 interface PageProps {
@@ -42,14 +41,18 @@ const PaginationModule = ({
   };
 
   const getLeftArrowIcon = () =>
-    startPage > 1 ? LeftArrowBlackIcon : LeftArrowEmptyIcon;
+    startPage > 1 ? ChevronLeftBlackIcon : ChevronLeftBlackIcon;
   const getRightArrowIcon = () =>
-    startPage + 5 <= totalPages ? RightArrowBlackIcon : RightArrowEmptyIcon;
+    startPage + 5 <= totalPages ? ChevronRightBlackIcon : ChevronRightEmptyIcon;
 
   const endPage = Math.min(startPage + 4, totalPages);
 
   return (
+<<<<<<< HEAD
     <div className="flex bg-white">
+=======
+    <div className="flex rounded-lg bg-white">
+>>>>>>> e85c873 (refactor: 아이콘 이름에 맞게 경로 변경)
       <div className="flex h-12 w-12 items-center justify-center rounded-l-lg border border-stroke-100">
         <button onClick={handlePrev} disabled={startPage === 1}>
           <Image src={getLeftArrowIcon()} alt="LeftArrowIcon" />

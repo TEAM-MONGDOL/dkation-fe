@@ -10,11 +10,15 @@ interface TitleProps {
 
 const NavTitleAtom = ({ icon, title, onIconClick, isVisible }: TitleProps) => {
   return (
+<<<<<<< HEAD
     <div
       role="presentation"
       className="flex justify-between py-2"
       onClick={onIconClick}
     >
+=======
+    <div className="flex justify-between py-2" onClick={onIconClick}>
+>>>>>>> e85c873 (refactor: 아이콘 이름에 맞게 경로 변경)
       <div className="flex">
         <Image className="mr-3" src={icon} alt={title} />
         <p className="text-3 font-semibold">{title}</p>

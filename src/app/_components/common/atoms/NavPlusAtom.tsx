@@ -1,4 +1,4 @@
-import { PlusRoundIcon } from '@/_assets/icons';
+import { AddCircleIcon } from '@/_assets/icons';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -9,8 +9,8 @@ interface PlusProps {
 const NavPlusAtom = ({ content, route }: PlusProps) => {
   return (
     <Link href={route}>
-      <button className="my-1.5 pl-2 gap-2 items-center flex rounded-[5px] w-32 h-8 ml-[29px] bg-white text-sub-400 text-5 font-semibold">
-        <Image src={PlusRoundIcon} alt="PlusRoundIcon" />
+      <button className="my-1.5 ml-[29px] flex h-8 w-32 items-center gap-2 rounded-[5px] bg-white pl-2 text-5 font-semibold text-sub-400">
+        <Image src={AddCircleIcon} alt="PlusRoundIcon" />
         {content}
       </button>
     </Link>

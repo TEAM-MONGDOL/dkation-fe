@@ -1,16 +1,16 @@
 import NavModule from '@/_components/common/modules/NavModule';
 import {
+  ControlPointDuplicateIcon,
+  ExtensionGrayIcon,
   InfoIcon,
-  PointIcon,
-  ProfileIcon,
-  WorkationIcon,
+  PersonIcon,
 } from '@/_assets/icons';
 
 const NavBarContainer = () => {
   return (
     <div className="h-full w-[203px] bg-sub-400 pt-1 text-white">
       <NavModule
-        icon={ProfileIcon}
+        icon={PersonIcon}
         title="회원 관리"
         contents={[
           { content: '회원 목록', route: '/admin/members' },
@@ -19,7 +19,7 @@ const NavBarContainer = () => {
       />
       <hr className="opacity-50" />
       <NavModule
-        icon={PointIcon}
+        icon={ControlPointDuplicateIcon}
         title="포인트 관리"
         plusContents={[
           { content: '단체 포인트 등록', route: '/admin/points/reward/new' },
@@ -32,7 +32,7 @@ const NavBarContainer = () => {
       />
       <hr className="opacity-50" />
       <NavModule
-        icon={WorkationIcon}
+        icon={ExtensionGrayIcon}
         title="워케이션 관리"
         contents={[
           { content: '워케이션 목록', route: '/admin/workation/list' },

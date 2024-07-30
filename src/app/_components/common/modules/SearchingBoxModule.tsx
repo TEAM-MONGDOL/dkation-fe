@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { SearchingGlasses } from '@/_assets/icons';
+import { SearchIcon } from '@/_assets/icons';
 import FilteringButtonAtom from '@/_components/common/atoms/FilteringButtonAtom';
 import { useState } from 'react';
 
@@ -45,7 +45,7 @@ const SearchingBoxModule = ({
         />
         <Image
           className="absolute bottom-3 right-3 cursor-pointer"
-          src={SearchingGlasses}
+          src={SearchIcon}
           alt="SearchingGlasses"
         />
       </div>
