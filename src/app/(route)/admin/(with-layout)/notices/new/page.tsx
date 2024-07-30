@@ -45,7 +45,7 @@ const WriteNoticesPage = () => {
   };
 
   return (
-    <div>
+    <section>
       <TitleBarModule title="공지 글쓰기" type="LEFT" />
       <form onSubmit={handleSubmit}>
         <div className="pt-10">
@@ -83,7 +83,7 @@ const WriteNoticesPage = () => {
           </div>
         </div>
       </form>
-    </div>
+    </section>
   );
 };
 

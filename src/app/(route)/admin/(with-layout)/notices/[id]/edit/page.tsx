@@ -95,7 +95,7 @@ const AdminWriteNoticesEditPage = () => {
   };
 
   return (
-    <div>
+    <section>
       <TitleBarModule title="공지 수정" type="LEFT" />
       <form onSubmit={handleSubmit}>
         <div className="pt-10">
@@ -179,7 +179,7 @@ const AdminWriteNoticesEditPage = () => {
           </div>
         </ModalModule>
       )}
-    </div>
+    </section>
   );
 };
 

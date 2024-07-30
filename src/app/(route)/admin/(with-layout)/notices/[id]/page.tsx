@@ -47,7 +47,7 @@ const NoticeDetailPage = () => {
   };
 
   return (
-    <div>
+    <section>
       <TitleBarModule title="공지 상세" type="LEFT" />
       <div className="pt-10">
         <p className="mb-4 text-3 font-bold">제목</p>
@@ -129,7 +129,7 @@ const NoticeDetailPage = () => {
           </ModalModule>
         )}
       </div>
-    </div>
+    </section>
   );
 };
 

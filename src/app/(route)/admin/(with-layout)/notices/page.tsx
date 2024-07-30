@@ -72,7 +72,7 @@ const NoticesListPage = () => {
   }
 
   return (
-    <div className="w-full">
+    <section className="w-full">
       <div className="mb-12 flex items-center justify-between">
         <TitleBarModule title="공지사항 목록" />
         <div className="ml-auto flex items-center space-x-4">
@@ -168,7 +168,7 @@ const NoticesListPage = () => {
           />
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
