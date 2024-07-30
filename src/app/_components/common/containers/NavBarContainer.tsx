@@ -3,9 +3,6 @@ import {
   ControlPointIcon,
   ExtensionGrayIcon,
   InfoIcon,
-  ControlPointIcon,
-  ExtensionGrayIcon,
-  InfoIcon,
   PersonIcon,
 } from '@/_assets/icons';
 
