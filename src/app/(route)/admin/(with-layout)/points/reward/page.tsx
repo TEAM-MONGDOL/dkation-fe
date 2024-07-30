@@ -157,12 +157,14 @@ const AdminPointsRewardPage = () => {
           selectedOption={param.order}
           setSelectedOption={(order: string) => setParam({ ...param, order })}
         />
+        <hr className="w-full border-0 h-[0.5px] bg-sub-100" />
         <CheckboxContainer
           title="분류"
           options={Object.entries(pointRewardList) as [string, string][]}
           selectedOptions={param.type}
           setSelectedOptions={(type: string[]) => setParam({ ...param, type })}
         />
+        <hr className="w-full border-0 h-[0.5px] bg-sub-100" />
         <CheckboxContainer
           title="구분"
           options={[
@@ -175,6 +177,7 @@ const AdminPointsRewardPage = () => {
             setParam({ ...param, reason })
           }
         />
+        <hr className="w-full border-0 h-[0.5px] bg-sub-100" />
         <DatePickerContainer
           title="신청 및 지급 일시"
           selectedTag={selectedDateTag}
