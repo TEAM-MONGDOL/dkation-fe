@@ -20,12 +20,12 @@ const AdminWorkationResultLayout = ({ children, params }: Props) => {
   const WkResultDetailSidebar = [
     {
       id: '1',
-      title: '워케이션 신청 내역',
+      title: '추첨 결과',
       url: `/admin/workation/list/${resultId}/result`,
     },
     {
       id: '2',
-      title: '포인트 사용 내역',
+      title: '결과 통계 및 페널티',
       url: `/admin/workation/list/${resultId}/result/penalty`,
     },
   ];
