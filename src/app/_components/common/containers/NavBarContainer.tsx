@@ -1,5 +1,7 @@
 import NavModule from '@/_components/common/modules/NavModule';
 import {
+  ControlPointIcon,
+  ExtensionGrayIcon,
   InfoIcon,
   ControlPointIcon,
   PersonIcon,
