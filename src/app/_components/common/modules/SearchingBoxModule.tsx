@@ -35,10 +35,10 @@ const SearchingBoxModule = ({
     widthClass = filter ? 'w-[312px]' : 'w-[528px]';
   }
   return (
-    <div className="flex">
-      <div className="relative">
+    <div className={`flex ${widthFull ? 'w-full' : ''}`}>
+      <div className={`relative ${widthFull ? 'w-full' : ''}`}>
         <input
-          className={`pr-10 placeholder-sub-100 border rounded-regular text-4 h-11 outline-0 pl-2.5 ${widthClass}`}
+          className={`h-11 rounded-regular border pl-2.5 pr-10 text-4 placeholder-sub-100 outline-0 ${widthClass}`}
           placeholder={placeholder}
           value={value || ''}
           onChange={handleChange}
