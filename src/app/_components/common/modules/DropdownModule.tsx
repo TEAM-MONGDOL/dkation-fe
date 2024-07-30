@@ -23,17 +23,19 @@ const DropdownModule = ({
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <>
+    <div>
       <div
         role="presentation"
-        className={`fixed left-0 top-0 z-10 h-full min-h-screen w-screen ${isOpen ? 'block' : 'hidden'}`}
+        className={`fixed left-0 top-0 z-10 h-full min-h-screen w-52 ${isOpen ? 'block' : 'hidden'}`}
         onClick={() => setIsOpen(false)}
       />
-      <div className="relative inline-block w-full text-left">
+      <div
+        className={`relative inline-block ${fixed ? 'w-52' : 'w-full'} text-left`}
+      >
         <div>
           <button
             type="button"
-            className={`flex h-5xl items-center justify-between border border-stroke-100 px-4 text-4 ${fixed ? 'w-52' : 'w-full'} ${isOpen ? 'rounded-t-regular' : 'rounded-regular'}`}
+            className={`flex h-5xl w-full items-center justify-between border border-stroke-100 px-4 text-4 ${isOpen ? 'rounded-t-regular' : 'rounded-regular'}`}
             onClick={() => setIsOpen(!isOpen)}
           >
             <span
@@ -52,7 +54,7 @@ const DropdownModule = ({
           className={`top-5xl duration-600 absolute z-20 w-full transform rounded-b-regular border border-t-0 border-stroke-100 bg-white transition-transform ease-in-out ${fixed ? 'w-52' : 'w-full'} ${isOpen ? 'translate-y-0 border-t-0 opacity-100' : 'translate-y-[-1px] opacity-0'}`}
         >
           {isOpen && (
-            <div>
+            <div className="w-full">
               {options.map((option) => (
                 <DropdownItemAtom
                   key={option}
@@ -67,7 +69,7 @@ const DropdownModule = ({
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
