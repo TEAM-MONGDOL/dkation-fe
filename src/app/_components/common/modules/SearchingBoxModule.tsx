@@ -10,6 +10,7 @@ interface BoxProps {
   onClick: () => void;
   placeholder: string;
   widthFull?: boolean;
+  height?: string;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -17,6 +18,7 @@ interface BoxProps {
 const SearchingBoxModule = ({
   filter,
   widthFull,
+  height = 'h-11',
   onClick,
   placeholder,
   value: initialValue = '',
@@ -36,22 +38,26 @@ const SearchingBoxModule = ({
   }
   return (
     <div className={`flex ${widthFull ? 'w-full' : ''}`}>
-      <div className={`relative ${widthFull ? 'w-full' : ''}`}>
+      <div
+        className={`flex ${height} items-center gap-x-2.5 rounded-regular border border-stroke-100 bg-white px-3 py-1.5 ${widthClass}`}
+      >
         <input
-          className={`h-11 rounded-regular border pl-2.5 pr-10 text-4 placeholder-sub-100 outline-0 ${widthClass}`}
+          className="h-full grow text-4 placeholder-sub-100 outline-0"
           placeholder={placeholder}
           value={value || ''}
           onChange={handleChange}
         />
         <Image
-          className="absolute bottom-3 right-3 cursor-pointer"
+          className="cursor-pointer"
           src={SearchIcon}
           alt="SearchingGlasses"
         />
       </div>
-      <div className="ml-5">
-        {filter && <FilteringButtonAtom onClick={onClick} />}
-      </div>
+      {filter && (
+        <div className="ml-5">
+          <FilteringButtonAtom onClick={onClick} />
+        </div>
+      )}
     </div>
   );
 };
