@@ -36,11 +36,11 @@ const AdminMainPage = () => {
   const router = useRouter();
 
   const moveToWkDetail = (id: number) => {
-    router.push(`/admin/workation/list/${id}`);
+    router.push(`/admin/workation/list/${id}/result`);
   };
 
   const moveToPointsDetail = (id: number) => {
-    router.push(`/admin/points/request/${id}`);
+    router.push(`/admin/points/reward/${id}`);
   };
 
   return (
