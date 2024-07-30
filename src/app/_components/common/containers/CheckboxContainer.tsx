@@ -31,7 +31,7 @@ const CheckboxContainer = ({
   };
 
   return (
-    <div className="flex w-full flex-col py-2.5 px-3">
+    <div className="flex w-full flex-col px-3 py-2.5">
       <AccordionHeaderModule
         title={title}
         isExpanded={isExpanded}
