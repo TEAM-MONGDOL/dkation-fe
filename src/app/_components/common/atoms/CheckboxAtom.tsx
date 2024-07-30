@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { ClickedCheckBox, UnClickedCheckBox } from '@/_assets/icons';
+import { CheckboxIcon, CheckboxOutlineBlankIcon } from '@/_assets/icons';
 
 interface CheckboxAtomProps {
   isChecked: boolean;
@@ -11,7 +11,7 @@ const CheckboxAtom = ({ isChecked, onClick, size }: CheckboxAtomProps) => {
   return (
     <div className="inline-block" role="presentation" onClick={onClick}>
       <Image
-        src={isChecked ? ClickedCheckBox : UnClickedCheckBox}
+        src={isChecked ? CheckboxIcon : CheckboxOutlineBlankIcon}
         alt={isChecked ? 'Checked' : 'Unchecked'}
         width={size || 24}
         height={size || 24}

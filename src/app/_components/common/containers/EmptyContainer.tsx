@@ -7,7 +7,7 @@ interface EmptyContainerProps {
 const EmptyContainer = ({ colSpan }: EmptyContainerProps) => {
   return (
     <td colSpan={colSpan}>
-      <div className="w-full h-40 bg-cus-100 content-center">
+      <div className="h-40 w-full content-center bg-cus-100">
         <EmptyContentModule />
       </div>
     </td>
