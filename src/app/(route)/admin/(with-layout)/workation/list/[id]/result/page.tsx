@@ -11,15 +11,12 @@ import { resultList } from '@/_types/adminType';
 import CheckboxContainer from '@/_components/common/containers/CheckboxContainer';
 import FilteringBarContainer from '@/_components/common/containers/FilteringBarContainer';
 import RangeContainer from '@/_components/common/containers/RangeContainer';
-
-const headers = [
-  { title: '번호', width: '50px' },
-  { title: '이름', width: '130px' },
-  { title: '아이디', flexGrow: true },
-  { title: '소속', flexGrow: true },
-  { title: '확률', width: '100px' },
-  { title: '상태', width: '130px' },
-];
+import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
+import TableHeaderAtom from '@/_components/common/atoms/TableHeaderAtom';
+import EmptyContainer from '@/_components/common/containers/EmptyContainer';
+import TableBodyModule from '@/_components/common/modules/TableBodyModule';
+import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
+import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAtom';
 
 const data = [
   {
@@ -27,27 +24,29 @@ const data = [
     이름: '홍길동',
     아이디: 'hong.gil',
     소속: '개발팀',
-    확률: { text: '3.8%', color: 'orange' },
-    상태: { text: '미당첨', color: 'gray' },
+    확률: { text: '3.8%', color: 'text-primaryDark' },
+    상태: { text: '미당첨', color: 'text-gray' },
   },
   {
     id: 2,
     이름: '홍길동',
     아이디: 'hong.gil',
     소속: '개발팀',
-    확률: { text: '3.8%', color: 'orange' },
-    상태: { text: '당첨취소', color: 'red' },
+    확률: { text: '3.8%', color: 'text-primaryDark' },
+    상태: { text: '당첨취소', color: 'text-negative' },
   },
   {
     id: 3,
     이름: '홍길동',
     아이디: 'hong.gil',
     소속: '개발팀',
-    확률: { text: '3.8%', color: 'orange' },
-    상태: { text: '당첨확정', color: 'green' },
+    확률: { text: '3.8%', color: 'text-primaryDark' },
+    상태: { text: '당첨확정', color: 'text-[#008726]' },
   },
 ];
 const AdminWorkationListResultPage = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
   const [param, setParam] = useState<{
     order: string;
@@ -100,9 +99,46 @@ const AdminWorkationListResultPage = () => {
 
         <FilteringButtonAtom onClick={() => setIsFilteringBarOpen(true)} />
       </div>
-      <TableContainer headers={headers} data={data} />
+      <TableContainer>
+        <TableHeaderModule>
+          <TableHeaderAtom width="78px" isFirst>
+            번호
+          </TableHeaderAtom>
+          <TableHeaderAtom width="130px">이름</TableHeaderAtom>
+          <TableHeaderAtom>아이디</TableHeaderAtom>
+          <TableHeaderAtom>소속</TableHeaderAtom>
+          <TableHeaderAtom width="100px">확률</TableHeaderAtom>
+          <TableHeaderAtom width="130px" isLast>
+            상태
+          </TableHeaderAtom>
+        </TableHeaderModule>
+        <tbody>
+          {data.length <= 0 ? (
+            <EmptyContainer colSpan={8} />
+          ) : (
+            data.map((item, index) => (
+              <TableBodyModule key={item.id}>
+                <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
+                <TableBodyAtom>{item.이름}</TableBodyAtom>
+                <TableBodyAtom>{item.아이디}</TableBodyAtom>
+                <TableBodyAtom>{item.소속}</TableBodyAtom>
+                <TableBodyAtom color={item.확률.color}>
+                  {item.확률.text}
+                </TableBodyAtom>
+                <TableBodyAtom color={item.상태.color} isLast>
+                  {item.상태.text}
+                </TableBodyAtom>
+              </TableBodyModule>
+            ))
+          )}
+        </tbody>
+      </TableContainer>
       <div className="mt-28 flex w-full items-center justify-center">
-        <PaginationModule />
+        <PaginationModule
+          totalPages={1}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
       </div>
       <FilteringBarContainer
         isOpen={isFilteringBarOpen}
