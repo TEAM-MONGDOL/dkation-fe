@@ -49,11 +49,7 @@ const PaginationModule = ({
   const endPage = Math.min(startPage + 4, totalPages);
 
   return (
-<<<<<<< HEAD
-    <div className="flex bg-white">
-=======
     <div className="flex rounded-lg bg-white">
->>>>>>> e85c873 (refactor: 아이콘 이름에 맞게 경로 변경)
       <div className="flex h-12 w-12 items-center justify-center rounded-l-lg border border-stroke-100">
         <button onClick={handlePrev} disabled={startPage === 1}>
           <Image src={getLeftArrowIcon()} alt="LeftArrowIcon" />
