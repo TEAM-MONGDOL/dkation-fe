@@ -75,7 +75,7 @@ const AdminWorkationListPenaltyPage = () => {
               <TableHeaderAtom>아이디</TableHeaderAtom>
               <TableHeaderAtom width="100px">소속</TableHeaderAtom>
               <TableHeaderAtom width="100px">지급 일시</TableHeaderAtom>
-              <TableHeaderAtom width="130px" isLast>
+              <TableHeaderAtom width="140px" isLast>
                 패널티
               </TableHeaderAtom>
             </TableHeaderModule>
@@ -92,7 +92,9 @@ const AdminWorkationListPenaltyPage = () => {
                     <TableBodyAtom>{item.소속}</TableBodyAtom>
                     <TableBodyAtom>{item.지급일시}</TableBodyAtom>
                     <TableBodyAtom isLast>
-                      <button>부여하기</button>
+                      <button className="rounded-full bg-primary px-4 py-1.5 text-4">
+                        부여하기
+                      </button>
                     </TableBodyAtom>
                   </TableBodyModule>
                 ))

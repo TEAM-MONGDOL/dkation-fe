@@ -71,7 +71,9 @@ const WorkationList = () => {
     startDate: null,
     endDate: null,
   });
-
+  const penaltyRouteButtonClick = (id: number) => {
+    router.push(`/admin/workation/list/${id}/result`);
+  };
   const [startDate, setStartDate] = useState<Date>(
     dayjs().subtract(1, 'year').toDate(),
   );
@@ -119,7 +121,7 @@ const WorkationList = () => {
           <TableHeaderAtom width="140px">모집 기간</TableHeaderAtom>
           <TableHeaderAtom width="140px">워케이션 기간</TableHeaderAtom>
           <TableHeaderAtom width="110px">상태</TableHeaderAtom>
-          <TableHeaderAtom width="130px">결과및 페널티</TableHeaderAtom>
+          <TableHeaderAtom width="130px">결과 및 페널티</TableHeaderAtom>
           <TableHeaderAtom width="150px" isLast>
             내용
           </TableHeaderAtom>
@@ -139,7 +141,10 @@ const WorkationList = () => {
                   {item.상태.text}
                 </TableBodyAtom>
                 <TableBodyAtom>
-                  <button className="rounded-full bg-primary px-6 py-2 text-4 font-semibold text-white">
+                  <button
+                    onClick={() => penaltyRouteButtonClick(item.id)}
+                    className="rounded-full bg-primary px-6 py-2 text-4 font-semibold text-white"
+                  >
                     자세히
                   </button>
                 </TableBodyAtom>
