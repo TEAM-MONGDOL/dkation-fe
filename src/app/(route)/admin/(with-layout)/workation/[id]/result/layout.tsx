@@ -21,12 +21,12 @@ const AdminWorkationResultLayout = ({ children, params }: Props) => {
     {
       id: '1',
       title: '추첨 결과',
-      url: `/admin/workation/list/${resultId}/result`,
+      url: `/admin/workation/${resultId}/result`,
     },
     {
       id: '2',
       title: '결과 통계 및 페널티',
-      url: `/admin/workation/list/${resultId}/result/penalty`,
+      url: `/admin/workation/${resultId}/result/penalty`,
     },
   ];
 

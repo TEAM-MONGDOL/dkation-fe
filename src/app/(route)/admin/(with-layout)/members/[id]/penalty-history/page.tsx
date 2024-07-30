@@ -48,7 +48,7 @@ const transformCurrentPenaltyData = (penalty: any) => {
 const AdminMembersPenaltyHistoryPage = () => {
   const router = useRouter();
   const moveToNewPenalty = () => {
-    router.push('/admin/workation/list/null/result/penalty');
+    router.push('/admin/workation/null/result/penalty');
   };
 
   const transformedCurrentPenaltyData =
