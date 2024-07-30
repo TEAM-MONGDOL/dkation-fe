@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import FilteringButtonAtom from '@/_components/common/atoms/FilteringButtonAtom';
 import Image from 'next/image';
-import { ResultIcon } from '@/_assets/icons';
+import { ExtensionIcon } from '@/_assets/icons';
 import TableContainer from '@/_components/common/containers/TableContainer';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
 import RadioButtonContainer from '@/_components/common/containers/RadioButtonContainer';
@@ -92,16 +92,16 @@ const AdminWorkationListResultPage = () => {
   };
   return (
     <div>
-      <div className="flex mb-6 justify-between  items-center w-full">
+      <div className="mb-6 flex w-full items-center justify-between">
         <div className="flex gap-2">
-          <Image src={ResultIcon} alt="ResultIcon" />
+          <Image src={ExtensionIcon} alt="ResultIcon" />
           <p className="text-h3 font-bold">추첨 결과</p>
         </div>
 
         <FilteringButtonAtom onClick={() => setIsFilteringBarOpen(true)} />
       </div>
       <TableContainer headers={headers} data={data} />
-      <div className="mt-28 w-full flex items-center justify-center">
+      <div className="mt-28 flex w-full items-center justify-center">
         <PaginationModule />
       </div>
       <FilteringBarContainer
