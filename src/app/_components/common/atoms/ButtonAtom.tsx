@@ -2,7 +2,7 @@ interface ButtonProps {
   buttonStyle: 'yellow' | 'dark' | 'red';
   onClick?: () => void;
   text: string;
-  type?: 'button' | 'submit';
+  type: 'button' | 'submit';
   width?: 'fixed' | 'grow';
 }
 
@@ -45,7 +45,7 @@ const ButtonAtom = ({
   buttonStyle,
   text,
   onClick,
-  type = 'button',
+  type,
   width,
 }: ButtonProps) => {
   const baseClasses =
