@@ -117,7 +117,7 @@ const AdminPointsRequestPage = () => {
       </div>
       <TableContainer>
         <TableHeaderModule>
-          <TableHeaderAtom isFirst width="100px">
+          <TableHeaderAtom isFirst width="80px">
             번호
           </TableHeaderAtom>
           <TableHeaderAtom width="150px">분류</TableHeaderAtom>
@@ -132,7 +132,7 @@ const AdminPointsRequestPage = () => {
         ) : (
           data.map((item, idx) => (
             <TableBodyModule key={item.id}>
-              <TableBodyAtom isFirst>{idx}</TableBodyAtom>
+              <TableBodyAtom isFirst>{idx + 1}</TableBodyAtom>
               <TableBodyAtom>{item.category}</TableBodyAtom>
               <TableBodyAtom>{item.name}</TableBodyAtom>
               <TableBodyAtom>{item.requestedAt}</TableBodyAtom>
@@ -152,11 +152,13 @@ const AdminPointsRequestPage = () => {
         )}
       </TableContainer>
       {data.length > 0 && (
-        <PaginationModule
-          currentPage={page}
-          setCurrentPage={setPage}
-          totalPages={Math.ceil(data.length / 10)}
-        />
+        <div className="flex w-full items-center justify-center">
+          <PaginationModule
+            currentPage={page}
+            setCurrentPage={setPage}
+            totalPages={Math.ceil(data.length / 10)}
+          />
+        </div>
       )}
       <div className="flex w-full items-center justify-center" />
       <FilteringBarContainer
@@ -170,6 +172,7 @@ const AdminPointsRequestPage = () => {
           selectedOption={param.order}
           setSelectedOption={(order) => setParam({ ...param, order })}
         />
+        <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         <CheckboxContainer
           title="분류"
           options={Object.entries(pointRequestStatusList) as [string, string][]}
@@ -178,8 +181,9 @@ const AdminPointsRequestPage = () => {
             setParam({ ...param, state })
           }
         />
+        <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         <CheckboxContainer
-          title="category"
+          title="구분"
           options={[
             ['SELF_STUDY', '자기계발'],
             ['VOLUNTEER', '봉사활동'],
@@ -188,6 +192,7 @@ const AdminPointsRequestPage = () => {
           selectedOptions={param.type}
           setSelectedOptions={(type: string[]) => setParam({ ...param, type })}
         />
+        <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         <DatePickerContainer
           title="신청 및 심사 일시"
           selectedTag={selectedDateTag}
