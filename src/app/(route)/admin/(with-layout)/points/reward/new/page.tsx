@@ -9,7 +9,6 @@ import InfoSectionContainer from '@/_components/common/containers/InfoSectionCon
 import SelectContainer from '@/_components/common/containers/SelectContainer';
 import TableContainer from '@/_components/common/containers/TableContainer';
 import DropdownModule from '@/_components/common/modules/DropdownModule';
-import InputModule from '@/_components/common/modules/InputModule';
 import ModalModule from '@/_components/common/modules/ModalModule';
 import SearchingBoxModule from '@/_components/common/modules/SearchingBoxModule';
 import TableBodyModule from '@/_components/common/modules/TableBodyModule';
@@ -73,9 +72,6 @@ const AdminPointsRewardNewPage = () => {
       <section className="flex w-full flex-col gap-y-[60px]">
         <div className="flex w-[200px] flex-col gap-y-4">
           <h3 className="font-bold">분류</h3>
-          {/* TODO : 애니메이션 필요 */}
-          {/* TODO : Width 조정 필요 (기본, 아이템 모두) */}
-          {/* TODO : selectedOption도 전달받는 게 좋을 듯 */}
           <DropdownModule
             options={['봉사활동', '자기계발']}
             onSelect={setSelectedType}
