@@ -123,9 +123,6 @@ const AdminWorkationListPenaltyPage = () => {
           confirmText="확인"
           confirmButtonStyle="dark"
           cancelButtonStyle="yellow"
-          onClick={() => {
-            setIsConfirmModelOpen(false);
-          }}
           onConfirm={() => {
             //  TODO : 페널티 등록 API 호출
             alert('페널티 등록 완료');
