@@ -34,16 +34,14 @@ const NoticesListPage = () => {
   const [selectedDateTag, setSelectedDateTag] =
     useState<DatePickerTagType>('ALL');
   const [currentPage, setCurrentPage] = useState(1);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
   const [param, setParam] = useState<{
     order: string;
     noticeType: string[];
-    startDate: Date | null;
-    endDate: Date | null;
   }>({
     order: 'RECENT',
     noticeType: ['NOTICE', 'RESULT', 'EVENT'],
-    startDate: null,
-    endDate: null,
   });
 
   const router = useRouter();
@@ -61,10 +59,10 @@ const NoticesListPage = () => {
       ...param,
       order: 'RECENT',
       noticeType: ['NOTICE', 'RESULT', 'EVENT'],
-      startDate: null,
-      endDate: null,
     });
     setSelectedDateTag('ALL');
+    setStartDate(null);
+    setEndDate(null);
   };
 
   function moveToNoticesDetail(id: number) {
@@ -108,13 +106,13 @@ const NoticesListPage = () => {
           title="등록 일시"
           selectedTag={selectedDateTag}
           setSelectedTag={setSelectedDateTag}
-          startDate={param.startDate}
+          startDate={startDate}
           setStartDate={(start: Date | null) => {
-            setParam({ ...param, startDate: start });
+            setStartDate(start);
           }}
-          endDate={param.endDate}
+          endDate={endDate}
           setEndDate={(end: Date | null) => {
-            setParam({ ...param, endDate: end });
+            setEndDate(end);
           }}
           startDatePlaceholder="시작일 선택"
           endDatePlaceholder="마감일 선택"
