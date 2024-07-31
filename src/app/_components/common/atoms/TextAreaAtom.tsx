@@ -7,6 +7,7 @@ interface TextboxAtomProps {
   sizeClass: string;
   name: string;
   readOnly?: boolean;
+  bgColor?: string;
 }
 
 const TextAreaAtom = ({
@@ -16,10 +17,11 @@ const TextAreaAtom = ({
   sizeClass,
   name,
   readOnly,
+  bgColor,
 }: TextboxAtomProps) => {
   return (
     <textarea
-      className={`w-full p-3 border border-stroke-100 placeholder-sub-200 rounded-regular text-3 outline-none resize-none ${sizeClass}`}
+      className={`w-full resize-none rounded-regular border border-stroke-100 p-3 text-3 placeholder-sub-200 outline-none ${readOnly ? 'cursor-not-allowed' : ''} ${sizeClass} ${bgColor}`}
       placeholder={placeholder}
       value={value}
       onChange={onChange}
