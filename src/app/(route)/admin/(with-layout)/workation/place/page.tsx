@@ -13,6 +13,7 @@ import { LocationList, orderList } from '@/_types/adminType';
 import CheckboxContainer from '@/_components/common/containers/CheckboxContainer';
 import FilteringBarContainer from '@/_components/common/containers/FilteringBarContainer';
 import { useRouter } from 'next/navigation';
+import PlaceListButton from '@/_components/admin/workation/placeListButton';
 
 const data = [
   { subtitle: '이름', content: '양양 쏠비치' },
@@ -28,6 +29,7 @@ const data = [
 ];
 const AdminWorkationPlaceListPage = () => {
   const router = useRouter();
+
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [param, setParam] = useState<{
@@ -74,9 +76,21 @@ const AdminWorkationPlaceListPage = () => {
         <EmptyContainer />
       ) : (
         <div className="flex flex-col gap-2.5">
-          <InfoSectionContainer row image={imsyPlace} data={data} />
-          <InfoSectionContainer row image={imsyPlace} data={data} />
-          <InfoSectionContainer row image={imsyPlace} data={data} />
+          <PlaceListButton
+            image={imsyPlace}
+            data={data}
+            domain="/admin/workation/place/1"
+          />
+          <PlaceListButton
+            image={imsyPlace}
+            data={data}
+            domain="/admin/workation/place/1"
+          />
+          <PlaceListButton
+            image={imsyPlace}
+            data={data}
+            domain="/admin/workation/place/1"
+          />
         </div>
       )}
       <div className="relative mt-8">

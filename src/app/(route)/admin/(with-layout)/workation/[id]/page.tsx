@@ -20,7 +20,7 @@ const workationExample = {
   description: '상세내용입니다.',
 };
 
-const WorkationNew = () => {
+const WorkationDetail = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const handleDelete = () => {
     setIsDeleteModalOpen(true);
@@ -130,4 +130,4 @@ const WorkationNew = () => {
   );
 };
 
-export default WorkationNew;
+export default WorkationDetail;
