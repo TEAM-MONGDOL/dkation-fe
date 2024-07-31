@@ -13,6 +13,7 @@ interface ModalModuleProps {
   cancelText?: string;
   confirmButtonStyle?: 'yellow' | 'dark' | 'red';
   cancelButtonStyle?: 'yellow' | 'dark' | 'red';
+  infoText?: string;
 }
 
 const ModalModule = ({
@@ -24,10 +25,11 @@ const ModalModule = ({
   cancelText = '취소',
   confirmButtonStyle = 'yellow',
   cancelButtonStyle = 'dark',
+  infoText,
 }: ModalModuleProps) => {
   return (
     <div className="fixed left-0 top-0 z-10 flex h-screen w-screen items-center justify-center bg-black/30">
-      <div className="relative w-[600px] rounded-regular bg-white p-10">
+      <div className="relative w-[600px] rounded-regular bg-white p-10 text-center">
         <button className="absolute right-5 top-5" onClick={onCancel}>
           <Image src={CloseIcon} alt="x" />
         </button>
@@ -37,7 +39,7 @@ const ModalModule = ({
         {children}
         <div className="flex w-full gap-2 pt-10">
           <ButtonAtom
-            buttonStyle={confirmButtonStyle}
+            buttonStyle={cancelButtonStyle}
             width="grow"
             onClick={onCancel}
             text={cancelText}
@@ -45,13 +47,14 @@ const ModalModule = ({
           />
 
           <ButtonAtom
-            buttonStyle={cancelButtonStyle}
+            buttonStyle={confirmButtonStyle}
             width="grow"
             onClick={onConfirm}
             text={confirmText}
             type="button"
           />
         </div>
+        <p className="pt-5 text-center text-5 text-sub-200">{infoText}</p>
       </div>
     </div>
   );
