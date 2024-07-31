@@ -71,7 +71,7 @@ const AdminWorkationPlaceEditPage = () => {
 
   return (
     <section className="flex flex-col gap-7">
-      <TitleBarModule title="워케이션 장소 수정" type="LEFT" />
+      <TitleBarModule title="장소 수정" type="LEFT" />
       <div className="flex w-full gap-7">
         <InputModule
           subtitle="이름"
