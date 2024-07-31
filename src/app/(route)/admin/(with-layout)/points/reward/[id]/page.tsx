@@ -78,8 +78,8 @@ const AdminPointsRewardDetailPage = () => {
     <section className="flex w-full flex-col gap-y-10 overflow-y-auto">
       {/* TODO : Left onClick에 -1 적용 필요 */}
       <TitleBarModule title="포인트 지급 내역 상세" type="LEFT" />
-      <div className="flex w-full items-start gap-x-[30px]">
-        <div className="flex min-w-[400px] basis-1/3 flex-col gap-y-[30px]">
+      <div className="flex w-full items-start gap-x-3xl">
+        <div className="flex min-w-[400px] basis-1/3 flex-col gap-y-3xl">
           {/* TODO : InputModule에 Readonly 필요, gap 추가 필요 */}
           <InputModule
             subtitle="구분"
@@ -111,10 +111,12 @@ const AdminPointsRewardDetailPage = () => {
             />
             <TableContainer>
               <TableHeaderModule bgColor="bg-cus-100">
-                <TableHeaderAtom width="100px">번호</TableHeaderAtom>
+                <TableHeaderAtom isFirst width="80px">
+                  번호
+                </TableHeaderAtom>
                 <TableHeaderAtom>이름</TableHeaderAtom>
                 <TableHeaderAtom>소속</TableHeaderAtom>
-                <TableHeaderAtom width="120px">아이디</TableHeaderAtom>
+                <TableHeaderAtom isLast>아이디</TableHeaderAtom>
               </TableHeaderModule>
               <tbody>
                 {users.length <= 0 ? (
