@@ -43,11 +43,13 @@ const AdminWorkationPlaceDetailPage = () => {
           subtitle="이름"
           value={workationPlaceExample.placeName}
           name="placeName"
+          status="readonly"
         />
         <InputModule
           subtitle="주소"
           value={workationPlaceExample.address}
           name="address"
+          status="readonly"
         />
       </div>
       <div className="flex w-full gap-7">
@@ -55,6 +57,7 @@ const AdminWorkationPlaceDetailPage = () => {
           subtitle="최대 인원"
           value={workationPlaceExample.maxPeople}
           name="maxPeople"
+          status="readonly"
         />
         <InputModule
           subtitle="등록 일시"
@@ -84,7 +87,6 @@ const AdminWorkationPlaceDetailPage = () => {
         <p className="mb-4 text-3 font-bold">상세 내용</p>
         <TextAreaModule
           readonly
-          placeholder="상세 내용을 입력하세요"
           size="MEDIUM"
           name="상세내용"
           value={workationPlaceExample.description}
