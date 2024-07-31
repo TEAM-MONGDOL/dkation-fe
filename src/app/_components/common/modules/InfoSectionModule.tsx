@@ -4,9 +4,12 @@ interface InfoSectionModuleProps {
   isStartAlign?: boolean;
   data: { subtitle: string; content: string }[];
 }
-const InfoSectionModule = ({ data, isStartAlign }: InfoSectionModuleProps) => {
+const InfoSectionModule = ({
+  data,
+  isStartAlign = true,
+}: InfoSectionModuleProps) => {
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 px-5">
       {data.map((item, index) => (
         <InfoContentAtom
           key={`data-${item}`}
