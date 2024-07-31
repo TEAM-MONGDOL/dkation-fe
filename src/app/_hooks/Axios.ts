@@ -33,7 +33,7 @@ api.interceptors.response.use(
       try {
         const refresh = sessionStorage.getItem('refreshToken');
         const email = sessionStorage.getItem('email');
-        const res = await api.post('/user/refresh', {
+        const res = await api.post('/refresh', {
           refreshToken: refresh,
           email,
         });
