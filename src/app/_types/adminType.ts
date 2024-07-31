@@ -26,7 +26,7 @@ export const workationListSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
-export const pointSupplyInfo = z.object({
+export const pointSupplyInfoSchema = z.object({
   id: z.number(),
   pointSupplyType: z.union([z.literal('PERSONAL'), z.literal('GROUP')]),
   pointTitle: z.string(),
@@ -36,7 +36,19 @@ export const pointSupplyInfo = z.object({
 });
 
 export const pointSupplyListSchema = z.object({
-  pointSupplyList: pointSupplyInfo.array(),
+  pointSupplyList: pointSupplyInfoSchema.array(),
+  pageInfo: pageInfoSchema,
+});
+
+export const pointSupplyMemberSchema = z.object({
+  name: z.string(),
+  department: z.string(),
+  accountId: z.string(),
+});
+
+export const pointSupplyDetailSchema = z.object({
+  pointSupplyInfo: pointSupplyInfoSchema,
+  pointSupplyMemberList: pointSupplyMemberSchema.array(),
   pageInfo: pageInfoSchema,
 });
 
