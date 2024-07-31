@@ -6,43 +6,85 @@ import FileContainer from '@/_components/common/containers/FileContainer';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import FileModule from '@/_components/common/modules/FileModule';
 import ModalModule from '@/_components/common/modules/ModalModule';
 import InfoSectionContainer from '@/_components/common/containers/InfoSectionContainer';
 import dayjs from 'dayjs';
-import { useRouter } from 'next/navigation';
 
-const AdminWorkationPlaceNewPage = () => {
-  const [formData, setFormData] = useState({
-    placeName: '',
-    address: '',
-    maxPeople: '',
-    registrationDate: '2024.07.14',
-  });
-  const handleChange = (e: any) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-  const [isConfirmModelOpen, setIsConfirmModelOpen] = useState(false);
+interface FileItem {
+  name: string;
+  url: string;
+  type: 'image' | 'other';
+}
+
+const data = {
+  placeName: '양양',
+  address: '강원도 양양군 손양면 도화길 14',
+  maxPeople: '2',
+  registrationDate: '2024.07.14',
+  description: '상세내용입니다.',
+  files: [
+    {
+      name: '첨부파일1.pdf',
+      url: '/file/path/example/file1.pdf',
+      type: 'other',
+    },
+    {
+      name: '첨부파일2.pdf',
+      url: '/file/path/example/file2.pdf',
+      type: 'other',
+    },
+  ] as FileItem[],
+};
+const AdminWorkationPlaceEditPage = () => {
   const router = useRouter();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  const [values, setValues] = useState({
+    placeName: data.placeName,
+    address: data.address,
+    maxPeople: data.maxPeople,
+    registrationDate: data.registrationDate,
+    files: data.files,
+  });
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setValues({
+      ...values,
+      [e.target.name]: e.target.value,
+    });
+  };
+  const handleFilesChange = (newFiles: File[]) => {
+    const fileItems: FileItem[] = newFiles.map((file) => ({
+      name: file.name,
+      url: URL.createObjectURL(file),
+      type: file.type.startsWith('image') ? 'image' : 'other',
+    }));
+
+    setValues({
+      ...values,
+      files: fileItems,
+    });
+  };
+
   return (
     <section className="flex flex-col gap-7">
-      <TitleBarModule title="장소 추가" type="LEFT" />
+      <TitleBarModule title="워케이션 장소 수정" type="LEFT" />
       <div className="flex w-full gap-7">
         <InputModule
           subtitle="이름"
           textCount={20}
           placeholder="장소 이름을 입력하세요."
-          value={formData.placeName}
+          value={values.placeName}
           onChange={handleChange}
           name="placeName"
         />
         <InputModule
           subtitle="주소"
           placeholder="주소를 입력하세요."
-          value={formData.address}
+          value={values.address}
           onChange={handleChange}
           name="address"
         />
@@ -51,72 +93,88 @@ const AdminWorkationPlaceNewPage = () => {
         <InputModule
           subtitle="최대 인원"
           placeholder="0"
-          value={formData.maxPeople}
+          value={values.maxPeople}
           onChange={handleChange}
           name="maxPeople"
         />
         <InputModule
           subtitle="등록 일시"
           status="disabled"
-          value={formData.registrationDate}
+          value={values.registrationDate}
           onChange={() => {}}
         />
       </div>
-      <FileContainer />
-      <div>
+      <div className="flex flex-col gap-4 py-7">
+        {values.files.length > 0 ? (
+          <div className="flex flex-col gap-2">
+            {values.files.map((file) => (
+              <FileModule
+                key={file.url}
+                fileName={file.name}
+                fileType={file.type}
+                fileUrl={file.url}
+                buttonType="delete"
+                onDelete={() => console.log(`Delete ${file.name}`)} // 추후 수정 예정
+              />
+            ))}
+          </div>
+        ) : (
+          ''
+        )}
+        <FileContainer onFileChange={handleFilesChange} /> <div />
         <p className="mb-4 text-3 font-bold">상세 내용</p>
         <TextAreaModule
           placeholder="상세 내용을 입력하세요"
           size="MEDIUM"
           maxLength={500}
           name="상세내용"
+          value={data.description}
         />
       </div>
-      <div className="flex justify-end gap-5">
+      <div className="mt-12 flex justify-end gap-5">
         <ButtonAtom
+          width="fixed"
           text="취소"
           type="button"
-          width="fixed"
           buttonStyle="dark"
+          onClick={() => router.push('/admin/workation/place')}
         />
         <ButtonAtom
-          text="등록"
-          type="button"
           width="fixed"
+          text="수정"
+          type="button"
           buttonStyle="yellow"
-          onClick={() => setIsConfirmModelOpen(true)}
+          onClick={() => setIsEditModalOpen(true)}
         />
       </div>
-      {isConfirmModelOpen && (
+      {isEditModalOpen && (
         <ModalModule
-          title="장소를 추가하시겠습니까?"
+          title="워케이션 장소를 수정하시겠습니까?"
           confirmText="확인"
           cancelText="취소"
-          confirmButtonStyle="dark"
-          cancelButtonStyle="yellow"
           onConfirm={() => {
-            //  TODO : 워케이션 장소 등록 API 호출
-            alert('워케이션 장소 등록 완료');
-            setIsConfirmModelOpen(false);
+            //  TODO : 워케이션 장소 수정 API 호출
+            alert('워케이션 장소 수정 완료');
+            setIsEditModalOpen(false);
             router.push('/admin/workation/place');
           }}
           onCancel={() => {
-            setIsConfirmModelOpen(false);
+            setIsEditModalOpen(false);
           }}
         >
           <InfoSectionContainer
             data={[
               {
-                subtitle: '제목',
-                content: formData.placeName,
+                subtitle: '이름',
+                content: values.placeName,
               },
               {
-                subtitle: '장소',
-                content: formData.address,
+                subtitle: '주소',
+                content: values.address,
               },
               {
-                subtitle: '최대인원',
-                content: formData.maxPeople,
+                subtitle: '최대 인원',
+                content: values.maxPeople,
               },
             ]}
           />
@@ -126,4 +184,4 @@ const AdminWorkationPlaceNewPage = () => {
   );
 };
 
-export default AdminWorkationPlaceNewPage;
+export default AdminWorkationPlaceEditPage;

@@ -33,7 +33,7 @@ const workationPlaceExample = {
     },
   ] as FileItem[],
 };
-const AdminWorkationPlaceNewPage = () => {
+const AdminWorkationPlaceDetailPage = () => {
   const router = useRouter();
   return (
     <section className="flex flex-col gap-7">
@@ -97,7 +97,9 @@ const AdminWorkationPlaceNewPage = () => {
           width="fixed"
           buttonStyle="dark"
           onClick={() =>
-            router.push(`/admin/workation/${workationPlaceExample.id}/edit`)
+            router.push(
+              `/admin/workation/place/${workationPlaceExample.id}/edit`,
+            )
           }
         />
       </div>
@@ -105,4 +107,4 @@ const AdminWorkationPlaceNewPage = () => {
   );
 };
 
-export default AdminWorkationPlaceNewPage;
+export default AdminWorkationPlaceDetailPage;

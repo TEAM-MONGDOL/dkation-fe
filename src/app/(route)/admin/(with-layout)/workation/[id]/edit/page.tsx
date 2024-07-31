@@ -28,7 +28,7 @@ const data = {
   endDateWorkation: dayjs('2024-07-14,').toDate(),
 };
 
-const WorkationNew = () => {
+const WorkationEdit = () => {
   const router = useRouter();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [values, setValues] = useState({
@@ -38,15 +38,7 @@ const WorkationNew = () => {
     place: data.place,
     description: data.description,
   });
-  const closeModal = () => {
-    setIsEditModalOpen(false);
-  };
 
-  const confirmEdit = () => {
-    // 수정 로직 추가 예정
-    setIsEditModalOpen(false);
-    router.push('/admin/notices');
-  };
   const [startDateRecruitment, setStartDateRecruitment] = useState<Date | null>(
     data.startDateRecruitment,
   );
@@ -204,4 +196,4 @@ const WorkationNew = () => {
   );
 };
 
-export default WorkationNew;
+export default WorkationEdit;
