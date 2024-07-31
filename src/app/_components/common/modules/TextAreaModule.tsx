@@ -5,7 +5,7 @@ import TextAreaAtom from '@/_components/common/atoms/TextAreaAtom';
 import TextCountAtom from '@/_components/common/atoms/TextCountAtom';
 
 interface TextboxModuleProps {
-  placeholder: string;
+  placeholder?: string;
   size: 'SMALL' | 'MEDIUM' | 'LARGE';
   maxLength?: number;
   value?: string;

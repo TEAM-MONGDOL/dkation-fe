@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface TextboxAtomProps {
-  placeholder: string;
+  placeholder?: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   sizeClass: string;
