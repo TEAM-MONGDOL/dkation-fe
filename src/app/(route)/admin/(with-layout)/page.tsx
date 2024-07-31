@@ -46,23 +46,27 @@ const AdminMainPage = () => {
   return (
     <div className="flex w-full flex-col gap-y-12 overflow-y-auto">
       <div className="flex w-full flex-col gap-y-6">
-        <TitleBarModule title="워케이션 모집 현황" type="RIGHT" />
+        <TitleBarModule
+          title="워케이션 목록"
+          type="RIGHT"
+          url="/admin/workation"
+        />
         <TableContainer>
           <TableHeaderModule>
-            <TableHeaderAtom width="80px">번호</TableHeaderAtom>
+            <TableHeaderAtom isFirst width="80px">
+              번호
+            </TableHeaderAtom>
             <TableHeaderAtom>워케이션</TableHeaderAtom>
+            {/* TODO : API에서 받을 때는 모집 시작일자, 종료일자 따로 받앗어 dayjs를 통한 포맷팅으로 넣어줘야 함 */}
             <TableHeaderAtom width="260px">모집 기간</TableHeaderAtom>
             <TableHeaderAtom width="260px">워케이션 기간</TableHeaderAtom>
             <TableHeaderAtom width="120px">모집 인원</TableHeaderAtom>
             <TableHeaderAtom width="120px">지원자 수</TableHeaderAtom>
-            <TableHeaderAtom width="160px" />
+            <TableHeaderAtom isLast width="160px" />
           </TableHeaderModule>
-
           <tbody>
             {wkData.length <= 0 ? (
-              <td colSpan={6}>
-                <EmptyContainer />
-              </td>
+              <EmptyContainer colSpan={6} />
             ) : (
               wkData.map((item, index) => (
                 <TableBodyModule key={item.id}>
@@ -84,23 +88,26 @@ const AdminMainPage = () => {
         </TableContainer>
       </div>
       <div className="flex w-full flex-col gap-y-6">
-        <TitleBarModule title="포인트 신청 내역" type="RIGHT" />
+        <TitleBarModule
+          title="포인트 신청 내역"
+          type="RIGHT"
+          url="/admin/points/request"
+        />
         <TableContainer>
           <TableHeaderModule>
-            <TableHeaderAtom width="80px">번호</TableHeaderAtom>
+            <TableHeaderAtom isFirst width="80px">
+              번호
+            </TableHeaderAtom>
             <TableHeaderAtom width="200px">구분</TableHeaderAtom>
             <TableHeaderAtom width="190px">이름</TableHeaderAtom>
             <TableHeaderAtom>신청 일시</TableHeaderAtom>
             <TableHeaderAtom>심사 일시</TableHeaderAtom>
             <TableHeaderAtom width="160px">상태</TableHeaderAtom>
-            <TableHeaderAtom width="160px" />
+            <TableHeaderAtom isLast width="160px" />
           </TableHeaderModule>
-
           <tbody>
             {pointData.length <= 0 ? (
-              <td colSpan={6}>
-                <EmptyContainer />
-              </td>
+              <EmptyContainer colSpan={6} />
             ) : (
               pointData.map((item, index) => (
                 <TableBodyModule key={item.id}>

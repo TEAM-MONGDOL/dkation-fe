@@ -79,11 +79,15 @@ const AdminMembersPointHistoryPage = () => {
       </div>
       <TableContainer>
         <TableHeaderModule>
-          <TableHeaderAtom width="90px">번호</TableHeaderAtom>
+          <TableHeaderAtom isFirst width="80px">
+            번호
+          </TableHeaderAtom>
           <TableHeaderAtom>분류</TableHeaderAtom>
           <TableHeaderAtom width="220px">일시</TableHeaderAtom>
           <TableHeaderAtom width="200px">변동</TableHeaderAtom>
-          <TableHeaderAtom width="200px">확률</TableHeaderAtom>
+          <TableHeaderAtom isLast width="200px">
+            확률
+          </TableHeaderAtom>
         </TableHeaderModule>
 
         <tbody>
@@ -96,9 +100,9 @@ const AdminMembersPointHistoryPage = () => {
                 <TableBodyAtom>{item.분류}</TableBodyAtom>
                 <TableBodyAtom>{item.일시}</TableBodyAtom>
                 <TableBodyAtom color={item.변동.color}>
-                  ${item.변동.text} P
+                  {item.변동.text} P
                 </TableBodyAtom>
-                <TableBodyAtom>{item.총합}</TableBodyAtom>
+                <TableBodyAtom isLast>{item.총합}</TableBodyAtom>
               </TableBodyModule>
             ))
           )}
@@ -125,7 +129,7 @@ const AdminMembersPointHistoryPage = () => {
         />
         <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         <DatePickerContainer
-          title="날짜"
+          title="일시"
           selectedTag={selectedDateTag}
           setSelectedTag={setSelectedDateTag}
           startDate={param.startDate}

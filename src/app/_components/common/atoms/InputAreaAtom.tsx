@@ -7,6 +7,7 @@ interface InputProps {
   textCount?: number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   name?: string;
+  type?: 'text' | 'password' | 'number';
 }
 
 const InputAreaAtom = ({
@@ -16,6 +17,7 @@ const InputAreaAtom = ({
   textCount,
   onChange,
   name,
+  type = 'text',
 }: InputProps) => {
   const getStatus = () => {
     switch (status) {
@@ -49,6 +51,7 @@ const InputAreaAtom = ({
         value={value || ''}
         onChange={handleChange}
         name={name}
+        type={type}
       />
       {isInteractive && textCount && (
         <div className="absolute bottom-3.5 right-3.5">

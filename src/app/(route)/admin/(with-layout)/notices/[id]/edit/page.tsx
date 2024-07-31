@@ -170,7 +170,6 @@ const AdminWriteNoticesEditPage = () => {
           title="해당 게시글을 수정하시겠습니까?"
           cancelText="취소"
           confirmText="확인"
-          onClick={closeModal}
           onCancel={closeModal}
           onConfirm={confirmEdit}
         >

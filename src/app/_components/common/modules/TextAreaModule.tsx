@@ -12,6 +12,7 @@ interface TextboxModuleProps {
   onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   name: string;
   readonly?: boolean;
+  bgColor?: string;
 }
 
 const TextAreaModule = ({
@@ -22,6 +23,7 @@ const TextAreaModule = ({
   onChange,
   name,
   readonly = false,
+  bgColor,
 }: TextboxModuleProps) => {
   const [text, setText] = useState(value || '');
 
@@ -48,6 +50,7 @@ const TextAreaModule = ({
         sizeClass={sizeClass}
         name={name}
         readOnly={readonly}
+        bgColor={bgColor}
       />
       {!readonly && (
         <div className="absolute bottom-3.5 right-3.5 text-4 text-sub-200">

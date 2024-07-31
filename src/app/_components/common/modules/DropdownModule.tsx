@@ -39,7 +39,7 @@ const DropdownModule = ({
             onClick={() => setIsOpen(!isOpen)}
           >
             <span
-              className={`text-sub-200 ${selectedOption ? 'text-black' : ''}`}
+              className={`${selectedOption ? 'text-sub-400' : 'text-sub-200'}`}
             >
               {selectedOption || placeholder}
             </span>
@@ -59,6 +59,7 @@ const DropdownModule = ({
                 <DropdownItemAtom
                   key={option}
                   option={option}
+                  isSelect={selectedOption === option}
                   onSelect={() => {
                     onSelect(option);
                     setIsOpen(false);

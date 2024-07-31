@@ -9,10 +9,12 @@ interface PlusProps {
 const NavPlusAtom = ({ content, route }: PlusProps) => {
   return (
     <Link href={route}>
-      <button className="my-1.5 ml-[29px] flex h-8 w-32 items-center gap-2 rounded-regular bg-white pl-2 text-5 font-semibold text-sub-400">
-        <Image src={AddCircleIcon} alt="PlusRoundIcon" />
-        {content}
-      </button>
+      <div className="flex w-full py-1.5 pl-10">
+        <button className="flex h-8 w-full items-center gap-2 rounded-regular bg-white p-2 text-5 font-semibold text-sub-400">
+          <Image src={AddCircleIcon} alt="PlusRoundIcon" />
+          {content}
+        </button>
+      </div>
     </Link>
   );
 };

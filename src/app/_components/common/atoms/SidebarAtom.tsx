@@ -16,7 +16,7 @@ const SidebarAtom = ({ title, to }: SidebarAtomProps) => {
   return (
     <div
       onClick={() => router.push(to)}
-      className={`w-full py-3.5 pl-4 grow cursor-pointer text-cus-300 text-3 ${isActive ? 'font-bold' : ''}`}
+      className={`w-full grow cursor-pointer py-3.5 pl-4 text-3 text-cus-300 ${isActive ? 'font-bold' : ''}`}
       role="presentation"
     >
       {title}

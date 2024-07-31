@@ -111,9 +111,6 @@ const NoticeDetailPage = () => {
             cancelText="취소"
             confirmText="삭제"
             confirmButtonStyle="red"
-            onClick={() => {
-              setIsDeleteModalOpen(false);
-            }}
             onCancel={() => {
               setIsDeleteModalOpen(false);
             }}

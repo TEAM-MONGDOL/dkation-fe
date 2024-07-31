@@ -83,15 +83,16 @@ const AdminMembersListPage = () => {
       </FilteringBarContainer>
       <TableContainer>
         <TableHeaderModule>
-          <TableHeaderAtom width="120px">번호</TableHeaderAtom>
+          <TableHeaderAtom isFirst width="80px">
+            번호
+          </TableHeaderAtom>
           <TableHeaderAtom width="190px">이름</TableHeaderAtom>
           <TableHeaderAtom width="190px">아이디</TableHeaderAtom>
           <TableHeaderAtom>소속</TableHeaderAtom>
           <TableHeaderAtom width="140px">보유 포인트</TableHeaderAtom>
           <TableHeaderAtom width="120px">포인트 신청</TableHeaderAtom>
-          <TableHeaderAtom width="160px" />
+          <TableHeaderAtom isLast width="160px" />
         </TableHeaderModule>
-
         <tbody>
           {data.length <= 0 ? (
             <EmptyContainer colSpan={7} />

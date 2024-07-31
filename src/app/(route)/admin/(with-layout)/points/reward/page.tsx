@@ -88,7 +88,7 @@ const AdminPointsRewardPage = () => {
   const [isChecked, setIsChecked] = useState(false);
 
   return (
-    <div className="flex w-full flex-col gap-y-10 overflow-y-auto">
+    <section className="flex w-full flex-col gap-y-10 overflow-y-auto">
       <div className="flex w-full items-center justify-between">
         <TitleBarModule title="포인트 지급 내역" />
         <SearchingBoxModule
@@ -184,7 +184,7 @@ const AdminPointsRewardPage = () => {
           }}
         />
       </FilteringBarContainer>
-    </div>
+    </section>
   );
 };
 

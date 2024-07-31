@@ -60,7 +60,7 @@ const AdminPointsRewardNewPage = () => {
   const [selectedDelete, setSelectedDelete] = useState<MemberType[]>([]);
   const [isConfirmModelOpen, setIsConfirmModelOpen] = useState(false);
   const [isTeamFilterOpen, setIsTeamFilterOpen] = useState(false);
-  const [selectedType, setSelectedType] = useState<string>('봉사활동');
+  const [selectedType, setSelectedType] = useState<string>('');
   const [selectedOptions, setSelectedOptions] = useState<string[]>([
     '개발팀',
     '디자인팀',
@@ -68,7 +68,7 @@ const AdminPointsRewardNewPage = () => {
   ]);
 
   return (
-    <div className="flex h-full w-full flex-col gap-y-10 overflow-y-auto">
+    <section className="flex h-full w-full flex-col gap-y-10 overflow-y-auto">
       <TitleBarModule title="단체 포인트 등록" />
       <section className="flex w-full flex-col gap-y-[60px]">
         <div className="flex w-[200px] flex-col gap-y-4">
@@ -79,6 +79,7 @@ const AdminPointsRewardNewPage = () => {
           <DropdownModule
             options={['봉사활동', '자기계발']}
             onSelect={setSelectedType}
+            selectedOption={selectedType}
             placeholder="분류 선택"
           />
         </div>
@@ -110,7 +111,7 @@ const AdminPointsRewardNewPage = () => {
                     />
                   </div>
                   {isTeamFilterOpen && (
-                    <div className="absolute bottom-[-10px] right-0 translate-y-full bg-white">
+                    <div className="absolute bottom-[-10px] right-0 z-10 translate-y-full bg-white">
                       <SelectContainer
                         title="소속"
                         options={['개발팀', '디자인팀', '기획팀']}
@@ -125,7 +126,7 @@ const AdminPointsRewardNewPage = () => {
                 <TableHeaderModule>
                   <TableHeaderAtom
                     isFirst
-                    width="100px"
+                    width="80px"
                     isBoolean={selectedRequest.length === data.length}
                     onClickBoolean={() => {
                       if (selectedRequest.length === data.length) {
@@ -135,7 +136,7 @@ const AdminPointsRewardNewPage = () => {
                       }
                     }}
                   />
-                  <TableHeaderAtom width="100px">이름</TableHeaderAtom>
+                  <TableHeaderAtom>이름</TableHeaderAtom>
                   <TableHeaderAtom>소속</TableHeaderAtom>
                   <TableHeaderAtom isLast>아이디</TableHeaderAtom>
                 </TableHeaderModule>
@@ -196,7 +197,7 @@ const AdminPointsRewardNewPage = () => {
                 <TableHeaderModule>
                   <TableHeaderAtom
                     isFirst
-                    width="100px"
+                    width="80px"
                     isBoolean={
                       selectedDelete.length === selectedRequest.length &&
                       selectedRequest.length !== 0
@@ -209,7 +210,7 @@ const AdminPointsRewardNewPage = () => {
                       }
                     }}
                   />
-                  <TableHeaderAtom width="100px">이름</TableHeaderAtom>
+                  <TableHeaderAtom>이름</TableHeaderAtom>
                   <TableHeaderAtom>소속</TableHeaderAtom>
                   <TableHeaderAtom isLast>아이디</TableHeaderAtom>
                 </TableHeaderModule>
@@ -266,9 +267,6 @@ const AdminPointsRewardNewPage = () => {
             title="단체 포인트를 등록하시겠습니까?"
             confirmText="등록"
             cancelText="취소"
-            onClick={() => {
-              setIsConfirmModelOpen(false);
-            }}
             onConfirm={() => {
               //  TODO : 포인트 등록 API 호출
               alert('포인트 등록 완료');
@@ -301,7 +299,7 @@ const AdminPointsRewardNewPage = () => {
           </ModalModule>
         )}
       </section>
-    </div>
+    </section>
   );
 };
 

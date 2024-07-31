@@ -7,7 +7,7 @@ interface SubTitleProps {
 const NavSubAtom = ({ content, route }: SubTitleProps) => {
   return (
     <Link href={route}>
-      <p className="font-light py-1.5 ml-[29px] text-4">{content}</p>
+      <p className="px-10 py-1.5 text-4 font-medium">{content}</p>
     </Link>
   );
 };

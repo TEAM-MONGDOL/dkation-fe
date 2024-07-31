@@ -12,7 +12,6 @@ import RadioButtonContainer from '@/_components/common/containers/RadioButtonCon
 import RangeContainer from '@/_components/common/containers/RangeContainer';
 import TableContainer from '@/_components/common/containers/TableContainer';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
-import SearchingBoxModule from '@/_components/common/modules/SearchingBoxModule';
 import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
@@ -20,15 +19,6 @@ import { orderList } from '@/_types/adminType';
 import { DatePickerTagType } from '@/_types/commonType';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-
-const headers = [
-  { title: '번호', width: '120px' },
-  { title: '분류', width: '200px' },
-  { title: '포인트', width: '200px' },
-  { title: '상세 내용', flexGrow: true },
-  { title: '등록 일시', flexGrow: true },
-  { title: '', width: '160px' },
-];
 
 const data = [
   {
@@ -66,18 +56,16 @@ const AdminPointsPolicyPage = () => {
   const [selectedTag, setSelectedTag] = useState<DatePickerTagType>('ALL');
   const [page, setPage] = useState(1);
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
   const [param, setParam] = useState<{
     order: string;
     startPoint: number;
     endPoint: number;
-    startDate: Date | null;
-    endDate: Date | null;
   }>({
     order: 'RECENT',
     startPoint: 0,
     endPoint: 1100,
-    startDate: null,
-    endDate: null,
   });
 
   const refreshHandler = () => {
@@ -85,9 +73,10 @@ const AdminPointsPolicyPage = () => {
       order: 'RECENT',
       startPoint: 0,
       endPoint: 1100,
-      startDate: null,
-      endDate: null,
     });
+    setSelectedTag('ALL');
+    setStartDate(null);
+    setEndDate(null);
   };
 
   const onClickRowDetail = (id: number) => {
@@ -102,7 +91,7 @@ const AdminPointsPolicyPage = () => {
       </div>
       <TableContainer>
         <TableHeaderModule>
-          <TableHeaderAtom isFirst width="100px">
+          <TableHeaderAtom isFirst width="80px">
             번호
           </TableHeaderAtom>
           <TableHeaderAtom width="200px">분류</TableHeaderAtom>
@@ -160,6 +149,7 @@ const AdminPointsPolicyPage = () => {
           selectedOption={param.order}
           setSelectedOption={(order: string) => setParam({ ...param, order })}
         />
+        <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         <RangeContainer
           title="포인트 점수"
           min={0}
@@ -168,12 +158,13 @@ const AdminPointsPolicyPage = () => {
             setParam({ ...param, startPoint: min, endPoint: max })
           }
         />
+        <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         <DatePickerContainer
           title="등록일"
-          startDate={param.startDate}
-          setStartDate={(startDate) => setParam({ ...param, startDate })}
-          endDate={param.endDate}
-          setEndDate={(endDate) => setParam({ ...param, endDate })}
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
           selectedTag={selectedTag}
           setSelectedTag={setSelectedTag}
         />

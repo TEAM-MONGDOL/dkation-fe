@@ -8,11 +8,11 @@ interface Props {
 
 const AdminLayout = ({ children }: Props) => {
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex h-screen flex-col">
       <HeaderModule />
-      <div className="grow flex">
+      <div className="flex grow">
         <NavBarContainer />
-        <main className="flex-1 px-20 py-16">{children}</main>
+        <main className="flex-1 overflow-y-auto px-20 py-6xl">{children}</main>
       </div>
     </div>
   );

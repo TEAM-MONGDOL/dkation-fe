@@ -12,6 +12,7 @@ interface InputProps {
   message?: string;
   textCount?: number;
   name?: string;
+  type?: 'text' | 'password' | 'number';
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -23,6 +24,7 @@ const InputModule = ({
   message,
   textCount,
   name,
+  type,
   onChange = () => {},
 }: InputProps) => {
   return (
@@ -38,6 +40,7 @@ const InputModule = ({
         value={value}
         textCount={textCount}
         name={name}
+        type={type}
         onChange={onChange}
       />
     </div>

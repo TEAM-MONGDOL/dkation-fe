@@ -26,7 +26,7 @@ const NavModule = ({ icon, title, plusContents, contents }: TitleProps) => {
     setIsVisible(!isVisible);
   };
   return (
-    <div className="px-6 py-5">
+    <div className="flex flex-col gap-y-1 px-3 py-2.5">
       <NavTitleAtom
         icon={icon}
         title={title}

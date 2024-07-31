@@ -15,6 +15,7 @@ import React, { useState } from 'react';
 import ModalModule from '@/_components/common/modules/ModalModule';
 import InputModule from '@/_components/common/modules/InputModule';
 import DropdownModule from '@/_components/common/modules/DropdownModule';
+import dayjs from 'dayjs';
 
 const headers = [
   { title: '번호', width: '90px' },
@@ -86,14 +87,19 @@ const AdminMembersPenaltyHistoryPage = () => {
       <div>
         <TableContainer>
           <TableHeaderModule>
-            <TableHeaderAtom width="90px">번호</TableHeaderAtom>
+            <TableHeaderAtom isFirst width="80px">
+              번호
+            </TableHeaderAtom>
             <TableHeaderAtom>워케이션</TableHeaderAtom>
             <TableHeaderAtom width="200px">사유</TableHeaderAtom>
-            <TableHeaderAtom width="190px">일시</TableHeaderAtom>
+            <TableHeaderAtom isLast width="190px">
+              일시
+            </TableHeaderAtom>
           </TableHeaderModule>
 
           <tbody>
-            {pastPenalties.length <= 0 ? (
+            {pastPenalties.length <= 0 ||
+            dayjs(pastPenalties[0].일시).add(3, 'month').isBefore(dayjs()) ? (
               <EmptyContainer colSpan={4} />
             ) : (
               pastPenalties.map((item, index) => (
@@ -101,7 +107,7 @@ const AdminMembersPenaltyHistoryPage = () => {
                   <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
                   <TableBodyAtom>{item.워케이션}</TableBodyAtom>
                   <TableBodyAtom>{item.사유}</TableBodyAtom>
-                  <TableBodyAtom>{item.일시}</TableBodyAtom>
+                  <TableBodyAtom isLast>{item.일시}</TableBodyAtom>
                 </TableBodyModule>
               ))
             )}
@@ -123,9 +129,6 @@ const AdminMembersPenaltyHistoryPage = () => {
           confirmText="확인"
           confirmButtonStyle="dark"
           cancelButtonStyle="yellow"
-          onClick={() => {
-            setIsPenaltyModelOpen(false);
-          }}
           onConfirm={() => {
             alert('페널티 등록 완료');
             setIsPenaltyModelOpen(false);
@@ -144,7 +147,7 @@ const AdminMembersPenaltyHistoryPage = () => {
           <div className="mt-4 flex flex-col gap-4">
             <p className="text-3 font-semibold">분류</p>
             <DropdownModule
-              options={['노쇼', '고성방가']}
+              options={['노쇼', '고성방가', '포인트 정책 오남용']}
               onSelect={setSelectedType}
               placeholder="페널티 사유를 선택하세요."
               selectedOption={selectedType}

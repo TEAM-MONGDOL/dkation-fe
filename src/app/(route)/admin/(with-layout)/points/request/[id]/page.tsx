@@ -1,11 +1,13 @@
 'use client';
 
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
+import InfoContentAtom from '@/_components/common/atoms/InfoContentAtom';
 import FileModule from '@/_components/common/modules/FileModule';
 import InputModule from '@/_components/common/modules/InputModule';
 import ModalModule from '@/_components/common/modules/ModalModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 const waitingData = {
@@ -50,9 +52,10 @@ const rejectedData = {
   fileUrl: 'www.naver.com',
 };
 
-const data = acceptedData;
+const data = waitingData;
 
 const AdminPointsRequestDetailPage = () => {
+  const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState<'accept' | 'reject' | null>(
     null,
   );
@@ -93,7 +96,6 @@ const AdminPointsRequestDetailPage = () => {
           <div className="flex h-full grow flex-col gap-y-[30px]">
             <div className="flex flex-col gap-y-4">
               <h3 className="font-bold">증빙 서류</h3>
-              {/* TODO : 높이 조절 필요 */}
               <FileModule
                 fileName={data.fileName}
                 fileType="other"
@@ -102,7 +104,6 @@ const AdminPointsRequestDetailPage = () => {
                 onDownload={() => {}}
               />
             </div>
-            {/* TODO : Readonly, 카운트 조건부, height 필요 */}
             <TextAreaModule
               placeholder="내용을 입력하세요."
               size="SMALL"
@@ -116,22 +117,35 @@ const AdminPointsRequestDetailPage = () => {
         </div>
         <div className="flex w-full items-center justify-end gap-x-5 pt-[30px]">
           {/* TODO : 좀 더 길게 버튼 길이 고정 필요 */}
-          <ButtonAtom
-            type="button"
-            buttonStyle="dark"
-            onClick={() => {
-              setIsModalOpen('reject');
-            }}
-            text="반려"
-          />
-          <ButtonAtom
-            type="button"
-            buttonStyle="yellow"
-            onClick={() => {
-              setIsModalOpen('accept');
-            }}
-            text="승인"
-          />
+          {data.status === 'WAITING' ? (
+            <>
+              <ButtonAtom
+                type="button"
+                buttonStyle="dark"
+                onClick={() => {
+                  setIsModalOpen('reject');
+                }}
+                text="반려"
+              />
+              <ButtonAtom
+                type="button"
+                buttonStyle="yellow"
+                onClick={() => {
+                  setIsModalOpen('accept');
+                }}
+                text="승인"
+              />
+            </>
+          ) : (
+            <ButtonAtom
+              type="button"
+              buttonStyle="dark"
+              onClick={() => {
+                router.back();
+              }}
+              text="닫기"
+            />
+          )}
         </div>
         {isModalOpen &&
           (isModalOpen === 'accept' ? (
@@ -144,11 +158,8 @@ const AdminPointsRequestDetailPage = () => {
                 // API 호출 필요
                 alert('승인');
               }}
-              onClick={() => {
-                setIsModalOpen(null);
-              }}
             >
-              해당 신청을 승인하시겠습니까?
+              해당 포인트 신청을 승인하시겠습니까?
             </ModalModule>
           ) : (
             <ModalModule
@@ -160,11 +171,36 @@ const AdminPointsRequestDetailPage = () => {
                 // API 호출 필요
                 alert('반려');
               }}
-              onClick={() => {
-                setIsModalOpen(null);
-              }}
+              infoText="* 반려할 경우 반려사유와 함께 사용자에게 포인트 신청 반려 안내 메일이 발송됩니다. "
             >
-              해당 신청을 반려하시겠습니까?
+              <div className="flex w-full flex-col gap-y-5">
+                <div className="flex w-full flex-col items-start gap-y-5">
+                  <h4 className="font-semibold text-sub-300">반려 사유 작성</h4>
+                  <TextAreaModule
+                    placeholder="반려 사유를 입력하세요."
+                    size="MEDIUM"
+                    maxLength={100}
+                    value=""
+                    name="rejectReason"
+                    onChange={() => {}}
+                    bgColor="bg-cus-100"
+                  />
+                </div>
+                <div className="flex w-full flex-col items-start gap-y-5">
+                  <InfoContentAtom
+                    isStartAlign
+                    data={{ subtitle: '구분', content: data.type }}
+                  />
+                  <InfoContentAtom
+                    isStartAlign
+                    data={{ subtitle: '신청자', content: data.name }}
+                  />
+                  <InfoContentAtom
+                    isStartAlign
+                    data={{ subtitle: '신청 일시', content: data.createdAt }}
+                  />
+                </div>
+              </div>
             </ModalModule>
           ))}
       </section>

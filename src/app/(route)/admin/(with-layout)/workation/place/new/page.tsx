@@ -94,9 +94,6 @@ const AdminWorkationPlaceNewPage = () => {
           cancelText="취소"
           confirmButtonStyle="dark"
           cancelButtonStyle="yellow"
-          onClick={() => {
-            setIsConfirmModelOpen(false);
-          }}
           onConfirm={() => {
             //  TODO : 워케이션 장소 등록 API 호출
             alert('워케이션 장소 등록 완료');
