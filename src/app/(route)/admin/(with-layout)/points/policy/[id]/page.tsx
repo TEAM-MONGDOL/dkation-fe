@@ -98,7 +98,14 @@ const AdminPointsPolicyDetailPage = () => {
             onCancel={() => {
               setIsDeleteModalOpen(false);
             }}
-          />
+          >
+            <TextAreaModule
+              name="deleteReason"
+              placeholder="삭제 사유를 입력하세요."
+              maxLength={200}
+              size="SMALL"
+            />
+          </ModalModule>
         )}
       </section>
     </div>

@@ -8,6 +8,7 @@ import ModalModule from '@/_components/common/modules/ModalModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import dayjs from 'dayjs';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -127,7 +128,11 @@ const AdminPointsPolicyEditPage = () => {
               onCancel={() => {
                 setIsEditModalOpen(false);
               }}
-            />
+            >
+              <div className="flex w-full flex-col items-center gap-y-4">
+                <p className="text-center">정책을 수정하시겠습니까?</p>
+              </div>
+            </ModalModule>
           )}
         </form>
       </section>
