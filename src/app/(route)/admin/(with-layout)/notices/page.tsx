@@ -19,17 +19,11 @@ import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
 import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAtom';
-
-const data = [
-  {
-    id: 1,
-    구분: '공지사항',
-    제목: '공지입니다',
-    작성일: '2024-07-20',
-  },
-];
+import dayjs from 'dayjs';
+import { useGetNoticeListQuery } from '@/_hooks/admin/useGetNoticeListQuery';
 
 const NoticesListPage = () => {
+  const router = useRouter();
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
   const [selectedDateTag, setSelectedDateTag] =
     useState<DatePickerTagType>('ALL');
@@ -43,8 +37,6 @@ const NoticesListPage = () => {
     order: 'RECENT',
     noticeType: ['NOTICE', 'RESULT', 'EVENT'],
   });
-
-  const router = useRouter();
 
   const moveToWritePage = () => {
     router.push('/admin/notices/new');
@@ -68,6 +60,17 @@ const NoticesListPage = () => {
   function moveToNoticesDetail(id: number) {
     router.push(`/admin/notices/${id}`);
   }
+
+  const { data, isLoading, isError } = useGetNoticeListQuery({
+    type: param.noticeType.join(','),
+    startDate: startDate ? dayjs(startDate).format('YYYY-MM-DD') : undefined,
+    endDate: endDate ? dayjs(endDate).format('YYYY-MM-DD') : undefined,
+    pageParam: {
+      pageNum: currentPage,
+      pageSize: 10,
+      sort: param.order,
+    },
+  });
 
   return (
     <section className="w-full">
@@ -130,17 +133,21 @@ const NoticesListPage = () => {
         </TableHeaderModule>
 
         <tbody>
-          {data.length <= 0 ? (
-            <td colSpan={5}>
-              <EmptyContainer />
-            </td>
+          {!data ? (
+            isLoading ? (
+              <EmptyContainer colSpan={5} />
+            ) : (
+              <EmptyContainer colSpan={5} />
+            )
+          ) : data.pageInfo.totalElements <= 0 ? (
+            <EmptyContainer colSpan={5} />
           ) : (
-            data.map((item, index) => (
+            data.announcementInfos.map((item, index) => (
               <TableBodyModule key={item.id}>
                 <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
-                <TableBodyAtom>{item.구분}</TableBodyAtom>
-                <TableBodyAtom>{item.제목}</TableBodyAtom>
-                <TableBodyAtom>{item.작성일}</TableBodyAtom>
+                <TableBodyAtom>{item.type}</TableBodyAtom>
+                <TableBodyAtom>{item.title}</TableBodyAtom>
+                <TableBodyAtom>{item.createdAt}</TableBodyAtom>
                 <TableBodyAtom isLast>
                   <ShowDetailButtonAtom
                     onClick={() => moveToNoticesDetail(item.id)}
@@ -152,13 +159,15 @@ const NoticesListPage = () => {
         </tbody>
       </TableContainer>
       <div className="relative mt-8">
-        <div className="flex justify-center">
-          <PaginationModule
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            totalPages={Math.ceil(data.length / 10)}
-          />
-        </div>
+        {data && data.pageInfo.totalElements > 0 && (
+          <div className="flex justify-center">
+            <PaginationModule
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              totalPages={Math.ceil(data.pageInfo.totalPages / 10)}
+            />
+          </div>
+        )}
         <div className="absolute right-0 top-0">
           <ButtonAtom
             type="button"
