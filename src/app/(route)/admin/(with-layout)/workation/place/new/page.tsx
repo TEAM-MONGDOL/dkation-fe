@@ -98,7 +98,7 @@ const AdminWorkationPlaceNewPage = () => {
             //  TODO : 워케이션 장소 등록 API 호출
             alert('워케이션 장소 등록 완료');
             setIsConfirmModelOpen(false);
-            router.push('/admin/workation/place/list');
+            router.push('/admin/workation/place');
           }}
           onCancel={() => {
             setIsConfirmModelOpen(false);
