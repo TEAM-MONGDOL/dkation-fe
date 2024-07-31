@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import SearchingBoxModule from '@/_components/common/modules/SearchingBoxModule';
@@ -16,17 +16,8 @@ import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
 import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAtom';
-
-const data = [
-  {
-    id: 1,
-    이름: '홍길동',
-    아이디: 'hong.gil',
-    소속: '개발팀',
-    보유포인트: 300,
-    포인트신청: { text: '1건', color: 'text-primaryDark' },
-  },
-];
+import { useGetMemberListQuery } from '@/_hooks/admin/useGetMemberListQuery';
+import { MembersSearchQueryOptions } from '@/_constants/common'; // Ensure this import is correct
 
 const AdminMembersListPage = () => {
   const router = useRouter();
@@ -34,21 +25,38 @@ const AdminMembersListPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [param, setParam] = useState<{
     order: string;
-    type: string[];
+    departmentType: string[];
   }>({
     order: 'NAME',
-    type: ['MANAGEMENT', 'SALES', 'MARKETING', 'PROMOTION', 'DEV'],
+    departmentType: ['MANAGEMENT', 'SALES', 'MARKETING', 'PROMOTION', 'DEV'],
+  });
+
+  const [selectedOption, setSelectedOption] = useState(
+    MembersSearchQueryOptions.NAME,
+  );
+
+  const { data, isLoading, error } = useGetMemberListQuery({
+    department: param.departmentType.join(','),
+    pageParam: {
+      pageNum: currentPage,
+      pageSize: 10,
+      sort: param.order,
+    },
   });
 
   const refreshHandler = () => {
     setParam({
       ...param,
       order: 'NAME',
-      type: ['MANAGEMENT', 'SALES', 'MARKETING', 'PROMOTION', 'DEV'],
+      departmentType: ['MANAGEMENT', 'SALES', 'MARKETING', 'PROMOTION', 'DEV'],
     });
   };
 
-  const moveToMembersDetail = (id: number) => {
+  const handleSelect = (option: string) => {
+    setSelectedOption(option); // Update the selected option
+  };
+
+  const moveToMembersDetail = (id: string) => {
     router.push(`/admin/members/${id}`);
   };
 
@@ -57,7 +65,11 @@ const AdminMembersListPage = () => {
       <div className="flex w-full items-center justify-between">
         <TitleBarModule title="회원 목록" />
         <SearchingBoxModule
-          placeholder="이름을 검색하세요."
+          options={Object.values(MembersSearchQueryOptions)}
+          onSelect={handleSelect}
+          dropdownPlaceholder="검색 조건 선택"
+          selectedOption={selectedOption}
+          placeholder="검색어를 입력하세요."
           filter
           onClick={() => setIsFilteringBarOpen(true)}
         />
@@ -77,8 +89,10 @@ const AdminMembersListPage = () => {
         <CheckboxContainer
           title="소속"
           options={Object.entries(teamList) as [string, string][]}
-          selectedOptions={param.type}
-          setSelectedOptions={(type: string[]) => setParam({ ...param, type })}
+          selectedOptions={param.departmentType}
+          setSelectedOptions={(departmentType: string[]) =>
+            setParam({ ...param, departmentType })
+          }
         />
       </FilteringBarContainer>
       <TableContainer>
@@ -94,22 +108,28 @@ const AdminMembersListPage = () => {
           <TableHeaderAtom isLast width="160px" />
         </TableHeaderModule>
         <tbody>
-          {data.length <= 0 ? (
-            <EmptyContainer colSpan={7} />
+          {!data ? (
+            isLoading ? (
+              <EmptyContainer colSpan={7} text="loading" />
+            ) : (
+              <EmptyContainer colSpan={7} text="no data" />
+            )
+          ) : data.pageInfo.totalElements <= 0 ? (
+            <div>
+              <EmptyContainer colSpan={7} />
+            </div>
           ) : (
-            data.map((item, index) => (
-              <TableBodyModule key={item.id}>
+            data.memberInfos.map((item, index) => (
+              <TableBodyModule key={item.accountId}>
                 <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
-                <TableBodyAtom>{item.이름}</TableBodyAtom>
-                <TableBodyAtom>{item.아이디}</TableBodyAtom>
-                <TableBodyAtom>{item.소속}</TableBodyAtom>
-                <TableBodyAtom>{item.보유포인트}</TableBodyAtom>
-                <TableBodyAtom color={item.포인트신청.color}>
-                  {item.포인트신청.text}
-                </TableBodyAtom>
+                <TableBodyAtom>{item.name}</TableBodyAtom>
+                <TableBodyAtom>{item.accountId}</TableBodyAtom>
+                <TableBodyAtom>{item.department}</TableBodyAtom>
+                <TableBodyAtom>{item.pointQuantity}</TableBodyAtom>
+                <TableBodyAtom>{item.pointApplicationQuantity}</TableBodyAtom>
                 <TableBodyAtom isLast>
                   <ShowDetailButtonAtom
-                    onClick={() => moveToMembersDetail(item.id)}
+                    onClick={() => moveToMembersDetail(item.accountId)}
                   />
                 </TableBodyAtom>
               </TableBodyModule>
@@ -117,13 +137,15 @@ const AdminMembersListPage = () => {
           )}
         </tbody>
       </TableContainer>
-      <div className="flex w-full items-center justify-center">
-        <PaginationModule
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          totalPages={Math.ceil(data.length / 10)}
-        />
-      </div>
+      {data && data.pageInfo.totalElements > 0 && (
+        <div className="flex w-full items-center justify-center">
+          <PaginationModule
+            totalPages={data.pageInfo.totalPages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        </div>
+      )}
     </section>
   );
 };
