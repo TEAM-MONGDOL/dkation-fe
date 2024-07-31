@@ -122,11 +122,13 @@ const NoticesListPage = () => {
       </FilteringBarContainer>
       <TableContainer>
         <TableHeaderModule>
-          <TableHeaderAtom width="80px">번호</TableHeaderAtom>
+          <TableHeaderAtom isFirst width="80px">
+            번호
+          </TableHeaderAtom>
           <TableHeaderAtom width="140px">구분</TableHeaderAtom>
           <TableHeaderAtom>제목</TableHeaderAtom>
           <TableHeaderAtom width="190px">작성일</TableHeaderAtom>
-          <TableHeaderAtom width="160px" />
+          <TableHeaderAtom isLast width="160px" />
         </TableHeaderModule>
 
         <tbody>
