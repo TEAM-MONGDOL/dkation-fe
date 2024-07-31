@@ -146,9 +146,6 @@ const WorkationNew = () => {
           title="워케이션을 등록하시겠습니까?"
           confirmText="확인"
           cancelText="취소"
-          onClick={() => {
-            setIsConfirmModelOpen(false);
-          }}
           onConfirm={() => {
             //  TODO : 워케이션 등록 API 호출
             alert('워케이션 등록 완료');
