@@ -8,8 +8,8 @@ const api = axios.create({
 
 api.interceptors.request.use(
   async (config) => {
-    if (config.url !== '/user/refresh') {
-      const accessToken = localStorage.getItem('accessToken');
+    if (config.url !== '/refresh' && config.url !== '/login') {
+      const accessToken = sessionStorage.getItem('accessToken');
       if (accessToken) {
         // eslint-disable-next-line no-param-reassign
         config.headers.Authorization = `Bearer ${accessToken}`;
@@ -29,22 +29,24 @@ api.interceptors.response.use(
   },
   async (error) => {
     const req = error.config;
-    if (error.response.status === 500) {
+    if (error.response.status === 500 || error.response.status === 401) {
       try {
-        const refresh = localStorage.getItem('refreshToken');
-        const email = localStorage.getItem('email');
+        const refresh = sessionStorage.getItem('refreshToken');
+        const email = sessionStorage.getItem('email');
         const res = await api.post('/user/refresh', {
           refreshToken: refresh,
           email,
         });
         const { accessToken } = res.data.data;
-        localStorage.setItem('accessToken', accessToken);
+        sessionStorage.setItem('accessToken', accessToken);
         req.headers.Authorization = `Bearer ${accessToken}`;
       } catch (err) {
         const navigate = useNavigate();
         navigate('/login');
+        return Promise.reject(err);
       }
     }
+    return Promise.reject(error);
   },
 );
 
