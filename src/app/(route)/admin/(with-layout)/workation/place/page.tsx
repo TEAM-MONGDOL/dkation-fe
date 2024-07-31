@@ -28,6 +28,9 @@ const data = [
 ];
 const AdminWorkationPlaceListPage = () => {
   const router = useRouter();
+  const penaltyRouteButtonClick = () => {
+    router.push(`/admin/workation/place/1`);
+  };
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [param, setParam] = useState<{
@@ -74,7 +77,9 @@ const AdminWorkationPlaceListPage = () => {
         <EmptyContainer />
       ) : (
         <div className="flex flex-col gap-2.5">
-          <InfoSectionContainer row image={imsyPlace} data={data} />
+          <button onClick={() => penaltyRouteButtonClick()}>
+            <InfoSectionContainer row image={imsyPlace} data={data} />
+          </button>
           <InfoSectionContainer row image={imsyPlace} data={data} />
           <InfoSectionContainer row image={imsyPlace} data={data} />
         </div>
