@@ -14,42 +14,12 @@ import SearchingBoxModule from '@/_components/common/modules/SearchingBoxModule'
 import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
+import { useGetPointSupplyQuery } from '@/_hooks/admin/useGetPointSupplyQuery';
 import { orderList, pointRewardList } from '@/_types/adminType';
 import { DatePickerTagType } from '@/_types/commonType';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-
-const data = [
-  {
-    id: 1,
-    구분: { text: '개인', color: 'red' },
-    분류: '자기계발',
-    이름: '김철수',
-    지급일: '2024-07-20',
-  },
-  {
-    id: 2,
-    구분: { text: '개인', color: 'red' },
-    분류: '봉사활동',
-    이름: '이영희',
-    지급일: '2024-07-21',
-  },
-  {
-    id: 3,
-    구분: { text: '단체', color: 'blue' },
-    분류: '이벤트',
-    이름: '박민수',
-    지급일: '2024-07-21',
-  },
-  {
-    id: 4,
-    구분: { text: '단체', color: 'blue' },
-    분류: '자기계발',
-    이름: '김철수 외 3명',
-    지급일: '2024-07-21',
-  },
-];
 
 const AdminPointsRewardPage = () => {
   const router = useRouter();
@@ -85,7 +55,17 @@ const AdminPointsRewardPage = () => {
     router.push(`/admin/points/reward/${id}`);
   };
 
-  const [isChecked, setIsChecked] = useState(false);
+  const { data, isLoading, isError } = useGetPointSupplyQuery({
+    supplyType: param.type.length > 1 ? undefined : param.type[0],
+    pointTitle: param.reason.join(','),
+    startDate: startDate ? dayjs(startDate).format('YYYY-MM-DD') : undefined,
+    endDate: endDate ? dayjs(endDate).format('YYYY-MM-DD') : undefined,
+    pageParam: {
+      pageNum: currentPage,
+      pageSize: 10,
+      sort: param.order,
+    },
+  });
 
   return (
     <section className="flex w-full flex-col gap-y-10 overflow-y-auto">
@@ -109,18 +89,22 @@ const AdminPointsRewardPage = () => {
           <TableHeaderAtom width="160px" isLast />
         </TableHeaderModule>
         <tbody>
-          {data.length <= 0 ? (
+          {!data ? (
+            isLoading ? (
+              <EmptyContainer colSpan={6} text="로딩 중입니다..." />
+            ) : (
+              <EmptyContainer colSpan={6} text="데이터가 없습니다." />
+            )
+          ) : data.pageInfo.totalElements <= 0 ? (
             <EmptyContainer colSpan={6} />
           ) : (
-            data.map((item, index) => (
+            data.pointSupplyList.map((item, index) => (
               <TableBodyModule key={item.id}>
                 <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
-                <TableBodyAtom color={item.구분.color}>
-                  {item.구분.text}
-                </TableBodyAtom>
-                <TableBodyAtom>{item.분류}</TableBodyAtom>
-                <TableBodyAtom>{item.이름}</TableBodyAtom>
-                <TableBodyAtom>{item.지급일}</TableBodyAtom>
+                <TableBodyAtom>{item.pointSupplyType}</TableBodyAtom>
+                <TableBodyAtom>{item.pointTitle}</TableBodyAtom>
+                <TableBodyAtom>{item.name}</TableBodyAtom>
+                <TableBodyAtom>{item.supplyTime}</TableBodyAtom>
                 <TableBodyAtom isLast>
                   <ShowDetailButtonAtom
                     onClick={() => onClickRowDetail(item.id)}
@@ -131,13 +115,15 @@ const AdminPointsRewardPage = () => {
           )}
         </tbody>
       </TableContainer>
-      <div className="flex w-full items-center justify-center">
-        <PaginationModule
-          totalPages={Math.ceil(data.length / 10)}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-        />
-      </div>
+      {data && data.pageInfo.totalElements > 0 && (
+        <div className="flex w-full items-center justify-center">
+          <PaginationModule
+            totalPages={data.pageInfo.totalPages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        </div>
+      )}
       <FilteringBarContainer
         isOpen={isFilteringBarOpen}
         setIsOpen={setIsFilteringBarOpen}

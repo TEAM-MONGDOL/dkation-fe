@@ -26,6 +26,20 @@ export const workationListSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
+export const pointSupplyInfo = z.object({
+  id: z.number(),
+  pointSupplyType: z.union([z.literal('PERSONAL'), z.literal('GROUP')]),
+  pointTitle: z.string(),
+  name: z.string(),
+  quantity: z.number(),
+  supplyTime: z.string(),
+});
+
+export const pointSupplyListSchema = z.object({
+  pointSupplyList: pointSupplyInfo.array(),
+  pageInfo: pageInfoSchema,
+});
+
 export const pointInfoSchema = z.object({
   pointType: z.union([
     z.literal('MONTHLY'),
