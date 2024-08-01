@@ -7,7 +7,7 @@ import InputAreaAtom from '@/_components/common/atoms/InputAreaAtom';
 interface InputProps {
   placeholder?: string;
   status?: 'error' | 'correct' | 'readonly' | 'disabled';
-  value: string;
+  value: string | number;
   subtitle?: string;
   message?: string;
   textCount?: number;
