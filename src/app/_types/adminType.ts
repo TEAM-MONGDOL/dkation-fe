@@ -11,14 +11,15 @@ export const pageInfoSchema = z.object({
 });
 
 export const wktInfoSchema = z.object({
+  wkId: z.number(),
   title: z.string(),
   thumbnail: z.string(),
   totalRecruit: z.number(),
-  startDate: z.string(),
-  endDate: z.string(),
-  applyStartDate: z.string(),
-  applyEndDate: z.string(),
-  createdAt: z.string(),
+  startDate: z.date(),
+  endDate: z.date(),
+  applyStartDate: z.date(),
+  applyEndDate: z.date(),
+  createdAt: z.date(),
 });
 
 export const workationListSchema = z.object({
@@ -138,6 +139,8 @@ export type NoticeType = 'NOTICE' | 'RESULT' | 'EVENT';
 
 export type ResultType = 'NAME' | 'LOWEST' | 'HIGHEST';
 
+export type WktStatusType = 'PLANNED' | 'ONGOING' | 'CLOSED';
+
 export type TeamType =
   | 'MANAGEMENT'
   | 'SALES'
@@ -173,6 +176,12 @@ export const statusList: { [key in StatusType]: string } = {
   CONFIRM: '당첨확정',
   WAIT: '대기',
   VISITED: '일정종료',
+};
+
+export const wktStatusList: { [key in WktStatusType]: string } = {
+  PLANNED: '모집 예정',
+  ONGOING: '모집 중',
+  CLOSED: '모집 종료',
 };
 
 export const pointOrderList: { [key in PointOrderType]: string } = {
