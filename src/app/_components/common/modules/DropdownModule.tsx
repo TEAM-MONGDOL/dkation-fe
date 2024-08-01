@@ -10,7 +10,7 @@ interface DropdownModuleProps {
   onSelect: (option: string) => void;
   placeholder: string;
   selectedOption: string | undefined;
-  fixed?: boolean;
+  size?: 'small' | 'large' | 'full';
 }
 
 const DropdownModule = ({
@@ -18,9 +18,12 @@ const DropdownModule = ({
   onSelect,
   placeholder,
   selectedOption,
-  fixed = false,
+  size = 'full',
 }: DropdownModuleProps) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const sizeClass =
+    size === 'small' ? 'w-28' : size === 'large' ? 'w-52' : 'w-full';
 
   return (
     <div>
@@ -29,9 +32,7 @@ const DropdownModule = ({
         className={`fixed left-0 top-0 z-10 h-full min-h-screen w-full ${isOpen ? 'block' : 'hidden'}`}
         onClick={() => setIsOpen(false)}
       />
-      <div
-        className={`relative inline-block ${fixed ? 'w-52' : 'w-full'} text-left`}
-      >
+      <div className={`relative inline-block ${sizeClass} text-left`}>
         <div>
           <button
             type="button"
@@ -51,7 +52,7 @@ const DropdownModule = ({
           </button>
         </div>
         <div
-          className={`top-5xl duration-600 absolute z-20 w-full transform rounded-b-regular border border-t-0 border-stroke-100 bg-white transition-transform ease-in-out ${fixed ? 'w-52' : 'w-full'} ${isOpen ? 'translate-y-0 border-t-0 opacity-100' : 'translate-y-[-1px] opacity-0'}`}
+          className={`top-5xl duration-600 absolute z-20 w-full transform rounded-b-regular border border-t-0 border-stroke-100 bg-white transition-transform ease-in-out ${sizeClass} ${isOpen ? 'translate-y-0 border-t-0 opacity-100' : 'translate-y-[-1px] opacity-0'}`}
         >
           {isOpen && (
             <div className="w-full">
