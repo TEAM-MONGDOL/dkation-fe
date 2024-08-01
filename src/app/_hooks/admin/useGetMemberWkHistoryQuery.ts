@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { applyListSchema } from '@/_types/adminType';
 import api from '../Axios';
 
-export const useGetMEmberWkHistoryQueryKey = 'useGetMEmberWkHistoryQuery';
+export const useGetMemberWkHistoryQueryKey = 'useGetMEmberWkHistoryQuery';
 
 export const useGetMemberWkHistoryQuery = ({
   accountId,
@@ -18,13 +18,20 @@ export const useGetMemberWkHistoryQuery = ({
   statuses?: string;
   place?: string;
   pageParam: {
-    pageNum: number;
-    pageSize: number;
+    page: number;
+    size: number;
     sort?: string;
   };
 }) => {
   return useQuery({
-    queryKey: [useGetMEmberWkHistoryQueryKey],
+    queryKey: [
+      useGetMemberWkHistoryQueryKey,
+      statuses,
+      accountId,
+      startDate,
+      endDate,
+      pageParam,
+    ],
     queryFn: async () => {
       const res = await api.get(`/api/apply/member/admin`, {
         params: {
