@@ -17,9 +17,11 @@ export const usePostPointSupplyMutation = ({
       body,
     }: {
       policyId: number;
-      body: string[];
+      body: { accountId: string }[];
     }) => {
-      await api.post(`/api/point/supply/${policyId}`, body);
+      await api.post(`/api/point/supply/${policyId}`, {
+        memberInfos: body,
+      });
     },
     onSuccess: () => {
       client.invalidateQueries({
