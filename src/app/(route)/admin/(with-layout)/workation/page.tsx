@@ -31,7 +31,7 @@ const WorkationList = () => {
     status: string[];
   }>({
     order: 'RECENT',
-    status: ['WILL', 'PROCEED', 'COMPLETE'],
+    status: ['PLANNED', 'ONGOING', 'CLOSED'],
   });
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -58,7 +58,7 @@ const WorkationList = () => {
     setParam({
       ...param,
       order: 'RECENT',
-      status: ['WILL', 'PROCEED', 'COMPLETE'],
+      status: ['PLANNED', 'ONGOING', 'CLOSED'],
     });
     setStartDate(dayjs().subtract(1, 'year').toDate());
     setEndDate(dayjs().subtract(1, 'year').toDate());
@@ -66,6 +66,7 @@ const WorkationList = () => {
     setApplyEndDate(dayjs().toDate());
   };
   const { data, isLoading, isError } = useGetWkListQuery({
+    status: param.status.join(','),
     wktStartDate: startDate === null ? undefined : startDate,
     wktEndDate: endDate === null ? undefined : endDate,
     applyStartDate: applyStartDate === null ? undefined : applyStartDate,
@@ -76,7 +77,6 @@ const WorkationList = () => {
       // sort: param.order,
     },
   });
-
   return (
     <section className="flex h-full w-full flex-col gap-y-10 overflow-y-auto">
       <div className="flex w-full items-center justify-between">
@@ -177,9 +177,9 @@ const WorkationList = () => {
         <CheckboxContainer
           title="상태"
           options={[
-            ['WILL', '모집 예정'],
-            ['PROCEED', '모집 중'],
-            ['COMPLETE', '모집 완료'],
+            ['PLANNED', '모집 예정'],
+            ['ONGOING', '모집 중'],
+            ['CLOSED', '모집 완료'],
           ]}
           selectedOptions={param.status}
           setSelectedOptions={(status: string[]) =>

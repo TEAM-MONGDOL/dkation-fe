@@ -1,9 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import {
-  wktStatusList,
-  WktStatusType,
-  workationListSchema,
-} from '@/_types/adminType';
+import { workationListSchema } from '@/_types/adminType';
 import api from '../Axios';
 
 export const useGetWkListQueryKey = 'useGetWkListQuery';
@@ -16,7 +12,7 @@ export const useGetWkListQuery = ({
   wktEndDate,
   pageParam,
 }: {
-  status?: WktStatusType;
+  status?: string;
   applyStartDate?: Date;
   applyEndDate?: Date;
   wktStartDate?: Date;
@@ -32,6 +28,7 @@ export const useGetWkListQuery = ({
     queryFn: async () => {
       const res = await api.get(`/api/wkt`, {
         params: {
+          status,
           applyStartDate,
           applyEndDate,
           wktStartDate,
