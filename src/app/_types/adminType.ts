@@ -68,6 +68,13 @@ export const pointPolicyListSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
+export const pointPolicyDetailSchema = z.object({
+  policyTitle: z.string(),
+  detail: z.string(),
+  lastModifiedAt: z.string(),
+  quantity: z.number(),
+});
+
 export const fileUrlSchema = z.string();
 
 export const fileUrlsSchema = z.object({
