@@ -1,6 +1,6 @@
 import App from 'next/app';
 import { title } from 'process';
-import { z } from 'zod';
+import { boolean, z } from 'zod';
 
 // ResponseSchema
 export const pageInfoSchema = z.object({
@@ -23,6 +23,20 @@ export const wktInfoSchema = z.object({
 
 export const workationListSchema = z.object({
   wktInfos: wktInfoSchema.array(),
+  pageInfo: pageInfoSchema,
+});
+
+export const wktReviewInfoSchema = z.object({
+  id: z.number(),
+  reviewer: z.string(),
+  wktPlace: z.string(),
+  rating: z.number(),
+  lastModifiedAt: z.number(),
+  blindedType: z.boolean(),
+});
+
+export const workationReviewInfoSchema = z.object({
+  wktReviewInfos: wktReviewInfoSchema.array(),
   pageInfo: pageInfoSchema,
 });
 

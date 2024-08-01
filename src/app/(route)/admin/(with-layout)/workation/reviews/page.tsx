@@ -17,33 +17,7 @@ import { LocationList, orderList, reviewOrderList } from '@/_types/adminType';
 import CheckboxContainer from '@/_components/common/containers/CheckboxContainer';
 import FilteringBarContainer from '@/_components/common/containers/FilteringBarContainer';
 import RangeContainer from '@/_components/common/containers/RangeContainer';
-
-const data = [
-  {
-    id: 1,
-    평점: '⭐⭐⭐⭐⭐',
-    워케이션: '1월 2주차 워케이션 : 양양',
-    작성자: '홍길동',
-    등록일: '2024.05.06',
-    상태: { text: '블라인드', color: 'text-negative' },
-  },
-  {
-    id: 2,
-    평점: '⭐⭐⭐⭐⭐',
-    워케이션: '1월 2주차 워케이션 : 양양',
-    작성자: '홍길동',
-    등록일: '2024.05.06',
-    상태: { text: '등록', color: 'text-positive' },
-  },
-  {
-    id: 3,
-    평점: '⭐⭐⭐⭐⭐',
-    워케이션: '1월 2주차 워케이션 : 양양',
-    작성자: '홍길동',
-    등록일: '2024.05.06',
-    상태: { text: '등록', color: 'text-positive' },
-  },
-];
+import { useGetWkReviewListQuery } from '@/_hooks/admin/useGetWkReviewListQuery';
 
 const AdminWorkationReviewsPage = () => {
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
@@ -58,9 +32,13 @@ const AdminWorkationReviewsPage = () => {
   const [param, setParam] = useState<{
     order: string;
     type: string[];
+    startPoint: number;
+    endPoint: number;
   }>({
     order: 'RECENT',
     type: [
+      // 워케이션 장소 목록 api 가져와서 수정
+      // 스트링 join(,) 으로 해야함
       'SEOUL',
       'GANGWON',
       'CHUNGCEOUNG',
@@ -69,7 +47,10 @@ const AdminWorkationReviewsPage = () => {
       'JEJU',
       'ABROAD',
     ],
+    startPoint: 0,
+    endPoint: 5,
   });
+
   const refreshHandler = () => {
     setParam({
       ...param,
@@ -85,12 +66,16 @@ const AdminWorkationReviewsPage = () => {
       ],
     });
   };
-  const handleRangeChange = ({ min, max }: { min: number; max: number }) => {
-    setParam((prevParam) => ({
-      ...prevParam,
-      range: { min, max },
-    }));
-  };
+  const { data, isLoading, isError } = useGetWkReviewListQuery({
+    regionFilter: param.type,
+    maxRating: param.startPoint,
+    minRating: param.endPoint,
+    pageParam: {
+      page: currentPage,
+      size: 10,
+      // sort: param.order,
+    },
+  });
   return (
     <div className="flex flex-col">
       <div className="mb-9 flex items-center justify-between">
@@ -110,19 +95,23 @@ const AdminWorkationReviewsPage = () => {
           <TableHeaderAtom width="160px" isLast />
         </TableHeaderModule>
         <tbody>
-          {data.length <= 0 ? (
-            <EmptyContainer colSpan={6} />
+          {!data ? (
+            isLoading ? (
+              <EmptyContainer colSpan={7} text="loading" />
+            ) : (
+              <EmptyContainer colSpan={7} text="no data" />
+            )
+          ) : data.pageInfo.totalElements <= 0 ? (
+            <EmptyContainer colSpan={7} />
           ) : (
-            data.map((item, index) => (
+            data.wktReviewInfos.map((item, index) => (
               <TableBodyModule key={item.id}>
-                <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
-                <TableBodyAtom>{item.평점}</TableBodyAtom>
-                <TableBodyAtom>{item.워케이션}</TableBodyAtom>
-                <TableBodyAtom>{item.작성자}</TableBodyAtom>
-                <TableBodyAtom>{item.등록일}</TableBodyAtom>
-                <TableBodyAtom color={item.상태.color}>
-                  {item.상태.text}
-                </TableBodyAtom>
+                <TableBodyAtom isFirst>{item.id + 1}</TableBodyAtom>
+                <TableBodyAtom>{item.rating}</TableBodyAtom>
+                <TableBodyAtom>{item.wktPlace}</TableBodyAtom>
+                <TableBodyAtom>{item.reviewer}</TableBodyAtom>
+                <TableBodyAtom>{item.lastModifiedAt}</TableBodyAtom>
+                <TableBodyAtom>상태</TableBodyAtom>
                 <TableBodyAtom isLast>
                   <ShowDetailButtonAtom
                     onClick={() => onClickRowDetail(item.id)}
@@ -160,7 +149,9 @@ const AdminWorkationReviewsPage = () => {
         />
         <hr />
         <RangeContainer
-          onChange={handleRangeChange}
+          onChange={({ min, max }) =>
+            setParam({ ...param, startPoint: min, endPoint: max })
+          }
           title="평점"
           min={0}
           max={5}
