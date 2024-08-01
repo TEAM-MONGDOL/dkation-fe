@@ -31,12 +31,8 @@ const AdminPointsPolicyPage = () => {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [param, setParam] = useState<{
     order: string;
-    startPoint: number;
-    endPoint: number;
   }>({
     order: 'DESC',
-    startPoint: 0,
-    endPoint: 1100,
   });
   const { data, isLoading, isError } = useGetPointPolicyQuery({
     pageable: {
@@ -51,16 +47,12 @@ const AdminPointsPolicyPage = () => {
       endDate: endDate
         ? dayjs(endDate.setHours(23, 59, 59, 999)).format('YYYY-MM-DDTHH:mm:ss')
         : undefined,
-      minPoint: param.startPoint,
-      maxPoint: param.endPoint,
     },
   });
 
   const refreshHandler = () => {
     setParam({
       order: 'DESC',
-      startPoint: 0,
-      endPoint: 1100,
     });
     setSelectedTag('ALL');
     setStartDate(null);
@@ -148,16 +140,6 @@ const AdminPointsPolicyPage = () => {
           options={Object.entries(orderList) as [string, string][]}
           selectedOption={param.order}
           setSelectedOption={(order: string) => setParam({ ...param, order })}
-        />
-        <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
-        <RangeContainer
-          title="포인트 점수"
-          min={0}
-          max={100000}
-          step={10}
-          onChange={({ min, max }) =>
-            setParam({ ...param, startPoint: min, endPoint: max })
-          }
         />
         <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         <DatePickerContainer
