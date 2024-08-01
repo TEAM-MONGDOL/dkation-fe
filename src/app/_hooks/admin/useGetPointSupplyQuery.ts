@@ -16,9 +16,9 @@ export const useGetPointSupplyQuery = ({
   startDate?: string;
   endDate?: string;
   pageParam: {
-    pageNum: number;
-    pageSize: number;
-    sort?: string;
+    page: number;
+    size: number;
+    // sort?: string;
   };
 }) => {
   return useQuery({
@@ -26,10 +26,10 @@ export const useGetPointSupplyQuery = ({
     queryFn: async () => {
       const res = await api.get(`/api/point/supply`, {
         params: {
-          supplyType,
-          pointTitle,
-          startDate,
-          endDate,
+          // supplyType,
+          // pointTitle,
+          // startDate,
+          // endDate,
           ...pageParam,
         },
       });
