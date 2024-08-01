@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import TableContainer from '@/_components/common/containers/TableContainer';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
 import FilteringButtonAtom from '@/_components/common/atoms/FilteringButtonAtom';
@@ -20,8 +20,12 @@ import { ControlPointDuplicateIcon } from '@/_assets/icons';
 import { useGetMemberPointHistoryQuery } from '@/_hooks/admin/useGetMemberPointHistoryQuery';
 import dayjs from 'dayjs';
 
-const AdminMembersPointHistoryPage = () => {
-  const [accountId, setAccountId] = useState<string>('');
+interface Props {
+  params: { id: string };
+}
+
+const AdminMembersPointHistoryPage = ({ params }: Props) => {
+  const accountId = params.id;
   const [currentPage, setCurrentPage] = useState(1);
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
   const [selectedDateTag, setSelectedDateTag] =
@@ -37,13 +41,6 @@ const AdminMembersPointHistoryPage = () => {
     type: [],
     point: ['INCREASE', 'DECREASE'],
   });
-
-  useEffect(() => {
-    const url = window.location.pathname;
-    const parts = url.split('/');
-    const id = parts[parts.indexOf('members') + 1];
-    setAccountId(id);
-  }, []);
 
   const refreshHandler = () => {
     setParam({
