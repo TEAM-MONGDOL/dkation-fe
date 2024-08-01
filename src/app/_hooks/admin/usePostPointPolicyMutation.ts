@@ -8,7 +8,7 @@ interface PostPointPolicyRequest {
   quantity: number;
 }
 
-export const usePostPointPolicyMutate = ({
+export const usePostPointPolicyMutation = ({
   successCallback,
   errorCallback,
 }: {
