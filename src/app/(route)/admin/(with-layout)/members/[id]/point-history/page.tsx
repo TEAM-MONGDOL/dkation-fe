@@ -54,20 +54,26 @@ const AdminMembersPointHistoryPage = ({ params }: Props) => {
     setEndDate(null);
   };
 
+  const isPositive =
+    param.point.length === 1
+      ? param.point[0] === 'INCREASE'
+      : param.point.length === 0
+        ? undefined
+        : undefined;
+
   const { data, isLoading, isError } = useGetMemberPointHistoryQuery({
     accountId,
     startDate: startDate
       ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
       : undefined,
     endDate: endDate ? dayjs(endDate).format('YYYY-MM-DDTHH:mm:ss') : undefined,
+    isPositive,
     pageParam: {
       page: currentPage,
       size: 10,
       sort: `createdAt,${param.order}`,
     },
   });
-
-  const reversedData = data ? [...data.pointInfos].reverse() : [];
 
   return (
     <section className="flex w-full flex-col gap-y-10">
@@ -102,7 +108,7 @@ const AdminMembersPointHistoryPage = ({ params }: Props) => {
           ) : data.pageInfo.totalElements <= 0 ? (
             <EmptyContainer colSpan={6} />
           ) : (
-            reversedData.map((item, index) => {
+            [...data.pointInfos].reverse().map((item, index) => {
               const { totalElements } = data.pageInfo;
               const { pageSize } = data.pageInfo;
               const currentIndex = (currentPage - 1) * pageSize + index;
