@@ -3,7 +3,7 @@ import InfoSectionModule from '@/_components/common/modules/InfoSectionModule';
 
 interface InfoSectionContainerProps {
   title?: string;
-  image?: StaticImageData;
+  image?: string;
   data: { subtitle: string; content: string }[];
   row?: boolean;
 }

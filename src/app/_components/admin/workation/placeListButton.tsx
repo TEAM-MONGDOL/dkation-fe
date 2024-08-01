@@ -4,7 +4,7 @@ import { StaticImageData } from 'next/image';
 import { useRouter } from 'next/navigation';
 
 interface PlaceListButtonProps {
-  image: StaticImageData;
+  image: string;
   data: { subtitle: string; content: string }[];
   domain: string;
 }
@@ -19,7 +19,8 @@ const PlaceListButton: React.FC<PlaceListButtonProps> = ({
     router.push(domain);
   };
   return (
-    <button onClick={buttonClick}>
+    // eslint-disable-next-line jsx-a11y/control-has-associated-label
+    <button type="button" onClick={buttonClick}>
       <InfoSectionContainer row image={image} data={data} />
     </button>
   );

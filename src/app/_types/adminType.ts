@@ -127,6 +127,21 @@ export const memberDetailSchema = z.object({
   pointQuantity: z.number(),
 });
 
+export const wktPlaceInfoSchema = z.object({
+  id: z.number(),
+  thumbnailUrl: z.string(),
+  place: z.string(),
+  address: z.string(),
+  createdAt: z.date(),
+  maxPeople: z.number(),
+  description: z.string(),
+});
+
+export const workationPlaceListSchema = z.object({
+  wktPlaceInfos: wktPlaceInfoSchema.array(),
+  pageInfo: pageInfoSchema,
+});
+
 // Type
 export type StatusType = z.infer<typeof applyStatusSchema>;
 
