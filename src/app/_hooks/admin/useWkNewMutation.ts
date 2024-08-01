@@ -6,10 +6,10 @@ interface PostWkProps {
   thumbnailUrl: string;
   title: string;
   address: string;
-  startDate: Date;
-  endDate: Date;
-  applyStartDate: Date;
-  applyEndDate: Date;
+  startDate: string;
+  endDate: string;
+  applyStartDate: string;
+  applyEndDate: string;
   description: string;
   totalRecruit: number;
 }

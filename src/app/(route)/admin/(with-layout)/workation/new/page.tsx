@@ -42,7 +42,9 @@ const WorkationNew = () => {
     router.push('/admin/workation');
   };
   const { mutate: postWk } = useWkNewMutation(successCallback);
-  const handleChange = (e: any) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -55,16 +57,18 @@ const WorkationNew = () => {
       place: option,
     }));
   };
+
+  console.log(formData);
   const handleSubmit = () => {
     postWk({
-      wktPlaceId: 0,
+      wktPlaceId: 201, // 워케이션 목록 api 가져와서 id 주기
       thumbnailUrl: '썸네일 주소',
       title: formData.title,
-      address: formData.place,
-      startDate: startDateWorkation!,
-      endDate: endDateWorkation!,
-      applyStartDate: startDateRecruitment!,
-      applyEndDate: endDateRecruitment!,
+      address: formData.place, // 주소 삭제 예정
+      startDate: dayjs(startDateWorkation!).format('YYYY-MM-DD'),
+      endDate: dayjs(endDateWorkation!).format('YYYY-MM-DD'),
+      applyStartDate: dayjs(startDateRecruitment!).format('YYYY-MM-DD'),
+      applyEndDate: dayjs(endDateRecruitment!).format('YYYY-MM-DD'),
       description: formData.description,
       totalRecruit: parseInt(formData.number, 10),
     });
@@ -149,7 +153,8 @@ const WorkationNew = () => {
             placeholder="상세내용을 입력해주세요."
             size="LARGE"
             maxLength={2000}
-            name="워케이션 상세내용"
+            name="description"
+            onChange={handleChange}
           />
         </div>
       </div>
