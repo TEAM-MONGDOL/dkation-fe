@@ -19,8 +19,8 @@ import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
 import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAtom';
-import dayjs from 'dayjs';
 import { useGetNoticeListQuery } from '@/_hooks/admin/useGetNoticeListQuery';
+import dayjs from 'dayjs';
 
 const NoticesListPage = () => {
   const router = useRouter();
@@ -35,7 +35,7 @@ const NoticesListPage = () => {
     noticeType: string[];
   }>({
     order: 'RECENT',
-    noticeType: ['NOTICE', 'RESULT', 'EVENT'],
+    noticeType: ['ANNOUNCEMENT', 'RESULT', 'EVENT'],
   });
 
   const moveToWritePage = () => {
@@ -50,7 +50,7 @@ const NoticesListPage = () => {
     setParam({
       ...param,
       order: 'RECENT',
-      noticeType: ['NOTICE', 'RESULT', 'EVENT'],
+      noticeType: ['ANNOUNCEMENT', 'RESULT', 'EVENT'],
     });
     setSelectedDateTag('ALL');
     setStartDate(null);
@@ -66,8 +66,8 @@ const NoticesListPage = () => {
     startDate: startDate ? dayjs(startDate).format('YYYY-MM-DD') : undefined,
     endDate: endDate ? dayjs(endDate).format('YYYY-MM-DD') : undefined,
     pageParam: {
-      pageNum: currentPage,
-      pageSize: 10,
+      page: currentPage,
+      size: 10,
       sort: param.order,
     },
   });

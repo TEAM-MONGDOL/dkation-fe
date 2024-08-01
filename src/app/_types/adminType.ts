@@ -1,7 +1,4 @@
-import App from 'next/app';
-import { title } from 'process';
 import { z } from 'zod';
-
 // ResponseSchema
 export const pageInfoSchema = z.object({
   pageNum: z.number(),
@@ -134,7 +131,7 @@ export type OrderType = 'RECENT' | 'OLDEST';
 
 export type PointRewardType = 'PERSONAL' | 'GROUP';
 
-export type NoticeType = 'NOTICE' | 'RESULT' | 'EVENT';
+export type NoticeType = 'ANNOUNCEMENT' | 'RESULT' | 'EVENT';
 
 export type ResultType = 'NAME' | 'LOWEST' | 'HIGHEST';
 
@@ -234,7 +231,7 @@ export const pointRewardList: { [key in PointRewardType]: string } = {
   GROUP: '단체',
 };
 export const noticeList: { [key in NoticeType]: string } = {
-  NOTICE: '공지',
+  ANNOUNCEMENT: '공지',
   RESULT: '결과 발표',
   EVENT: '이벤트 안내',
 };
