@@ -56,8 +56,10 @@ const AdminMembersPointHistoryPage = ({ params }: Props) => {
 
   const { data, isLoading, isError } = useGetMemberPointHistoryQuery({
     accountId,
-    startDate: startDate ? dayjs(startDate).format('YYYY-MM-DD') : undefined,
-    endDate: endDate ? dayjs(endDate).format('YYYY-MM-DD') : undefined,
+    startDate: startDate
+      ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
+      : undefined,
+    endDate: endDate ? dayjs(endDate).format('YYYY-MM-DDTHH:mm:ss') : undefined,
     pageParam: {
       page: currentPage,
       size: 10,
