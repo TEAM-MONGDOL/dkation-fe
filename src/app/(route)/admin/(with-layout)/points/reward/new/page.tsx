@@ -14,47 +14,15 @@ import SearchingBoxModule from '@/_components/common/modules/SearchingBoxModule'
 import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
+import { useGetMemberListInifiniteQuery } from '@/_hooks/admin/useGetMemberListInfiniteQuery';
+import { MemberType } from '@/_types/adminType';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-
-// TODO : 타입 선언 필요
-type MemberType = {
-  id: number;
-  name: string;
-  team: string;
-  personalId: string;
-};
-
-const data: MemberType[] = [
-  {
-    id: 1,
-    name: '김철수',
-    team: '개발팀',
-    personalId: 'kim123',
-  },
-  {
-    id: 2,
-    name: '이영희',
-    team: '디자인팀',
-    personalId: 'lee123',
-  },
-  {
-    id: 3,
-    name: '박민수',
-    team: '기획팀',
-    personalId: 'park123',
-  },
-  {
-    id: 4,
-    name: '홍길동',
-    team: '개발팀',
-    personalId: 'hong123',
-  },
-];
+import { useRef, useState } from 'react';
 
 const AdminPointsRewardNewPage = () => {
   const router = useRouter();
+  const memberListRef = useRef<HTMLDivElement>(null);
   const [selectedRequest, setSelectedRequest] = useState<MemberType[]>([]);
   const [selectedDelete, setSelectedDelete] = useState<MemberType[]>([]);
   const [isConfirmModelOpen, setIsConfirmModelOpen] = useState(false);
@@ -65,6 +33,16 @@ const AdminPointsRewardNewPage = () => {
     '디자인팀',
     '기획팀',
   ]);
+
+  const {
+    data: memberList,
+    fetchNextPage: memberListFetchNextPage,
+    hasNextPage: memberListHasNextPage,
+    isLoading: memberListIsLoading,
+  } = useGetMemberListInifiniteQuery({
+    // department: selectedOptions.join(','),
+    pageable: { page: 1, size: 10 },
+  });
 
   return (
     <section className="flex h-full w-full flex-col gap-y-10 overflow-y-auto">
@@ -118,17 +96,45 @@ const AdminPointsRewardNewPage = () => {
                   )}
                 </div>
               </div>
-              <TableContainer maxHeight="max-h-[500px]">
+              <TableContainer
+                maxHeight="max-h-[300px]"
+                isInfiniteScroll
+                infiniteScrollProps={{
+                  load: (
+                    <p
+                      key={`loading-${!memberList ? 0 : memberList.pages[memberList.pages.length - 1].pageInfo.pageNum}`}
+                      className="w-full text-center"
+                    >
+                      로딩 중...
+                    </p>
+                  ),
+                  hasMore: memberListHasNextPage,
+                  loadMore: () => {
+                    memberListFetchNextPage();
+                  },
+                  useWindow: false,
+                }}
+              >
                 <TableHeaderModule>
                   <TableHeaderAtom
                     isFirst
                     width="80px"
-                    isBoolean={selectedRequest.length === data.length}
+                    isBoolean={
+                      memberList &&
+                      selectedRequest.length ===
+                        memberList.pages[0].pageInfo.totalElements &&
+                      memberList.pages[0].pageInfo.totalElements !== 0
+                    }
                     onClickBoolean={() => {
-                      if (selectedRequest.length === data.length) {
+                      if (
+                        selectedRequest.length ===
+                        memberList?.pages[0].pageInfo.totalElements
+                      ) {
                         setSelectedRequest([]);
                       } else {
-                        setSelectedRequest(data);
+                        setSelectedRequest(
+                          memberList?.pages[0].memberInfos || [],
+                        );
                       }
                     }}
                   />
@@ -137,27 +143,37 @@ const AdminPointsRewardNewPage = () => {
                   <TableHeaderAtom isLast>아이디</TableHeaderAtom>
                 </TableHeaderModule>
                 <tbody>
-                  {data.length <= 0 ? (
+                  {!memberList ? (
+                    memberListIsLoading ? (
+                      <EmptyContainer colSpan={4} text="is loading..." />
+                    ) : (
+                      <EmptyContainer colSpan={4} text="데이터가 없습니다." />
+                    )
+                  ) : memberList.pages[0].pageInfo.totalElements === 0 ? (
                     <EmptyContainer colSpan={4} />
                   ) : (
-                    data.map((item) => (
-                      <TableBodyModule key={item.id}>
-                        <TableBodyAtom
-                          isFirst
-                          isBoolean={selectedRequest.includes(item)}
-                          onClickBoolean={() => [
-                            setSelectedRequest((prev) =>
-                              prev.includes(item)
-                                ? prev.filter((current) => current !== item)
-                                : [...prev, item],
-                            ),
-                          ]}
-                        />
-                        <TableBodyAtom>{item.name}</TableBodyAtom>
-                        <TableBodyAtom>{item.team}</TableBodyAtom>
-                        <TableBodyAtom isLast>{item.personalId}</TableBodyAtom>
-                      </TableBodyModule>
-                    ))
+                    memberList.pages.map((page, pageIdx) =>
+                      page.memberInfos.map((member) => (
+                        <TableBodyModule key={member.accountId}>
+                          <TableBodyAtom
+                            isFirst
+                            isBoolean={selectedRequest.includes(member)}
+                            onClickBoolean={() => [
+                              setSelectedRequest((prev) =>
+                                prev.includes(member)
+                                  ? prev.filter((current) => current !== member)
+                                  : [...prev, member],
+                              ),
+                            ]}
+                          />
+                          <TableBodyAtom>{member.name}</TableBodyAtom>
+                          <TableBodyAtom>{member.department}</TableBodyAtom>
+                          <TableBodyAtom isLast>
+                            {member.accountId}
+                          </TableBodyAtom>
+                        </TableBodyModule>
+                      )),
+                    )
                   )}
                 </tbody>
               </TableContainer>
@@ -215,7 +231,7 @@ const AdminPointsRewardNewPage = () => {
                     <EmptyContainer colSpan={4} />
                   ) : (
                     selectedRequest.map((item) => (
-                      <TableBodyModule key={item.id}>
+                      <TableBodyModule key={item.accountId}>
                         <TableBodyAtom
                           isFirst
                           isBoolean={selectedDelete.includes(item)}
@@ -228,8 +244,8 @@ const AdminPointsRewardNewPage = () => {
                           ]}
                         />
                         <TableBodyAtom>{item.name}</TableBodyAtom>
-                        <TableBodyAtom>{item.team}</TableBodyAtom>
-                        <TableBodyAtom isLast>{item.personalId}</TableBodyAtom>
+                        <TableBodyAtom>{item.department}</TableBodyAtom>
+                        <TableBodyAtom isLast>{item.accountId}</TableBodyAtom>
                       </TableBodyModule>
                     ))
                   )}
