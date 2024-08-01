@@ -9,3 +9,7 @@ export const DragDropContent = {
 
 export const NoticeOptions = ['공지사항', '결과 발표', '이벤트 안내'];
 export const PlaceOptions = ['양양', '제주도'];
+export const MembersSearchQueryOptions = {
+  NAME: '이름',
+  ID: '아이디',
+};

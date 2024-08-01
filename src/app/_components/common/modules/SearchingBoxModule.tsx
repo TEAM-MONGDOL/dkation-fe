@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { SearchIcon } from '@/_assets/icons';
 import FilteringButtonAtom from '@/_components/common/atoms/FilteringButtonAtom';
 import { useState } from 'react';
+import DropdownModule from '@/_components/common/modules/DropdownModule';
 
 interface BoxProps {
   filter?: boolean;
@@ -13,16 +14,24 @@ interface BoxProps {
   height?: string;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  options?: string[];
+  onSelect?: (option: string) => void;
+  dropdownPlaceholder?: string;
+  selectedOption?: string;
 }
 
 const SearchingBoxModule = ({
   filter,
   widthFull,
-  height = 'h-11',
+  height = 'h-5xl',
   onClick,
   placeholder,
   value: initialValue = '',
   onChange,
+  options = [],
+  onSelect = () => {},
+  dropdownPlaceholder = '',
+  selectedOption,
 }: BoxProps) => {
   const [value, setValue] = useState(initialValue);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,7 +46,16 @@ const SearchingBoxModule = ({
     widthClass = filter ? 'w-[312px]' : 'w-[528px]';
   }
   return (
-    <div className={`flex ${widthFull ? 'w-full' : ''}`}>
+    <div className={`flex gap-x-2.5 ${widthFull ? 'w-full' : ''}`}>
+      {options && options.length > 0 ? (
+        <DropdownModule
+          size="small"
+          options={options}
+          onSelect={onSelect}
+          placeholder={dropdownPlaceholder}
+          selectedOption={selectedOption}
+        />
+      ) : null}
       <div
         className={`flex ${height} items-center gap-x-2.5 rounded-regular border border-stroke-100 bg-white px-3 py-1.5 ${widthClass}`}
       >
@@ -53,11 +71,7 @@ const SearchingBoxModule = ({
           alt="SearchingGlasses"
         />
       </div>
-      {filter && (
-        <div className="ml-5">
-          <FilteringButtonAtom onClick={onClick} />
-        </div>
-      )}
+      {filter && <FilteringButtonAtom onClick={onClick} />}
     </div>
   );
 };
