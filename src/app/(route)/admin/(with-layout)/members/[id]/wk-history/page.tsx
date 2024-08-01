@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import TableContainer from '@/_components/common/containers/TableContainer';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
 import FilteringButtonAtom from '@/_components/common/atoms/FilteringButtonAtom';
@@ -17,32 +17,21 @@ import TableHeaderAtom from '@/_components/common/atoms/TableHeaderAtom';
 import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
+import { useGetMemberWkHistoryQuery } from '@/_hooks/admin/useGetMemberWkHistoryQuery';
+import dayjs from 'dayjs';
 
 const wkHistoryOrderList = {
   ...orderList,
   ...pointOrderList,
 };
 
-const data = [
-  {
-    id: 1,
-    워케이션: '9월 2주차 워케이션 : 양양',
-    신청일시: '2024.07.04',
-    배팅포인트: { text: '350 P', color: 'text-primaryDark' },
-    확률: { text: '3.8%', color: 'text-primaryDark' },
-    상태: { text: '신청완료', color: 'text-positive' },
-  },
-  {
-    id: 2,
-    워케이션: '9월 2주차 워케이션 : 양양',
-    신청일시: '2024.07.04',
-    배팅포인트: { text: '350 P', color: 'text-primaryDark' },
-    확률: { text: '3.8%', color: 'text-primaryDark' },
-    상태: { text: '추첨대기', color: 'text-green-700' },
-  },
-];
+interface AdminMembersWkHistoryPageProps {
+  accountId: string;
+}
 
-const AdminMembersWkHistoryPage = () => {
+const AdminMembersWkHistoryPage = ({
+  accountId,
+}: AdminMembersWkHistoryPageProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
   const [selectedDateTag, setSelectedDateTag] =
@@ -86,6 +75,18 @@ const AdminMembersWkHistoryPage = () => {
     setEndDate(null);
   };
 
+  const { data, isLoading, isError } = useGetMemberWkHistoryQuery({
+    accountId,
+    statuses: param.type.join(','),
+    startDate: startDate ? dayjs(startDate).format('YYYY-MM-DD') : undefined,
+    endDate: endDate ? dayjs(endDate).format('YYYY-MM-DD') : undefined,
+    pageParam: {
+      pageNum: currentPage,
+      pageSize: 10,
+      sort: param.order,
+    },
+  });
+
   return (
     <section className="flex w-full flex-col gap-y-10">
       <div className="flex w-full items-center justify-between">
@@ -111,36 +112,37 @@ const AdminMembersWkHistoryPage = () => {
         </TableHeaderModule>
 
         <tbody>
-          {data.length <= 0 ? (
+          {!data ? (
+            isLoading ? (
+              <EmptyContainer colSpan={6} text="로딩 중입니다 .." />
+            ) : (
+              <EmptyContainer colSpan={6} text="데이터가 없습니다" />
+            )
+          ) : data.pageInfo.totalElements <= 0 ? (
             <EmptyContainer colSpan={6} />
           ) : (
-            data.map((item, index) => (
-              <TableBodyModule key={item.id}>
+            data.applyInfos.map((item, index) => (
+              <TableBodyModule key={item.wktName}>
                 <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
-                <TableBodyAtom>{item.워케이션}</TableBodyAtom>
-                <TableBodyAtom>{item.신청일시}</TableBodyAtom>
-                <TableBodyAtom color={item.배팅포인트.color}>
-                  {item.배팅포인트.text}
-                </TableBodyAtom>
-                <TableBodyAtom color={item.확률.color}>
-                  {item.확률.text}
-                </TableBodyAtom>
-                <TableBodyAtom isLast color={item.상태.color}>
-                  {item.상태.text}
-                </TableBodyAtom>
+                <TableBodyAtom>{item.wktName}</TableBodyAtom>
+                <TableBodyAtom>{item.applicationDate}</TableBodyAtom>
+                <TableBodyAtom>{item.bettingPoint}</TableBodyAtom>
+                <TableBodyAtom>{item.winningProbability}</TableBodyAtom>
+                <TableBodyAtom isLast>{item.status}</TableBodyAtom>
               </TableBodyModule>
             ))
           )}
         </tbody>
       </TableContainer>
-      <div className="flex w-full items-center justify-center">
-        <PaginationModule
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          totalPages={Math.ceil(data.length / 10)}
-        />
-      </div>
-
+      {data && data.pageInfo.totalElements > 0 && (
+        <div className="flex w-full items-center justify-center">
+          <PaginationModule
+            totalPages={data.pageInfo.totalPages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        </div>
+      )}
       <FilteringBarContainer
         isOpen={isFilteringBarOpen}
         setIsOpen={setIsFilteringBarOpen}
