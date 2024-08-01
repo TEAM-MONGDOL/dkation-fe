@@ -27,6 +27,7 @@ export const useGetMemberPointHistoryQuery = ({
       accountId,
       startDate,
       endDate,
+      isPositive,
       pageParam,
     ],
     queryFn: async () => {
