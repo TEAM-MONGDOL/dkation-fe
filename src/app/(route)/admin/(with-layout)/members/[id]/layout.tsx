@@ -31,13 +31,6 @@ const AdminMembersLayout = ({ children, params }: Props) => {
     },
   ];
 
-  // Ensure `children` is defined
-  const renderedChildren = children ? (
-    React.cloneElement(children as React.ReactElement)
-  ) : (
-    <div>Loading...</div>
-  );
-
   return (
     <div className="flex h-full flex-col gap-10">
       <TitleBarModule title="회원 상세" type="LEFT" />
@@ -47,7 +40,7 @@ const AdminMembersLayout = ({ children, params }: Props) => {
           <SidebarModule items={membersDetailSidebar} />
         </div>
         <div className="flex grow">
-          <main className="w-full">{renderedChildren}</main>
+          <main className="w-full">{children}</main>
         </div>
       </div>
     </div>
