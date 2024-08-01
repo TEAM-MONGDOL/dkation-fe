@@ -15,6 +15,8 @@ import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import { useGetMemberListInifiniteQuery } from '@/_hooks/admin/useGetMemberListInfiniteQuery';
+import { useGetPointPolicyQuery } from '@/_hooks/admin/useGetPointPolicyQuery';
+import { usePostPointSupplyMutation } from '@/_hooks/admin/usePostPointSupplyMutation';
 import { MemberType } from '@/_types/adminType';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -27,7 +29,7 @@ const AdminPointsRewardNewPage = () => {
   const [selectedDelete, setSelectedDelete] = useState<MemberType[]>([]);
   const [isConfirmModelOpen, setIsConfirmModelOpen] = useState(false);
   const [isTeamFilterOpen, setIsTeamFilterOpen] = useState(false);
-  const [selectedType, setSelectedType] = useState<string>('');
+  const [selectedType, setSelectedType] = useState<number | null>(null);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([
     '개발팀',
     '디자인팀',
@@ -44,6 +46,21 @@ const AdminPointsRewardNewPage = () => {
     pageable: { page: 1, size: 10 },
   });
 
+  const {
+    data: policyList,
+    isLoading: policyListIsLoading,
+    isError: policyListIsError,
+  } = useGetPointPolicyQuery({
+    pageable: { page: 1, size: 100 },
+  });
+
+  const { mutate: tryPostPointSupply } = usePostPointSupplyMutation({
+    successCallback: () => {
+      setIsConfirmModelOpen(false);
+      router.push('/admin/points/reward');
+    },
+  });
+
   return (
     <section className="flex h-full w-full flex-col gap-y-10 overflow-y-auto">
       <TitleBarModule title="단체 포인트 등록" />
@@ -51,7 +68,12 @@ const AdminPointsRewardNewPage = () => {
         <div className="flex w-[200px] flex-col gap-y-4">
           <h3 className="font-bold">분류</h3>
           <DropdownModule
-            options={['봉사활동', '자기계발']}
+            options={
+              policyList?.pointPolicyList.map((policy) => [
+                policy.id,
+                policy.policyTitle,
+              ]) || []
+            }
             onSelect={setSelectedType}
             selectedOption={selectedType}
             placeholder="분류 선택"
@@ -256,10 +278,10 @@ const AdminPointsRewardNewPage = () => {
         </div>
         <div className="flex w-full items-center justify-end">
           <ButtonAtom
-            type="submit"
+            type="button"
             buttonStyle="yellow"
             onClick={() => {
-              if (selectedType === '') {
+              if (selectedType === null) {
                 // TODO : alert 디자인 적용 필요
                 alert('분류를 선택해주세요.');
                 return;
@@ -280,10 +302,12 @@ const AdminPointsRewardNewPage = () => {
             confirmText="등록"
             cancelText="취소"
             onConfirm={() => {
-              //  TODO : 포인트 등록 API 호출
-              alert('포인트 등록 완료');
-              setIsConfirmModelOpen(false);
-              router.push('/admin/points/reward');
+              tryPostPointSupply({
+                policyId: selectedType!,
+                body: selectedRequest.map((request) => ({
+                  accountId: request.accountId,
+                })),
+              });
             }}
             onCancel={() => {
               setIsConfirmModelOpen(false);
@@ -293,7 +317,10 @@ const AdminPointsRewardNewPage = () => {
               data={[
                 {
                   subtitle: '분류',
-                  content: selectedType,
+                  content:
+                    policyList?.pointPolicyList.find(
+                      (policy) => policy.id === selectedType,
+                    )?.policyTitle || '',
                 },
                 {
                   subtitle: '지급 대상',
