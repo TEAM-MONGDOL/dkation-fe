@@ -223,8 +223,8 @@ export const teamList: { [key in TeamType]: string } = {
 };
 
 export const orderList: { [key in OrderType]: string } = {
-  ASC: '최신순',
-  DESC: '오래된순',
+  DESC: '최신순',
+  ASC: '오래된순',
 };
 
 export const pointRewardList: { [key in PointRewardType]: string } = {
