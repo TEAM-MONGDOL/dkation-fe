@@ -14,8 +14,8 @@ export const useGetNoticeListQuery = ({
   startDate?: string;
   endDate?: string;
   pageParam: {
-    pageNum: number;
-    pageSize: number;
+    page: number;
+    size: number;
     sort?: string;
   };
 }) => {
