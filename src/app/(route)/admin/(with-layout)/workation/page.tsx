@@ -78,7 +78,7 @@ const WorkationList = () => {
   });
 
   return (
-    <section className="flex w-full flex-col gap-y-10 overflow-y-auto">
+    <section className="flex h-full w-full flex-col gap-y-10 overflow-y-auto">
       <div className="flex w-full items-center justify-between">
         <TitleBarModule title="워케이션 목록" />
         <FilteringButtonAtom onClick={handleFilteringBar} />
