@@ -10,7 +10,7 @@ export const useGetMemberDetailQuery = ({
   accountId: string;
 }) => {
   return useQuery({
-    queryKey: [useGetMemberDetailQueryKey],
+    queryKey: [useGetMemberDetailQueryKey, accountId],
     queryFn: async () => {
       const res = await api.get(`/api/member/info`, {
         params: { accountId },

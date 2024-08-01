@@ -1,5 +1,3 @@
-import App from 'next/app';
-import { title } from 'process';
 import { z } from 'zod';
 
 // ResponseSchema
@@ -130,7 +128,7 @@ export const memberDetailSchema = z.object({
 // Type
 export type StatusType = z.infer<typeof applyStatusSchema>;
 
-export type OrderType = 'RECENT' | 'OLDEST';
+export type OrderType = 'DESC' | 'ASC';
 
 export type PointRewardType = 'PERSONAL' | 'GROUP';
 
@@ -225,8 +223,8 @@ export const teamList: { [key in TeamType]: string } = {
 };
 
 export const orderList: { [key in OrderType]: string } = {
-  RECENT: '최신순',
-  OLDEST: '오래된순',
+  DESC: '최신순',
+  ASC: '오래된순',
 };
 
 export const pointRewardList: { [key in PointRewardType]: string } = {
