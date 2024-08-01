@@ -14,14 +14,34 @@ import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import ModalModule from '@/_components/common/modules/ModalModule';
 import { useRouter } from 'next/navigation';
 import InfoSectionContainer from '@/_components/common/containers/InfoSectionContainer';
+import { useWkNewMutation } from '@/_hooks/admin/useWkNewMutation';
 
 const WorkationNew = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     title: '',
     number: '',
     place: '',
     description: '',
   });
+  const [startDateRecruitment, setStartDateRecruitment] = useState<Date | null>(
+    dayjs().subtract(1, 'year').toDate(),
+  );
+  const [endDateRecruitment, setEndDateRecruitment] = useState<Date | null>(
+    dayjs().toDate(),
+  );
+  const [startDateWorkation, setStartDateWorkation] = useState<Date | null>(
+    dayjs().subtract(1, 'year').toDate(),
+  );
+  const [endDateWorkation, setEndDateWorkation] = useState<Date | null>(
+    dayjs().toDate(),
+  );
+  const [isConfirmModelOpen, setIsConfirmModelOpen] = useState(false);
+  const successCallback = () => {
+    alert('워케이션 등록 완료');
+    router.push('/admin/workation');
+  };
+  const { mutate: postWk } = useWkNewMutation(successCallback);
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -35,21 +55,22 @@ const WorkationNew = () => {
       place: option,
     }));
   };
-  const [startDateRecruitment, setStartDateRecruitment] = useState<Date | null>(
-    dayjs().subtract(1, 'year').toDate(),
-  );
-  const [endDateRecruitment, setEndDateRecruitment] = useState<Date | null>(
-    dayjs().toDate(),
-  );
+  const handleSubmit = () => {
+    postWk({
+      wktPlaceId: 0,
+      thumbnailUrl: '썸네일 주소',
+      title: formData.title,
+      address: formData.place,
+      startDate: startDateWorkation!,
+      endDate: endDateWorkation!,
+      applyStartDate: startDateRecruitment!,
+      applyEndDate: endDateRecruitment!,
+      description: formData.description,
+      totalRecruit: parseInt(formData.number, 10),
+    });
+    setIsConfirmModelOpen(false);
+  };
 
-  const [startDateWorkation, setStartDateWorkation] = useState<Date | null>(
-    dayjs().subtract(1, 'year').toDate(),
-  );
-  const [endDateWorkation, setEndDateWorkation] = useState<Date | null>(
-    dayjs().toDate(),
-  );
-  const [isConfirmModelOpen, setIsConfirmModelOpen] = useState(false);
-  const router = useRouter();
   return (
     <section className="flex flex-col">
       <TitleBarModule title="워케이션 등록" type="LEFT" />
@@ -146,12 +167,7 @@ const WorkationNew = () => {
           title="워케이션을 등록하시겠습니까?"
           confirmText="확인"
           cancelText="취소"
-          onConfirm={() => {
-            //  TODO : 워케이션 등록 API 호출
-            alert('워케이션 등록 완료');
-            setIsConfirmModelOpen(false);
-            router.push('/admin/workation');
-          }}
+          onConfirm={handleSubmit}
           onCancel={() => {
             setIsConfirmModelOpen(false);
           }}
