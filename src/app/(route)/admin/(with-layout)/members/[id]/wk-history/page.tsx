@@ -25,13 +25,12 @@ const wkHistoryOrderList = {
   ...pointOrderList,
 };
 
-interface AdminMembersWkHistoryPageProps {
-  accountId: string;
+interface Props {
+  params: { id: string };
 }
 
-const AdminMembersWkHistoryPage = ({
-  accountId,
-}: AdminMembersWkHistoryPageProps) => {
+const AdminMembersWkHistoryPage = ({ params }: Props) => {
+  const accountId = params.id;
   const [currentPage, setCurrentPage] = useState(1);
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
   const [selectedDateTag, setSelectedDateTag] =
@@ -42,32 +41,32 @@ const AdminMembersWkHistoryPage = ({
     order: string;
     type: string[];
   }>({
-    order: 'RECENT',
+    order: 'ASC',
     type: [
       'APPLIED',
-      'DRAW_WAITING',
-      'FAIL',
-      'CONFIRMED_WAITING',
+      'RAFFLE_WAIT',
+      'NO_WINNING',
+      'CONFIRM_WAIT',
       'CANCEL',
       'CONFIRM',
-      'WAITING',
-      'COMPLETED',
+      'WAIT',
+      'VISITED',
     ],
   });
 
   const refreshHandler = () => {
     setParam({
       ...param,
-      order: 'RECENT',
+      order: 'ASC',
       type: [
         'APPLIED',
-        'DRAW_WAITING',
-        'FAIL',
-        'CONFIRMED_WAITING',
+        'RAFFLE_WAIT',
+        'NO_WINNING',
+        'CONFIRM_WAIT',
         'CANCEL',
         'CONFIRM',
-        'WAITING',
-        'COMPLETED',
+        'WAIT',
+        'VISITED',
       ],
     });
     setSelectedDateTag('ALL');
@@ -78,12 +77,14 @@ const AdminMembersWkHistoryPage = ({
   const { data, isLoading, isError } = useGetMemberWkHistoryQuery({
     accountId,
     statuses: param.type.join(','),
-    startDate: startDate ? dayjs(startDate).format('YYYY-MM-DD') : undefined,
-    endDate: endDate ? dayjs(endDate).format('YYYY-MM-DD') : undefined,
+    startDate: startDate
+      ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
+      : undefined,
+    endDate: endDate ? dayjs(endDate).format('YYYY-MM-DDTHH:mm:ss') : undefined,
     pageParam: {
-      pageNum: currentPage,
-      pageSize: 10,
-      sort: param.order,
+      page: currentPage,
+      size: 10,
+      sort: `createdAt,${param.order}`,
     },
   });
 
@@ -114,23 +115,30 @@ const AdminMembersWkHistoryPage = ({
         <tbody>
           {!data ? (
             isLoading ? (
-              <EmptyContainer colSpan={6} text="로딩 중입니다 .." />
+              <EmptyContainer colSpan={6} text="로딩 중입니다..." />
             ) : (
-              <EmptyContainer colSpan={6} text="데이터가 없습니다" />
+              <EmptyContainer colSpan={6} text="error" />
             )
           ) : data.pageInfo.totalElements <= 0 ? (
             <EmptyContainer colSpan={6} />
           ) : (
-            data.applyInfos.map((item, index) => (
-              <TableBodyModule key={item.wktName}>
-                <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
-                <TableBodyAtom>{item.wktName}</TableBodyAtom>
-                <TableBodyAtom>{item.applicationDate}</TableBodyAtom>
-                <TableBodyAtom>{item.bettingPoint}</TableBodyAtom>
-                <TableBodyAtom>{item.winningProbability}</TableBodyAtom>
-                <TableBodyAtom isLast>{item.status}</TableBodyAtom>
-              </TableBodyModule>
-            ))
+            [...data.applyInfoList].reverse().map((item, index) => {
+              const { totalElements, pageSize } = data.pageInfo;
+              const currentIndex = (currentPage - 1) * pageSize + index;
+              const descendingIndex = totalElements - currentIndex;
+              return (
+                <TableBodyModule key={item.wktnName}>
+                  <TableBodyAtom isFirst>{descendingIndex}</TableBodyAtom>
+                  <TableBodyAtom>{item.wktnName}</TableBodyAtom>
+                  <TableBodyAtom>
+                    {dayjs(item.applicationDate).format('YYYY-MM-DD')}
+                  </TableBodyAtom>
+                  <TableBodyAtom>{item.bettingPoint}</TableBodyAtom>
+                  <TableBodyAtom>{item.winningProbability}</TableBodyAtom>
+                  <TableBodyAtom isLast>{item.applyStatusType}</TableBodyAtom>
+                </TableBodyModule>
+              );
+            })
           )}
         </tbody>
       </TableContainer>
