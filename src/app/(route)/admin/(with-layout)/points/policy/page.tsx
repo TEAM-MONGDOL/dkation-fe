@@ -42,7 +42,7 @@ const AdminPointsPolicyPage = () => {
     pageable: {
       page,
       size: 10,
-      sort: `modifiedAt,${param.order}`,
+      sort: `lastModifiedAt,${param.order}`,
     },
     searchParam: {
       startDate: startDate ? startDate.toISOString() : undefined,
@@ -149,7 +149,8 @@ const AdminPointsPolicyPage = () => {
         <RangeContainer
           title="포인트 점수"
           min={0}
-          max={1580}
+          max={100000}
+          step={10}
           onChange={({ min, max }) =>
             setParam({ ...param, startPoint: min, endPoint: max })
           }
