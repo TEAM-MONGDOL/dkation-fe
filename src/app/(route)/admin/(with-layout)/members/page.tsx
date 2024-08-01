@@ -38,8 +38,8 @@ const AdminMembersListPage = () => {
   const { data, isLoading, error } = useGetMemberListQuery({
     department: param.departmentType.join(','),
     pageParam: {
-      pageNum: currentPage,
-      pageSize: 10,
+      page: currentPage,
+      size: 10,
       sort: param.order,
     },
   });

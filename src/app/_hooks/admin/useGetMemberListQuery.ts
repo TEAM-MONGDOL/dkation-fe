@@ -9,7 +9,7 @@ export const useGetMemberListQuery = ({
   pageParam,
 }: {
   department?: string;
-  pageParam: { pageNum: number; pageSize: number; sort?: string };
+  pageParam: { page: number; size: number; sort?: string };
 }) => {
   return useQuery({
     queryKey: [useGetMemberListQueryKey],
