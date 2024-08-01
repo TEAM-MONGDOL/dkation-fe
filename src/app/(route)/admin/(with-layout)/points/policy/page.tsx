@@ -45,8 +45,12 @@ const AdminPointsPolicyPage = () => {
       sort: `lastModifiedAt,${param.order}`,
     },
     searchParam: {
-      startDate: startDate ? startDate.toISOString() : undefined,
-      endDate: endDate ? endDate.toISOString() : undefined,
+      startDate: startDate
+        ? dayjs(startDate.setHours(0, 0, 0, 0)).format('YYYY-MM-DDTHH:mm:ss')
+        : undefined,
+      endDate: endDate
+        ? dayjs(endDate.setHours(23, 59, 59, 999)).format('YYYY-MM-DDTHH:mm:ss')
+        : undefined,
       minPoint: param.startPoint,
       maxPoint: param.endPoint,
     },
