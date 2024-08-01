@@ -125,6 +125,22 @@ export const memberDetailSchema = z.object({
   pointQuantity: z.number(),
 });
 
+export const penaltyInfoSchema = z.object({
+  wktnName: z.string(),
+  penaltyType: z.union([
+    z.literal('NOSHOW'),
+    z.literal('REPORT'),
+    z.literal('NEGLIGENCE'),
+    z.literal('ABUSE'),
+  ]),
+  createdAt: z.string(),
+});
+
+export const penaltyListSchema = z.object({
+  penaltyInfos: penaltyInfoSchema.array(),
+  pageInfo: pageInfoSchema,
+});
+
 // Type
 export type StatusType = z.infer<typeof applyStatusSchema>;
 
