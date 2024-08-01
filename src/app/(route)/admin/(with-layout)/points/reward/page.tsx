@@ -61,9 +61,9 @@ const AdminPointsRewardPage = () => {
     startDate: startDate ? dayjs(startDate).format('YYYY-MM-DD') : undefined,
     endDate: endDate ? dayjs(endDate).format('YYYY-MM-DD') : undefined,
     pageParam: {
-      pageNum: currentPage,
-      pageSize: 10,
-      sort: param.order,
+      page: currentPage,
+      size: 10,
+      // sort: param.order,
     },
   });
 
