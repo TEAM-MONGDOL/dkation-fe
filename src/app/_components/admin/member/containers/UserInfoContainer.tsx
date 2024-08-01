@@ -8,7 +8,7 @@ interface UserInfoContainerProps {
   accountId: string;
 }
 
-const UserInfoContainer: React.FC<UserInfoContainerProps> = ({ accountId }) => {
+const UserInfoContainer = ({ accountId }: UserInfoContainerProps) => {
   const { data, isLoading, isError } = useGetMemberDetailQuery({
     accountId,
   });
