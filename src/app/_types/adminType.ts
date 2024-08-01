@@ -130,6 +130,8 @@ export const memberDetailSchema = z.object({
 // Type
 export type StatusType = z.infer<typeof applyStatusSchema>;
 
+export type MemberType = z.infer<typeof memberInfoSchema>;
+
 export type OrderType = 'RECENT' | 'OLDEST';
 
 export type PointRewardType = 'PERSONAL' | 'GROUP';
