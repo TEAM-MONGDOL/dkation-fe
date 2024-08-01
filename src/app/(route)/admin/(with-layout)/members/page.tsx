@@ -17,7 +17,7 @@ import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
 import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAtom';
 import { useGetMemberListQuery } from '@/_hooks/admin/useGetMemberListQuery';
-import { MembersSearchQueryOptions } from '@/_constants/common'; // Ensure this import is correct
+import { MembersSearchQueryOptions } from '@/_constants/common';
 
 const AdminMembersListPage = () => {
   const router = useRouter();
