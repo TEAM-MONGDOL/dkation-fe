@@ -11,15 +11,16 @@ export const pageInfoSchema = z.object({
 });
 
 export const wktInfoSchema = z.object({
-  wkId: z.number(),
+  wktId: z.number(),
   title: z.string(),
-  thumbnail: z.string(),
+  wktPlaceTitle: z.string(),
+  thumbnailUrl: z.string(),
   totalRecruit: z.number(),
-  startDate: z.date(),
-  endDate: z.date(),
-  applyStartDate: z.date(),
-  applyEndDate: z.date(),
-  createdAt: z.date(),
+  startDate: z.string(),
+  endDate: z.string(),
+  applyStartDate: z.string(),
+  applyEndDate: z.string(),
+  createdAt: z.string(),
 });
 
 export const workationListSchema = z.object({

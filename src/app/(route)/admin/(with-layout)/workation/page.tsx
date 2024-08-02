@@ -2,7 +2,7 @@
 
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import FilteringButtonAtom from '@/_components/common/atoms/FilteringButtonAtom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TableContainer from '@/_components/common/containers/TableContainer';
 import { useRouter } from 'next/navigation';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
@@ -89,7 +89,7 @@ const WorkationList = () => {
             번호
           </TableHeaderAtom>
           <TableHeaderAtom>제목</TableHeaderAtom>
-          <TableHeaderAtom width="100px">등록 일시</TableHeaderAtom>
+          <TableHeaderAtom width="140px">등록 일시</TableHeaderAtom>
           <TableHeaderAtom width="140px">모집 기간</TableHeaderAtom>
           <TableHeaderAtom width="140px">워케이션 기간</TableHeaderAtom>
           <TableHeaderAtom width="110px">상태</TableHeaderAtom>
@@ -109,9 +109,9 @@ const WorkationList = () => {
             <EmptyContainer colSpan={8} />
           ) : (
             data.wktInfos.map((item, index) => (
-              <TableBodyModule key={item.wkId}>
-                <TableBodyAtom isFirst>{item.wkId + 1}</TableBodyAtom>
-                <TableBodyAtom>{item.title}</TableBodyAtom>
+              <TableBodyModule key={item.wktId}>
+                <TableBodyAtom isFirst>{item.wktId + 1}</TableBodyAtom>
+                <TableBodyAtom>{item.wktPlaceTitle}</TableBodyAtom>
                 <TableBodyAtom>
                   {dayjs(item.createdAt).format('YYYY-MM-DD')}
                 </TableBodyAtom>
@@ -126,7 +126,7 @@ const WorkationList = () => {
                 <TableBodyAtom>status 받아야함</TableBodyAtom>
                 <TableBodyAtom>
                   <button
-                    onClick={() => penaltyRouteButtonClick(item.wkId)}
+                    onClick={() => penaltyRouteButtonClick(item.wktId)}
                     className="rounded-full bg-primary px-6 py-2 text-4 font-semibold text-white"
                   >
                     자세히
@@ -134,7 +134,7 @@ const WorkationList = () => {
                 </TableBodyAtom>
                 <TableBodyAtom isLast>
                   <ShowDetailButtonAtom
-                    onClick={() => onClickRowDetail(item.wkId)}
+                    onClick={() => onClickRowDetail(item.wktId)}
                   />
                 </TableBodyAtom>
               </TableBodyModule>
@@ -152,7 +152,6 @@ const WorkationList = () => {
             />
           </div>
         )}
-        {/* 등록버튼 안생김ㅠ ㅠ */}
         <div className="absolute right-0 top-0">
           <ButtonAtom
             text="워케이션 등록"
