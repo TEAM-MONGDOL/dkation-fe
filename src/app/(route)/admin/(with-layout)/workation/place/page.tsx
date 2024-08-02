@@ -7,6 +7,8 @@ import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 import { useRouter } from 'next/navigation';
 import PlaceListButton from '@/_components/admin/workation/placeListButton';
 import { useGetWkPlaceListQuery } from '@/_hooks/admin/useGetWkPlaceListQuery';
+import TitleBarModule from '@/_components/common/modules/TitleBarModule';
+import SearchingBoxModule from '@/_components/common/modules/SearchingBoxModule';
 
 const AdminWorkationPlaceListPage = () => {
   const router = useRouter();
@@ -22,6 +24,9 @@ const AdminWorkationPlaceListPage = () => {
   });
   return (
     <section>
+      <div className="mb-10 flex w-full items-center justify-between">
+        <TitleBarModule title="워케이션 장소" />
+      </div>
       {!data ? (
         isError ? (
           <EmptyContainer text="no data" notTable />
