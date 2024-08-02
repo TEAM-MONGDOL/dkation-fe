@@ -13,10 +13,10 @@ export const useGetWkListQuery = ({
   pageParam,
 }: {
   status?: string;
-  applyStartDate?: Date;
-  applyEndDate?: Date;
-  wktStartDate?: Date;
-  wktEndDate?: Date;
+  applyStartDate?: string;
+  applyEndDate?: string;
+  wktStartDate?: string;
+  wktEndDate?: string;
   pageParam: {
     page: number;
     size: number;

@@ -83,10 +83,22 @@ const WorkationList = () => {
   console.log(param.status.join(','));
   const { data, isLoading, isError } = useGetWkListQuery({
     status: param.status.join(','),
-    wktStartDate: startDate === null ? undefined : startDate,
-    wktEndDate: endDate === null ? undefined : endDate,
-    applyStartDate: applyStartDate === null ? undefined : applyStartDate,
-    applyEndDate: applyEndDate === null ? undefined : applyEndDate,
+    wktStartDate:
+      startDate === null
+        ? undefined
+        : dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss'),
+    wktEndDate:
+      endDate === null
+        ? undefined
+        : dayjs(endDate).format('YYYY-MM-DDTHH:mm:ss'),
+    applyStartDate:
+      applyStartDate === null
+        ? undefined
+        : dayjs(applyStartDate).format('YYYY-MM-DDTHH:mm:ss'),
+    applyEndDate:
+      applyEndDate === null
+        ? undefined
+        : dayjs(applyEndDate).format('YYYY-MM-DDTHH:mm:ss'),
     pageParam: {
       page: currentPage,
       size: 10,
