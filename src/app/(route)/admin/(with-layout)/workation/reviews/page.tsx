@@ -13,11 +13,13 @@ import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
 import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAtom';
 import RadioButtonContainer from '@/_components/common/containers/RadioButtonContainer';
-import { reviewOrderList } from '@/_types/adminType';
 import CheckboxContainer from '@/_components/common/containers/CheckboxContainer';
 import FilteringBarContainer from '@/_components/common/containers/FilteringBarContainer';
 import RangeContainer from '@/_components/common/containers/RangeContainer';
 import { useGetWkReviewListQuery } from '@/_hooks/admin/useGetWkReviewListQuery';
+import { StarRateEmptyIcon, StarRateIcon } from '@/_assets/icons';
+import Image from 'next/image';
+import { orderList } from '@/_types/adminType';
 
 // 워케이션 장소 목록 api가져와서 변경
 const placeOrderList = {
@@ -41,7 +43,7 @@ const AdminWorkationReviewsPage = () => {
     startPoint: number;
     endPoint: number;
   }>({
-    order: 'RECENT',
+    order: 'ASC',
     type: Object.keys(placeOrderList),
     startPoint: 0,
     endPoint: 5,
@@ -61,7 +63,7 @@ const AdminWorkationReviewsPage = () => {
     pageParam: {
       page: currentPage,
       size: 10,
-      // sort: param.order,
+      sort: `lastModifiedAt,${param.order}`,
     },
   });
   return (
@@ -94,8 +96,25 @@ const AdminWorkationReviewsPage = () => {
           ) : (
             data.reviewList.map((item) => (
               <TableBodyModule key={item.id}>
-                <TableBodyAtom isFirst>{item.id + 1}</TableBodyAtom>
-                <TableBodyAtom>{item.rating}</TableBodyAtom>
+                <TableBodyAtom isFirst>{item.id}</TableBodyAtom>
+                <TableBodyAtom>
+                  <div className="flex justify-center">
+                    {[...Array(item.rating)].map((_, index) => (
+                      <Image
+                        key={item.id}
+                        src={StarRateIcon}
+                        alt="StarRateIcon"
+                      />
+                    ))}
+                    {[...Array(5 - item.rating)].map((_, index) => (
+                      <Image
+                        key={item.id}
+                        src={StarRateEmptyIcon}
+                        alt="StarRateEmptyIcon"
+                      />
+                    ))}
+                  </div>
+                </TableBodyAtom>
                 <TableBodyAtom>{item.wktPlace}</TableBodyAtom>
                 <TableBodyAtom>{item.reviewer}</TableBodyAtom>
                 <TableBodyAtom>
@@ -132,7 +151,7 @@ const AdminWorkationReviewsPage = () => {
       >
         <RadioButtonContainer
           title="정렬"
-          options={Object.entries(reviewOrderList) as [string, string][]}
+          options={Object.entries(orderList) as [string, string][]}
           selectedOption={param.order}
           setSelectedOption={(order: string) => setParam({ ...param, order })}
         />

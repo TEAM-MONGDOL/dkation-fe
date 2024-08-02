@@ -15,7 +15,7 @@ export const useGetWkReviewListQuery = ({
   pageParam: {
     page: number;
     size: number;
-    // sort?: string;
+    sort?: string;
   };
 }) => {
   return useQuery({

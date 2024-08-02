@@ -144,7 +144,7 @@ export const memberDetailSchema = z.object({
 // Type
 export type StatusType = z.infer<typeof applyStatusSchema>;
 
-export type OrderType = 'RECENT' | 'OLDEST';
+export type OrderType = 'ASC' | 'DESC';
 
 export type PointRewardType = 'PERSONAL' | 'GROUP';
 
@@ -175,8 +175,6 @@ export type PointOrderType = 'POINT_HIGHEST' | 'POINT_LOWEST';
 
 export type PointChangeType = 'INCREASE' | 'DECREASE';
 
-export type ReviewOrderType = 'RECENT' | 'OLDEST' | 'HIGHEST' | 'LOWEST';
-
 // Convert Type / List
 export const statusList: { [key in StatusType]: string } = {
   APPLIED: '신청완료',
@@ -197,13 +195,6 @@ export const pointOrderList: { [key in PointOrderType]: string } = {
 export const pointChangeList: { [key in PointChangeType]: string } = {
   INCREASE: '포인트 증가',
   DECREASE: '포인트 감소',
-};
-
-export const reviewOrderList: { [key in ReviewOrderType]: string } = {
-  RECENT: '최신순 ',
-  OLDEST: '오래된 순',
-  HIGHEST: '별점 높은 순',
-  LOWEST: '별점 낮은 순',
 };
 
 export const pointRequestStatusList: {
@@ -229,8 +220,8 @@ export const teamList: { [key in TeamType]: string } = {
 };
 
 export const orderList: { [key in OrderType]: string } = {
-  RECENT: '최신순',
-  OLDEST: '오래된순',
+  ASC: '최신순',
+  DESC: '오래된순',
 };
 
 export const pointRewardList: { [key in PointRewardType]: string } = {

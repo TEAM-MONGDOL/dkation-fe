@@ -28,3 +28,5 @@ export { default as ControlPointDuplicateIcon } from './controlPointDuplicate.sv
 export { default as InsertChartIcon } from './insertChart.svg';
 export { default as ImageIcon } from './image.svg';
 export { default as ExtensionIcon } from './extension.svg';
+export { default as StarRateIcon } from './starRate.svg';
+export { default as StarRateEmptyIcon } from './starRateEmpty.svg';
