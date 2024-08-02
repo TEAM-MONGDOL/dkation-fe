@@ -62,7 +62,11 @@ export const fileUrlsSchema = z.object({
 
 export const announcementInfoSchema = z.object({
   id: z.number(),
-  type: z.union([z.literal('NOTICE'), z.literal('RESULT'), z.literal('EVENT')]),
+  announcementType: z.union([
+    z.literal('ANNOUNCEMENT'),
+    z.literal('RESULT'),
+    z.literal('EVENT'),
+  ]),
   title: z.string(),
   createdAt: z.string(),
 });
@@ -74,7 +78,11 @@ export const announcementListSchema = z.object({
 
 export const announcementDetailSchema = z.object({
   id: z.number(),
-  type: z.union([z.literal('NOTICE'), z.literal('RESULT'), z.literal('EVENT')]),
+  announncementType: z.union([
+    z.literal('ANNOUNCEMENT'),
+    z.literal('RESULT'),
+    z.literal('EVENT'),
+  ]),
   title: z.string(),
   content: z.string(),
   fileUrls: fileUrlSchema.array(),
