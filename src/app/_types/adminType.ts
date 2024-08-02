@@ -120,11 +120,11 @@ export const applyInfoSchema = z.object({
   applicationDate: z.string(),
   bettingPoint: z.number(),
   winningProbability: z.number(),
-  status: applyStatusSchema,
+  applyStatusType: applyStatusSchema,
 });
 
 export const applyListSchema = z.object({
-  applyInfos: applyInfoSchema.array(),
+  applyInfoList: applyInfoSchema.array(),
   pageInfo: pageInfoSchema,
 });
 
@@ -252,8 +252,8 @@ export const teamList: { [key in TeamType]: string } = {
 };
 
 export const orderList: { [key in OrderType]: string } = {
-  DESC: '최신순',
-  ASC: '오래된순',
+  ASC: '최신순',
+  DESC: '오래된순',
 };
 
 export const reviewOrderList: { [key in ReviewOrderType]: string } = {

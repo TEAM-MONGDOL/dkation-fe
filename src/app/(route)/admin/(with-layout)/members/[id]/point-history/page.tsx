@@ -37,7 +37,7 @@ const AdminMembersPointHistoryPage = ({ params }: Props) => {
     type: string[];
     point: string[];
   }>({
-    order: 'DESC',
+    order: 'ASC',
     type: [],
     point: ['INCREASE', 'DECREASE'],
   });
@@ -45,7 +45,7 @@ const AdminMembersPointHistoryPage = ({ params }: Props) => {
   const refreshHandler = () => {
     setParam({
       ...param,
-      order: 'DESC',
+      order: 'ASC',
       type: [],
       point: ['INCREASE', 'DECREASE'],
     });
@@ -53,14 +53,12 @@ const AdminMembersPointHistoryPage = ({ params }: Props) => {
     setStartDate(null);
     setEndDate(null);
   };
-
   const isPositive =
     param.point.length === 1
       ? param.point[0] === 'INCREASE'
       : param.point.length === 0
         ? undefined
         : undefined;
-
   const { data, isLoading, isError } = useGetMemberPointHistoryQuery({
     accountId,
     startDate: startDate
@@ -74,7 +72,6 @@ const AdminMembersPointHistoryPage = ({ params }: Props) => {
       sort: `createdAt,${param.order}`,
     },
   });
-
   return (
     <section className="flex w-full flex-col gap-y-10">
       <div className="flex w-full items-center justify-between">
@@ -97,7 +94,6 @@ const AdminMembersPointHistoryPage = ({ params }: Props) => {
             총합
           </TableHeaderAtom>
         </TableHeaderModule>
-
         <tbody>
           {!data ? (
             isLoading ? (
@@ -108,12 +104,11 @@ const AdminMembersPointHistoryPage = ({ params }: Props) => {
           ) : data.pageInfo.totalElements <= 0 ? (
             <EmptyContainer colSpan={6} />
           ) : (
-            data.pointInfos.map((item, index) => {
+            [...data.pointInfos].reverse().map((item, index) => {
               const { totalElements } = data.pageInfo;
               const { pageSize } = data.pageInfo;
               const currentIndex = (currentPage - 1) * pageSize + index;
               const descendingIndex = totalElements - currentIndex;
-
               return (
                 <TableBodyModule key={`${item.pointType}-${item.getTime}`}>
                   <TableBodyAtom isFirst>{descendingIndex}</TableBodyAtom>
@@ -144,7 +139,6 @@ const AdminMembersPointHistoryPage = ({ params }: Props) => {
           />
         </div>
       )}
-
       <FilteringBarContainer
         isOpen={isFilteringBarOpen}
         setIsOpen={setIsFilteringBarOpen}
@@ -185,5 +179,4 @@ const AdminMembersPointHistoryPage = ({ params }: Props) => {
     </section>
   );
 };
-
 export default AdminMembersPointHistoryPage;
