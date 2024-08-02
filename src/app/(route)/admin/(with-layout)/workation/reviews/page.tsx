@@ -55,7 +55,7 @@ const AdminWorkationReviewsPage = () => {
     setIsFilteringBarOpen(true);
   };
   const [currentPage, setCurrentPage] = useState(1);
-  const [fparam, setParam] = useState<{
+  const [param, setParam] = useState<{
     order: string;
     type: string[];
   }>({

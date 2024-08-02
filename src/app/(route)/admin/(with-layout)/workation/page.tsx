@@ -141,15 +141,15 @@ const WorkationList = () => {
                 <TableBodyAtom isFirst>{item.wktId}</TableBodyAtom>
                 <TableBodyAtom>{item.wktPlaceTitle}</TableBodyAtom>
                 <TableBodyAtom>
-                  {dayjs(item.createdAt).format('YYYY-MM-DD')}
+                  {dayjs(item.createdAt).format('YYYY.MM.DD')}
                 </TableBodyAtom>
                 <TableBodyAtom>
-                  {dayjs(item.applyStartDate).format('YYYY-MM-DD')} -
-                  {dayjs(item.applyEndDate).format('YYYY-MM-DD')}
+                  {dayjs(item.applyStartDate).format('YYYY.MM.DD')} -
+                  {dayjs(item.applyEndDate).format('YYYY.MM.DD')}
                 </TableBodyAtom>
                 <TableBodyAtom>
-                  {dayjs(item.startDate).format('YYYY-MM-DD')} -
-                  {dayjs(item.endDate).format('YYYY-MM-DD')}
+                  {dayjs(item.startDate).format('YYYY.MM.DD')} -
+                  {dayjs(item.endDate).format('YYYY.MM.DD')}
                 </TableBodyAtom>
                 <TableBodyAtom
                   color={
