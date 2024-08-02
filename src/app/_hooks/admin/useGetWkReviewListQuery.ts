@@ -19,7 +19,13 @@ export const useGetWkReviewListQuery = ({
   };
 }) => {
   return useQuery({
-    queryKey: [useGetWkReviewListQueryKey],
+    queryKey: [
+      useGetWkReviewListQueryKey,
+      wktPlaceFilter,
+      minRating,
+      maxRating,
+      pageParam,
+    ],
     queryFn: async () => {
       const res = await api.get(`/api/review`, {
         params: {

@@ -56,8 +56,8 @@ const AdminWorkationReviewsPage = () => {
   };
   const { data, isLoading, isError } = useGetWkReviewListQuery({
     wktPlaceFilter: param.type.join(','),
-    maxRating: param.startPoint,
-    minRating: param.endPoint,
+    minRating: param.startPoint,
+    maxRating: param.endPoint,
     pageParam: {
       page: currentPage,
       size: 10,
@@ -98,8 +98,14 @@ const AdminWorkationReviewsPage = () => {
                 <TableBodyAtom>{item.rating}</TableBodyAtom>
                 <TableBodyAtom>{item.wktPlace}</TableBodyAtom>
                 <TableBodyAtom>{item.reviewer}</TableBodyAtom>
-                <TableBodyAtom>{item.lastModifiedAt}</TableBodyAtom>
-                <TableBodyAtom>상태</TableBodyAtom>
+                <TableBodyAtom>
+                  {item.lastModifiedAt.slice(0, 10)}
+                </TableBodyAtom>
+                <TableBodyAtom
+                  color={item.blindedType ? 'text-positive' : 'text-negative'}
+                >
+                  {item.blindedType ? '등록' : '블라인드'}
+                </TableBodyAtom>
                 <TableBodyAtom isLast>
                   <ShowDetailButtonAtom
                     onClick={() => onClickRowDetail(item.id)}
