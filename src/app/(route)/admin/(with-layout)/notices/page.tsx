@@ -22,6 +22,12 @@ import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAto
 import { useGetNoticeListQuery } from '@/_hooks/admin/useGetNoticeListQuery';
 import dayjs from 'dayjs';
 
+const noticeTypeMapping = {
+  ANNOUNCEMENT: '공지사항',
+  EVENT: '이벤트 안내',
+  RESULT: '결과 발표',
+};
+
 const NoticesListPage = () => {
   const router = useRouter();
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
@@ -34,7 +40,7 @@ const NoticesListPage = () => {
     order: string;
     noticeType: string[];
   }>({
-    order: 'RECENT',
+    order: 'DESC',
     noticeType: ['ANNOUNCEMENT', 'RESULT', 'EVENT'],
   });
 
@@ -49,7 +55,7 @@ const NoticesListPage = () => {
   const handleRefresh = () => {
     setParam({
       ...param,
-      order: 'RECENT',
+      order: 'DESC',
       noticeType: ['ANNOUNCEMENT', 'RESULT', 'EVENT'],
     });
     setSelectedDateTag('ALL');
@@ -63,12 +69,14 @@ const NoticesListPage = () => {
 
   const { data, isLoading, isError } = useGetNoticeListQuery({
     type: param.noticeType.join(','),
-    startDate: startDate ? dayjs(startDate).format('YYYY-MM-DD') : undefined,
-    endDate: endDate ? dayjs(endDate).format('YYYY-MM-DD') : undefined,
+    startDate: startDate
+      ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
+      : undefined,
+    endDate: endDate ? dayjs(endDate).format('YYYY-MM-DDTHH:mm:ss') : undefined,
     pageParam: {
       page: currentPage,
       size: 10,
-      sort: param.order,
+      sort: `createdAt,${param.order}`,
     },
   });
 
@@ -135,9 +143,9 @@ const NoticesListPage = () => {
         <tbody>
           {!data ? (
             isLoading ? (
-              <EmptyContainer colSpan={5} />
+              <EmptyContainer colSpan={5} text="loading" />
             ) : (
-              <EmptyContainer colSpan={5} />
+              <EmptyContainer colSpan={5} text="error" />
             )
           ) : data.pageInfo.totalElements <= 0 ? (
             <EmptyContainer colSpan={5} />
@@ -145,9 +153,13 @@ const NoticesListPage = () => {
             data.announcementInfos.map((item, index) => (
               <TableBodyModule key={item.id}>
                 <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
-                <TableBodyAtom>{item.type}</TableBodyAtom>
+                <TableBodyAtom>
+                  {noticeTypeMapping[item.announcementType]}
+                </TableBodyAtom>
                 <TableBodyAtom>{item.title}</TableBodyAtom>
-                <TableBodyAtom>{item.createdAt}</TableBodyAtom>
+                <TableBodyAtom>
+                  {dayjs(item.createdAt).format('YYYY-MM-DD')}
+                </TableBodyAtom>
                 <TableBodyAtom isLast>
                   <ShowDetailButtonAtom
                     onClick={() => moveToNoticesDetail(item.id)}
