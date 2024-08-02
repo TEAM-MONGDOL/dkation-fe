@@ -1,29 +1,57 @@
-'use client';
-
 import { useEffect, useState } from 'react';
 import FileModule from '@/_components/common/modules/FileModule';
 import DragDropModule from '@/_components/common/modules/DragDropModule';
+import { usePostFileMutation } from '@/_hooks/common/usePostFileMutation';
 
 interface FileContainerProps {
-  onFileChange?: (files: File[]) => void;
+  onFileChange?: (fileUrls: string[]) => void;
+  fileDomainType: string;
 }
 
-const FileContainer = ({ onFileChange }: FileContainerProps) => {
+const FileContainer = ({
+  onFileChange,
+  fileDomainType,
+}: FileContainerProps) => {
   const [files, setFiles] = useState<File[]>([]);
+  const [uploadedFileUrls, setUploadedFileUrls] = useState<string[]>([]);
+
+  const { mutate: postFile } = usePostFileMutation({
+    successCallback: (fileUrls: string[]) => {
+      setUploadedFileUrls((prevUrls) => {
+        const updatedUrls = [...prevUrls, ...fileUrls];
+        onFileChange?.(updatedUrls);
+        return updatedUrls;
+      });
+    },
+    errorCallback: (error: Error) => {
+      console.error('Error uploading file :', error);
+    },
+  });
 
   const handleFileAdd = (newFiles: File[]) => {
     setFiles((prevFiles) => {
       const updatedFiles = [...prevFiles, ...newFiles];
-      onFileChange?.(updatedFiles);
+      const newFileUrls = newFiles.map((file) => URL.createObjectURL(file));
+      onFileChange?.([...uploadedFileUrls, ...newFileUrls]);
+
+      newFiles.forEach((file) => {
+        postFile({ file, fileDomainType });
+      });
+
       return updatedFiles;
     });
   };
 
-  const handleDeleteFile = (fileToDelete: File) => {
+  const handleDeleteFile = (index: number) => {
+    setUploadedFileUrls((prevUrls) => {
+      const updatedUrls = prevUrls.filter((_, idx) => idx !== index);
+      onFileChange?.(updatedUrls);
+
+      return updatedUrls;
+    });
+
     setFiles((prevFiles) => {
-      const updatedFiles = prevFiles.filter((file) => file !== fileToDelete);
-      onFileChange?.(updatedFiles);
-      return updatedFiles;
+      return prevFiles.filter((_, idx) => idx !== index);
     });
   };
 
@@ -32,7 +60,6 @@ const FileContainer = ({ onFileChange }: FileContainerProps) => {
   };
 
   useEffect(() => {
-    // Clean up
     return () => {
       files.forEach((file) => {
         URL.revokeObjectURL(URL.createObjectURL(file));
@@ -50,9 +77,9 @@ const FileContainer = ({ onFileChange }: FileContainerProps) => {
             key={`${file.name}-${file.size}`}
             fileName={file.name}
             fileType={getFileType(file)}
-            fileUrl={URL.createObjectURL(file)}
+            preview={URL.createObjectURL(file)}
             buttonType="delete"
-            onDelete={() => handleDeleteFile(file)}
+            onDelete={() => handleDeleteFile(index)}
           />
         ))}
       </div>
