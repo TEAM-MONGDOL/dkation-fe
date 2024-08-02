@@ -127,11 +127,11 @@ const AdminMembersWkHistoryPage = ({ params }: Props) => {
               const currentIndex = (currentPage - 1) * pageSize + index;
               const descendingIndex = totalElements - currentIndex;
               return (
-                <TableBodyModule key={item.wktnName}>
+                <TableBodyModule key={item.wktName}>
                   <TableBodyAtom isFirst>{descendingIndex}</TableBodyAtom>
-                  <TableBodyAtom>{item.wktnName}</TableBodyAtom>
+                  <TableBodyAtom>{item.wktName}</TableBodyAtom>
                   <TableBodyAtom>
-                    {dayjs(item.applicationDate).format('YYYY-MM-DD')}
+                    {dayjs(item.applicationDate).format('YYYY.MM.DD')}
                   </TableBodyAtom>
                   <TableBodyAtom>{item.bettingPoint}</TableBodyAtom>
                   <TableBodyAtom>{item.winningProbability}</TableBodyAtom>

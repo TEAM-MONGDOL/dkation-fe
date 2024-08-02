@@ -93,7 +93,7 @@ export const applyStatusSchema = z.union([
 ]);
 
 export const applyInfoSchema = z.object({
-  wktnName: z.string(),
+  wktName: z.string(),
   applicationDate: z.string(),
   bettingPoint: z.number(),
   winningProbability: z.number(),
