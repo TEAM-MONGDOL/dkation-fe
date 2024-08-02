@@ -26,6 +26,7 @@ export const useGetWkListQuery = ({
   return useQuery({
     queryKey: [
       useGetWkListQueryKey,
+      status,
       pageParam,
       applyStartDate,
       applyEndDate,

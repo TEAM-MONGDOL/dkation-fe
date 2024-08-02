@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
 import FilteringBarContainer from '@/_components/common/containers/FilteringBarContainer';
 import RadioButtonContainer from '@/_components/common/containers/RadioButtonContainer';
-import { LocationList, orderList, wktStatusList } from '@/_types/adminType';
+import { orderList, wktStatusList } from '@/_types/adminType';
 import DatePickerContainer from '@/_components/common/containers/DatePickerContainer';
 import { DatePickerTagType } from '@/_types/commonType';
 import dayjs from 'dayjs';
@@ -80,7 +80,6 @@ const WorkationList = () => {
     setApplyStartDate(dayjs().subtract(1, 'year').toDate());
     setApplyEndDate(dayjs().toDate());
   };
-  console.log(param.status.join(','));
   const { data, isLoading, isError } = useGetWkListQuery({
     status: param.status.join(','),
     wktStartDate:

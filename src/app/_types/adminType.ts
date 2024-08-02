@@ -216,7 +216,7 @@ export const statusList: { [key in StatusType]: string } = {
 export const wktStatusList: { [key in WktStatusType]: string } = {
   PLANNED: '모집 예정',
   ONGOING: '모집 중',
-  CLOSED: '모집 종료',
+  CLOSED: '모집 완료',
 };
 
 export const pointOrderList: { [key in PointOrderType]: string } = {
@@ -261,7 +261,6 @@ export const reviewOrderList: { [key in ReviewOrderType]: string } = {
   DESC: '오래된순',
   STARASC: '별점 높은 순',
   STARDESC: '별점 낮은 순',
-
 };
 
 export const pointRewardList: { [key in PointRewardType]: string } = {
