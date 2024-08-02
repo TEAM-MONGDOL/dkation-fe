@@ -33,7 +33,7 @@ export const wkDetailInfoSchema = z.object({
   applyStartDate: z.string(),
   applyEndDate: z.string(),
   description: z.string(),
-  wktPlacedId: z.string(),
+  wktPlaceId: z.number(),
 });
 
 export const reviewListInfoSchema = z.object({
