@@ -18,7 +18,6 @@ const AdminWorkationPlaceListPage = () => {
     pageParam: {
       page: currentPage,
       size: 10,
-      // sort: param.order,
     },
   });
   return (
@@ -36,7 +35,7 @@ const AdminWorkationPlaceListPage = () => {
         <EmptyContainer notTable />
       ) : (
         data.wktPlaceInfos.map((item) => (
-          <div className="flex flex-col gap-2.5" key={item.id}>
+          <div className="mb-5 flex flex-col" key={item.id}>
             <PlaceListButton
               image={item.thumbnailUrl}
               data={[

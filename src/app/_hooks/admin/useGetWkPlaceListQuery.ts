@@ -9,11 +9,10 @@ export const useGetWkPlaceListQuery = ({
   pageParam: {
     page: number;
     size: number;
-    // sort?: string;
   };
 }) => {
   return useQuery({
-    queryKey: [useGetWkPlaceListQueryKey],
+    queryKey: [useGetWkPlaceListQueryKey, pageParam],
     queryFn: async () => {
       const res = await api.get(`/api/wkt-place`, {
         params: {
