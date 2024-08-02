@@ -1,15 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
-import { workationReviewInfoSchema } from '@/_types/adminType';
+import { ReviewListInfoSchema } from '@/_types/adminType';
 import api from '../Axios';
 
 export const useGetWkReviewListQueryKey = 'useGetWkReviewListQuery';
 export const useGetWkReviewListQuery = ({
-  regionFilter,
+  wktPlaceFilter,
   minRating,
   maxRating,
   pageParam,
 }: {
-  regionFilter?: string[]; // 스트링 join(,) 으로 해야함
+  wktPlaceFilter?: string;
   minRating?: number;
   maxRating?: number;
   pageParam: {
@@ -23,13 +23,13 @@ export const useGetWkReviewListQuery = ({
     queryFn: async () => {
       const res = await api.get(`/api/review`, {
         params: {
-          regionFilter,
+          wktPlaceFilter,
           minRating,
           maxRating,
           ...pageParam,
         },
       });
-      return workationReviewInfoSchema.parse(res.data.data);
+      return ReviewListInfoSchema.parse(res.data.data);
     },
   });
 };

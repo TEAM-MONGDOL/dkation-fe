@@ -13,12 +13,17 @@ import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
 import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAtom';
 import RadioButtonContainer from '@/_components/common/containers/RadioButtonContainer';
-import { LocationList, orderList, reviewOrderList } from '@/_types/adminType';
+import { reviewOrderList } from '@/_types/adminType';
 import CheckboxContainer from '@/_components/common/containers/CheckboxContainer';
 import FilteringBarContainer from '@/_components/common/containers/FilteringBarContainer';
 import RangeContainer from '@/_components/common/containers/RangeContainer';
 import { useGetWkReviewListQuery } from '@/_hooks/admin/useGetWkReviewListQuery';
 
+// 워케이션 장소 목록 api가져와서 변경
+const placeOrderList = {
+  '201': 'Region 1',
+  '202': 'Region 2',
+};
 const AdminWorkationReviewsPage = () => {
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
   const router = useRouter();
@@ -28,6 +33,7 @@ const AdminWorkationReviewsPage = () => {
   const handleFilteringBar = () => {
     setIsFilteringBarOpen(true);
   };
+
   const [currentPage, setCurrentPage] = useState(1);
   const [param, setParam] = useState<{
     order: string;
@@ -36,17 +42,7 @@ const AdminWorkationReviewsPage = () => {
     endPoint: number;
   }>({
     order: 'RECENT',
-    type: [
-      // 워케이션 장소 목록 api 가져와서 수정
-      // 스트링 join(,) 으로 해야함
-      'SEOUL',
-      'GANGWON',
-      'CHUNGCEOUNG',
-      'JEONLA',
-      'GYEONGSANG',
-      'JEJU',
-      'ABROAD',
-    ],
+    type: Object.keys(placeOrderList),
     startPoint: 0,
     endPoint: 5,
   });
@@ -55,19 +51,11 @@ const AdminWorkationReviewsPage = () => {
     setParam({
       ...param,
       order: 'RECENT',
-      type: [
-        'SEOUL',
-        'GANGWON',
-        'CHUNGCEOUNG',
-        'JEONLA',
-        'GYEONGSANG',
-        'JEJU',
-        'ABROAD',
-      ],
+      type: Object.keys(placeOrderList),
     });
   };
   const { data, isLoading, isError } = useGetWkReviewListQuery({
-    regionFilter: param.type,
+    wktPlaceFilter: param.type.join(','),
     maxRating: param.startPoint,
     minRating: param.endPoint,
     pageParam: {
@@ -104,7 +92,7 @@ const AdminWorkationReviewsPage = () => {
           ) : data.pageInfo.totalElements <= 0 ? (
             <EmptyContainer colSpan={7} />
           ) : (
-            data.wktReviewInfos.map((item, index) => (
+            data.reviewList.map((item) => (
               <TableBodyModule key={item.id}>
                 <TableBodyAtom isFirst>{item.id + 1}</TableBodyAtom>
                 <TableBodyAtom>{item.rating}</TableBodyAtom>
@@ -122,13 +110,15 @@ const AdminWorkationReviewsPage = () => {
           )}
         </tbody>
       </TableContainer>
-      <div className="mt-6 flex justify-center">
-        <PaginationModule
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          totalPages={1}
-        />
-      </div>
+      {data && data.pageInfo.totalPages > 0 && (
+        <div className="mt-6 flex justify-center">
+          <PaginationModule
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalPages={1}
+          />
+        </div>
+      )}
       <FilteringBarContainer
         isOpen={isFilteringBarOpen}
         setIsOpen={setIsFilteringBarOpen}
@@ -143,7 +133,7 @@ const AdminWorkationReviewsPage = () => {
         <hr />
         <CheckboxContainer
           title="지역"
-          options={Object.entries(LocationList) as [string, string][]}
+          options={Object.entries(placeOrderList) as [string, string][]}
           selectedOptions={param.type}
           setSelectedOptions={(type: string[]) => setParam({ ...param, type })}
         />

@@ -26,17 +26,17 @@ export const workationListSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
-export const wktReviewInfoSchema = z.object({
+export const reviewListInfoSchema = z.object({
   id: z.number(),
   reviewer: z.string(),
   wktPlace: z.string(),
   rating: z.number(),
-  lastModifiedAt: z.number(),
-  blindedType: z.boolean(),
+  lastModifiedAt: z.string(),
+  blindedType: z.union([z.literal('TRUE'), z.literal('FALSE')]),
 });
 
-export const workationReviewInfoSchema = z.object({
-  wktReviewInfos: wktReviewInfoSchema.array(),
+export const ReviewListInfoSchema = z.object({
+  reviewList: reviewListInfoSchema.array(),
   pageInfo: pageInfoSchema,
 });
 
@@ -192,16 +192,6 @@ export const statusList: { [key in StatusType]: string } = {
 export const pointOrderList: { [key in PointOrderType]: string } = {
   POINT_HIGHEST: '배팅 포인트 높은 순',
   POINT_LOWEST: '배팅 포인트 낮은 순',
-};
-
-export const LocationList: { [key in LocationType]: string } = {
-  SEOUL: '서울',
-  GANGWON: '강원',
-  CHUNGCEOUNG: '충청',
-  JEONLA: '전라',
-  GYEONGSANG: '경상',
-  JEJU: '제주',
-  ABROAD: '해외',
 };
 
 export const pointChangeList: { [key in PointChangeType]: string } = {
