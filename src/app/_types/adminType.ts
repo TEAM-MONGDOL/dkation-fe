@@ -1,5 +1,4 @@
 import { z } from 'zod';
-
 // ResponseSchema
 export const pageInfoSchema = z.object({
   pageNum: z.number(),
@@ -79,7 +78,11 @@ export const fileUrlsSchema = z.object({
 
 export const announcementInfoSchema = z.object({
   id: z.number(),
-  type: z.union([z.literal('NOTICE'), z.literal('RESULT'), z.literal('EVENT')]),
+  announcementType: z.union([
+    z.literal('ANNOUNCEMENT'),
+    z.literal('RESULT'),
+    z.literal('EVENT'),
+  ]),
   title: z.string(),
   createdAt: z.string(),
 });
@@ -91,7 +94,11 @@ export const announcementListSchema = z.object({
 
 export const announcementDetailSchema = z.object({
   id: z.number(),
-  type: z.union([z.literal('NOTICE'), z.literal('RESULT'), z.literal('EVENT')]),
+  announncementType: z.union([
+    z.literal('ANNOUNCEMENT'),
+    z.literal('RESULT'),
+    z.literal('EVENT'),
+  ]),
   title: z.string(),
   content: z.string(),
   fileUrls: fileUrlSchema.array(),
@@ -165,7 +172,7 @@ export type ReviewOrderType = 'ASC' | 'DESC' | 'STARASC' | 'STARDESC';
 
 export type PointRewardType = 'PERSONAL' | 'GROUP';
 
-export type NoticeType = 'NOTICE' | 'RESULT' | 'EVENT';
+export type NoticeType = 'ANNOUNCEMENT' | 'RESULT' | 'EVENT';
 
 export type ResultType = 'NAME' | 'LOWEST' | 'HIGHEST';
 
@@ -262,7 +269,7 @@ export const pointRewardList: { [key in PointRewardType]: string } = {
   GROUP: '단체',
 };
 export const noticeList: { [key in NoticeType]: string } = {
-  NOTICE: '공지',
+  ANNOUNCEMENT: '공지',
   RESULT: '결과 발표',
   EVENT: '이벤트 안내',
 };
