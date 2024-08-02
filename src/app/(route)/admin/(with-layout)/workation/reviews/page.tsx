@@ -19,7 +19,7 @@ import RangeContainer from '@/_components/common/containers/RangeContainer';
 import { useGetWkReviewListQuery } from '@/_hooks/admin/useGetWkReviewListQuery';
 import { StarRateEmptyIcon, StarRateIcon } from '@/_assets/icons';
 import Image from 'next/image';
-import { orderList } from '@/_types/adminType';
+import { reviewOrderList } from '@/_types/adminType';
 
 // 워케이션 장소 목록 api가져와서 변경
 const placeOrderList = {
@@ -48,6 +48,12 @@ const AdminWorkationReviewsPage = () => {
     startPoint: 0,
     endPoint: 5,
   });
+  const getSortField = (order: string) => {
+    if (order === 'STARASC' || order === 'STARDESC') {
+      return `starRating,${order === 'STARASC' ? 'DESC' : 'ASC'}`;
+    }
+    return `lastModifiedAt,${order}`;
+  };
 
   const refreshHandler = () => {
     setParam({
@@ -63,7 +69,7 @@ const AdminWorkationReviewsPage = () => {
     pageParam: {
       page: currentPage,
       size: 10,
-      sort: `lastModifiedAt,${param.order}`,
+      sort: getSortField(param.order),
     },
   });
   return (
@@ -94,9 +100,9 @@ const AdminWorkationReviewsPage = () => {
           ) : data.pageInfo.totalElements <= 0 ? (
             <EmptyContainer colSpan={7} />
           ) : (
-            data.reviewList.map((item) => (
+            data.reviewList.map((item, order) => (
               <TableBodyModule key={item.id}>
-                <TableBodyAtom isFirst>{item.id}</TableBodyAtom>
+                <TableBodyAtom isFirst>{order + 1}</TableBodyAtom>
                 <TableBodyAtom>
                   <div className="flex justify-center">
                     {[...Array(item.rating)].map((_, index) => (
@@ -151,7 +157,7 @@ const AdminWorkationReviewsPage = () => {
       >
         <RadioButtonContainer
           title="정렬"
-          options={Object.entries(orderList) as [string, string][]}
+          options={Object.entries(reviewOrderList) as [string, string][]}
           selectedOption={param.order}
           setSelectedOption={(order: string) => setParam({ ...param, order })}
         />

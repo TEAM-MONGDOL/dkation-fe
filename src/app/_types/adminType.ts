@@ -146,6 +146,8 @@ export type StatusType = z.infer<typeof applyStatusSchema>;
 
 export type OrderType = 'ASC' | 'DESC';
 
+export type ReviewOrderType = 'ASC' | 'DESC' | 'STARASC' | 'STARDESC';
+
 export type PointRewardType = 'PERSONAL' | 'GROUP';
 
 export type NoticeType = 'NOTICE' | 'RESULT' | 'EVENT';
@@ -222,6 +224,13 @@ export const teamList: { [key in TeamType]: string } = {
 export const orderList: { [key in OrderType]: string } = {
   ASC: '최신순',
   DESC: '오래된순',
+};
+
+export const reviewOrderList: { [key in ReviewOrderType]: string } = {
+  ASC: '최신순',
+  DESC: '오래된순',
+  STARASC: '별점 높은 순',
+  STARDESC: '별점 낮은 순',
 };
 
 export const pointRewardList: { [key in PointRewardType]: string } = {
