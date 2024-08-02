@@ -312,9 +312,7 @@ const AdminPointsRewardNewPage = () => {
             onConfirm={() => {
               tryPostPointSupply({
                 policyId: selectedType!,
-                body: selectedRequest.map((request) => ({
-                  accountId: request.accountId,
-                })),
+                body: selectedRequest.map((member) => member.accountId),
               });
             }}
             onCancel={() => {
