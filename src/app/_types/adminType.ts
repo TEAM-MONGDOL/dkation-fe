@@ -25,6 +25,17 @@ export const workationListSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
+export const wkDetailInfoSchema = z.object({
+  title: z.string(),
+  totalRecruit: z.number(),
+  startDate: z.string(),
+  endDate: z.string(),
+  applyStartDate: z.string(),
+  applyEndDate: z.string(),
+  description: z.string(),
+  wktPlacedId: z.string(),
+});
+
 export const reviewListInfoSchema = z.object({
   id: z.number(),
   reviewer: z.string(),
