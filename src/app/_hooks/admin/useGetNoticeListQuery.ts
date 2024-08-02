@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { announcementListSchema } from '@/_types/adminType';
 import api from '../Axios';
 
-const useGetNoticeListQueryKey = 'useGetNoticeListQuery';
+export const useGetNoticeListQueryKey = 'useGetNoticeListQuery';
 
 export const useGetNoticeListQuery = ({
   type,
