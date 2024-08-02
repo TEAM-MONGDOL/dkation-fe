@@ -3,7 +3,6 @@
 import TableContainer from '@/_components/common/containers/TableContainer';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import EmptyContainer from '@/_components/common/containers/EmptyContainer';
-import InfoSectionModule from '@/_components/common/modules/InfoSectionModule';
 import { WarningIcon } from '@/_assets/icons';
 import SubtitleModule from '@/_components/common/modules/SubtitleModule';
 import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
@@ -15,48 +14,35 @@ import React, { useState } from 'react';
 import ModalModule from '@/_components/common/modules/ModalModule';
 import InputModule from '@/_components/common/modules/InputModule';
 import DropdownModule from '@/_components/common/modules/DropdownModule';
+import { useGetMemberPenaltyHistoryQuery } from '@/_hooks/admin/useGetMemberPenaltyHistoryQuery';
 import dayjs from 'dayjs';
 
-const headers = [
-  { title: '번호', width: '90px' },
-  { title: '워케이션', flexGrow: true },
-  { title: '사유', width: '200px' },
-  { title: '일시', width: '190px' },
-];
+interface Props {
+  params: { id: string };
+}
 
-const pastPenalties = [
-  {
-    id: 1,
-    워케이션: '9월 2주차 워케이션 : 양양',
-    사유: '노쇼',
-    일시: '2024.07.04',
-  },
-];
-
-const currentPenalty = {
-  워케이션: '9월 2주차 워케이션 : 양양',
-  사유: '노쇼',
-  일시: '2024.07.04',
-  '페널티 기간': '2024.10.04 까지 (3개월)',
+const penaltyTypeMapping = {
+  NOSHOW: '노쇼',
+  REPORT: '협력체 신고',
+  NEGLIGENCE: '근무 태만',
+  ABUSE: '포인트 제도 악용',
 };
 
-// 현재 패널티 데이터를 InfoSectionModule 형식으로 변환
-const transformCurrentPenaltyData = (penalty: any) => {
-  return [
-    { subtitle: '워케이션', content: penalty.워케이션, id: 'workation' },
-    { subtitle: '사유', content: penalty.사유, id: 'reason' },
-    { subtitle: '일시', content: penalty.일시, id: 'date' },
-    { subtitle: '페널티 기간', content: penalty['페널티 기간'], id: 'period' },
-  ];
-};
-
-const AdminMembersPenaltyHistoryPage = () => {
+const AdminMembersPenaltyHistoryPage = ({ params }: Props) => {
+  const accountId = params.id;
   const router = useRouter();
+  const [currentPage, setCurrentPage] = useState(1);
   const [isPenaltyModelOpen, setIsPenaltyModelOpen] = useState(false);
   const [selectedType, setSelectedType] = useState<string>('');
 
-  const transformedCurrentPenaltyData =
-    transformCurrentPenaltyData(currentPenalty);
+  const { data, isLoading, isError } = useGetMemberPenaltyHistoryQuery({
+    accountId,
+    pageParam: {
+      page: currentPage,
+      size: 10,
+      // sort: param.order,
+    },
+  });
 
   return (
     <section className="flex w-full flex-col gap-y-10">
@@ -69,18 +55,15 @@ const AdminMembersPenaltyHistoryPage = () => {
       </div>
       <div className="flex flex-col gap-y-5">
         <p className="text-3 font-bold">현재 페널티</p>
-        {Object.keys(currentPenalty).length === 0 ? (
-          <EmptyContainer />
+        {!data || data.penaltyInfos.length === 0 ? (
+          <table>
+            <tbody>
+              <EmptyContainer />
+            </tbody>
+          </table>
         ) : (
           <div className="w-full rounded-regular border border-negative bg-negative bg-opacity-10 px-10 py-5">
-            <div className="grid grid-cols-2 gap-5">
-              {transformedCurrentPenaltyData.slice(0, 2).map((item) => (
-                <InfoSectionModule key={item.id} data={[item]} />
-              ))}
-              {transformedCurrentPenaltyData.slice(2).map((item) => (
-                <InfoSectionModule key={item.id} data={[item]} />
-              ))}
-            </div>
+            페널티 받는 중
           </div>
         )}
       </div>
@@ -98,16 +81,25 @@ const AdminMembersPenaltyHistoryPage = () => {
           </TableHeaderModule>
 
           <tbody>
-            {pastPenalties.length <= 0 ||
-            dayjs(pastPenalties[0].일시).add(3, 'month').isBefore(dayjs()) ? (
-              <EmptyContainer colSpan={4} />
+            {!data ? (
+              isLoading ? (
+                <EmptyContainer colSpan={6} text="로딩 중입니다..." />
+              ) : (
+                <EmptyContainer colSpan={6} text="error" />
+              )
+            ) : data.pageInfo.totalElements <= 0 ? (
+              <EmptyContainer colSpan={6} />
             ) : (
-              pastPenalties.map((item, index) => (
-                <TableBodyModule key={item.id}>
+              data.penaltyInfos.map((item, index) => (
+                <TableBodyModule key={item.wktnName}>
                   <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
-                  <TableBodyAtom>{item.워케이션}</TableBodyAtom>
-                  <TableBodyAtom>{item.사유}</TableBodyAtom>
-                  <TableBodyAtom isLast>{item.일시}</TableBodyAtom>
+                  <TableBodyAtom>{item.wktnName}</TableBodyAtom>
+                  <TableBodyAtom>
+                    {penaltyTypeMapping[item.penaltyType]}
+                  </TableBodyAtom>
+                  <TableBodyAtom isLast>
+                    {dayjs(item.createdAt).format('YYYY-MM-DD')}
+                  </TableBodyAtom>
                 </TableBodyModule>
               ))
             )}
