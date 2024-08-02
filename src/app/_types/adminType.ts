@@ -126,7 +126,7 @@ export const memberDetailSchema = z.object({
 });
 
 export const penaltyInfoSchema = z.object({
-  wktnName: z.string(),
+  wktnName: z.string().nullable(),
   penaltyType: z.union([
     z.literal('NOSHOW'),
     z.literal('REPORT'),
