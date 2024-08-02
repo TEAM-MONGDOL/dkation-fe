@@ -144,18 +144,26 @@ const AdminPointsRewardNewPage = () => {
                     isBoolean={
                       memberList &&
                       selectedRequest.length ===
-                        memberList.pages[0].pageInfo.totalElements &&
-                      memberList.pages[0].pageInfo.totalElements !== 0
+                        memberList.pages.reduce(
+                          (acc, page) => acc + page.memberInfos.length,
+                          0,
+                        )
                     }
                     onClickBoolean={() => {
                       if (
                         selectedRequest.length ===
-                        memberList?.pages[0].pageInfo.totalElements
+                        memberList?.pages.reduce(
+                          (acc, page) => acc + page.memberInfos.length,
+                          0,
+                        )
                       ) {
                         setSelectedRequest([]);
                       } else {
                         setSelectedRequest(
-                          memberList?.pages[0].memberInfos || [],
+                          memberList?.pages.reduce(
+                            (acc, page) => [...acc, ...page.memberInfos],
+                            [] as MemberType[],
+                          ) || [],
                         );
                       }
                     }}
@@ -227,7 +235,7 @@ const AdminPointsRewardNewPage = () => {
                   }}
                 />
               </div>
-              <TableContainer maxHeight="max-h-[500px]">
+              <TableContainer maxHeight="max-h-[300px]">
                 <TableHeaderModule>
                   <TableHeaderAtom
                     isFirst
