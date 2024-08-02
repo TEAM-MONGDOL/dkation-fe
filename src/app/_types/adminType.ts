@@ -1,6 +1,4 @@
-import App from 'next/app';
-import { title } from 'process';
-import { boolean, z } from 'zod';
+import { z } from 'zod';
 
 // ResponseSchema
 export const pageInfoSchema = z.object({
@@ -11,8 +9,10 @@ export const pageInfoSchema = z.object({
 });
 
 export const wktInfoSchema = z.object({
+  wktId: z.number(),
   title: z.string(),
-  thumbnail: z.string(),
+  wktPlaceTitle: z.string(),
+  thumbnailUrl: z.string(),
   totalRecruit: z.number(),
   startDate: z.string(),
   endDate: z.string(),
@@ -144,7 +144,7 @@ export const memberDetailSchema = z.object({
 // Type
 export type StatusType = z.infer<typeof applyStatusSchema>;
 
-export type OrderType = 'ASC' | 'DESC';
+export type OrderType = 'DESC' | 'ASC';
 
 export type ReviewOrderType = 'ASC' | 'DESC' | 'STARASC' | 'STARDESC';
 
@@ -153,6 +153,8 @@ export type PointRewardType = 'PERSONAL' | 'GROUP';
 export type NoticeType = 'NOTICE' | 'RESULT' | 'EVENT';
 
 export type ResultType = 'NAME' | 'LOWEST' | 'HIGHEST';
+
+export type WktStatusType = 'PLANNED' | 'ONGOING' | 'CLOSED';
 
 export type TeamType =
   | 'MANAGEMENT'
@@ -189,6 +191,12 @@ export const statusList: { [key in StatusType]: string } = {
   VISITED: '일정종료',
 };
 
+export const wktStatusList: { [key in WktStatusType]: string } = {
+  PLANNED: '모집 예정',
+  ONGOING: '모집 중',
+  CLOSED: '모집 종료',
+};
+
 export const pointOrderList: { [key in PointOrderType]: string } = {
   POINT_HIGHEST: '배팅 포인트 높은 순',
   POINT_LOWEST: '배팅 포인트 낮은 순',
@@ -222,8 +230,8 @@ export const teamList: { [key in TeamType]: string } = {
 };
 
 export const orderList: { [key in OrderType]: string } = {
-  ASC: '최신순',
-  DESC: '오래된순',
+  DESC: '최신순',
+  ASC: '오래된순',
 };
 
 export const reviewOrderList: { [key in ReviewOrderType]: string } = {
@@ -231,6 +239,7 @@ export const reviewOrderList: { [key in ReviewOrderType]: string } = {
   DESC: '오래된순',
   STARASC: '별점 높은 순',
   STARDESC: '별점 낮은 순',
+
 };
 
 export const pointRewardList: { [key in PointRewardType]: string } = {

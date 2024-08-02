@@ -6,6 +6,7 @@ import InputModule from '@/_components/common/modules/InputModule';
 import ModalModule from '@/_components/common/modules/ModalModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
+import { usePostPointPolicyMutate } from '@/_hooks/admin/usePostPointPolicyMutate';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
 import React, { ChangeEvent, useState } from 'react';
@@ -14,9 +15,9 @@ const AdminPointsPolicyNewPage = () => {
   const router = useRouter();
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [form, setForm] = useState({
-    category: '',
-    point: '',
+    policyTitle: '',
     detail: '',
+    quantity: 0,
   });
 
   const handleChange = (
@@ -29,6 +30,12 @@ const AdminPointsPolicyNewPage = () => {
     });
   };
 
+  const { mutate: tryPostPolicy } = usePostPointPolicyMutate({
+    successCallback: () => {
+      router.push('/admin/points/policy');
+    },
+  });
+
   return (
     <div className="flex w-full flex-col gap-y-10 overflow-y-auto">
       <TitleBarModule title="포인트 정책 추가" type="LEFT" />
@@ -37,20 +44,20 @@ const AdminPointsPolicyNewPage = () => {
           <div className="flex w-full items-center gap-x-[30px]">
             <div className="flex-1">
               <InputModule
-                name="category"
+                name="policyTitle"
                 subtitle="분류"
                 placeholder="분류를 입력해주세요."
                 textCount={20}
-                value={form.category}
+                value={form.policyTitle}
                 onChange={handleChange}
               />
             </div>
             <div className="flex-1">
               <InputModule
-                name="point"
+                name="quantity"
                 subtitle="포인트"
                 placeholder="지급할 포인트를 입력해주세요."
-                value={form.point}
+                value={form.quantity}
                 onChange={handleChange}
                 type="number"
               />
@@ -73,7 +80,7 @@ const AdminPointsPolicyNewPage = () => {
               name="detail"
               size="MEDIUM"
               placeholder="상세 내용을 입력해주세요."
-              maxLength={200}
+              maxLength={100}
               value={form.detail}
               onChange={handleChange}
             />
@@ -95,9 +102,11 @@ const AdminPointsPolicyNewPage = () => {
           <ModalModule
             title="정책을 추가하시겠습니까?"
             onConfirm={() => {
-              alert('등록하기');
-              // TODO : API 연동
-              router.push('/admin/points/policy');
+              tryPostPolicy({
+                policyTitle: form.policyTitle,
+                detail: form.detail,
+                quantity: form.quantity,
+              });
             }}
             onCancel={() => {
               setIsConfirmModalOpen(false);
