@@ -7,7 +7,7 @@ import FileNameAtom from '@/_components/common/atoms/FileNameAtom';
 interface FileModuleProps {
   fileName: string;
   fileType: 'image' | 'other';
-  fileUrl: string;
+  preview: string;
   buttonType: 'delete' | 'download';
   onDelete?: () => void;
   onDownload?: () => void;
@@ -16,29 +16,43 @@ interface FileModuleProps {
 const FileModule = ({
   fileName,
   fileType,
-  fileUrl,
+  preview,
   buttonType,
   onDelete,
   onDownload,
 }: FileModuleProps) => {
-  const handleClick = buttonType === 'delete' ? onDelete : onDownload;
+  const handleClick = () => {
+    if (buttonType === 'download') {
+      const link = document.createElement('a');
+      link.href = preview;
+      link.target = '_blank';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      if (onDownload) {
+        onDownload();
+      }
+    } else if (buttonType === 'delete' && onDelete) {
+      onDelete();
+    }
+  };
+
   const buttonTypeClass = buttonType === 'delete' ? 'delete' : 'download';
 
   return (
-    <div className="flex items-center rounded-regular border border-stroke-100 bg-[#F4F4f4] pr-4">
+    <div className="flex w-full items-center rounded-regular border border-stroke-100 bg-[#F4F4f4] pr-4">
       {fileType === 'image' ? (
         <div className="py-2 pl-2.5">
-          <ImagePreviewAtom src={fileUrl} />
+          <ImagePreviewAtom src={preview} />
         </div>
       ) : (
         ' '
       )}
+
       <div className={`flex-1 ${fileType === 'image' ? 'pl-10' : 'py-4 pl-4'}`}>
         <FileNameAtom fileName={fileName} />
       </div>
-      {handleClick && (
-        <FileControlButtonAtom type={buttonTypeClass} onClick={handleClick} />
-      )}
+      <FileControlButtonAtom type={buttonTypeClass} onClick={handleClick} />
     </div>
   );
 };
