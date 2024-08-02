@@ -1,6 +1,5 @@
 import React from 'react';
 import InfoSectionContainer from '@/_components/common/containers/InfoSectionContainer';
-import { StaticImageData } from 'next/image';
 import { useRouter } from 'next/navigation';
 
 interface PlaceListButtonProps {
@@ -19,8 +18,7 @@ const PlaceListButton: React.FC<PlaceListButtonProps> = ({
     router.push(domain);
   };
   return (
-    // eslint-disable-next-line jsx-a11y/control-has-associated-label
-    <button type="button" onClick={buttonClick}>
+    <button type="button" aria-label="button" onClick={buttonClick}>
       <InfoSectionContainer row image={image} data={data} />
     </button>
   );
