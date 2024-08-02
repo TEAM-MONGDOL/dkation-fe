@@ -1,5 +1,3 @@
-import App from 'next/app';
-import { title } from 'process';
 import { z } from 'zod';
 
 // ResponseSchema
@@ -54,6 +52,19 @@ export const pointInfoSchema = z.object({
 
 export const pointInfoListSchema = z.object({
   pointInfos: pointInfoSchema.array(),
+  pageInfo: pageInfoSchema,
+});
+
+export const pointPolicySchema = z.object({
+  id: z.number(),
+  policyTitle: z.string(),
+  detail: z.string(),
+  modifiedAt: z.string(),
+  quantity: z.number(),
+});
+
+export const pointPolicyListSchema = z.object({
+  pointPolicyList: pointPolicySchema.array(),
   pageInfo: pageInfoSchema,
 });
 
@@ -128,7 +139,15 @@ export const memberDetailSchema = z.object({
 });
 
 // Type
+export type PageableType = {
+  page?: number;
+  size?: number;
+  sort?: string;
+};
+
 export type StatusType = z.infer<typeof applyStatusSchema>;
+
+export type MemberType = z.infer<typeof memberInfoSchema>;
 
 export type OrderType = 'RECENT' | 'OLDEST';
 
@@ -225,8 +244,8 @@ export const teamList: { [key in TeamType]: string } = {
 };
 
 export const orderList: { [key in OrderType]: string } = {
-  RECENT: '최신순',
-  OLDEST: '오래된순',
+  DESC: '최신순',
+  ASC: '오래된순',
 };
 
 export const pointRewardList: { [key in PointRewardType]: string } = {

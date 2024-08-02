@@ -9,6 +9,7 @@ interface RangeContainerProps {
   title: string;
   min: number;
   max: number;
+  step?: number;
   onChange: ({ min, max }: { min: number; max: number }) => void;
   suffix?: string;
 }
@@ -17,6 +18,7 @@ const RangeContainer = ({
   title,
   min,
   max,
+  step,
   onChange,
   suffix,
 }: RangeContainerProps) => {
@@ -29,7 +31,13 @@ const RangeContainer = ({
         setIsExpanded={setIsExpanded}
       />
       <AccordionBodyModule isExpanded={isExpanded}>
-        <RangeAtom min={min} max={max} onChange={onChange} suffix={suffix} />
+        <RangeAtom
+          min={min}
+          max={max}
+          step={step}
+          onChange={onChange}
+          suffix={suffix}
+        />
       </AccordionBodyModule>
     </div>
   );
