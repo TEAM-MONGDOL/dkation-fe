@@ -17,10 +17,10 @@ export const usePostPointSupplyMutation = ({
       body,
     }: {
       policyId: number;
-      body: { accountId: string }[];
+      body: string[];
     }) => {
       await api.post(`/api/point/supply/${policyId}`, {
-        memberInfos: body,
+        accountIdList: body,
       });
     },
     onSuccess: () => {
