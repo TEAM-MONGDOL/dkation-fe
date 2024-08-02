@@ -20,7 +20,7 @@ export const useGetNoticeListQuery = ({
   };
 }) => {
   return useQuery({
-    queryKey: [useGetNoticeListQueryKey],
+    queryKey: [useGetNoticeListQueryKey, type, startDate, endDate, pageParam],
     queryFn: async () => {
       const res = await api.get('api/announcement', {
         params: {
