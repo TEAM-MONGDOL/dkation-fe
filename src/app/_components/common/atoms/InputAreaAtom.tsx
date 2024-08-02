@@ -3,7 +3,7 @@ import TextCountAtom from '@/_components/common/atoms/TextCountAtom';
 interface InputProps {
   placeholder?: string;
   status?: 'error' | 'correct' | 'readonly' | 'disabled';
-  value: string;
+  value: string | number;
   textCount?: number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   name?: string;
@@ -52,10 +52,11 @@ const InputAreaAtom = ({
         onChange={handleChange}
         name={name}
         type={type}
+        onWheel={(e) => e.currentTarget.blur()}
       />
       {isInteractive && textCount && (
         <div className="absolute bottom-3.5 right-3.5">
-          <TextCountAtom text={value} maxLength={textCount} />
+          <TextCountAtom text={value.toString()} maxLength={textCount} />
         </div>
       )}
     </div>
