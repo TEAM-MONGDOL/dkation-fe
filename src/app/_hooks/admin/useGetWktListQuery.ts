@@ -20,11 +20,18 @@ export const useGetWkListQuery = ({
   pageParam: {
     page: number;
     size: number;
-    // sort?: string;
+    sort?: string;
   };
 }) => {
   return useQuery({
-    queryKey: [useGetWkListQueryKey],
+    queryKey: [
+      useGetWkListQueryKey,
+      pageParam,
+      applyStartDate,
+      applyEndDate,
+      wktStartDate,
+      wktStartDate,
+    ],
     queryFn: async () => {
       const res = await api.get(`/api/wkt`, {
         params: {

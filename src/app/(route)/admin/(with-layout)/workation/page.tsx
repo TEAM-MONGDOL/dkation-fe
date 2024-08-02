@@ -2,13 +2,13 @@
 
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import FilteringButtonAtom from '@/_components/common/atoms/FilteringButtonAtom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import TableContainer from '@/_components/common/containers/TableContainer';
 import { useRouter } from 'next/navigation';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
 import FilteringBarContainer from '@/_components/common/containers/FilteringBarContainer';
 import RadioButtonContainer from '@/_components/common/containers/RadioButtonContainer';
-import { orderList } from '@/_types/adminType';
+import { LocationList, orderList, wktStatusList } from '@/_types/adminType';
 import DatePickerContainer from '@/_components/common/containers/DatePickerContainer';
 import { DatePickerTagType } from '@/_types/commonType';
 import dayjs from 'dayjs';
@@ -21,7 +21,6 @@ import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
 import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAtom';
 import { useGetWkListQuery } from '@/_hooks/admin/useGetWktListQuery';
-import { useGetPointSupplyQuery } from '@/_hooks/admin/useGetPointSupplyQuery';
 
 const WorkationList = () => {
   const router = useRouter();
@@ -30,10 +29,26 @@ const WorkationList = () => {
     order: string;
     status: string[];
   }>({
-    order: 'RECENT',
+    order: 'ASC',
     status: ['PLANNED', 'ONGOING', 'CLOSED'],
   });
   const [currentPage, setCurrentPage] = useState(1);
+  const getStatusLabelAndColor = (
+    applyStartDate: string,
+    applyEndDate: string,
+  ): { label: string; color: string } => {
+    const now = dayjs();
+    const start = dayjs(applyStartDate);
+    const end = dayjs(applyEndDate);
+
+    if (now.isBefore(start)) {
+      return { label: '모집 예정', color: '' };
+    }
+    if (now.isAfter(end)) {
+      return { label: '모집 완료', color: 'text-sub-200' };
+    }
+    return { label: '모집 중', color: 'text-positive' };
+  };
 
   const penaltyRouteButtonClick = (id: number) => {
     router.push(`/admin/workation/${id}/result`);
@@ -65,6 +80,7 @@ const WorkationList = () => {
     setApplyStartDate(dayjs().subtract(1, 'year').toDate());
     setApplyEndDate(dayjs().toDate());
   };
+  console.log(param.status.join(','));
   const { data, isLoading, isError } = useGetWkListQuery({
     status: param.status.join(','),
     wktStartDate: startDate === null ? undefined : startDate,
@@ -74,7 +90,7 @@ const WorkationList = () => {
     pageParam: {
       page: currentPage,
       size: 10,
-      // sort: param.order,
+      sort: `createdAt,${param.order}`,
     },
   });
   return (
@@ -110,20 +126,34 @@ const WorkationList = () => {
           ) : (
             data.wktInfos.map((item, index) => (
               <TableBodyModule key={item.wktId}>
-                <TableBodyAtom isFirst>{item.wktId + 1}</TableBodyAtom>
+                <TableBodyAtom isFirst>{item.wktId}</TableBodyAtom>
                 <TableBodyAtom>{item.wktPlaceTitle}</TableBodyAtom>
                 <TableBodyAtom>
                   {dayjs(item.createdAt).format('YYYY-MM-DD')}
                 </TableBodyAtom>
                 <TableBodyAtom>
-                  {dayjs(item.startDate).format('YYYY-MM-DD')} -
-                  {dayjs(item.endDate).format('YYYY-MM-DD')}
-                </TableBodyAtom>
-                <TableBodyAtom>
                   {dayjs(item.applyStartDate).format('YYYY-MM-DD')} -
                   {dayjs(item.applyEndDate).format('YYYY-MM-DD')}
                 </TableBodyAtom>
-                <TableBodyAtom>status 받아야함</TableBodyAtom>
+                <TableBodyAtom>
+                  {dayjs(item.startDate).format('YYYY-MM-DD')} -
+                  {dayjs(item.endDate).format('YYYY-MM-DD')}
+                </TableBodyAtom>
+                <TableBodyAtom
+                  color={
+                    getStatusLabelAndColor(
+                      item.applyStartDate,
+                      item.applyEndDate,
+                    ).color
+                  }
+                >
+                  {
+                    getStatusLabelAndColor(
+                      item.applyStartDate,
+                      item.applyEndDate,
+                    ).label
+                  }
+                </TableBodyAtom>
                 <TableBodyAtom>
                   <button
                     onClick={() => penaltyRouteButtonClick(item.wktId)}
@@ -175,14 +205,10 @@ const WorkationList = () => {
         />
         <CheckboxContainer
           title="상태"
-          options={[
-            ['PLANNED', '모집 예정'],
-            ['ONGOING', '모집 중'],
-            ['CLOSED', '모집 완료'],
-          ]}
+          options={Object.entries(wktStatusList) as [string, string][]}
           selectedOptions={param.status}
           setSelectedOptions={(status: string[]) =>
-            setParam({ ...param, status })
+            setParam((prev) => ({ ...prev, status }))
           }
         />
         <DatePickerContainer
