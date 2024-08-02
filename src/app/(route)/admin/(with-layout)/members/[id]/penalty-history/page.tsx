@@ -137,9 +137,9 @@ const AdminMembersPenaltyHistoryPage = ({ params }: Props) => {
             value=""
           />
           <div className="mt-4 flex flex-col gap-4">
-            <p className="text-3 font-semibold">분류</p>
+            <p className="flex items-start text-3 font-semibold">분류</p>
             <DropdownModule
-              options={['노쇼', '고성방가', '포인트 정책 오남용']}
+              options={['노쇼', '협력체 신고', '근무 태만', '포인트 제도 약용']}
               onSelect={setSelectedType}
               placeholder="페널티 사유를 선택하세요."
               selectedOption={selectedType}
