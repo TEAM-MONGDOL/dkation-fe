@@ -8,7 +8,6 @@ import { useRouter } from 'next/navigation';
 import PlaceListButton from '@/_components/admin/workation/placeListButton';
 import { useGetWkPlaceListQuery } from '@/_hooks/admin/useGetWkPlaceListQuery';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
-import SearchingBoxModule from '@/_components/common/modules/SearchingBoxModule';
 
 const AdminWorkationPlaceListPage = () => {
   const router = useRouter();
@@ -43,7 +42,10 @@ const AdminWorkationPlaceListPage = () => {
               data={[
                 { subtitle: '이름', content: item.place },
                 { subtitle: '장소', content: item.address },
-                { subtitle: '등록 일시', content: item.createdAt.toString() },
+                {
+                  subtitle: '등록 일시',
+                  content: item.createdAt.toString().slice(0, 10),
+                },
                 { subtitle: '최대 인원', content: item.maxPeople.toString() },
                 { subtitle: '설명', content: item.description },
               ]}

@@ -132,7 +132,7 @@ export const wktPlaceInfoSchema = z.object({
   thumbnailUrl: z.string(),
   place: z.string(),
   address: z.string(),
-  createdAt: z.date(),
+  createdAt: z.string(),
   maxPeople: z.number(),
   description: z.string(),
 });

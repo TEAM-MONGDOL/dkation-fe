@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+
   reactStrictMode: false,
   redirects: async () => {
     return [
@@ -14,6 +15,9 @@ const nextConfig = {
         permanent: true,
       },
     ];
+  },
+  images: {
+    domains: ['example.com'], // Add your image domain here
   },
 };
 
