@@ -5,127 +5,135 @@ import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import InputModule from '@/_components/common/modules/InputModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
-import FileModule from '@/_components/common/modules/FileModule';
 import { useState } from 'react';
 import ModalModule from '@/_components/common/modules/ModalModule';
 import logo from '@/_assets/images/logo_imsy.png';
 import Image from 'next/image';
+import { useGetNoticeDetailQuery } from '@/_hooks/admin/useGetNoticeDetailQuery';
+import FileModule from '@/_components/common/modules/FileModule';
 
-interface FileItem {
-  name: string;
-  url: string;
-  type: 'image' | 'other';
+interface NoticeDetailPageProps {
+  params: {
+    id: string;
+  };
 }
 
-const noticeExample = {
-  id: 1,
-  title: '제목입니다',
-  content: '내용입니다 !!!!!!!!!!!!!',
-  files: [
-    {
-      name: '첨부파일1.pdf',
-      url: '/file/path/example/file1.pdf',
-      type: 'other',
-    },
-    {
-      name: '첨부파일2.pdf',
-      url: '/file/path/example/file2.pdf',
-      type: 'other',
-    },
-  ] as FileItem[],
+const getFileType = (url) => {
+  const extension = url.split('.').pop().toLowerCase();
+  const imageExtensions = ['jpg', 'jpeg', 'png'];
+  return imageExtensions.includes(extension) ? 'image' : 'other';
 };
 
-const NoticeDetailPage = () => {
+const NoticeDetailPage = ({ params }: NoticeDetailPageProps) => {
+  const { id } = params;
   const router = useRouter();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const handleEdit = () => {
-    router.push(`/admin/notices/${noticeExample.id}/edit`);
+    router.push(`/admin/notices/${id}/edit`);
   };
 
   const handleDelete = () => {
     setIsDeleteModalOpen(true);
   };
 
+  const { data, isLoading, isError } = useGetNoticeDetailQuery(Number(id));
+
   return (
     <section>
       <TitleBarModule title="공지 상세" type="LEFT" />
-      <div className="pt-10">
-        <p className="mb-4 text-3 font-bold">제목</p>
-        <div className="flex gap-4">
-          <div className="w-full">
-            <InputModule
-              name="title"
-              placeholder="제목이 존재하지 않습니다."
-              status="readonly"
-              value={noticeExample.title}
+      {!data ? (
+        isLoading ? (
+          <div>로딩 중...</div>
+        ) : isError ? (
+          <div>에러 발생</div>
+        ) : null
+      ) : (
+        <div className="pt-10">
+          <p className="mb-4 text-3 font-bold">제목</p>
+          <div className="flex gap-4">
+            <div className="w-full">
+              <InputModule
+                name="title"
+                placeholder="제목이 존재하지 않습니다."
+                status="readonly"
+                value={data.title}
+              />
+            </div>
+          </div>
+          <div className="py-4">
+            {data.fileUrls && data.fileUrls.length > 0 ? (
+              <div className="py-2">
+                <div className="flex flex-col gap-2">
+                  {data.fileUrls.map((file, index) => {
+                    const fileName = decodeURIComponent(
+                      file.split('/').pop().split('-').slice(1).join('-'),
+                    );
+
+                    const fileType = getFileType(file);
+                    return (
+                      <div key={fileName} className="flex items-center gap-2">
+                        <FileModule
+                          preview={file}
+                          fileName={fileName}
+                          fileType={fileType}
+                          buttonType="download"
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null}
+          </div>
+
+          <div>
+            <p className="mb-4 text-3 font-bold">내용</p>
+            <TextAreaModule
+              name="content"
+              placeholder="내용이 존재하지 않습니다."
+              size="LARGE"
+              readonly
+              value={data.description}
             />
           </div>
-        </div>
-        <div className="py-4">
-          {noticeExample.files.length > 0 && (
-            <div className="py-2">
-              <div className="flex flex-col gap-2">
-                {noticeExample.files.map((file) => (
-                  <FileModule
-                    key={file.url}
-                    fileName={file.name}
-                    fileType={file.type}
-                    fileUrl={file.url}
-                    buttonType="download"
-                    onDownload={() => console.log(`Edit ${file.name}`)} // 추후 수정 예정
-                  />
-                ))}
+          <div className="flex justify-end gap-5 pt-14">
+            <ButtonAtom
+              width="fixed"
+              type="button"
+              buttonStyle="red"
+              onClick={handleDelete}
+              text="삭제"
+            />
+            <ButtonAtom
+              width="fixed"
+              type="button"
+              buttonStyle="dark"
+              onClick={handleEdit}
+              text="수정"
+            />
+          </div>
+          {isDeleteModalOpen && (
+            <ModalModule
+              title="해당 게시글을 삭제하시겠습니까?"
+              cancelText="취소"
+              confirmText="삭제"
+              confirmButtonStyle="red"
+              onCancel={() => {
+                setIsDeleteModalOpen(false);
+              }}
+              onConfirm={() => {
+                // 삭제 로직 위치
+                setIsDeleteModalOpen(false);
+                router.push('/admin/notices');
+              }}
+            >
+              <div className="flex justify-center">
+                <Image className="h-5 w-24" src={logo} alt="logo" />
               </div>
-            </div>
+            </ModalModule>
           )}
         </div>
-        <div>
-          <p className="mb-4 text-3 font-bold">내용</p>
-          <TextAreaModule
-            name="content"
-            placeholder="내용이 존재하지 않습니다."
-            size="LARGE"
-            readonly
-            value={noticeExample.content}
-          />
-        </div>
-        <div className="flex justify-end gap-5 pt-14">
-          <ButtonAtom
-            width="fixed"
-            type="button"
-            buttonStyle="red"
-            onClick={handleDelete}
-            text="삭제"
-          />
-          <ButtonAtom
-            width="fixed"
-            type="button"
-            buttonStyle="dark"
-            onClick={handleEdit}
-            text="수정"
-          />
-        </div>
-        {isDeleteModalOpen && (
-          <ModalModule
-            title="해당 게시글을 삭제하시겠습니까?"
-            cancelText="취소"
-            confirmText="삭제"
-            confirmButtonStyle="red"
-            onCancel={() => {
-              setIsDeleteModalOpen(false);
-            }}
-            onConfirm={() => {
-              // 삭제 로직 위치
-              setIsDeleteModalOpen(false);
-              router.push('/admin/notices');
-            }}
-          >
-            <div className="flex justify-center">
-              <Image className="h-5 w-24" src={logo} alt="logo" />
-            </div>
-          </ModalModule>
-        )}
-      </div>
+      )}
     </section>
   );
 };
