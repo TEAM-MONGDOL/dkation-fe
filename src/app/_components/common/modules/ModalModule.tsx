@@ -29,7 +29,7 @@ const ModalModule = ({
 }: ModalModuleProps) => {
   return (
     <div className="fixed left-0 top-0 z-10 flex h-screen w-screen items-center justify-center bg-black/30">
-      <div className="relative w-[600px] rounded-regular bg-white p-10 text-center">
+      <form className="relative w-[600px] rounded-regular bg-white p-10 text-center">
         <button className="absolute right-5 top-5" onClick={onCancel}>
           <Image src={CloseIcon} alt="x" />
         </button>
@@ -55,7 +55,7 @@ const ModalModule = ({
           />
         </div>
         <p className="pt-5 text-center text-5 text-sub-200">{infoText}</p>
-      </div>
+      </form>
     </div>
   );
 };
