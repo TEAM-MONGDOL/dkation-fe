@@ -176,7 +176,7 @@ const NoticesListPage = () => {
             <PaginationModule
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
-              totalPages={Math.ceil(data.pageInfo.totalPages / 10)}
+              totalPages={data.pageInfo.totalPages}
             />
           </div>
         )}
