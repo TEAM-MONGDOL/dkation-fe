@@ -94,14 +94,14 @@ export const announcementListSchema = z.object({
 
 export const announcementDetailSchema = z.object({
   id: z.number(),
-  announncementType: z.union([
+  announcementType: z.union([
     z.literal('ANNOUNCEMENT'),
     z.literal('RESULT'),
     z.literal('EVENT'),
   ]),
   title: z.string(),
-  content: z.string(),
-  fileUrls: fileUrlSchema.array(),
+  description: z.string(),
+  fileUrls: fileUrlSchema.array().nullable(),
 });
 
 export const applyStatusSchema = z.union([
@@ -261,7 +261,6 @@ export const reviewOrderList: { [key in ReviewOrderType]: string } = {
   DESC: '오래된순',
   STARASC: '별점 높은 순',
   STARDESC: '별점 낮은 순',
-
 };
 
 export const pointRewardList: { [key in PointRewardType]: string } = {
