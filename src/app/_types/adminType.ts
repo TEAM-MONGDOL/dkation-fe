@@ -101,7 +101,7 @@ export const pointPolicyDetailSchema = z.object({
   quantity: z.number(),
 });
 
-export const pointApplyType = z.union([
+export const pointApplyTypeSchema = z.union([
   z.literal('PENDING'),
   z.literal('APPROVED'),
   z.literal('DECLINED'),
@@ -112,7 +112,7 @@ export const pointApplyInfoSchema = z.object({
   name: z.string(),
   applyTime: z.string(),
   reviewTime: z.string(),
-  applyType: pointApplyType,
+  applyType: pointApplyTypeSchema,
 });
 
 export const pointApplyInfoListSchema = z.object({
@@ -223,6 +223,20 @@ export type PageableType = {
 export type StatusType = z.infer<typeof applyStatusSchema>;
 
 export type MemberType = z.infer<typeof memberInfoSchema>;
+
+export type PointApplyType = z.infer<typeof pointApplyTypeSchema>;
+
+export const pointApplyTypeList: PointApplyType[] = [
+  'PENDING',
+  'APPROVED',
+  'DECLINED',
+];
+
+export const pointApplyTypeConvertList: { [key in PointApplyType]: string } = {
+  PENDING: '대기',
+  APPROVED: '승인',
+  DECLINED: '반려',
+};
 
 export type OrderType = 'DESC' | 'ASC';
 
