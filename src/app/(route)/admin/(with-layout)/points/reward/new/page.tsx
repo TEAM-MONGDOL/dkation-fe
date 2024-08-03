@@ -65,7 +65,7 @@ const AdminPointsRewardNewPage = () => {
     <section className="flex h-full w-full flex-col gap-y-10 overflow-y-auto">
       <TitleBarModule title="단체 포인트 등록" />
       <section className="flex w-full flex-col gap-y-[60px]">
-        <div className="flex w-[200px] flex-col gap-y-4">
+        <div className="flex flex-col gap-y-4">
           <h3 className="font-bold">분류</h3>
           <DropdownModule
             options={
@@ -74,6 +74,7 @@ const AdminPointsRewardNewPage = () => {
                 policy.policyTitle,
               ]) || []
             }
+            size="large"
             onSelect={setSelectedType}
             selectedOption={selectedType}
             placeholder="분류 선택"
