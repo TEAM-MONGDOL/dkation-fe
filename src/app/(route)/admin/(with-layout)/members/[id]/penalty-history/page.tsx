@@ -16,6 +16,7 @@ import InputModule from '@/_components/common/modules/InputModule';
 import DropdownModule from '@/_components/common/modules/DropdownModule';
 import { useGetMemberPenaltyHistoryQuery } from '@/_hooks/admin/useGetMemberPenaltyHistoryQuery';
 import dayjs from 'dayjs';
+import InfoContentAtom from '@/_components/common/atoms/InfoContentAtom';
 
 interface Props {
   params: { id: string };
@@ -28,21 +29,38 @@ const penaltyTypeMapping = {
   ABUSE: '포인트 제도 악용',
 };
 
+const calculateExpiryDate = (penaltyCount: number, penaltyDate: string) => {
+  const penaltyDateObj = dayjs(penaltyDate);
+  switch (penaltyCount) {
+    case 1:
+      return `${penaltyDateObj.add(6, 'month').format('YYYY.MM.DD')} (6개월)`;
+    case 2:
+      return `${penaltyDateObj.add(12, 'month').format('YYYY.MM.DD')} (12개월)`;
+    case 3:
+      return '영구정지';
+    default:
+      return '';
+  }
+};
+
 const AdminMembersPenaltyHistoryPage = ({ params }: Props) => {
   const accountId = params.id;
   const router = useRouter();
-  const [currentPage, setCurrentPage] = useState(1);
   const [isPenaltyModelOpen, setIsPenaltyModelOpen] = useState(false);
   const [selectedType, setSelectedType] = useState<string>('');
 
   const { data, isLoading, isError } = useGetMemberPenaltyHistoryQuery({
     accountId,
-    pageParam: {
-      page: currentPage,
-      size: 10,
-      // sort: param.order,
-    },
   });
+
+  const penaltyInfos = data?.penaltyInfos || [];
+  const mostRecentPenalty = [...penaltyInfos].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+  )[0];
+
+  const expiryDate = mostRecentPenalty
+    ? calculateExpiryDate(penaltyInfos.length, mostRecentPenalty.createdAt)
+    : null;
 
   return (
     <section className="flex w-full flex-col gap-y-10">
@@ -55,16 +73,50 @@ const AdminMembersPenaltyHistoryPage = ({ params }: Props) => {
       </div>
       <div className="flex flex-col gap-y-5">
         <p className="text-3 font-bold">현재 페널티</p>
-        {!data || data.penaltyInfos.length === 0 ? (
+        {!data || data.memberType === 'PENALTY' ? (
+          <div className="w-full rounded-regular border border-negative bg-negative bg-opacity-10 px-10 py-5">
+            {mostRecentPenalty ? (
+              <div className="grid grid-cols-2 gap-4">
+                <InfoContentAtom
+                  data={{
+                    subtitle: '워케이션',
+                    content: mostRecentPenalty.wktName || '',
+                  }}
+                />
+                <InfoContentAtom
+                  data={{
+                    subtitle: '부여 일시',
+                    content:
+                      dayjs(mostRecentPenalty.createdAt).format('YYYY.MM.DD') ||
+                      '',
+                  }}
+                />
+
+                <InfoContentAtom
+                  data={{
+                    subtitle: '사유',
+                    content:
+                      penaltyTypeMapping[mostRecentPenalty.penaltyType] || '',
+                  }}
+                />
+
+                <InfoContentAtom
+                  data={{
+                    subtitle: '페널티 기간',
+                    content: expiryDate || '',
+                  }}
+                />
+              </div>
+            ) : (
+              ''
+            )}
+          </div>
+        ) : (
           <table>
             <tbody>
               <EmptyContainer />
             </tbody>
           </table>
-        ) : (
-          <div className="w-full rounded-regular border border-negative bg-negative bg-opacity-10 px-10 py-5">
-            페널티 받는 중
-          </div>
         )}
       </div>
       <div>
@@ -87,18 +139,18 @@ const AdminMembersPenaltyHistoryPage = ({ params }: Props) => {
               ) : (
                 <EmptyContainer colSpan={6} text="error" />
               )
-            ) : data.pageInfo.totalElements <= 0 ? (
+            ) : data.penaltyAmount <= 0 ? (
               <EmptyContainer colSpan={6} />
             ) : (
-              data.penaltyInfos.map((item, index) => (
-                <TableBodyModule key={item.wktnName}>
+              penaltyInfos.map((item, index) => (
+                <TableBodyModule key={item.wktName}>
                   <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
-                  <TableBodyAtom>{item.wktnName}</TableBodyAtom>
+                  <TableBodyAtom>{item.wktName}</TableBodyAtom>
                   <TableBodyAtom>
                     {penaltyTypeMapping[item.penaltyType]}
                   </TableBodyAtom>
                   <TableBodyAtom isLast>
-                    {dayjs(item.createdAt).format('YYYY-MM-DD')}
+                    {dayjs(item.createdAt).format('YYYY.MM.DD')}
                   </TableBodyAtom>
                 </TableBodyModule>
               ))
