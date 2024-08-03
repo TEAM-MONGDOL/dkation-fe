@@ -2,7 +2,6 @@
 
 import InputModule from '@/_components/common/modules/InputModule';
 import React, { useState } from 'react';
-import placeImsy from '@/_assets/images/place_impy.png';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';

@@ -1,6 +1,5 @@
 import React, { ReactNode } from 'react';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
-import PlaceImsy from '@/_assets/images/place_impy.png';
 import InfoSectionContainer from '@/_components/common/containers/InfoSectionContainer';
 import SidebarModule from '@/_components/common/modules/SidebarModule';
 
@@ -35,7 +34,7 @@ const AdminWorkationResultLayout = ({ children, params }: Props) => {
       <TitleBarModule title="결과 및 페널티" type="LEFT" />
       <div className="flex">
         <div className="flex w-[300px] flex-col gap-5">
-          <InfoSectionContainer data={data} image={PlaceImsy} />
+          <InfoSectionContainer data={data} />
           <SidebarModule items={WkResultDetailSidebar} />
         </div>
         <div className="ml-5 flex grow">

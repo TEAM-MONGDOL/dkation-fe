@@ -1,4 +1,8 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQueryClient,
+  UseMutationResult,
+} from '@tanstack/react-query';
 import api from '@/_hooks/Axios';
 
 interface PatchWkProps {
@@ -15,20 +19,16 @@ interface PatchWkProps {
   totalRecruit: number;
 }
 
-export const usePatchWkQuery = async ({
-  successCallback,
-}: {
-  successCallback?: () => void;
-}) => {
+export const usePatchWkQuery = (
+  wktId: number,
+  successCallback?: () => void,
+): UseMutationResult<void, Error, PatchWkProps> => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async ({
-      wktId,
       wktPlaceId,
-      thumbnailUrl,
       title,
-      address,
       startDate,
       endDate,
       applyStartDate,
@@ -36,12 +36,9 @@ export const usePatchWkQuery = async ({
       description,
       totalRecruit,
     }: PatchWkProps) => {
-      await api.patch(`/api/wkt/${wktId}`, {
-        wktId,
+      const response = await api.patch(`/api/wkt/${wktId}`, {
         wktPlaceId,
-        thumbnailUrl,
         title,
-        address,
         startDate,
         endDate,
         applyStartDate,
@@ -49,15 +46,14 @@ export const usePatchWkQuery = async ({
         description,
         totalRecruit,
       });
+      return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        // queryKey: [워케이션목록키],
-      });
-      successCallback && successCallback();
+      queryClient.invalidateQueries(); // Update with your actual query key
+      if (successCallback) successCallback();
     },
     onError: (error: Error) => {
-      console.error('Error creating new workation:', error);
+      console.error('Error updating workation:', error);
     },
   });
 };
