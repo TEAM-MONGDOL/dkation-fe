@@ -81,6 +81,19 @@ export const pointInfoListSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
+export const pointPolicySchema = z.object({
+  id: z.number(),
+  policyTitle: z.string(),
+  detail: z.string(),
+  modifiedAt: z.string(),
+  quantity: z.number(),
+});
+
+export const pointPolicyListSchema = z.object({
+  pointPolicyList: pointPolicySchema.array(),
+  pageInfo: pageInfoSchema,
+});
+
 export const fileUrlSchema = z.string();
 
 export const fileUrlsSchema = z.object({
@@ -175,6 +188,12 @@ export const workationPlaceListSchema = z.object({
 });
 
 // Type
+export type PageableType = {
+  page?: number;
+  size?: number;
+  sort?: string;
+};
+
 export type StatusType = z.infer<typeof applyStatusSchema>;
 
 export type OrderType = 'DESC' | 'ASC';
