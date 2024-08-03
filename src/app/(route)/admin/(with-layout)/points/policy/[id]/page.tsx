@@ -91,7 +91,7 @@ const AdminPointsPolicyDetailPage = ({
             type="button"
             buttonStyle="dark"
             onClick={() => {
-              router.push(`/admin/points/policy/${id}/edit`);
+              router.replace(`/admin/points/policy/${id}/edit`);
             }}
             text="수정"
           />
@@ -105,7 +105,7 @@ const AdminPointsPolicyDetailPage = ({
             onConfirm={() => {
               alert('삭제하기');
               // TODO : API 연동
-              router.push(`/admin/points/policy/${id}/edit`);
+              router.replace(`/admin/points/policy/${id}/edit`);
             }}
             onCancel={() => {
               setIsDeleteModalOpen(false);
