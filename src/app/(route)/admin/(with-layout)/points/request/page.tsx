@@ -14,71 +14,78 @@ import SearchingBoxModule from '@/_components/common/modules/SearchingBoxModule'
 import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
-import { orderList, pointRequestStatusList } from '@/_types/adminType';
+import { useGetPointApply } from '@/_hooks/admin/useGetPointApply';
+import { useGetPointPolicyQuery } from '@/_hooks/admin/useGetPointPolicyQuery';
+import {
+  orderList,
+  PointApplyType,
+  pointApplyTypeConvertList,
+  pointApplyTypeList,
+  pointRequestStatusList,
+} from '@/_types/adminType';
 import { DatePickerTagType } from '@/_types/commonType';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-const data: {
-  id: number;
-  category: string;
-  name: string;
-  requestedAt: string;
-  rewardAt: string;
-  status: string;
-}[] = [
-  {
-    id: 1,
-    category: '자기계발',
-    name: '김철수',
-    requestedAt: '2024-07-20',
-    rewardAt: '-',
-    status: 'WAITING',
-  },
-  {
-    id: 2,
-    category: '봉사활동',
-    name: '이영희',
-    requestedAt: '2024-07-21',
-    rewardAt: '2024-07-22',
-    status: 'APPROVED',
-  },
-  {
-    id: 3,
-    category: '이벤트',
-    name: '박민수',
-    requestedAt: '2024-07-21',
-    rewardAt: '2024-07-22',
-    status: 'WAITING',
-  },
-  {
-    id: 4,
-    category: '자기계발',
-    name: '김철수 외 3명',
-    requestedAt: '2024-07-21',
-    rewardAt: '-',
-    status: 'REJECT',
-  },
-];
+const getStatusColor = (
+  status: PointApplyType,
+): 'text-sub-200' | 'text-negative' | 'text-positive' | undefined => {
+  if (status === 'PENDING') return 'text-sub-200';
+  if (status === 'DECLINED') return 'text-negative';
+  if (status === 'APPROVED') return 'text-positive';
+  return undefined;
+};
 
 const AdminPointsRequestPage = () => {
   const router = useRouter();
   const [page, setPage] = useState(1);
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
   const [param, setParam] = useState<{
     order: string;
     state: string[];
     type: string[];
   }>({
-    order: 'RECENT',
-    state: ['WAITING', 'REJECTED', 'ACCEPTED'],
-    type: ['SELF_STUDY', 'VOLUNTEER', 'EVENT'],
+    order: 'DESC',
+    state: pointApplyTypeList,
+    type: [],
   });
   const [selectedDateTag, setSelectedDateTag] =
     useState<DatePickerTagType>('ALL');
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
+
+  const { data: pointPolicyList } = useGetPointPolicyQuery({
+    pageable: {
+      page: 1,
+      size: 100,
+      sort: 'createdAt,DESC',
+    },
+  });
+
+  const { data, isLoading, isError } = useGetPointApply({
+    params: {
+      name: searchValue || undefined,
+      accountId: searchValue || undefined,
+      applyTypes:
+        param.state.length > 0 && param.state.length < 3
+          ? param.state.join(',')
+          : undefined,
+      pointTitle: param.type.length > 0 ? param.type.join(',') : undefined,
+      startDate: startDate
+        ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
+        : undefined,
+      endDate: endDate
+        ? dayjs(endDate).format('YYYY-MM-DDTHH:mm:ss')
+        : undefined,
+    },
+    pageable: {
+      page,
+      size: 10,
+      sort: `createdAt,${param.order}`,
+    },
+  });
 
   const onClickRowDetail = (id: number) => {
     router.push(`/admin/points/request/${id}`);
@@ -88,22 +95,23 @@ const AdminPointsRequestPage = () => {
     setParam({
       ...param,
       order: 'RECENT',
-      state: ['WAITING', 'REJECTED', 'ACCEPTED'],
-      type: ['SELF_STUDY', 'VOLUNTEER', 'EVENT'],
+      state: pointApplyTypeList,
+      type: pointPolicyList
+        ? pointPolicyList.pointPolicyList.map((item) => item.id.toString())
+        : [],
     });
     setSelectedDateTag('ALL');
-    setStartDate(dayjs().subtract(1, 'year').toDate());
-    setEndDate(dayjs().toDate());
+    setStartDate(null);
+    setEndDate(null);
   };
 
-  const getStatusColor = (
-    status: string,
-  ): 'text-sub-200' | 'text-negative' | 'text-positive' | undefined => {
-    if (status === 'WAITING') return 'text-sub-200';
-    if (status === 'REJECT') return 'text-negative';
-    if (status === 'APPROVED') return 'text-positive';
-    return undefined;
-  };
+  useEffect(() => {
+    pointPolicyList &&
+      setParam((prev) => ({
+        ...prev,
+        type: pointPolicyList.pointPolicyList.map((item) => item.id.toString()),
+      }));
+  }, [pointPolicyList]);
 
   return (
     <div className="flex w-full flex-col gap-y-10 overflow-y-auto">
@@ -113,6 +121,8 @@ const AdminPointsRequestPage = () => {
           placeholder="이름을 검색하세요."
           filter
           onClick={() => setIsFilteringBarOpen(true)}
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
         />
       </div>
       <TableContainer>
@@ -127,36 +137,51 @@ const AdminPointsRequestPage = () => {
           <TableHeaderAtom width="140px">상태</TableHeaderAtom>
           <TableHeaderAtom isLast width="160px" />
         </TableHeaderModule>
-        {data.length <= 0 ? (
-          <EmptyContainer colSpan={7} />
-        ) : (
-          data.map((item, idx) => (
-            <TableBodyModule key={item.id}>
-              <TableBodyAtom isFirst>{idx + 1}</TableBodyAtom>
-              <TableBodyAtom>{item.category}</TableBodyAtom>
-              <TableBodyAtom>{item.name}</TableBodyAtom>
-              <TableBodyAtom>{item.requestedAt}</TableBodyAtom>
-              <TableBodyAtom>{item.rewardAt}</TableBodyAtom>
-              <TableBodyAtom color={getStatusColor(item.status)}>
-                {item.status === 'WAITING' && '대기'}
-                {item.status === 'REJECT' && '반려'}
-                {item.status === 'APPROVED' && '승인'}
-              </TableBodyAtom>
-              <TableBodyAtom isLast>
-                <ShowDetailButtonAtom
-                  onClick={() => onClickRowDetail(item.id)}
-                />
-              </TableBodyAtom>
-            </TableBodyModule>
-          ))
-        )}
+        <tbody>
+          {!data ? (
+            isLoading ? (
+              <EmptyContainer colSpan={7} text="로딩 중..." />
+            ) : isError ? (
+              <EmptyContainer colSpan={7} text="에러가 발생했습니다." />
+            ) : (
+              <EmptyContainer
+                colSpan={7}
+                text="알 수 없는 에러가 발생했습니다."
+              />
+            )
+          ) : data.pointApplyInfos.length <= 0 ? (
+            <EmptyContainer colSpan={7} />
+          ) : (
+            data.pointApplyInfos.map((item, idx) => (
+              <TableBodyModule key={item.name}>
+                <TableBodyAtom isFirst>{idx + 1}</TableBodyAtom>
+                <TableBodyAtom>{item.pointTitle}</TableBodyAtom>
+                <TableBodyAtom>{item.name}</TableBodyAtom>
+                <TableBodyAtom>
+                  {dayjs(item.applyTime).format('YYYY.MM.DD')}
+                </TableBodyAtom>
+                <TableBodyAtom>
+                  {dayjs(item.reviewTime).format('YYYY.MM.DD')}
+                </TableBodyAtom>
+                <TableBodyAtom color={getStatusColor(item.applyType)}>
+                  {pointApplyTypeConvertList[item.applyType]}
+                </TableBodyAtom>
+                <TableBodyAtom isLast>
+                  <ShowDetailButtonAtom
+                    onClick={() => onClickRowDetail(idx + 1)}
+                  />
+                </TableBodyAtom>
+              </TableBodyModule>
+            ))
+          )}
+        </tbody>
       </TableContainer>
-      {data.length > 0 && (
+      {data && data.pageInfo.totalElements > 0 && (
         <div className="flex w-full items-center justify-center">
           <PaginationModule
             currentPage={page}
             setCurrentPage={setPage}
-            totalPages={Math.ceil(data.length / 10)}
+            totalPages={data.pageInfo.totalPages}
           />
         </div>
       )}
@@ -175,23 +200,28 @@ const AdminPointsRequestPage = () => {
         <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         <CheckboxContainer
           title="분류"
-          options={Object.entries(pointRequestStatusList) as [string, string][]}
+          options={
+            Object.entries(pointApplyTypeConvertList) as [string, string][]
+          }
           selectedOptions={param.state}
           setSelectedOptions={(state: string[]) =>
             setParam({ ...param, state })
           }
         />
         <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
-        <CheckboxContainer
-          title="구분"
-          options={[
-            ['SELF_STUDY', '자기계발'],
-            ['VOLUNTEER', '봉사활동'],
-            ['EVENT', '이벤트'],
-          ]}
-          selectedOptions={param.type}
-          setSelectedOptions={(type: string[]) => setParam({ ...param, type })}
-        />
+        {pointPolicyList && (
+          <CheckboxContainer
+            title="구분"
+            options={pointPolicyList.pointPolicyList.map((item) => [
+              item.id.toString(),
+              item.policyTitle,
+            ])}
+            selectedOptions={param.type}
+            setSelectedOptions={(reason: string[]) =>
+              setParam({ ...param, type: reason })
+            }
+          />
+        )}
         <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         <DatePickerContainer
           title="신청 및 심사 일시"
