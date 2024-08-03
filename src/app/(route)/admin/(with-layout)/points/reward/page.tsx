@@ -56,22 +56,29 @@ const AdminPointsRewardPage = () => {
     router.push(`/admin/points/reward/${id}`);
   };
 
-  const { data, isLoading, isError } = useGetPointSupplyQuery({
-    supplyType: param.type.length > 1 ? undefined : param.type[0],
-    pointTitle: param.reason.length > 0 ? param.reason.join(',') : undefined,
-    startDate: startDate ? dayjs(startDate).format('YYYY-MM-DD') : undefined,
-    endDate: endDate ? dayjs(endDate).format('YYYY-MM-DD') : undefined,
-    pageParam: {
-      page: currentPage,
-      size: 10,
-      sort: `createdAt,${param.order}`,
-    },
-  });
-
   const { data: pointPolicyList } = useGetPointPolicyQuery({
     pageable: {
       page: 1,
       size: 100,
+    },
+  });
+
+  const { data, isLoading, isError } = useGetPointSupplyQuery({
+    supplyType: param.type.length > 1 ? undefined : param.type[0],
+    pointTitle:
+      param.reason.length > 0 &&
+      pointPolicyList &&
+      param.reason.length < pointPolicyList?.pointPolicyList.length
+        ? param.reason.join(',')
+        : undefined,
+    startDate: startDate
+      ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
+      : undefined,
+    endDate: endDate ? dayjs(endDate).format('YYYY-MM-DDTHH:mm:ss') : undefined,
+    pageParam: {
+      page: currentPage,
+      size: 10,
+      sort: `createdAt,${param.order}`,
     },
   });
 
