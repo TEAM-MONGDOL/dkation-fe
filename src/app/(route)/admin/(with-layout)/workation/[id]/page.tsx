@@ -1,9 +1,8 @@
 'use client';
 
 import InputModule from '@/_components/common/modules/InputModule';
-import React, { ReactNode, useState } from 'react';
+import React, { useState } from 'react';
 import placeImsy from '@/_assets/images/place_impy.png';
-import dayjs from 'dayjs';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
@@ -11,33 +10,67 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import ModalModule from '@/_components/common/modules/ModalModule';
 import logo from '@/_assets/images/logo_imsy.png';
+import { useGetWkDetailQuery } from '@/_hooks/admin/useGetWkDetailQuery';
+import { useGetWkPlaceListQuery } from '@/_hooks/admin/useGetWkPlaceListQuery';
 
-const workationExample = {
-  id: 1,
-  title: '제목입니다',
-  number: '2',
-  place: '양양',
-  description: '상세내용입니다.',
-};
-
-const WorkationDetail = () => {
+interface WkDetailProps {
+  params: { id: number };
+}
+const WorkationDetail = ({ params }: WkDetailProps) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const { id } = params;
+  const { data, isLoading, isError } = useGetWkDetailQuery({
+    wktId: id,
+  });
+
+  const {
+    data: placeData,
+    isLoading: isPlaceLoading,
+    isError: isPlaceError,
+  } = useGetWkPlaceListQuery({
+    pageParam: {
+      page: 1,
+      size: 100,
+    },
+  });
+  const router = useRouter();
   const handleDelete = () => {
     setIsDeleteModalOpen(true);
   };
-  const router = useRouter();
+  if (isLoading || isPlaceLoading) {
+    return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
+  }
+  if (isError || isPlaceError) {
+    return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정
+  }
+  if (!data || !placeData) {
+    return <div>No data</div>;
+  }
+  const placeInfo = placeData.wktPlaceInfos.find(
+    (place) => place.id === data.wktPlaceId,
+  );
+
   return (
     <section className="flex flex-col">
       <TitleBarModule title="워케이션 상세" type="LEFT" />
       <div className="mt-10 flex flex-col gap-[30px]">
         <div className="flex h-52 gap-x-8">
-          <Image src={placeImsy} alt="placeImsy" />
+          {placeInfo ? (
+            <Image
+              width={500} // 이미지뜨면 수정예정
+              height={300} // 이미지뜨면 수정예정
+              src={placeInfo.thumbnailUrl}
+              alt={placeInfo.place}
+            />
+          ) : (
+            <Image src="/fallback-image.png" alt="No place image available" />
+          )}
           <div className="w-full">
             <div className="flex w-full gap-6">
               <div className="w-full">
                 <InputModule
                   subtitle="제목"
-                  value={workationExample.title}
+                  value={data.title}
                   name="title"
                   status="readonly"
                 />
@@ -45,7 +78,7 @@ const WorkationDetail = () => {
               <div className="w-52">
                 <InputModule
                   subtitle="모집 인원"
-                  value={workationExample.number}
+                  value={data.totalRecruit}
                   name="number"
                   status="readonly"
                 />
@@ -54,7 +87,7 @@ const WorkationDetail = () => {
             <div className="mt-6 flex w-full flex-col gap-4">
               <InputModule
                 subtitle="장소"
-                value={workationExample.place}
+                value={placeInfo ? placeInfo.place : 'Unknown place'}
                 name="place"
                 status="readonly"
               />
@@ -65,17 +98,33 @@ const WorkationDetail = () => {
           <div className="flex w-full flex-col gap-4">
             <p className="text-3 font-semibold">모집 기간</p>
             <div className="flex items-center gap-4">
-              <InputModule value="2024.06.07" name="place" status="readonly" />
+              <InputModule
+                value={data.applyStartDate}
+                name="place"
+                status="readonly"
+              />
               <p className="text-sub-200">-</p>
-              <InputModule value="2024.06.07" name="place" status="readonly" />
+              <InputModule
+                value={data.applyEndDate}
+                name="place"
+                status="readonly"
+              />
             </div>
           </div>
           <div className="flex w-full flex-col gap-4">
             <p className="text-3 font-semibold">워케이션 기간</p>
             <div className="flex items-center gap-4">
-              <InputModule value="2024.06.07" name="place" status="readonly" />
+              <InputModule
+                value={data.startDate}
+                name="place"
+                status="readonly"
+              />
               <p className="text-sub-200">-</p>
-              <InputModule value="2024.06.07" name="place" status="readonly" />
+              <InputModule
+                value={data.endDate}
+                name="place"
+                status="readonly"
+              />
             </div>
           </div>
         </div>
@@ -84,7 +133,7 @@ const WorkationDetail = () => {
           <TextAreaModule
             readonly
             size="LARGE"
-            value={workationExample.description}
+            value={data.description}
             name="워케이션 상세내용"
           />
         </div>
@@ -102,9 +151,7 @@ const WorkationDetail = () => {
           text="수정"
           type="button"
           buttonStyle="dark"
-          onClick={() =>
-            router.push(`/admin/workation/${workationExample.id}/edit`)
-          }
+          onClick={() => router.push(`/admin/workation/${id}/edit`)}
         />
       </div>
       {isDeleteModalOpen && (

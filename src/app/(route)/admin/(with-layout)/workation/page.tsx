@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
 import FilteringBarContainer from '@/_components/common/containers/FilteringBarContainer';
 import RadioButtonContainer from '@/_components/common/containers/RadioButtonContainer';
-import { orderList } from '@/_types/adminType';
+import { orderList, wktStatusList } from '@/_types/adminType';
 import DatePickerContainer from '@/_components/common/containers/DatePickerContainer';
 import { DatePickerTagType } from '@/_types/commonType';
 import dayjs from 'dayjs';
@@ -20,68 +20,46 @@ import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
 import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAtom';
+import { useGetWkListQuery } from '@/_hooks/admin/useGetWktListQuery';
 
-const data = [
-  {
-    id: 1,
-    제목: '2024년 5월 3주차 워케이션 : 양양',
-    등록일시: '2024.06.05',
-    모집기간: '2024.07.03 - 2024.07.03',
-    워케이션기간: '2024.07.03 - 2024.07.03',
-    상태: { text: '모집 예정' },
-    결과및페널티: '',
-    내용: '',
-  },
-  {
-    id: 2,
-    제목: '2024년 5월 3주차 워케이션 : 양양',
-    등록일시: '2024.06.05',
-    모집기간: '2024.07.03 - 2024.07.03',
-    워케이션기간: '2024.07.03 - 2024.07.03',
-    상태: { text: '모집 중', color: 'text-positive' },
-    결과및페널티: '',
-    내용: '',
-  },
-  {
-    id: 3,
-    제목: '2024년 5월 3주차 워케이션 : 양양',
-    등록일시: '2024.06.05',
-    모집기간: '2024.07.03 - 2024.07.03',
-    워케이션기간: '2024.07.03 - 2024.07.03',
-    상태: { text: '모집 완료', color: 'text-primaryDark' },
-    결과및페널티: '',
-    내용: '',
-  },
-];
 const WorkationList = () => {
   const router = useRouter();
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
-  const [selectedDateTag, setSelectedDateTag] =
-    useState<DatePickerTagType>('ALL');
-  const [selectedDateTagSec, setSelectedDateTagSec] =
-    useState<DatePickerTagType>('ALL');
   const [param, setParam] = useState<{
     order: string;
     status: string[];
-    startDate: Date | null;
-    endDate: Date | null;
   }>({
-    order: 'RECENT',
-    status: ['WILL', 'PROCEED', 'COMPLETE'],
-    startDate: null,
-    endDate: null,
+    order: 'ASC',
+    status: ['PLANNED', 'ONGOING', 'CLOSED'],
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const getStatusLabelAndColor = (
+    applyStartDate: string,
+    applyEndDate: string,
+  ): { label: string; color: string } => {
+    const now = dayjs();
+    const start = dayjs(applyStartDate);
+    const end = dayjs(applyEndDate);
+
+    if (now.isBefore(start)) {
+      return { label: '모집 예정', color: '' };
+    }
+    if (now.isAfter(end)) {
+      return { label: '모집 완료', color: 'text-sub-200' };
+    }
+    return { label: '모집 중', color: 'text-positive' };
+  };
+
   const penaltyRouteButtonClick = (id: number) => {
     router.push(`/admin/workation/${id}/result`);
   };
-  const [startDate, setStartDate] = useState<Date>(
-    dayjs().subtract(1, 'year').toDate(),
-  );
-  const [endDate, setEndDate] = useState<Date>(dayjs().toDate());
-  const [startDateSec, setStartDateSec] = useState<Date>(
-    dayjs().subtract(1, 'year').toDate(),
-  );
-  const [endDateSec, setEndDateSec] = useState<Date>(dayjs().toDate());
+  const [selectedTag, setSelectedTag] = useState<DatePickerTagType>('ALL');
+  const [selectedApplyTag, setApplySelectedTag] =
+    useState<DatePickerTagType>('ALL');
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [applyStartDate, setApplyStartDate] = useState<Date | null>(null);
+  const [applyEndDate, setApplyEndDate] = useState<Date | null>(null);
   const handleFilteringBar = () => {
     setIsFilteringBarOpen(true);
   };
@@ -95,18 +73,39 @@ const WorkationList = () => {
     setParam({
       ...param,
       order: 'RECENT',
-      status: ['WILL', 'PROCEED', 'COMPLETE'],
+      status: ['PLANNED', 'ONGOING', 'CLOSED'],
     });
-    setSelectedDateTag('ALL');
     setStartDate(dayjs().subtract(1, 'year').toDate());
-    setEndDate(dayjs().toDate());
-    setSelectedDateTagSec('ALL');
-    setStartDateSec(dayjs().subtract(1, 'year').toDate());
-    setEndDateSec(dayjs().toDate());
+    setEndDate(dayjs().subtract(1, 'year').toDate());
+    setApplyStartDate(dayjs().subtract(1, 'year').toDate());
+    setApplyEndDate(dayjs().toDate());
   };
-  const [currentPage, setCurrentPage] = useState(1);
+  const { data, isLoading, isError } = useGetWkListQuery({
+    status: param.status.join(','),
+    wktStartDate:
+      startDate === null
+        ? undefined
+        : dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss'),
+    wktEndDate:
+      endDate === null
+        ? undefined
+        : dayjs(endDate).format('YYYY-MM-DDTHH:mm:ss'),
+    applyStartDate:
+      applyStartDate === null
+        ? undefined
+        : dayjs(applyStartDate).format('YYYY-MM-DDTHH:mm:ss'),
+    applyEndDate:
+      applyEndDate === null
+        ? undefined
+        : dayjs(applyEndDate).format('YYYY-MM-DDTHH:mm:ss'),
+    pageParam: {
+      page: currentPage,
+      size: 10,
+      sort: `createdAt,${param.order}`,
+    },
+  });
   return (
-    <section className="flex w-full flex-col gap-y-10 overflow-y-auto">
+    <section className="flex h-full w-full flex-col gap-y-10 overflow-y-auto">
       <div className="flex w-full items-center justify-between">
         <TitleBarModule title="워케이션 목록" />
         <FilteringButtonAtom onClick={handleFilteringBar} />
@@ -117,7 +116,7 @@ const WorkationList = () => {
             번호
           </TableHeaderAtom>
           <TableHeaderAtom>제목</TableHeaderAtom>
-          <TableHeaderAtom width="100px">등록 일시</TableHeaderAtom>
+          <TableHeaderAtom width="140px">등록 일시</TableHeaderAtom>
           <TableHeaderAtom width="140px">모집 기간</TableHeaderAtom>
           <TableHeaderAtom width="140px">워케이션 기간</TableHeaderAtom>
           <TableHeaderAtom width="110px">상태</TableHeaderAtom>
@@ -127,22 +126,48 @@ const WorkationList = () => {
           </TableHeaderAtom>
         </TableHeaderModule>
         <tbody>
-          {data.length <= 0 ? (
+          {!data ? (
+            isLoading ? (
+              <EmptyContainer colSpan={8} text="loading" />
+            ) : (
+              <EmptyContainer colSpan={8} text="no data" />
+            )
+          ) : data.pageInfo.totalElements <= 0 ? (
             <EmptyContainer colSpan={8} />
           ) : (
-            data.map((item, index) => (
-              <TableBodyModule key={item.id}>
-                <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
-                <TableBodyAtom>{item.제목}</TableBodyAtom>
-                <TableBodyAtom>{item.등록일시}</TableBodyAtom>
-                <TableBodyAtom>{item.모집기간}</TableBodyAtom>
-                <TableBodyAtom>{item.워케이션기간}</TableBodyAtom>
-                <TableBodyAtom color={item.상태.color}>
-                  {item.상태.text}
+            data.wktInfos.map((item, index) => (
+              <TableBodyModule key={item.wktId}>
+                <TableBodyAtom isFirst>{item.wktId}</TableBodyAtom>
+                <TableBodyAtom>{item.wktPlaceTitle}</TableBodyAtom>
+                <TableBodyAtom>
+                  {dayjs(item.createdAt).format('YYYY.MM.DD')}
+                </TableBodyAtom>
+                <TableBodyAtom>
+                  {dayjs(item.applyStartDate).format('YYYY.MM.DD')} -
+                  {dayjs(item.applyEndDate).format('YYYY.MM.DD')}
+                </TableBodyAtom>
+                <TableBodyAtom>
+                  {dayjs(item.startDate).format('YYYY.MM.DD')} -
+                  {dayjs(item.endDate).format('YYYY.MM.DD')}
+                </TableBodyAtom>
+                <TableBodyAtom
+                  color={
+                    getStatusLabelAndColor(
+                      item.applyStartDate,
+                      item.applyEndDate,
+                    ).color
+                  }
+                >
+                  {
+                    getStatusLabelAndColor(
+                      item.applyStartDate,
+                      item.applyEndDate,
+                    ).label
+                  }
                 </TableBodyAtom>
                 <TableBodyAtom>
                   <button
-                    onClick={() => penaltyRouteButtonClick(item.id)}
+                    onClick={() => penaltyRouteButtonClick(item.wktId)}
                     className="rounded-full bg-primary px-6 py-2 text-4 font-semibold text-white"
                   >
                     자세히
@@ -150,7 +175,7 @@ const WorkationList = () => {
                 </TableBodyAtom>
                 <TableBodyAtom isLast>
                   <ShowDetailButtonAtom
-                    onClick={() => onClickRowDetail(item.id)}
+                    onClick={() => onClickRowDetail(item.wktId)}
                   />
                 </TableBodyAtom>
               </TableBodyModule>
@@ -158,15 +183,16 @@ const WorkationList = () => {
           )}
         </tbody>
       </TableContainer>
-
       <div className="relative mt-8">
-        <div className="flex justify-center">
-          <PaginationModule
-            totalPages={6}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-          />
-        </div>
+        {data && data.pageInfo.totalPages > 0 && (
+          <div className="flex justify-center">
+            <PaginationModule
+              totalPages={data.pageInfo.totalPages}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
+          </div>
+        )}
         <div className="absolute right-0 top-0">
           <ButtonAtom
             text="워케이션 등록"
@@ -190,42 +216,29 @@ const WorkationList = () => {
         />
         <CheckboxContainer
           title="상태"
-          options={[
-            ['WILL', '모집 예정'],
-            ['PROCEED', '모집 중'],
-            ['COMPLETE', '모집 완료'],
-          ]}
+          options={Object.entries(wktStatusList) as [string, string][]}
           selectedOptions={param.status}
           setSelectedOptions={(status: string[]) =>
-            setParam({ ...param, status })
+            setParam((prev) => ({ ...prev, status }))
           }
         />
-        {/* 추후 수정 예정 */}
         <DatePickerContainer
           title="모집 기간"
-          selectedTag={selectedDateTag}
-          setSelectedTag={setSelectedDateTag}
-          startDate={param.startDate}
-          setStartDate={(start: Date | null) => {
-            setParam({ ...param, startDate: start });
-          }}
-          endDate={param.endDate}
-          setEndDate={(end: Date | null) => {
-            setParam({ ...param, endDate: end });
-          }}
+          selectedTag={selectedApplyTag}
+          setSelectedTag={setApplySelectedTag}
+          startDate={applyStartDate}
+          setStartDate={setApplyStartDate}
+          endDate={applyEndDate}
+          setEndDate={setApplyEndDate}
         />
         <DatePickerContainer
           title="워케이션 기간"
-          selectedTag={selectedDateTagSec}
-          setSelectedTag={setSelectedDateTagSec}
-          startDate={startDateSec}
-          setStartDate={(start: Date | null) => {
-            setParam({ ...param, startDate: start });
-          }}
-          endDate={endDateSec}
-          setEndDate={(end: Date | null) => {
-            setParam({ ...param, endDate: end });
-          }}
+          selectedTag={selectedTag}
+          setSelectedTag={setSelectedTag}
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
         />
       </FilteringBarContainer>
     </section>
