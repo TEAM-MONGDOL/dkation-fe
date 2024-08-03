@@ -10,6 +10,7 @@ import DropdownModule from '@/_components/common/modules/DropdownModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import { NoticeOptions } from '@/_constants/common';
 import { usePostNoticeMutation } from '@/_hooks/admin/usePostNoticeMutation';
+import FileModule from '@/_components/common/modules/FileModule';
 
 const WriteNoticesPage = () => {
   const router = useRouter();
@@ -45,13 +46,32 @@ const WriteNoticesPage = () => {
   const handleFilesChange = (fileUrls: string[]) => {
     setValues((prevValues) => ({
       ...prevValues,
-      fileUrls,
+      fileUrls: [...prevValues.fileUrls, ...fileUrls],
     }));
+  };
+
+  const handleDeleteFile = (index: number) => {
+    setValues((prevValues) => {
+      const updatedFileUrls = prevValues.fileUrls.filter(
+        (_, idx) => idx !== index,
+      );
+      return {
+        ...prevValues,
+        fileUrls: updatedFileUrls,
+      };
+    });
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     postAnnouncement(values);
+  };
+
+  const getFileType = (url: string) => {
+    const parts = url.split('.');
+    const extension = parts.length > 1 ? parts.pop()?.toLowerCase() : '';
+    const imageExtensions = ['jpg', 'jpeg', 'png'];
+    return imageExtensions.includes(extension || '') ? 'image' : 'other';
   };
 
   return (
@@ -77,6 +97,31 @@ const WriteNoticesPage = () => {
             />
           </div>
           <div className="py-7">
+            {values.fileUrls.length > 0 && (
+              <div className="py-2">
+                <div className="flex flex-col gap-2">
+                  {values.fileUrls.map((fileUrl, index) => {
+                    const fileName = decodeURIComponent(
+                      fileUrl.split('/').pop()?.split('-').slice(1).join('-') ||
+                        '',
+                    );
+
+                    const fileType = getFileType(fileUrl);
+                    return (
+                      <div key={fileName} className="flex items-center gap-2">
+                        <FileModule
+                          preview={fileUrl}
+                          fileName={fileName}
+                          fileType={fileType}
+                          buttonType="delete"
+                          onDelete={() => handleDeleteFile(index)}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
             <FileContainer
               onFileChange={handleFilesChange}
               fileDomainType="ANNOUNCEMENT"
