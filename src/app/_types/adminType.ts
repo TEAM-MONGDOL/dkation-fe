@@ -120,6 +120,15 @@ export const pointApplyInfoListSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
+export const pointApplyDetailInfoSchema = z.object({
+  name: z.string(),
+  accountId: z.string(),
+  pointTitle: z.string(),
+  description: z.string(),
+  url: z.string().nullable().optional(),
+  createdAt: z.string(),
+});
+
 export const fileUrlSchema = z.string();
 
 export const fileUrlsSchema = z.object({
