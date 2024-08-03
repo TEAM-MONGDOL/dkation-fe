@@ -28,7 +28,9 @@ export const usePatchWkQuery = (
   return useMutation({
     mutationFn: async ({
       wktPlaceId,
+      thumbnailUrl,
       title,
+      address,
       startDate,
       endDate,
       applyStartDate,
@@ -38,7 +40,9 @@ export const usePatchWkQuery = (
     }: PatchWkProps) => {
       const response = await api.patch(`/api/wkt/${wktId}`, {
         wktPlaceId,
+        thumbnailUrl,
         title,
+        address,
         startDate,
         endDate,
         applyStartDate,

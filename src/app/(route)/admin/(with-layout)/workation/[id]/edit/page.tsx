@@ -41,7 +41,7 @@ const WorkationEdit = ({ params }: WkEditProps) => {
     title: '',
     number: 0,
     place: '',
-    description: '',
+    description: data?.description,
   });
   const successCallback = () => {
     alert('워케이션 수정 완료');
@@ -92,12 +92,14 @@ const WorkationEdit = ({ params }: WkEditProps) => {
       return;
     }
     const patchData = {
+      thumbnailUrl: '썸네일 주소',
       wktPlaceId: selectedPlace.id,
       title: values.title,
-      startDate: dayjs(startDateWorkation).toString(),
-      endDate: dayjs(endDateWorkation).toString(),
-      applyStartDate: dayjs(startDateRecruitment).toString(),
-      applyEndDate: dayjs(endDateRecruitment).toString(),
+      address: values.place, // 주소 삭제 예정
+      startDate: dayjs(startDateWorkation).toISOString(),
+      endDate: dayjs(endDateWorkation).toISOString(),
+      applyStartDate: dayjs(startDateRecruitment).toISOString(),
+      applyEndDate: dayjs(endDateRecruitment).toISOString(),
       description: values.description,
       totalRecruit: values.number,
     };
@@ -195,10 +197,10 @@ const WorkationEdit = ({ params }: WkEditProps) => {
           <p className="mb-3 text-3 font-semibold">내용</p>
           <TextAreaModule
             maxLength={2000}
-            placeholder="상세내용을 입력하세요."
             size="LARGE"
             value={values.description}
-            name="워케이션 상세내용"
+            name="description"
+            onChange={handleChange}
           />
         </div>
       </div>
