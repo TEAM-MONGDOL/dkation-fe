@@ -125,14 +125,14 @@ export const announcementListSchema = z.object({
 
 export const announcementDetailSchema = z.object({
   id: z.number(),
-  announncementType: z.union([
+  announcementType: z.union([
     z.literal('ANNOUNCEMENT'),
     z.literal('RESULT'),
     z.literal('EVENT'),
   ]),
   title: z.string(),
-  content: z.string(),
-  fileUrls: fileUrlSchema.array(),
+  description: z.string(),
+  fileUrls: fileUrlSchema.array().nullable(),
 });
 
 export const applyStatusSchema = z.union([
