@@ -23,7 +23,7 @@ const WriteNoticesPage = () => {
 
   const { mutate: postAnnouncement } = usePostNoticeMutation({
     successCallback: () => {
-      router.push('/admin/notices');
+      router.replace('/admin/notices');
     },
     errorCallback: (error: Error) => {
       console.error('failed upload announcement : ', error);
