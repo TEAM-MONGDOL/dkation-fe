@@ -9,7 +9,7 @@ export const useGetPointPolicyQuery = ({
   searchParam,
 }: {
   pageable: PageableType;
-  searchParam: {
+  searchParam?: {
     startDate?: string;
     endDate?: string;
     minPoint?: number;

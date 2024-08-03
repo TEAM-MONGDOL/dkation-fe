@@ -1,5 +1,4 @@
 import { z } from 'zod';
-
 // ResponseSchema
 export const pageInfoSchema = z.object({
   pageNum: z.number(),
@@ -9,8 +8,10 @@ export const pageInfoSchema = z.object({
 });
 
 export const wktInfoSchema = z.object({
+  wktId: z.number(),
   title: z.string(),
-  thumbnail: z.string(),
+  wktPlaceTitle: z.string(),
+  thumbnailUrl: z.string(),
   totalRecruit: z.number(),
   startDate: z.string(),
   endDate: z.string(),
@@ -21,6 +22,31 @@ export const wktInfoSchema = z.object({
 
 export const workationListSchema = z.object({
   wktInfos: wktInfoSchema.array(),
+  pageInfo: pageInfoSchema,
+});
+
+export const wkDetailInfoSchema = z.object({
+  title: z.string(),
+  totalRecruit: z.number(),
+  startDate: z.string(),
+  endDate: z.string(),
+  applyStartDate: z.string(),
+  applyEndDate: z.string(),
+  description: z.string(),
+  wktPlaceId: z.number(),
+});
+
+export const reviewListInfoSchema = z.object({
+  id: z.number(),
+  reviewer: z.string(),
+  wktPlace: z.string(),
+  rating: z.number(),
+  lastModifiedAt: z.string(),
+  blindedType: z.union([z.literal('TRUE'), z.literal('FALSE')]),
+});
+
+export const ReviewListInfoSchema = z.object({
+  reviewList: reviewListInfoSchema.array(),
   pageInfo: pageInfoSchema,
 });
 
@@ -83,7 +109,11 @@ export const fileUrlsSchema = z.object({
 
 export const announcementInfoSchema = z.object({
   id: z.number(),
-  type: z.union([z.literal('NOTICE'), z.literal('RESULT'), z.literal('EVENT')]),
+  announcementType: z.union([
+    z.literal('ANNOUNCEMENT'),
+    z.literal('RESULT'),
+    z.literal('EVENT'),
+  ]),
   title: z.string(),
   createdAt: z.string(),
 });
@@ -95,7 +125,11 @@ export const announcementListSchema = z.object({
 
 export const announcementDetailSchema = z.object({
   id: z.number(),
-  type: z.union([z.literal('NOTICE'), z.literal('RESULT'), z.literal('EVENT')]),
+  announncementType: z.union([
+    z.literal('ANNOUNCEMENT'),
+    z.literal('RESULT'),
+    z.literal('EVENT'),
+  ]),
   title: z.string(),
   content: z.string(),
   fileUrls: fileUrlSchema.array(),
@@ -117,11 +151,11 @@ export const applyInfoSchema = z.object({
   applicationDate: z.string(),
   bettingPoint: z.number(),
   winningProbability: z.number(),
-  status: applyStatusSchema,
+  applyStatusType: applyStatusSchema,
 });
 
 export const applyListSchema = z.object({
-  applyInfos: applyInfoSchema.array(),
+  applyInfoList: applyInfoSchema.array(),
   pageInfo: pageInfoSchema,
 });
 
@@ -145,6 +179,21 @@ export const memberDetailSchema = z.object({
   pointQuantity: z.number(),
 });
 
+export const wktPlaceInfoSchema = z.object({
+  id: z.number(),
+  thumbnailUrl: z.string(),
+  place: z.string(),
+  address: z.string(),
+  createdAt: z.string(),
+  maxPeople: z.number(),
+  description: z.string(),
+});
+
+export const workationPlaceListSchema = z.object({
+  wktPlaceInfos: wktPlaceInfoSchema.array(),
+  pageInfo: pageInfoSchema,
+});
+
 // Type
 export type PageableType = {
   page?: number;
@@ -154,13 +203,19 @@ export type PageableType = {
 
 export type StatusType = z.infer<typeof applyStatusSchema>;
 
-export type OrderType = 'DESC' | 'ASC';
+export type MemberType = z.infer<typeof memberInfoSchema>;
+
+export type OrderType = 'RECENT' | 'OLDEST';
+
+export type ReviewOrderType = 'ASC' | 'DESC' | 'STARASC' | 'STARDESC';
 
 export type PointRewardType = 'PERSONAL' | 'GROUP';
 
-export type NoticeType = 'NOTICE' | 'RESULT' | 'EVENT';
+export type NoticeType = 'ANNOUNCEMENT' | 'RESULT' | 'EVENT';
 
 export type ResultType = 'NAME' | 'LOWEST' | 'HIGHEST';
+
+export type WktStatusType = 'PLANNED' | 'ONGOING' | 'CLOSED';
 
 export type TeamType =
   | 'MANAGEMENT'
@@ -185,8 +240,6 @@ export type PointOrderType = 'POINT_HIGHEST' | 'POINT_LOWEST';
 
 export type PointChangeType = 'INCREASE' | 'DECREASE';
 
-export type ReviewOrderType = 'RECENT' | 'OLDEST' | 'HIGHEST' | 'LOWEST';
-
 // Convert Type / List
 export const statusList: { [key in StatusType]: string } = {
   APPLIED: '신청완료',
@@ -199,31 +252,20 @@ export const statusList: { [key in StatusType]: string } = {
   VISITED: '일정종료',
 };
 
+export const wktStatusList: { [key in WktStatusType]: string } = {
+  PLANNED: '모집 예정',
+  ONGOING: '모집 중',
+  CLOSED: '모집 완료',
+};
+
 export const pointOrderList: { [key in PointOrderType]: string } = {
   POINT_HIGHEST: '배팅 포인트 높은 순',
   POINT_LOWEST: '배팅 포인트 낮은 순',
 };
 
-export const LocationList: { [key in LocationType]: string } = {
-  SEOUL: '서울',
-  GANGWON: '강원',
-  CHUNGCEOUNG: '충청',
-  JEONLA: '전라',
-  GYEONGSANG: '경상',
-  JEJU: '제주',
-  ABROAD: '해외',
-};
-
 export const pointChangeList: { [key in PointChangeType]: string } = {
   INCREASE: '포인트 증가',
   DECREASE: '포인트 감소',
-};
-
-export const reviewOrderList: { [key in ReviewOrderType]: string } = {
-  RECENT: '최신순 ',
-  OLDEST: '오래된 순',
-  HIGHEST: '별점 높은 순',
-  LOWEST: '별점 낮은 순',
 };
 
 export const pointRequestStatusList: {
@@ -249,8 +291,15 @@ export const teamList: { [key in TeamType]: string } = {
 };
 
 export const orderList: { [key in OrderType]: string } = {
-  DESC: '최신순',
-  ASC: '오래된순',
+  ASC: '최신순',
+  DESC: '오래된순',
+};
+
+export const reviewOrderList: { [key in ReviewOrderType]: string } = {
+  ASC: '최신순',
+  DESC: '오래된순',
+  STARASC: '별점 높은 순',
+  STARDESC: '별점 낮은 순',
 };
 
 export const pointRewardList: { [key in PointRewardType]: string } = {
@@ -258,7 +307,7 @@ export const pointRewardList: { [key in PointRewardType]: string } = {
   GROUP: '단체',
 };
 export const noticeList: { [key in NoticeType]: string } = {
-  NOTICE: '공지',
+  ANNOUNCEMENT: '공지',
   RESULT: '결과 발표',
   EVENT: '이벤트 안내',
 };

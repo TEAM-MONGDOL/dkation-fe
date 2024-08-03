@@ -1,10 +1,9 @@
 import React from 'react';
 import InfoSectionContainer from '@/_components/common/containers/InfoSectionContainer';
-import { StaticImageData } from 'next/image';
 import { useRouter } from 'next/navigation';
 
 interface PlaceListButtonProps {
-  image: StaticImageData;
+  image: string;
   data: { subtitle: string; content: string }[];
   domain: string;
 }
@@ -19,7 +18,7 @@ const PlaceListButton: React.FC<PlaceListButtonProps> = ({
     router.push(domain);
   };
   return (
-    <button onClick={buttonClick}>
+    <button type="button" aria-label="button" onClick={buttonClick}>
       <InfoSectionContainer row image={image} data={data} />
     </button>
   );
