@@ -15,7 +15,7 @@ const CheckboxModule = ({
 }: CheckboxModuleProps) => {
   return (
     <button
-      className={`flex items-center justify-start w-full ${gap === 'sm' ? 'gap-x-2.5' : 'gap-x-10'} py-[5px] bg-white`}
+      className={`flex w-full items-center justify-start ${gap === 'sm' ? 'gap-x-2.5' : 'gap-x-10'} bg-white py-[5px]`}
       onClick={onClick}
     >
       <CheckboxAtom isChecked={isChecked} />

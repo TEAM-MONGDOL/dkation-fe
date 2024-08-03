@@ -6,7 +6,7 @@ import InputModule from '@/_components/common/modules/InputModule';
 import ModalModule from '@/_components/common/modules/ModalModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
-import { usePostPointPolicyMutate } from '@/_hooks/admin/usePostPointPolicyMutate';
+import { usePostPointPolicyMutation } from '@/_hooks/admin/usePostPointPolicyMutation';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
 import React, { ChangeEvent, useState } from 'react';
@@ -30,7 +30,7 @@ const AdminPointsPolicyNewPage = () => {
     });
   };
 
-  const { mutate: tryPostPolicy } = usePostPointPolicyMutate({
+  const { mutate: tryPostPolicy } = usePostPointPolicyMutation({
     successCallback: () => {
       router.push('/admin/points/policy');
     },

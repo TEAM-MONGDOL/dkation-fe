@@ -203,7 +203,9 @@ export type PageableType = {
 
 export type StatusType = z.infer<typeof applyStatusSchema>;
 
-export type OrderType = 'DESC' | 'ASC';
+export type MemberType = z.infer<typeof memberInfoSchema>;
+
+export type OrderType = 'RECENT' | 'OLDEST';
 
 export type ReviewOrderType = 'ASC' | 'DESC' | 'STARASC' | 'STARDESC';
 
