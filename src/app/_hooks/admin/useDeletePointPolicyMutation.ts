@@ -20,6 +20,9 @@ export const useDeletePointPolicyMutation = ({
       queryClient.invalidateQueries({
         queryKey: [useGetPointPolicyQueryKey, useGetPointPolicyDetailQueryKey],
       });
+      queryClient.refetchQueries({
+        queryKey: [useGetPointPolicyQueryKey],
+      });
       successCallback && successCallback();
     },
     onError: (error: Error) => {
