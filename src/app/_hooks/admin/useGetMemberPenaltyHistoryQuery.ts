@@ -7,22 +7,15 @@ export const useGetMemberPenaltyHistoryQueryKey =
 
 export const useGetMemberPenaltyHistoryQuery = ({
   accountId,
-  pageParam,
 }: {
-  accountId?: string;
-  pageParam: {
-    page: number;
-    size: number;
-    sort?: string;
-  };
+  accountId: string;
 }) => {
   return useQuery({
-    queryKey: [useGetMemberPenaltyHistoryQueryKey, accountId, pageParam],
+    queryKey: [useGetMemberPenaltyHistoryQueryKey, accountId],
     queryFn: async () => {
       const res = await api.get(`/api/penalty/member`, {
         params: {
           accountId,
-          ...pageParam,
         },
       });
       return penaltyListSchema.parse(res.data.data);
