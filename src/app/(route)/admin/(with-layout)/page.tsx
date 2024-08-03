@@ -26,11 +26,9 @@ const pointData = [
 
 const AdminMainPage = () => {
   const router = useRouter();
-  const [param, setParam] = useState<{
-    order: string;
+  const [statusOption, setStatusOption] = useState<{
     status: string[];
   }>({
-    order: 'ASC',
     status: ['PLANNED', 'ONGOING', 'CLOSED'],
   });
 
@@ -43,11 +41,11 @@ const AdminMainPage = () => {
   };
 
   const { data, isLoading, isError } = useGetWkListQuery({
-    status: param.status.join(','),
+    status: statusOption.status.join(','),
     pageParam: {
       page: 1,
       size: 5,
-      sort: `createdAt,${param.order}`,
+      sort: `createdAt,DESC`,
     },
   });
 
