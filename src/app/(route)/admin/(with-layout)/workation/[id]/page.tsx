@@ -11,11 +11,15 @@ import ModalModule from '@/_components/common/modules/ModalModule';
 import logo from '@/_assets/images/logo_imsy.png';
 import { useGetWkDetailQuery } from '@/_hooks/admin/useGetWkDetailQuery';
 import { useGetWkPlaceListQuery } from '@/_hooks/admin/useGetWkPlaceListQuery';
+import { deleteWkQuery } from '@/_hooks/admin/useDeleteWkQuery';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useGetWkListQueryKey } from '@/_hooks/admin/useGetWktListQuery';
 
 interface WkDetailProps {
   params: { id: number };
 }
 const WorkationDetail = ({ params }: WkDetailProps) => {
+  const queryClient = useQueryClient();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const { id } = params;
   const { data, isLoading, isError } = useGetWkDetailQuery({
@@ -33,9 +37,16 @@ const WorkationDetail = ({ params }: WkDetailProps) => {
     },
   });
   const router = useRouter();
-  const handleDelete = () => {
-    setIsDeleteModalOpen(true);
-  };
+  const deleteWk = useMutation({
+    mutationFn: () => deleteWkQuery(id),
+    onSuccess: () => {
+      alert('워케이션 삭제 완료');
+      router.push('/admin/workation');
+    },
+    onError: () => {
+      alert('다시 시도해 주세요.');
+    },
+  });
   if (isLoading || isPlaceLoading) {
     return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
   }
@@ -163,8 +174,8 @@ const WorkationDetail = ({ params }: WkDetailProps) => {
             setIsDeleteModalOpen(false);
           }}
           onConfirm={() => {
+            deleteWk.mutate();
             setIsDeleteModalOpen(false);
-            router.push('/admin/workation');
           }}
         >
           <div className="flex justify-center">
