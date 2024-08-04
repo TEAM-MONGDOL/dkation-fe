@@ -33,15 +33,15 @@ const AdminPointsRequestDetailPage = ({
     <section className="flex w-full flex-col gap-y-10 overflow-y-auto">
       <TitleBarModule title="포인트 신청 내역 상세" type="LEFT" />
       <section className="flex w-full flex-col gap-y-3xl">
-        {/* {data.status !== 'WAITING' && (
+        {data?.applyType !== 'PENDING' && (
           <p
-            className={`flex w-full items-center rounded-regular px-5 py-4 font-semibold ${data.status === 'ACCEPTED' ? 'border border-primary bg-[#FEEC66]' : 'border border-sub-100 bg-[#E1E1E1]'}`}
+            className={`flex w-full items-center rounded-regular px-5 py-4 font-semibold ${data?.applyType === 'APPROVED' ? 'border border-primary bg-[#FEEC66]' : 'border border-sub-100 bg-[#E1E1E1]'}`}
           >
-            {data.status === 'ACCEPTED'
+            {data?.applyType === 'APPROVED'
               ? '이미 승인된 내역입니다.'
               : '이미 반려된 내역입니다.'}
           </p>
-        )} */}
+        )}
         {!data ? (
           isLoading ? (
             <p className="flex h-[100px] w-full items-center justify-center">
@@ -107,8 +107,7 @@ const AdminPointsRequestDetailPage = ({
               </div>
             </div>
             <div className="flex w-full items-center justify-end gap-x-5 pt-[30px]">
-              {/* TODO : 좀 더 길게 버튼 길이 고정 필요 */}
-              {/* {data.status === 'WAITING' ? (
+              {data.applyType === 'PENDING' ? (
                 <>
                   <ButtonAtom
                     type="button"
@@ -117,6 +116,7 @@ const AdminPointsRequestDetailPage = ({
                       setIsModalOpen('reject');
                     }}
                     text="반려"
+                    width="fixed"
                   />
                   <ButtonAtom
                     type="button"
@@ -125,6 +125,7 @@ const AdminPointsRequestDetailPage = ({
                       setIsModalOpen('accept');
                     }}
                     text="승인"
+                    width="fixed"
                   />
                 </>
               ) : (
@@ -135,15 +136,9 @@ const AdminPointsRequestDetailPage = ({
                     router.back();
                   }}
                   text="닫기"
+                  width="fixed"
                 />
-              )} */}
-              <ButtonAtom
-                type="button"
-                buttonStyle="dark"
-                onClick={() => router.back()}
-                text="닫기"
-                width="fixed"
-              />
+              )}
             </div>
           </>
         )}
