@@ -7,6 +7,7 @@ import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import { useRouter } from 'next/navigation';
 import FileModule from '@/_components/common/modules/FileModule';
 import { useGetWkPlaceDetailQuery } from '@/_hooks/admin/useGetWkPlaceDetailQuery';
+import dayjs from 'dayjs';
 
 interface FileItem {
   name: string;
@@ -60,7 +61,7 @@ const AdminWorkationPlaceDetailPage = ({ params }: WkPlaceDetailProps) => {
         <InputModule
           subtitle="등록 일시"
           status="disabled"
-          value={data.wktPlaceDetailInfo.createdAt.slice(0, 10)}
+          value={dayjs(data.wktPlaceDetailInfo.createdAt).format('YYYY-MM-DD')}
         />
       </div>
       <div className="py-4">
