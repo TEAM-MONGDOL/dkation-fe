@@ -8,6 +8,8 @@ interface PostWkPlaceProps {
   address: string;
   description: string;
 }
+export const useGetWkPlaceListQuery = 'useGetWkPlaceListQuery';
+
 export const useWkNewPlaceMutation = (successCallback?: () => void) => {
   const client = useQueryClient();
 

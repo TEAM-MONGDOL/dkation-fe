@@ -23,7 +23,7 @@ const AdminWorkationPlaceNewPage = () => {
   });
   const successCallback = () => {
     alert('워케이션 장소 등록 완료');
-    router.push('/admin/workation/place');
+    router.replace('/admin/workation/place');
   };
 
   const { mutate: postWkPlace } = useWkNewPlaceMutation(successCallback);
