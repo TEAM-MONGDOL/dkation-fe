@@ -8,6 +8,7 @@ import ModalModule from '@/_components/common/modules/ModalModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import { useGetPointApplyDetailQuery } from '@/_hooks/admin/useGetPointApplyDetailQuery';
+import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -74,12 +75,16 @@ const AdminPointsRequestDetailPage = ({
               <div className="flex w-full items-center justify-around gap-x-3xl">
                 <InputModule
                   subtitle="신청 일시"
-                  value={data.createdAt}
+                  value={dayjs(data.createdAt).format('YYYY.MM.DD')}
                   status="readonly"
                 />
                 <InputModule
                   subtitle="지급 일시"
-                  value={!data.createdAt ? '-' : data.createdAt} // TODO : 지급 일시 API 필요
+                  value={
+                    data.reviewTime && data.applyType !== 'PENDING'
+                      ? dayjs(data.reviewTime).format('YYYY.MM.DD')
+                      : '-'
+                  }
                   status="disabled"
                 />
               </div>
