@@ -39,7 +39,7 @@ const WorkationList = () => {
   ): { label: string; color: string } => {
     const now = dayjs();
     const start = dayjs(applyStartDate);
-    const end = dayjs(applyEndDate);
+    const end = dayjs(applyEndDate).endOf('day');
 
     if (now.isBefore(start)) {
       return { label: '모집 예정', color: '' };
@@ -138,7 +138,7 @@ const WorkationList = () => {
             data.wktInfos.map((item, index) => (
               <TableBodyModule key={item.wktId}>
                 <TableBodyAtom isFirst>{item.wktId}</TableBodyAtom>
-                <TableBodyAtom>{item.wktPlaceTitle}</TableBodyAtom>
+                <TableBodyAtom>{item.title}</TableBodyAtom>
                 <TableBodyAtom>
                   {dayjs(item.createdAt).format('YYYY.MM.DD')}
                 </TableBodyAtom>
