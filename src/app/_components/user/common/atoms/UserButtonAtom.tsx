@@ -8,6 +8,7 @@ interface UserButtonAtomProps {
   buttonStyle: 'white' | 'red' | 'black' | 'lightGray' | 'darkGray';
   type: 'button' | 'submit';
   className?: string;
+  onClick?: () => void;
 }
 
 const UserButtonAtom = ({
@@ -17,6 +18,7 @@ const UserButtonAtom = ({
   buttonStyle,
   type,
   className = '',
+  onClick,
 }: UserButtonAtomProps) => {
   const sizeStyles = {
     sm: 'px-4 py-2.5',
@@ -36,6 +38,7 @@ const UserButtonAtom = ({
   return (
     <button
       type={type}
+      onClick={onClick}
       className={`flex items-center justify-center gap-4 ${sizeStyles[size]} ${buttonStyles[buttonStyle]} ${className}`}
     >
       {text}
