@@ -108,6 +108,7 @@ export const pointApplyTypeSchema = z.union([
 ]);
 
 export const pointApplyInfoSchema = z.object({
+  pointApplyId: z.number(),
   pointTitle: z.string(),
   name: z.string(),
   applyTime: z.string(),
