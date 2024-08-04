@@ -153,7 +153,7 @@ const AdminPointsRequestPage = () => {
             <EmptyContainer colSpan={7} />
           ) : (
             data.pointApplyInfos.map((item, idx) => (
-              <TableBodyModule key={item.name}>
+              <TableBodyModule key={item.pointApplyId}>
                 <TableBodyAtom isFirst>{idx + 1}</TableBodyAtom>
                 <TableBodyAtom>{item.pointTitle}</TableBodyAtom>
                 <TableBodyAtom>{item.name}</TableBodyAtom>
@@ -168,7 +168,7 @@ const AdminPointsRequestPage = () => {
                 </TableBodyAtom>
                 <TableBodyAtom isLast>
                   <ShowDetailButtonAtom
-                    onClick={() => onClickRowDetail(idx + 1)}
+                    onClick={() => onClickRowDetail(item.pointApplyId)}
                   />
                 </TableBodyAtom>
               </TableBodyModule>
