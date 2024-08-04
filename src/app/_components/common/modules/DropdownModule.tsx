@@ -6,8 +6,8 @@ import DropdownItemAtom from '@/_components/common/atoms/DropdownItemAtom';
 import { KeyboardArrowDownIcon } from '@/_assets/icons';
 
 interface DropdownModuleProps {
-  options: [number, string][];
-  onSelect: (option: number | null) => void;
+  options: string[];
+  onSelect: (option: string) => void;
   placeholder: string;
   selectedOption: string | undefined | number | null;
   size?: 'small' | 'large' | 'full';

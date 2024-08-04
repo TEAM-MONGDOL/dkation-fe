@@ -103,7 +103,7 @@ const WorkationEdit = ({ params }: WkEditProps) => {
       description: values.description,
       totalRecruit: values.number,
     };
-    patchWkQuery.mutate(patchData);
+    patchWkQuery.mutate;
   };
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
