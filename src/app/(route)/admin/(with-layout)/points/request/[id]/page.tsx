@@ -33,7 +33,7 @@ const AdminPointsRequestDetailPage = ({
     <section className="flex w-full flex-col gap-y-10 overflow-y-auto">
       <TitleBarModule title="포인트 신청 내역 상세" type="LEFT" />
       <section className="flex w-full flex-col gap-y-3xl">
-        {data?.applyType !== 'PENDING' && (
+        {data && data.applyType !== 'PENDING' && (
           <p
             className={`flex w-full items-center rounded-regular px-5 py-4 font-semibold ${data?.applyType === 'APPROVED' ? 'border border-primary bg-[#FEEC66]' : 'border border-sub-100 bg-[#E1E1E1]'}`}
           >
