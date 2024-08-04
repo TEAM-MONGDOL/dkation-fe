@@ -5,7 +5,7 @@ import {
 } from '@tanstack/react-query';
 import api from '@/_hooks/Axios';
 
-interface PatchWkProps {
+interface PatchWkPlaceProps {
   place: string;
   thumbnailUrls: string[];
   maxPeople: number;
@@ -16,7 +16,7 @@ export const useGetWkPlaceListQueryKey = 'useGetWkPlaceListQuery';
 export const usePatchWkPlaceQuery = (
   wktPlaceId: number,
   successCallback?: () => void,
-): UseMutationResult<void, Error, PatchWkProps> => {
+): UseMutationResult<void, Error, PatchWkPlaceProps> => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -26,7 +26,7 @@ export const usePatchWkPlaceQuery = (
       maxPeople,
       address,
       description,
-    }: PatchWkProps) => {
+    }: PatchWkPlaceProps) => {
       const response = await api.patch(`/api/wkt-place/${wktPlaceId}`, {
         place,
         thumbnailUrls,
