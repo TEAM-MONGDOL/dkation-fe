@@ -6,7 +6,7 @@ interface UserTableHeaderModuleProps {
 
 const UserTableHeaderModule = ({ children }: UserTableHeaderModuleProps) => {
   return (
-    <thead className="rounded bg-stroke-100/20">
+    <thead className="bg-stroke-100/20">
       <tr>{children}</tr>
     </thead>
   );
