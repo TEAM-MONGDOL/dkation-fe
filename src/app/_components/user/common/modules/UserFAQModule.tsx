@@ -21,7 +21,7 @@ const UserFAQModule = ({
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="">
+    <div>
       <div
         role="presentation"
         className="flex h-[78px] w-full cursor-pointer items-center justify-between border-b border-sub-100 px-3xl"
