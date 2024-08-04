@@ -18,7 +18,7 @@ interface PatchWkProps {
   description: string;
   totalRecruit: number;
 }
-
+export const useGetWkListQueryKey = 'useGetWkListQuery';
 export const usePatchWkQuery = (
   wktId: number,
   successCallback?: () => void,
@@ -53,7 +53,7 @@ export const usePatchWkQuery = (
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(); // Update with your actual query key
+      queryClient.invalidateQueries({ queryKey: ['useGetWkListQueryKey'] });
       if (successCallback) successCallback();
     },
     onError: (error: Error) => {
