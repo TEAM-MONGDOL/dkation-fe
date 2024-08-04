@@ -13,7 +13,7 @@ export const useDeleteWkPlaceMutation = (wktPlaceId: number) => {
       await api.delete(`api/wkt-place/${wktPlaceId}`);
     },
     onSuccess: () => {
-      router.push('/admin/workation');
+      router.push('/admin/workation/place');
       queryClient.invalidateQueries({ queryKey: [useGetWkPlaceListQueryKey] });
       alert('워케이션 장소 삭제 완료');
     },
