@@ -5,7 +5,7 @@ interface UserButtonAtomProps {
   text: string;
   size: 'sm' | 'md' | 'lg' | 'xl';
   rightArrow?: boolean;
-  buttonStyle: 'white' | 'red' | 'black' | 'lightGray' | 'darkGray';
+  buttonStyle: 'white' | 'red' | 'black' | 'lightGray' | 'darkGray' | 'yellow';
   type: 'button' | 'submit';
   className?: string;
   onClick?: () => void;
@@ -33,6 +33,7 @@ const UserButtonAtom = ({
     black: 'bg-[#242424] text-white border border-[#242424]',
     lightGray: 'bg-sub-100 text-black border border-sub-100',
     darkGray: 'bg-sub-300 text-white border border-sub-300',
+    yellow: 'bg-primary text-black border border-[#E5CD07]',
   };
 
   return (
