@@ -17,7 +17,7 @@ const nextConfig = {
     ];
   },
   images: {
-    domains: ['mongdol-s3.s3.ap-northeast-2.amazonaws.com'], // Add your image domain here
+    domains: ['example.com','mongdol-s3.s3.ap-northeast-2.amazonaws.com'], // Add your image domain here
   },
 };
 
