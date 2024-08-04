@@ -50,14 +50,16 @@ export const ReviewListInfoSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
-export const wkPlaceDetailInfoSchema = z.object({
-  id: z.number(),
-  place: z.string(),
-  address: z.string(),
-  maxPeople: z.number(),
-  createAt: z.string(),
-  description: z.string(),
-  thumbnailUrls: z.array(z.string()),
+export const wktPlaceDetailShema = z.object({
+  wktPlaceDetailInfo: z.object({
+    id: z.number(),
+    place: z.string(),
+    address: z.string(),
+    maxPeople: z.number(),
+    createdAt: z.string(),
+    description: z.string(),
+    thumbnailUrls: z.array(z.string().nullable()),
+  }),
 });
 
 export const pointSupplyInfo = z.object({
@@ -215,7 +217,7 @@ export type StatusType = z.infer<typeof applyStatusSchema>;
 
 export type MemberType = z.infer<typeof memberInfoSchema>;
 
-export type OrderType = 'RECENT' | 'OLDEST';
+export type OrderType = 'ASC' | 'DESC';
 
 export type ReviewOrderType = 'ASC' | 'DESC' | 'STARASC' | 'STARDESC';
 
