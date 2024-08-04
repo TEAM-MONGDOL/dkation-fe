@@ -8,6 +8,7 @@ import ModalModule from '@/_components/common/modules/ModalModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import { useGetPointApplyDetailQuery } from '@/_hooks/admin/useGetPointApplyDetailQuery';
+import { usePatchPointApplyMutation } from '@/_hooks/admin/usePatchPointApplyMutation';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -23,11 +24,22 @@ const AdminPointsRequestDetailPage = ({
 }: AdminPointsRequestDetailPageProps) => {
   const { id } = params;
   const router = useRouter();
+  const [declinedReason, setDeclinedReason] = useState('');
   const [isModalOpen, setIsModalOpen] = useState<'accept' | 'reject' | null>(
     null,
   );
   const { data, isLoading, isError } = useGetPointApplyDetailQuery({
     id: Number(id),
+  });
+  const { mutate: tryEditPointApply } = usePatchPointApplyMutation({
+    pointApplyId: Number(data?.pointApplyId),
+    successCallback: () => {
+      setIsModalOpen(null);
+      router.back();
+    },
+    errorCallback: (e: Error) => {
+      alert(e.message);
+    },
   });
 
   return (
@@ -95,7 +107,7 @@ const AdminPointsRequestDetailPage = ({
                     <FileModule
                       fileName={data.fileInfo.fileName}
                       fileType="other"
-                      fileUrl={data.fileInfo.url}
+                      preview={data.fileInfo.url}
                       buttonType="download"
                       onDownload={() => {}}
                     />
@@ -155,8 +167,9 @@ const AdminPointsRequestDetailPage = ({
                 setIsModalOpen(null);
               }}
               onConfirm={() => {
-                // API 호출 필요
-                alert('승인');
+                tryEditPointApply({
+                  pointApplyType: 'APPROVED',
+                });
               }}
             >
               해당 포인트 신청을 승인하시겠습니까?
@@ -168,8 +181,10 @@ const AdminPointsRequestDetailPage = ({
                 setIsModalOpen(null);
               }}
               onConfirm={() => {
-                // API 호출 필요
-                alert('반려');
+                tryEditPointApply({
+                  pointApplyType: 'DECLINED',
+                  declinedReason,
+                });
               }}
               infoText="* 반려할 경우 반려사유와 함께 사용자에게 포인트 신청 반려 안내 메일이 발송됩니다. "
             >
@@ -180,9 +195,11 @@ const AdminPointsRequestDetailPage = ({
                     placeholder="반려 사유를 입력하세요."
                     size="MEDIUM"
                     maxLength={100}
-                    value=""
+                    value={declinedReason}
                     name="rejectReason"
-                    onChange={() => {}}
+                    onChange={(e) => {
+                      setDeclinedReason(e.target.value);
+                    }}
                     bgColor="bg-cus-100"
                   />
                 </div>
@@ -198,7 +215,10 @@ const AdminPointsRequestDetailPage = ({
                     />
                     <InfoContentAtom
                       isStartAlign
-                      data={{ subtitle: '신청 일시', content: data.createdAt }}
+                      data={{
+                        subtitle: '신청 일시',
+                        content: dayjs(data.createdAt).format('YYYY.MM.DD'),
+                      }}
                     />
                   </div>
                 )}
