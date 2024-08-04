@@ -14,6 +14,7 @@ import ModalModule from '@/_components/common/modules/ModalModule';
 import { useRouter } from 'next/navigation';
 import InfoSectionContainer from '@/_components/common/containers/InfoSectionContainer';
 import { useWkNewMutation } from '@/_hooks/admin/useWkNewMutation';
+import { useGetWkPlaceListQuery } from '@/_hooks/admin/useGetWkPlaceListQuery';
 
 const WorkationNew = () => {
   const router = useRouter();
@@ -23,7 +24,12 @@ const WorkationNew = () => {
     place: '',
     description: '',
   });
-
+  const { data, isLoading, isError } = useGetWkPlaceListQuery({
+    pageParam: {
+      page: 1,
+      size: 100,
+    },
+  });
   const [startDateRecruitment, setStartDateRecruitment] = useState<Date | null>(
     dayjs().subtract(1, 'year').toDate(),
   );
@@ -42,6 +48,16 @@ const WorkationNew = () => {
     router.push('/admin/workation');
   };
   const { mutate: postWk } = useWkNewMutation(successCallback);
+
+  if (isLoading) {
+    return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
+  }
+  if (isError) {
+    return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정
+  }
+  if (!data) {
+    return <div>No data</div>;
+  }
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -52,15 +68,25 @@ const WorkationNew = () => {
     }));
   };
   const handleSelect = (option: string) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      place: option,
+    const selectedPlace = data.wktPlaceInfos.find(
+      (place) => place.place === option,
+    );
+    setFormData((prevValues) => ({
+      ...prevValues,
+      place: selectedPlace ? selectedPlace.id.toString() : '',
     }));
   };
 
   const handleSubmit = () => {
+    const selectedPlace = data.wktPlaceInfos.find(
+      (place) => place.id.toString() === formData.place,
+    );
+    if (!selectedPlace) {
+      alert('선택한 장소를 찾을 수 없습니다.');
+      return;
+    }
     postWk({
-      wktPlaceId: 201, // 워케이션 목록 api 가져와서 id 주기
+      wktPlaceId: selectedPlace.id, // 워케이션 목록 api 가져와서 id 주기
       thumbnailUrl: '썸네일 주소',
       title: formData.title,
       address: formData.place, // 주소 삭제 예정
@@ -73,6 +99,7 @@ const WorkationNew = () => {
     });
     setIsConfirmModelOpen(false);
   };
+  const placeOptions = data.wktPlaceInfos.map((place) => place.place);
 
   return (
     <section className="flex flex-col">
@@ -112,8 +139,12 @@ const WorkationNew = () => {
             <div className="mt-6 flex w-full flex-col gap-4">
               <p className="text-3 font-semibold">장소</p>
               <DropdownModule
-                selectedOption={formData.place}
-                options={PlaceOptions}
+                selectedOption={
+                  data.wktPlaceInfos.find(
+                    (place) => place.id.toString() === formData.place,
+                  )?.place
+                }
+                options={placeOptions}
                 onSelect={handleSelect}
                 placeholder="장소를 선택해주세요."
               />
@@ -184,7 +215,10 @@ const WorkationNew = () => {
               },
               {
                 subtitle: '장소',
-                content: formData.place,
+                content:
+                  data.wktPlaceInfos.find(
+                    (place) => place.id.toString() === formData.place,
+                  )?.place || 'Unknown place',
               },
               {
                 subtitle: '모집 기간',
