@@ -84,13 +84,13 @@ const AdminPointsRequestDetailPage = ({
                 />
               </div>
               <div className="flex h-full grow flex-col gap-y-[30px]">
-                {data.url && (
+                {data.fileInfo && (
                   <div className="flex flex-col gap-y-4">
                     <h3 className="font-bold">증빙 서류</h3>
                     <FileModule
-                      fileName={data.url.split('/').pop() || ''}
+                      fileName={data.fileInfo.fileName}
                       fileType="other"
-                      fileUrl={data.url}
+                      fileUrl={data.fileInfo.url}
                       buttonType="download"
                       onDownload={() => {}}
                     />
