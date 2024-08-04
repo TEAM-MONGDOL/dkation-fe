@@ -50,6 +50,16 @@ export const ReviewListInfoSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
+export const wkPlaceDetailInfoSchema = z.object({
+  id: z.number(),
+  place: z.string(),
+  address: z.string(),
+  maxPeople: z.number(),
+  createAt: z.string(),
+  description: z.string(),
+  thumbnailUrls: z.array(z.string()),
+});
+
 export const pointSupplyInfo = z.object({
   id: z.number(),
   pointSupplyType: z.union([z.literal('PERSONAL'), z.literal('GROUP')]),
