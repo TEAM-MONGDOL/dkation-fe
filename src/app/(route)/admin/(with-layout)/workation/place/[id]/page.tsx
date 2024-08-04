@@ -39,13 +39,13 @@ const AdminWorkationPlaceDetailPage = ({ params }: WkPlaceDetailProps) => {
       <div className="flex w-full gap-7">
         <InputModule
           subtitle="이름"
-          value={data.place}
+          value={data.wktPlaceDetailInfo.place}
           name="placeName"
           status="readonly"
         />
         <InputModule
           subtitle="주소"
-          value={data.address}
+          value={data.wktPlaceDetailInfo.address}
           name="address"
           status="readonly"
         />
@@ -53,18 +53,18 @@ const AdminWorkationPlaceDetailPage = ({ params }: WkPlaceDetailProps) => {
       <div className="flex w-full gap-7">
         <InputModule
           subtitle="최대 인원"
-          value={data.maxPeople}
+          value={data.wktPlaceDetailInfo.maxPeople}
           name="maxPeople"
           status="readonly"
         />
         <InputModule
           subtitle="등록 일시"
           status="disabled"
-          value={data.createAt}
+          value={data.wktPlaceDetailInfo.createdAt.slice(0, 10)}
         />
       </div>
       <div className="py-4">
-        {data.thumbnailUrls.length > 0 && (
+        {data.wktPlaceDetailInfo.thumbnailUrls.length > 0 && (
           <div className="py-2">
             <div className="flex flex-col gap-2">
               {/* 파일업로드 수정 시 변경정예정 */}
@@ -88,7 +88,7 @@ const AdminWorkationPlaceDetailPage = ({ params }: WkPlaceDetailProps) => {
           readonly
           size="MEDIUM"
           name="상세내용"
-          value={data.description}
+          value={data.wktPlaceDetailInfo.description}
         />
       </div>
       <div className="flex justify-end">
