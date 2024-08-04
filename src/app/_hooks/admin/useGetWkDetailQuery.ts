@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { wkDetailInfoSchema, workationListSchema } from '@/_types/adminType';
+import { wkDetailInfoSchema } from '@/_types/adminType';
 import api from '../Axios';
 
 export const useGetWkDetailQueryKey = 'useGetWkDetailQuery';

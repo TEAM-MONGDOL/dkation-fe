@@ -5,7 +5,6 @@ import React, { useState } from 'react';
 import { ImageIcon } from '@/_assets/icons';
 import Image from 'next/image';
 import DropdownModule from '@/_components/common/modules/DropdownModule';
-import { PlaceOptions } from '@/_constants/common';
 import dayjs from 'dayjs';
 import DatePickersModule from '@/_components/common/modules/DatePickersModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
@@ -24,6 +23,7 @@ const WorkationNew = () => {
     place: '',
     description: '',
   });
+
   const [startDateRecruitment, setStartDateRecruitment] = useState<Date | null>(
     dayjs().subtract(1, 'year').toDate(),
   );
@@ -58,7 +58,6 @@ const WorkationNew = () => {
     }));
   };
 
-  console.log(formData);
   const handleSubmit = () => {
     postWk({
       wktPlaceId: 201, // 워케이션 목록 api 가져와서 id 주기
