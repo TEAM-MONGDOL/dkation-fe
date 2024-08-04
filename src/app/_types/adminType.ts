@@ -122,12 +122,16 @@ export const pointApplyInfoListSchema = z.object({
 });
 
 export const pointApplyDetailInfoSchema = z.object({
+  pointApplyId: z.number(),
   name: z.string(),
   accountId: z.string(),
   pointTitle: z.string(),
   description: z.string(),
   url: z.string().nullable().optional(),
+  applyType: pointApplyTypeSchema,
+  declineReason: z.string().nullable().optional(),
   createdAt: z.string(),
+  reviewTime: z.string().nullable().optional(),
 });
 
 export const fileUrlSchema = z.string();
