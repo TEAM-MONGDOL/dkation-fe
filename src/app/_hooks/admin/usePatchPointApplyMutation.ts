@@ -8,22 +8,22 @@ import { useGetPointApplyKey } from './useGetPointApply';
 import { useGetPointApplyDetailQueryKey } from './useGetPointApplyDetailQuery';
 
 export const usePatchPointApplyMutation = ({
+  pointApplyId,
   successCallback,
   errorCallback,
 }: {
+  pointApplyId: number;
   successCallback?: () => void;
   errorCallback?: (error: Error) => void;
 }) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({
-      pointApplyId,
       pointApplyType,
       declinedReason,
     }: {
-      pointApplyId: number;
       pointApplyType: string;
-      declinedReason: string;
+      declinedReason?: string | null;
     }) => {
       const response = await api.patch(`/api/point-apply/${pointApplyId}`, {
         pointApplyType,
@@ -33,7 +33,18 @@ export const usePatchPointApplyMutation = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [useGetPointApplyKey, useGetPointApplyDetailQueryKey],
+        queryKey: [
+          useGetPointApplyKey,
+          useGetPointApplyDetailQueryKey,
+          pointApplyId,
+        ],
+      });
+      queryClient.refetchQueries({
+        queryKey: [
+          useGetPointApplyKey,
+          useGetPointApplyDetailQueryKey,
+          pointApplyId,
+        ],
       });
       successCallback && successCallback();
     },
