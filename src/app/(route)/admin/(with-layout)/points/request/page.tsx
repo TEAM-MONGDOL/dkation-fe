@@ -72,7 +72,7 @@ const AdminPointsRequestPage = () => {
         param.state.length > 0 && param.state.length < 3
           ? param.state.join(',')
           : undefined,
-      pointTitle: param.type.length > 0 ? param.type.join(',') : undefined,
+      pointPolicyIds: param.type.length > 0 ? param.type.join(',') : undefined,
       startDate: startDate
         ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
         : undefined,

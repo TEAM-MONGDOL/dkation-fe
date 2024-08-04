@@ -12,7 +12,7 @@ export const useGetPointApply = ({
     name?: string;
     accountId?: string;
     applyTypes?: string;
-    pointTitle?: string;
+    pointPolicyIds?: string;
     startDate?: string;
     endDate?: string;
   };
