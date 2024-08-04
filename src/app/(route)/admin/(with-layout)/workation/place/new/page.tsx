@@ -8,17 +8,29 @@ import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import React, { useState } from 'react';
 import ModalModule from '@/_components/common/modules/ModalModule';
 import InfoSectionContainer from '@/_components/common/containers/InfoSectionContainer';
-import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
+import { useWkNewPlaceMutation } from '@/_hooks/admin/useWkPlaceNewMutate';
+import dayjs from 'dayjs';
 
 const AdminWorkationPlaceNewPage = () => {
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     placeName: '',
     address: '',
-    maxPeople: '',
-    registrationDate: '2024.07.14',
+    maxPeople: 0,
+    description: '',
   });
-  const handleChange = (e: any) => {
+  const successCallback = () => {
+    alert('워케이션 장소 등록 완료');
+    router.replace('/admin/workation/place');
+  };
+
+  const { mutate: postWkPlace } = useWkNewPlaceMutation(successCallback);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -26,7 +38,16 @@ const AdminWorkationPlaceNewPage = () => {
     }));
   };
   const [isConfirmModelOpen, setIsConfirmModelOpen] = useState(false);
-  const router = useRouter();
+  const handleSubmit = () => {
+    postWkPlace({
+      place: formData.placeName,
+      thumbnailUrls: ['dd'],
+      maxPeople: formData.maxPeople,
+      address: formData.address,
+      description: formData.description,
+    });
+    setIsConfirmModelOpen(false);
+  };
   return (
     <section className="flex flex-col gap-7">
       <TitleBarModule title="장소 추가" type="LEFT" />
@@ -58,8 +79,7 @@ const AdminWorkationPlaceNewPage = () => {
         <InputModule
           subtitle="등록 일시"
           status="disabled"
-          value={formData.registrationDate}
-          onChange={() => {}}
+          value={dayjs().format('YYYY.MM.DD')}
         />
       </div>
       <FileContainer />
@@ -70,6 +90,7 @@ const AdminWorkationPlaceNewPage = () => {
           size="MEDIUM"
           maxLength={500}
           name="상세내용"
+          onChange={handleChange}
         />
       </div>
       <div className="flex justify-end gap-5">
@@ -116,7 +137,7 @@ const AdminWorkationPlaceNewPage = () => {
               },
               {
                 subtitle: '최대인원',
-                content: formData.maxPeople,
+                content: formData.maxPeople.toString(),
               },
             ]}
           />
