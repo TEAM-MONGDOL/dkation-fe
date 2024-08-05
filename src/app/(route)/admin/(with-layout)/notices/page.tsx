@@ -22,12 +22,6 @@ import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAto
 import { useGetNoticeListQuery } from '@/_hooks/admin/useGetNoticeListQuery';
 import dayjs from 'dayjs';
 
-const noticeTypeMapping = {
-  ANNOUNCEMENT: '공지사항',
-  EVENT: '이벤트 안내',
-  RESULT: '결과 발표',
-};
-
 const NoticesListPage = () => {
   const router = useRouter();
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
@@ -154,7 +148,7 @@ const NoticesListPage = () => {
               <TableBodyModule key={item.id}>
                 <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
                 <TableBodyAtom>
-                  {noticeTypeMapping[item.announcementType]}
+                  {noticeList[item.announcementType]}
                 </TableBodyAtom>
                 <TableBodyAtom>{item.title}</TableBodyAtom>
                 <TableBodyAtom>

@@ -14,7 +14,7 @@ export const useDeleteWkMutation = (wktId: number) => {
     },
     onSuccess: () => {
       router.push('/admin/workation');
-      queryClient.invalidateQueries({ queryKey: ['useGetWkListQueryKey'] });
+      queryClient.invalidateQueries({ queryKey: [useGetWkListQueryKey] });
       alert('워케이션 삭제 완료');
     },
     onError: (error: Error) => {
