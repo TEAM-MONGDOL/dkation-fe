@@ -86,13 +86,22 @@ const AdminPointsRewardPage = () => {
     },
   });
 
+  const { data: pointPolicyData } = useGetPointPolicyQuery({
+    pageable: {
+      page: 1,
+      size: 100,
+    },
+  });
+
   useEffect(() => {
-    data &&
+    pointPolicyData &&
       setParam({
         ...param,
-        reason: data.pointSupplyList.map((item) => item.pointTitle),
+        reason: pointPolicyData.pointPolicyList.map((item) =>
+          item.id.toString(),
+        ),
       });
-  }, [data]);
+  }, [pointPolicyData]);
 
   return (
     <section className="flex w-full flex-col gap-y-10 overflow-y-auto">
