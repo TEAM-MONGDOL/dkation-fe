@@ -8,12 +8,14 @@ interface BoxProps {
   placeholder: string;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onClick?: () => void;
 }
 
 const UserSearchingBoxModule = ({
   placeholder,
   value: initialValue = '',
   onChange,
+  onClick,
 }: BoxProps) => {
   const [value, setValue] = useState(initialValue);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,6 +35,7 @@ const UserSearchingBoxModule = ({
         className="cursor-pointer"
         src={SearchIcon}
         alt="SearchingGlasses"
+        onClick={onClick}
       />
     </div>
   );
