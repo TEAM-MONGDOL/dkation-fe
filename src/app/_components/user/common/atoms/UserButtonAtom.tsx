@@ -3,7 +3,7 @@ import { RightArrowIcon } from '@/_assets/icons';
 
 interface UserButtonAtomProps {
   text: string;
-  size: 'sm' | 'md' | 'lg' | 'xl';
+  size: 'sm' | 'md' | 'lg' | 'xl' | 'header';
   rightArrow?: boolean;
   buttonStyle: 'white' | 'red' | 'black' | 'lightGray' | 'darkGray' | 'yellow';
   type: 'button' | 'submit';
@@ -25,12 +25,13 @@ const UserButtonAtom = ({
     md: 'px-5 py-2.5',
     lg: 'px-7 py-4',
     xl: 'px-9 py-2.5',
+    header: 'px-4 py-2',
   };
 
   const buttonStyles = {
     white: 'bg-white text-black border border-sub-100',
     red: 'bg-white text-negative border border-negative',
-    black: 'bg-[#242424] text-white border border-[#242424]',
+    black: 'bg-button text-white border border-button',
     lightGray: 'bg-sub-100 text-black border border-sub-100',
     darkGray: 'bg-sub-300 text-white border border-sub-300',
     yellow: 'bg-primary text-black border border-[#E5CD07]',
