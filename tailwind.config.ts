@@ -28,6 +28,7 @@ const config: Config = {
         'cus-200': '#374553',
         'cus-300': '#323232',
         'stroke-100': '#DBDBDB',
+        button: '#2A2A2A',
       },
       fontSize: {
         '1': '20px',
