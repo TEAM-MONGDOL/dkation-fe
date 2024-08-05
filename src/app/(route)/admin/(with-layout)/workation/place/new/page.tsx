@@ -41,7 +41,7 @@ const AdminWorkationPlaceNewPage = () => {
   const handleSubmit = () => {
     postWkPlace({
       place: formData.placeName,
-      thumbnailUrls: ['dd'],
+      thumbnailUrls: ['https://example.com/images/gangnam_workation.jpg'],
       maxPeople: formData.maxPeople,
       address: formData.address,
       description: formData.description,
@@ -82,7 +82,7 @@ const AdminWorkationPlaceNewPage = () => {
           value={dayjs().format('YYYY.MM.DD')}
         />
       </div>
-      <FileContainer />
+      {/* <FileContainer /> */}
       <div>
         <p className="mb-4 text-3 font-bold">상세 내용</p>
         <TextAreaModule
@@ -116,10 +116,7 @@ const AdminWorkationPlaceNewPage = () => {
           confirmButtonStyle="dark"
           cancelButtonStyle="yellow"
           onConfirm={() => {
-            //  TODO : 워케이션 장소 등록 API 호출
-            alert('워케이션 장소 등록 완료');
-            setIsConfirmModelOpen(false);
-            router.push('/admin/workation/place');
+            handleSubmit();
           }}
           onCancel={() => {
             setIsConfirmModelOpen(false);

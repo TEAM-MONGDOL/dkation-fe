@@ -14,7 +14,7 @@ export const useGetWkPlaceListQuery = ({
   return useQuery({
     queryKey: [useGetWkPlaceListQueryKey, pageParam],
     queryFn: async () => {
-      const res = await api.get(`/api/wkt-place`, {
+      const res = await api.get(`/api/wkt/place`, {
         params: {
           ...pageParam,
         },

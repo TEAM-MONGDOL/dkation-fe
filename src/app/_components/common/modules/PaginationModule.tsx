@@ -14,12 +14,14 @@ interface PageProps {
   totalPages: number;
   currentPage: number;
   setCurrentPage: Dispatch<SetStateAction<number>>;
+  user?: boolean;
 }
 
 const PaginationModule = ({
   totalPages,
   currentPage,
   setCurrentPage,
+  user,
 }: PageProps) => {
   const [startPage, setStartPage] = useState(1);
   const handlePageClick = (page: number) => {
@@ -58,6 +60,7 @@ const PaginationModule = ({
       <div className="flex">
         {Array.from({ length: endPage - startPage + 1 }, (_, index) => (
           <PaginationButtonAtom
+            user={user}
             key={index}
             onPage={index + startPage === currentPage}
             page={index + startPage}
