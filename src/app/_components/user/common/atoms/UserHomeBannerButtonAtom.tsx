@@ -3,7 +3,7 @@ import Link from 'next/link';
 export interface HomeBannerProps {
   link: string;
 }
-const HomeBannerButtonAtom = ({ link }: HomeBannerProps) => {
+const UserHomeBannerButtonAtom = ({ link }: HomeBannerProps) => {
   return (
     <Link href={link}>
       <button className="h-7 w-16 items-center justify-center rounded-[17px] bg-primary text-5 text-black">
@@ -13,4 +13,4 @@ const HomeBannerButtonAtom = ({ link }: HomeBannerProps) => {
   );
 };
 
-export default HomeBannerButtonAtom;
+export default UserHomeBannerButtonAtom;
