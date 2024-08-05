@@ -73,10 +73,10 @@ const AdminPointsRewardNewPage = () => {
               []
             }
             size="large"
-            onSelect={() => {
+            onSelect={(option) => {
               setSelectedType(
                 policyList?.pointPolicyList.find(
-                  (policy) => policy.policyTitle === policy.policyTitle,
+                  (policy) => policy.policyTitle === option,
                 )?.id || null,
               );
             }}
