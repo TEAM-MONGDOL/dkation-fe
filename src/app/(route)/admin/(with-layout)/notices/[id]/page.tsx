@@ -11,6 +11,7 @@ import logo from '@/_assets/images/logo_imsy.png';
 import Image from 'next/image';
 import { useGetNoticeDetailQuery } from '@/_hooks/admin/useGetNoticeDetailQuery';
 import FileModule from '@/_components/common/modules/FileModule';
+import { useDeleteNoticeMutation } from '@/_hooks/admin/useDeleteNoticeMutation';
 
 interface NoticeDetailPageProps {
   params: {
@@ -33,11 +34,15 @@ const NoticeDetailPage = ({ params }: NoticeDetailPageProps) => {
     router.push(`/admin/notices/${id}/edit`);
   };
 
-  const handleDelete = () => {
-    setIsDeleteModalOpen(true);
-  };
-
   const { data, isLoading, isError } = useGetNoticeDetailQuery(Number(id));
+
+  const { mutate: DeleteNotice } = useDeleteNoticeMutation({
+    successCallback: () => {
+      alert('삭제가 완료되었습니다.');
+      setIsDeleteModalOpen(false);
+      router.replace('/admin/notices');
+    },
+  });
 
   return (
     <section>
@@ -98,7 +103,7 @@ const NoticeDetailPage = ({ params }: NoticeDetailPageProps) => {
               width="fixed"
               type="button"
               buttonStyle="red"
-              onClick={handleDelete}
+              onClick={() => setIsDeleteModalOpen(true)}
               text="삭제"
             />
             <ButtonAtom
@@ -119,9 +124,7 @@ const NoticeDetailPage = ({ params }: NoticeDetailPageProps) => {
                 setIsDeleteModalOpen(false);
               }}
               onConfirm={() => {
-                // 삭제 로직 위치
-                setIsDeleteModalOpen(false);
-                router.push('/admin/notices');
+                DeleteNotice(id);
               }}
             >
               <div className="flex justify-center">
