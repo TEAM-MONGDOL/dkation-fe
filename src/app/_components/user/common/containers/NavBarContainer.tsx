@@ -18,7 +18,7 @@ export default function Header() {
     { href: '/', text: '홈' },
     { href: '/workation', text: '워케이션' },
     { href: '/point', text: '포인트' },
-    { href: '/faq', text: 'FAQ' },
+    { href: '/support', text: '고객지원' },
     { href: '/mypage', text: '마이페이지' },
   ];
 
