@@ -12,6 +12,8 @@ import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAto
 import { useGetWkListQuery } from '@/_hooks/admin/useGetWktListQuery';
 import dayjs from 'dayjs';
 import { useState } from 'react';
+import { useGetPointApply } from '@/_hooks/admin/useGetPointApply';
+import { pointApplyTypeConvertList } from '@/_types/adminType';
 
 const pointData = [
   {
@@ -40,7 +42,11 @@ const AdminMainPage = () => {
     router.push(`/admin/points/reward/${id}`);
   };
 
-  const { data, isLoading, isError } = useGetWkListQuery({
+  const {
+    data: wkData,
+    isLoading: isWkLoading,
+    isError: isWkError,
+  } = useGetWkListQuery({
     status: statusOption.status.join(','),
     pageParam: {
       page: 1,
@@ -49,8 +55,25 @@ const AdminMainPage = () => {
     },
   });
 
+  const {
+    data: PointData,
+    isLoading: isPointLoading,
+    isError: isPointError,
+  } = useGetPointApply({
+    params: { applyTypes: 'PENDING' },
+    pageable: {
+      page: 1,
+      size: 5,
+      sort: `createdAt,DESC`,
+    },
+  });
+
   const moveToWkDetail = (id: number) => {
     router.push(`/admin/workation/${id}`);
+  };
+
+  const onClickRowDetail = (id: number) => {
+    router.push(`/admin/points/reward/${id}`);
   };
 
   const getStatusLabelAndColor = (
@@ -92,16 +115,16 @@ const AdminMainPage = () => {
             <TableHeaderAtom isLast width="160px" />
           </TableHeaderModule>
           <tbody>
-            {!data ? (
-              isLoading ? (
+            {!wkData ? (
+              isWkLoading ? (
                 <EmptyContainer colSpan={8} text="loading" />
               ) : (
                 <EmptyContainer colSpan={8} text="no data" />
               )
-            ) : data.pageInfo.totalElements <= 0 ? (
+            ) : wkData.pageInfo.totalElements <= 0 ? (
               <EmptyContainer colSpan={8} />
             ) : (
-              data.wktInfos.map((item, index) => (
+              wkData.wktInfos.map((item, index) => (
                 <TableBodyModule key={item.wktId}>
                   <TableBodyAtom isFirst>{item.wktId}</TableBodyAtom>
                   <TableBodyAtom>{item.wktPlaceTitle}</TableBodyAtom>
@@ -159,30 +182,45 @@ const AdminMainPage = () => {
             <TableHeaderAtom isFirst width="80px">
               번호
             </TableHeaderAtom>
-            <TableHeaderAtom width="200px">구분</TableHeaderAtom>
+            <TableHeaderAtom width="150px">분류</TableHeaderAtom>
             <TableHeaderAtom width="190px">이름</TableHeaderAtom>
             <TableHeaderAtom>신청 일시</TableHeaderAtom>
-            <TableHeaderAtom>심사 일시</TableHeaderAtom>
-            <TableHeaderAtom width="160px">상태</TableHeaderAtom>
+            <TableHeaderAtom>지급 일시</TableHeaderAtom>
+            <TableHeaderAtom width="140px">상태</TableHeaderAtom>
             <TableHeaderAtom isLast width="160px" />
           </TableHeaderModule>
           <tbody>
-            {pointData.length <= 0 ? (
-              <EmptyContainer colSpan={6} />
+            {!PointData ? (
+              isPointLoading ? (
+                <EmptyContainer colSpan={7} text="로딩 중..." />
+              ) : isPointError ? (
+                <EmptyContainer colSpan={7} text="에러가 발생했습니다." />
+              ) : (
+                <EmptyContainer
+                  colSpan={7}
+                  text="알 수 없는 에러가 발생했습니다."
+                />
+              )
+            ) : PointData.pointApplyInfos.length <= 0 ? (
+              <EmptyContainer colSpan={7} />
             ) : (
-              pointData.map((item, index) => (
-                <TableBodyModule key={item.id}>
-                  <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
-                  <TableBodyAtom>{item.구분}</TableBodyAtom>
-                  <TableBodyAtom>{item.이름}</TableBodyAtom>
-                  <TableBodyAtom>{item.신청일시}</TableBodyAtom>
-                  <TableBodyAtom>{item.심사일시}</TableBodyAtom>
-                  <TableBodyAtom color={item.상태.color}>
-                    {item.상태.text}
+              PointData.pointApplyInfos.map((item, idx) => (
+                <TableBodyModule key={item.pointApplyId}>
+                  <TableBodyAtom isFirst>{idx + 1}</TableBodyAtom>
+                  <TableBodyAtom>{item.pointTitle}</TableBodyAtom>
+                  <TableBodyAtom>{item.name}</TableBodyAtom>
+                  <TableBodyAtom>
+                    {dayjs(item.applyTime).format('YYYY.MM.DD')}
+                  </TableBodyAtom>
+                  <TableBodyAtom>
+                    {dayjs(item.reviewTime).format('YYYY.MM.DD')}
+                  </TableBodyAtom>
+                  <TableBodyAtom color="text-sub-200">
+                    {pointApplyTypeConvertList[item.applyType]}
                   </TableBodyAtom>
                   <TableBodyAtom isLast>
                     <ShowDetailButtonAtom
-                      onClick={() => moveToPointsDetail(item.id)}
+                      onClick={() => onClickRowDetail(item.pointApplyId)}
                     />
                   </TableBodyAtom>
                 </TableBodyModule>
