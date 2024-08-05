@@ -4,7 +4,9 @@ interface UserFAQTextProps {
 }
 
 const UserFAQText = ({ text, className = '' }: UserFAQTextProps) => {
-  return <div className={`text-3 ${className}`}>{text}</div>;
+  return (
+    <div className={`whitespace-pre-line text-3 ${className}`}>{text}</div>
+  );
 };
 
 export default UserFAQText;
