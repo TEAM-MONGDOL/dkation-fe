@@ -1,14 +1,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useGetNoticeDetailQueryKey } from '@/_hooks/admin/useGetNoticeDetailQuery';
 import api from '../Axios';
-import { useGetPointPolicyQueryKey } from './useGetPointPolicyQuery';
 
-interface PostPointPolicyRequest {
-  policyTitle: string;
-  detail: string;
-  quantity: number;
+interface PostAnnouncementRequest {
+  title: string;
+  description: string;
+  announcementType: string;
+  fileUrls: string[];
 }
 
-export const usePostPointPolicyMutation = ({
+export const usePostNoticeMutation = ({
   successCallback,
   errorCallback,
 }: {
@@ -18,16 +19,13 @@ export const usePostPointPolicyMutation = ({
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (request: PostPointPolicyRequest) => {
-      const response = await api.post('/api/point/policy', request);
+    mutationFn: async (request: PostAnnouncementRequest) => {
+      const response = await api.post('/api/announcement', request);
       return response;
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: [useGetPointPolicyQueryKey],
-      });
-      queryClient.refetchQueries({
-        queryKey: [useGetPointPolicyQueryKey],
+        queryKey: [useGetNoticeDetailQueryKey],
       });
       successCallback && successCallback();
     },

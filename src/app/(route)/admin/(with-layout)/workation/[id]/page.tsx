@@ -2,7 +2,6 @@
 
 import InputModule from '@/_components/common/modules/InputModule';
 import React, { useState } from 'react';
-import placeImsy from '@/_assets/images/place_impy.png';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
@@ -12,6 +11,7 @@ import ModalModule from '@/_components/common/modules/ModalModule';
 import logo from '@/_assets/images/logo_imsy.png';
 import { useGetWkDetailQuery } from '@/_hooks/admin/useGetWkDetailQuery';
 import { useGetWkPlaceListQuery } from '@/_hooks/admin/useGetWkPlaceListQuery';
+import { useDeleteWkMutation } from '@/_hooks/admin/useDeleteWkQuery';
 
 interface WkDetailProps {
   params: { id: number };
@@ -34,9 +34,8 @@ const WorkationDetail = ({ params }: WkDetailProps) => {
     },
   });
   const router = useRouter();
-  const handleDelete = () => {
-    setIsDeleteModalOpen(true);
-  };
+  const { mutate: deleteWkMutation } = useDeleteWkMutation(id);
+
   if (isLoading || isPlaceLoading) {
     return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
   }
@@ -164,8 +163,8 @@ const WorkationDetail = ({ params }: WkDetailProps) => {
             setIsDeleteModalOpen(false);
           }}
           onConfirm={() => {
+            deleteWkMutation();
             setIsDeleteModalOpen(false);
-            router.push('/admin/workation');
           }}
         >
           <div className="flex justify-center">
