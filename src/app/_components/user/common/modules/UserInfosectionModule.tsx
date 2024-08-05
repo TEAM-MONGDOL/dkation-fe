@@ -12,7 +12,7 @@ const UserInfosectionModule = ({
   children,
 }: UserInfosectionModuleProps) => {
   return (
-    <div className="flex w-full border-b border-t border-sub-100">
+    <div className="flex w-full border-y border-sub-100">
       <UserInfosectionTitleAtom title={title} />
       <UserInfosectionContentAtom>{children}</UserInfosectionContentAtom>
     </div>
