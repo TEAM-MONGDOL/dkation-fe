@@ -1,3 +1,5 @@
+import { WktStatusType } from './adminType';
+
 export type DatePickerTagType =
   | 'ALL'
   | '1_WEEK'
@@ -13,4 +15,12 @@ export const datePickerTagList: { [key in DatePickerTagType]: string } = {
   '3_MONTH': '3개월',
   '6_MONTH': '6개월',
   '1_YEAR': '1년',
+};
+
+export const WktStatusList: WktStatusType[] = ['PLANNED', 'ONGOING', 'CLOSED'];
+
+export const WktStatusConverter: { [key in WktStatusType]: string } = {
+  PLANNED: '모집 예정',
+  ONGOING: '모집 중',
+  CLOSED: '모집 완료',
 };
