@@ -62,10 +62,15 @@ export const wktPlaceDetailShema = z.object({
   }),
 });
 
+export const pointSupplyTypeSchema = z.union([
+  z.literal('PERSONAL'),
+  z.literal('GROUP'),
+]);
+
 export const pointSupplyInfoSchema = z.object({
   id: z.number(),
   count: z.number(),
-  pointSupplyType: z.union([z.literal('PERSONAL'), z.literal('GROUP')]),
+  pointSupplyType: pointSupplyTypeSchema,
   pointTitle: z.string(),
   name: z.string(),
   quantity: z.number(),
@@ -83,8 +88,14 @@ export const pointSupplyMemberSchema = z.object({
   accountId: z.string(),
 });
 
+export const pointSupplyDetailInfoSchema = z.object({
+  pointSupplyType: pointSupplyTypeSchema,
+  pointTitle: z.string(),
+  supplyTime: z.string(),
+});
+
 export const pointSupplyDetailSchema = z.object({
-  pointSupplyInfo: pointSupplyInfoSchema,
+  pointSupplyDetailInfo: pointSupplyDetailInfoSchema,
   pointSupplyMemberList: pointSupplyMemberSchema.array(),
   pageInfo: pageInfoSchema,
 });
@@ -302,6 +313,14 @@ export const pointApplyTypeConvertList: { [key in PointApplyType]: string } = {
   APPROVED: '승인',
   DECLINED: '반려',
 };
+
+export type PointSupplyType = z.infer<typeof pointSupplyTypeSchema>;
+
+export const pointSupplyTypeConvertList: { [key in PointSupplyType]: string } =
+  {
+    PERSONAL: '개인',
+    GROUP: '단체',
+  };
 
 export type OrderType = 'DESC' | 'ASC';
 
