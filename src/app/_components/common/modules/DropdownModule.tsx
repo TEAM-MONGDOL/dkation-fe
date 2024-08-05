@@ -58,11 +58,11 @@ const DropdownModule = ({
             <div className="w-full">
               {options.map((option) => (
                 <DropdownItemAtom
-                  key={option[0]}
-                  option={option[1]}
-                  isSelect={selectedOption === option[0]}
+                  key={option}
+                  option={option}
+                  isSelect={selectedOption === option}
                   onSelect={() => {
-                    onSelect(option[0]);
+                    onSelect(option);
                     setIsOpen(false);
                   }}
                 />
