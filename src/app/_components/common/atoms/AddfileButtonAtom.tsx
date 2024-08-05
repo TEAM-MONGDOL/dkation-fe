@@ -7,7 +7,7 @@ interface AddFIleButtonAtomProps {
 
 const AddFIleButtonAtom = ({ onClick }: AddFIleButtonAtomProps) => {
   return (
-    <button onClick={onClick}>
+    <button onClick={onClick} type="button">
       <Image src={AddFileIcon} alt="파일추가" />
     </button>
   );

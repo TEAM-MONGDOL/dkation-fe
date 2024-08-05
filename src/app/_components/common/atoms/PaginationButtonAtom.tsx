@@ -12,7 +12,7 @@ const PaginationButtonAtom = ({
 }: ButtonProps) => {
   return (
     <button
-      className={`text-4 border border-stroke-100 w-12 h-12 flex items-center justify-center ${onPage ? 'bg-cus-200 text-white' : 'text-cus-200'} ${disabled ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : ''}`}
+      className={`flex h-12 w-12 items-center justify-center border border-stroke-100 text-4 ${onPage ? 'bg-cus-200 text-white' : 'text-cus-200'} ${disabled ? 'cursor-not-allowed bg-gray-200 text-gray-500' : ''}`}
       onClick={!disabled ? onClick : undefined}
       disabled={disabled}
     >

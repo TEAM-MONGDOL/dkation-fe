@@ -1,61 +1,39 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import FileModule from '@/_components/common/modules/FileModule';
+import React from 'react';
 import DragDropModule from '@/_components/common/modules/DragDropModule';
+import { usePostFileMutation } from '@/_hooks/common/usePostFileMutation';
 
-interface FileContainerProps {
-  onFileChange?: (files: File[]) => void;
+interface FileInfo {
+  url: string;
+  fileName: string;
 }
 
-const FileContainer = ({ onFileChange }: FileContainerProps) => {
-  const [files, setFiles] = useState<File[]>([]);
+interface FileContainerProps {
+  onFileChange?: (fileInfos: FileInfo[]) => void;
+  fileDomainType: string;
+}
+
+const FileContainer = ({
+  onFileChange,
+  fileDomainType,
+}: FileContainerProps) => {
+  const { mutate: postFile } = usePostFileMutation({
+    successCallback: (fileInfos: FileInfo[]) => {
+      onFileChange?.(fileInfos);
+    },
+    errorCallback: (error: Error) => {
+      console.error('Error uploading file:', error);
+    },
+  });
 
   const handleFileAdd = (newFiles: File[]) => {
-    setFiles((prevFiles) => {
-      const updatedFiles = [...prevFiles, ...newFiles];
-      onFileChange?.(updatedFiles);
-      return updatedFiles;
+    newFiles.forEach((file) => {
+      postFile({ file, fileDomainType });
     });
   };
-
-  const handleDeleteFile = (fileToDelete: File) => {
-    setFiles((prevFiles) => {
-      const updatedFiles = prevFiles.filter((file) => file !== fileToDelete);
-      onFileChange?.(updatedFiles);
-      return updatedFiles;
-    });
-  };
-
-  const getFileType = (file: File): 'image' | 'other' => {
-    return file.type.startsWith('image/') ? 'image' : 'other';
-  };
-
-  useEffect(() => {
-    // Clean up
-    return () => {
-      files.forEach((file) => {
-        URL.revokeObjectURL(URL.createObjectURL(file));
-      });
-    };
-  }, [files]);
 
   return (
     <div className="flex w-full flex-col">
       <DragDropModule onFileAdd={handleFileAdd} />
-
-      <div className="flex flex-col gap-1.5 pt-2">
-        {files.map((file, index) => (
-          <FileModule
-            key={`${file.name}-${file.size}`}
-            fileName={file.name}
-            fileType={getFileType(file)}
-            fileUrl={URL.createObjectURL(file)}
-            buttonType="delete"
-            onDelete={() => handleDeleteFile(file)}
-          />
-        ))}
-      </div>
     </div>
   );
 };
