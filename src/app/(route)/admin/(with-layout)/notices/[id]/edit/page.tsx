@@ -8,7 +8,7 @@ import FileContainer from '@/_components/common/containers/FileContainer';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import DropdownModule from '@/_components/common/modules/DropdownModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
-import { NoticeOptions } from '@/_constants/common';
+import { noticeList, NoticeType } from '@/_types/adminType';
 import FileModule from '@/_components/common/modules/FileModule';
 import ModalModule from '@/_components/common/modules/ModalModule';
 import Image from 'next/image';
@@ -44,7 +44,7 @@ const AdminWriteNoticesEditPage = ({ params }: NoticeEditPageProps) => {
   const [values, setValues] = useState({
     announcementType: data?.announcementType || '',
     title: data?.title || '',
-    fileInfos: data?.fileInfos || [], // Adjusted to fileInfos array
+    fileInfos: data?.fileInfos || [],
     description: data?.description || '',
   });
 
@@ -59,8 +59,11 @@ const AdminWriteNoticesEditPage = ({ params }: NoticeEditPageProps) => {
     }
   }, [data]);
 
-  const handleSelect = (option: { label: string; key: string }) => {
-    setValues({ ...values, announcementType: option.key });
+  const handleSelect = (option: string) => {
+    const selectedKey = Object.keys(noticeList).find(
+      (key) => noticeList[key as NoticeType] === option,
+    ) as NoticeType;
+    setValues({ ...values, announcementType: selectedKey });
   };
 
   const handleChange = (
@@ -128,12 +131,10 @@ const AdminWriteNoticesEditPage = ({ params }: NoticeEditPageProps) => {
           <div className="flex w-full gap-4">
             <DropdownModule
               size="large"
-              options={NoticeOptions}
+              options={Object.values(noticeList)}
               onSelect={handleSelect}
               placeholder="구분 선택"
-              selectedOption={NoticeOptions.find(
-                (option) => option.key === values.announcementType,
-              )}
+              selectedOption={noticeList[values.announcementType as NoticeType]}
             />
             <div className="w-full">
               <InputModule

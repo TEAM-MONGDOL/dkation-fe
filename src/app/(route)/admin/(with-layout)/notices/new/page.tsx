@@ -8,14 +8,14 @@ import FileContainer from '@/_components/common/containers/FileContainer';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import DropdownModule from '@/_components/common/modules/DropdownModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
-import { NoticeOptions } from '@/_constants/common';
+import { noticeList, NoticeType } from '@/_types/adminType';
 import { usePostNoticeMutation } from '@/_hooks/admin/usePostNoticeMutation';
 import FileModule from '@/_components/common/modules/FileModule';
 
 const WriteNoticesPage = () => {
   const router = useRouter();
   const [values, setValues] = useState({
-    announcementType: '',
+    announcementType: '' as NoticeType | '',
     title: '',
     fileInfos: [] as { url: string; fileName: string }[],
     description: '',
@@ -30,8 +30,11 @@ const WriteNoticesPage = () => {
     },
   });
 
-  const handleSelect = (option: { label: string; key: string }) => {
-    setValues({ ...values, announcementType: option.key });
+  const handleSelect = (option: string) => {
+    const selectedKey = Object.keys(noticeList).find(
+      (key) => noticeList[key as NoticeType] === option,
+    ) as NoticeType;
+    setValues({ ...values, announcementType: selectedKey });
   };
 
   const handleChange = (
@@ -87,12 +90,10 @@ const WriteNoticesPage = () => {
           <div className="flex w-full gap-4">
             <DropdownModule
               size="large"
-              options={NoticeOptions}
+              options={Object.values(noticeList)}
               onSelect={handleSelect}
               placeholder="구분 선택"
-              selectedOption={NoticeOptions.find(
-                (option) => option.key === values.announcementType,
-              )}
+              selectedOption={noticeList[values.announcementType as NoticeType]}
             />
             <InputModule
               name="title"
