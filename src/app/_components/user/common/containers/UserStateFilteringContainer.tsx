@@ -1,8 +1,9 @@
 import React from 'react';
-import UserFilteringTitleAtom from '../atoms/UserFilteringTitleAtom';
 import RadioButtonModule from '@/_components/common/modules/RadioButtonModule';
 import { WktStatusConverter, WktStatusList } from '@/_types/commonType';
 import { applyStatusList, applyStatusListConverter } from '@/_types/adminType';
+import UserFilteringTitleAtom from '@/_components/user/common/atoms/UserFilteringTitleAtom';
+import UserFilteringSubContainer from './UserFilteringSubContainer';
 
 interface UserStateFilteringContainerProps {
   type: 'WKT' | 'MYPAGE';
@@ -16,7 +17,7 @@ const UserStateFilteringContainer = ({
   onClickOption,
 }: UserStateFilteringContainerProps) => {
   return (
-    <div className="flex w-full flex-col gap-y-6 border-t-[0.5px] border-sub-100 px-8 pb-9 pt-7">
+    <UserFilteringSubContainer>
       <UserFilteringTitleAtom text="진행 상태" />
       <div className="flex w-full flex-col gap-y-1.5">
         {type === 'WKT'
@@ -26,7 +27,7 @@ const UserStateFilteringContainer = ({
                   option={WktStatusConverter[option]}
                   isClicked={selectedOption === option}
                   onClick={() => onClickOption(option)}
-                  key={'userStateFiltering' + option}
+                  key={`userStateFiltering${option}`}
                   size={20}
                 />
               );
@@ -37,13 +38,13 @@ const UserStateFilteringContainer = ({
                   option={applyStatusListConverter[option]}
                   isClicked={selectedOption === option}
                   onClick={() => onClickOption(option)}
-                  key={'userStateFiltering' + option}
+                  key={`userStateFiltering${option}`}
                   size={20}
                 />
               );
             })}
       </div>
-    </div>
+    </UserFilteringSubContainer>
   );
 };
 
