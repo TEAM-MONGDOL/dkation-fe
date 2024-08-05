@@ -98,7 +98,7 @@ const AdminPointsPolicyDetailPage = ({
             type="button"
             buttonStyle="dark"
             onClick={() => {
-              router.push(`/admin/points/policy/${id}/edit`);
+              router.replace(`/admin/points/policy/${id}/edit`);
             }}
             text="수정"
           />
