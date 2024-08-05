@@ -97,7 +97,7 @@ const AdminWriteNoticesEditPage = ({ params }: NoticeEditPageProps) => {
   const { mutate: PatchNotice } = usePatchNoticeMutation({
     successCallback: () => {
       setIsEditModalOpen(false);
-      router.push(`/admin/notices`);
+      router.replace(`/admin/notices`);
     },
   });
 
