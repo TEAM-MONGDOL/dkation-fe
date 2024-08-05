@@ -13,7 +13,7 @@ const DatePickerTagListModule = ({
   setSelectedTag,
 }: DatePickerTagListModuleProps) => {
   return (
-    <div className="w-full flex flex-wrap gap-1.5">
+    <div className="flex w-full flex-wrap gap-1.5">
       {tags.map(([tag, text]) => (
         <DatePickerTagAtom
           key={`filter-tag-${tag}`}

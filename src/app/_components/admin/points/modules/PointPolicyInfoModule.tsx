@@ -4,12 +4,12 @@ import React from 'react';
 
 const PointPolicyInfoModule = () => {
   return (
-    <div className="w-full flex gap-x-12 rounded-regular items-start bg-cus-100 p-5">
+    <div className="flex w-full items-start gap-x-12 rounded-regular bg-cus-100 p-5">
       <div className="flex items-center gap-x-3">
         <Image src={InfoIcon} alt="Info Icon" width={24} height={24} />
         <span className="font-semibold text-sub-300">주의사항</span>
       </div>
-      <ul className="text-sub-200 list-disc list-inside">
+      <ul className="list-inside list-disc text-sub-200">
         <li>
           포인트 정책 등록 시 이는 등록 일자 이후의 모든 포인트 심사 및 등록에
           적용됩니다.

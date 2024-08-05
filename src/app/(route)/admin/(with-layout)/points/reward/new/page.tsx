@@ -43,7 +43,7 @@ const AdminPointsRewardNewPage = () => {
     isLoading: memberListIsLoading,
   } = useGetMemberListInifiniteQuery({
     // department: selectedOptions.join(','),
-    pageable: { page: 1, size: 10 },
+    pageable: { page: 1, size: 100 },
   });
 
   const {
@@ -69,14 +69,22 @@ const AdminPointsRewardNewPage = () => {
           <h3 className="font-bold">분류</h3>
           <DropdownModule
             options={
-              policyList?.pointPolicyList.map((policy) => [
-                policy.id,
-                policy.policyTitle,
-              ]) || []
+              policyList?.pointPolicyList.map((policy) => policy.policyTitle) ||
+              []
             }
             size="large"
-            onSelect={setSelectedType}
-            selectedOption={selectedType}
+            onSelect={(option) => {
+              setSelectedType(
+                policyList?.pointPolicyList.find(
+                  (policy) => policy.policyTitle === option,
+                )?.id || null,
+              );
+            }}
+            selectedOption={
+              policyList?.pointPolicyList.find(
+                (policy) => policy.id === selectedType,
+              )?.policyTitle || null
+            }
             placeholder="분류 선택"
           />
         </div>
@@ -338,7 +346,10 @@ const AdminPointsRewardNewPage = () => {
                 },
                 {
                   subtitle: '지급 포인트',
-                  content: '1000P',
+                  content:
+                    policyList?.pointPolicyList
+                      .find((policy) => policy.id === selectedType)
+                      ?.quantity.toLocaleString() || '0',
                 },
               ]}
             />

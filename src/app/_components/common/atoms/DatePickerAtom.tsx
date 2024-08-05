@@ -35,7 +35,6 @@ const DatePickerAtom = ({
       onChange={setSelectedDate}
       dateFormat="yyyy.MM.dd"
       minDate={minDate === null ? undefined : minDate}
-      maxDate={new Date()}
       formatWeekDay={(nameOfDay) => nameOfDay.substring(0, 1)}
       shouldCloseOnSelect
       popperPlacement="bottom-end"
@@ -56,7 +55,7 @@ const DatePickerAtom = ({
             <button type="button" onClick={increaseMonth}>
               <Image
                 src={NavigateNext}
-                alt="navigate-before"
+                alt="navigate-next"
                 width={24}
                 height={24}
               />

@@ -31,3 +31,8 @@ export { default as ExtensionIcon } from './extension.svg';
 export { default as StarRateIcon } from './starRate.svg';
 export { default as StarRateEmptyIcon } from './starRateEmpty.svg';
 export { default as RightArrowIcon } from './rightArrow.svg';
+export { default as CalendarIcon } from './calendar.svg';
+export { default as DownArrowIcon } from './downArrow.svg';
+export { default as IsolationModeIcon } from './isolationMode.svg';
+export { default as FilterIcon } from './filter.svg';
+export { default as DktechinLogo } from './dktechinLogo.svg';

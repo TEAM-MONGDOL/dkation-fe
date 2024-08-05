@@ -62,9 +62,15 @@ export const wktPlaceDetailShema = z.object({
   }),
 });
 
-export const pointSupplyInfo = z.object({
+export const pointSupplyTypeSchema = z.union([
+  z.literal('PERSONAL'),
+  z.literal('GROUP'),
+]);
+
+export const pointSupplyInfoSchema = z.object({
   id: z.number(),
-  pointSupplyType: z.union([z.literal('PERSONAL'), z.literal('GROUP')]),
+  count: z.number(),
+  pointSupplyType: pointSupplyTypeSchema,
   pointTitle: z.string(),
   name: z.string(),
   quantity: z.number(),
@@ -72,7 +78,25 @@ export const pointSupplyInfo = z.object({
 });
 
 export const pointSupplyListSchema = z.object({
-  pointSupplyList: pointSupplyInfo.array(),
+  pointSupplyList: pointSupplyInfoSchema.array(),
+  pageInfo: pageInfoSchema,
+});
+
+export const pointSupplyMemberSchema = z.object({
+  name: z.string(),
+  department: z.string(),
+  accountId: z.string(),
+});
+
+export const pointSupplyDetailInfoSchema = z.object({
+  pointSupplyType: pointSupplyTypeSchema,
+  pointTitle: z.string(),
+  supplyTime: z.string(),
+});
+
+export const pointSupplyDetailSchema = z.object({
+  pointSupplyDetailInfo: pointSupplyDetailInfoSchema,
+  pointSupplyMemberList: pointSupplyMemberSchema.array(),
   pageInfo: pageInfoSchema,
 });
 
@@ -113,6 +137,44 @@ export const pointPolicyDetailSchema = z.object({
   quantity: z.number(),
 });
 
+export const pointApplyTypeSchema = z.union([
+  z.literal('PENDING'),
+  z.literal('APPROVED'),
+  z.literal('DECLINED'),
+]);
+
+export const pointApplyInfoSchema = z.object({
+  pointApplyId: z.number(),
+  pointTitle: z.string(),
+  name: z.string(),
+  applyTime: z.string(),
+  reviewTime: z.string(),
+  applyType: pointApplyTypeSchema,
+});
+
+export const pointApplyInfoListSchema = z.object({
+  pointApplyInfos: z.array(pointApplyInfoSchema),
+  pageInfo: pageInfoSchema,
+});
+
+export const fileInfoSchema = z.object({
+  url: z.string(),
+  fileName: z.string(),
+});
+
+export const pointApplyDetailInfoSchema = z.object({
+  pointApplyId: z.number(),
+  name: z.string(),
+  accountId: z.string(),
+  pointTitle: z.string(),
+  description: z.string(),
+  fileInfo: fileInfoSchema.nullable().optional(),
+  applyType: pointApplyTypeSchema,
+  declineReason: z.string().nullable().optional(),
+  createdAt: z.string(),
+  reviewTime: z.string().nullable().optional(),
+});
+
 export const fileUrlSchema = z.string();
 
 export const fileUrlsSchema = z.object({
@@ -144,7 +206,7 @@ export const announcementDetailSchema = z.object({
   ]),
   title: z.string(),
   description: z.string(),
-  fileUrls: fileUrlSchema.array().nullable(),
+  fileInfos: fileInfoSchema.array().nullable().optional(),
 });
 
 export const applyStatusSchema = z.union([
@@ -191,6 +253,27 @@ export const memberDetailSchema = z.object({
   pointQuantity: z.number(),
 });
 
+export const penaltyInfoSchema = z.object({
+  wktName: z.string().nullable(),
+  penaltyType: z.union([
+    z.literal('NOSHOW'),
+    z.literal('REPORT'),
+    z.literal('NEGLIGENCE'),
+    z.literal('ABUSE'),
+  ]),
+  createdAt: z.string(),
+});
+
+export const penaltyListSchema = z.object({
+  penaltyInfos: penaltyInfoSchema.array(),
+  penaltyAmount: z.number(),
+  memberType: z.union([
+    z.literal('EMPLOYMENT'),
+    z.literal('LEAVE'),
+    z.literal('PENALTY'),
+  ]),
+});
+
 export const wktPlaceInfoSchema = z.object({
   id: z.number(),
   thumbnailUrl: z.string(),
@@ -217,7 +300,29 @@ export type StatusType = z.infer<typeof applyStatusSchema>;
 
 export type MemberType = z.infer<typeof memberInfoSchema>;
 
-export type OrderType = 'ASC' | 'DESC';
+export type PointApplyType = z.infer<typeof pointApplyTypeSchema>;
+
+export const pointApplyTypeList: PointApplyType[] = [
+  'PENDING',
+  'APPROVED',
+  'DECLINED',
+];
+
+export const pointApplyTypeConvertList: { [key in PointApplyType]: string } = {
+  PENDING: '대기',
+  APPROVED: '승인',
+  DECLINED: '반려',
+};
+
+export type PointSupplyType = z.infer<typeof pointSupplyTypeSchema>;
+
+export const pointSupplyTypeConvertList: { [key in PointSupplyType]: string } =
+  {
+    PERSONAL: '개인',
+    GROUP: '단체',
+  };
+
+export type OrderType = 'DESC' | 'ASC';
 
 export type ReviewOrderType = 'ASC' | 'DESC' | 'STARASC' | 'STARDESC';
 
@@ -253,7 +358,18 @@ export type PointOrderType = 'POINT_HIGHEST' | 'POINT_LOWEST';
 export type PointChangeType = 'INCREASE' | 'DECREASE';
 
 // Convert Type / List
-export const statusList: { [key in StatusType]: string } = {
+export const applyStatusList: StatusType[] = [
+  'APPLIED',
+  'RAFFLE_WAIT',
+  'NO_WINNING',
+  'CONFIRM_WAIT',
+  'CANCEL',
+  'CONFIRM',
+  'WAIT',
+  'VISITED',
+];
+
+export const applyStatusListConverter: { [key in StatusType]: string } = {
   APPLIED: '신청완료',
   RAFFLE_WAIT: '추첨대기',
   NO_WINNING: '미당첨',
@@ -303,8 +419,8 @@ export const teamList: { [key in TeamType]: string } = {
 };
 
 export const orderList: { [key in OrderType]: string } = {
-  ASC: '최신순',
-  DESC: '오래된순',
+  DESC: '최신순',
+  ASC: '오래된순',
 };
 
 export const reviewOrderList: { [key in ReviewOrderType]: string } = {

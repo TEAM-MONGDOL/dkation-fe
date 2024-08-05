@@ -26,6 +26,9 @@ export const usePostPointPolicyMutation = ({
       queryClient.invalidateQueries({
         queryKey: [useGetPointPolicyQueryKey],
       });
+      queryClient.refetchQueries({
+        queryKey: [useGetPointPolicyQueryKey],
+      });
       successCallback && successCallback();
     },
     onError: (error: Error) => {
