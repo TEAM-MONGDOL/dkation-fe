@@ -25,7 +25,7 @@ export const useGetPointApply = ({
   return useQuery({
     queryKey: [useGetPointApplyKey, params, pageable],
     queryFn: async () => {
-      const res = await api.get('/api/point-apply', {
+      const res = await api.get('/api/point/apply', {
         params: {
           ...params,
           ...pageable,

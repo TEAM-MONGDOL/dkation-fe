@@ -25,7 +25,7 @@ export const usePatchPointApplyMutation = ({
       pointApplyType: string;
       declinedReason?: string | null;
     }) => {
-      const response = await api.patch(`/api/point-apply/${pointApplyId}`, {
+      const response = await api.patch(`/api/point/apply/${pointApplyId}`, {
         pointApplyType,
         declinedReason,
       });

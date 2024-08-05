@@ -8,7 +8,7 @@ export const useGetPointApplyDetailQuery = ({ id }: { id: number }) => {
   return useQuery({
     queryKey: [useGetPointApplyDetailQueryKey, id],
     queryFn: async () => {
-      const response = await api.get(`/api/point-apply/${id}`);
+      const response = await api.get(`/api/point/apply/${id}`);
       return pointApplyDetailInfoSchema.parse(response.data.data);
     },
   });
