@@ -92,6 +92,7 @@ const WorkationEdit = ({ params }: WkEditProps) => {
       return;
     }
     const patchData = {
+      wktId: id,
       thumbnailUrl: '썸네일 주소',
       wktPlaceId: selectedPlace.id,
       title: values.title,
@@ -100,7 +101,7 @@ const WorkationEdit = ({ params }: WkEditProps) => {
       endDate: dayjs(endDateWorkation).toISOString(),
       applyStartDate: dayjs(startDateRecruitment).toISOString(),
       applyEndDate: dayjs(endDateRecruitment).toISOString(),
-      description: values.description,
+      description: values.description || '',
       totalRecruit: values.number,
     };
     patchWkQuery.mutate(patchData);
