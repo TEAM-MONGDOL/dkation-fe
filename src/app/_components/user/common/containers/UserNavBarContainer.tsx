@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import logo from '@/_assets/images/logo_imsy.png';
+import logo from '@/_assets/images/logo.png';
 import UserNavButtonAtom from '@/_components/user/common/atoms/UserNavButtonAtom';
 
 const UserNavBarContainer = () => {
@@ -27,11 +27,11 @@ const UserNavBarContainer = () => {
   };
 
   return (
-    <div className="mx-10 flex h-20 items-center">
-      <div className="mr-32 flex">
-        <Image src={logo} alt="logo" className="w-[121px]" />
+    <div className="mx-28 mt-2 flex h-20 items-center">
+      <div className="mr-28 flex">
+        <Image src={logo} alt="logo" className="w-[145px]" />
       </div>
-      <div className="flex gap-16">
+      <div className="flex gap-10">
         {menuItems.map((item) => (
           <div
             role="presentation"
