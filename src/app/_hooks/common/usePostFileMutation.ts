@@ -1,18 +1,20 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../Axios';
 
-interface FilePostRequest {
+type FilePostRequest = {
   file: File;
   fileDomainType: string;
-}
+};
 
 export const usePostFileMutation = ({
   successCallback,
   errorCallback,
 }: {
-  successCallback?: (fileUrls: string[]) => void;
+  successCallback?: (fileInfos: { url: string; fileName: string }[]) => void;
   errorCallback?: (error: Error) => void;
 }) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async (request: FilePostRequest) => {
       const formData = new FormData();
@@ -27,7 +29,7 @@ export const usePostFileMutation = ({
     },
     onSuccess: (data) => {
       if (successCallback) {
-        successCallback(data.data.fileUrls);
+        successCallback(data.data.fileInfos);
       }
     },
     onError: (error: Error) => {

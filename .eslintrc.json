@@ -19,8 +19,7 @@
     "next/core-web-vitals",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
-    "prettier",
-    "plugin:storybook/recommended"
+    "prettier"
   ],
   "rules": {
     "react/react-in-jsx-scope": "off",
@@ -43,13 +42,6 @@
       2,
       {
         "namedComponents": ["arrow-function", "function-declaration"]
-      }
-    ],
-    "import/no-extraneous-dependencies": [
-      "error",
-      {
-        "devDependencies": ["**/*.stories.*", "**/.storybook/**/*.*"],
-        "peerDependencies": true
       }
     ]
   }

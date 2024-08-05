@@ -8,7 +8,7 @@ const AddFIleCommentAtom = ({
   subComment,
 }: AddFIleCommentAtomProps) => {
   return (
-    <div className="text-center text-sub-200 text-4">
+    <div className="text-center text-4 text-sub-200">
       <p>{comment}</p>
       <p>{subComment}</p>
     </div>

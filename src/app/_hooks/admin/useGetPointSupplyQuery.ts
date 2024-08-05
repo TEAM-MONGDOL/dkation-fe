@@ -6,28 +6,35 @@ export const useGetPointSupplyQueryKey = 'usePointSupplyQuery';
 
 export const useGetPointSupplyQuery = ({
   supplyType,
-  pointTitle,
+  pointPolicyIds,
   startDate,
   endDate,
   pageParam,
 }: {
   supplyType?: string;
-  pointTitle?: string;
+  pointPolicyIds?: string;
   startDate?: string;
   endDate?: string;
   pageParam: {
-    pageNum: number;
-    pageSize: number;
+    page: number;
+    size: number;
     sort?: string;
   };
 }) => {
   return useQuery({
-    queryKey: [useGetPointSupplyQueryKey],
+    queryKey: [
+      useGetPointSupplyQueryKey,
+      supplyType,
+      pointPolicyIds,
+      startDate,
+      endDate,
+      pageParam,
+    ],
     queryFn: async () => {
       const res = await api.get(`/api/point/supply`, {
         params: {
           supplyType,
-          pointTitle,
+          pointPolicyIds,
           startDate,
           endDate,
           ...pageParam,

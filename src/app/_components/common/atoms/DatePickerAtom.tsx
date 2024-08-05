@@ -55,7 +55,7 @@ const DatePickerAtom = ({
             <button type="button" onClick={increaseMonth}>
               <Image
                 src={NavigateNext}
-                alt="navigate-before"
+                alt="navigate-next"
                 width={24}
                 height={24}
               />
