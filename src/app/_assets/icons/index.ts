@@ -30,3 +30,5 @@ export { default as ImageIcon } from './image.svg';
 export { default as ExtensionIcon } from './extension.svg';
 export { default as StarRateIcon } from './starRate.svg';
 export { default as StarRateEmptyIcon } from './starRateEmpty.svg';
+export { default as IsolationModeIcon } from './isolationMode.svg';
+export { default as FilterIcon } from './filter.svg';
