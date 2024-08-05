@@ -17,56 +17,61 @@ import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
 import { ControlPointDuplicateIcon } from '@/_assets/icons';
+import { useGetMemberPointHistoryQuery } from '@/_hooks/admin/useGetMemberPointHistoryQuery';
+import dayjs from 'dayjs';
 
-const data = [
-  {
-    id: 1,
-    분류: '워케이션 당첨',
-    일시: '2024.07.04',
-    변동: { text: '-380', color: 'text-negative' },
-    총합: 1000,
-  },
-  {
-    id: 2,
-    분류: '봉사활동',
-    일시: '2024.07.04',
-    변동: { text: '+300', color: 'text-positive' },
-    총합: 1000,
-  },
-];
+interface Props {
+  params: { id: string };
+}
 
-const AdminMembersPointHistoryPage = () => {
+const AdminMembersPointHistoryPage = ({ params }: Props) => {
+  const accountId = params.id;
   const [currentPage, setCurrentPage] = useState(1);
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
   const [selectedDateTag, setSelectedDateTag] =
     useState<DatePickerTagType>('ALL');
-
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
   const [param, setParam] = useState<{
     order: string;
     type: string[];
     point: string[];
-    startDate: Date | null;
-    endDate: Date | null;
   }>({
-    order: 'RECENT',
+    order: 'ASC',
     type: [],
     point: ['INCREASE', 'DECREASE'],
-    startDate: null,
-    endDate: null,
   });
 
   const refreshHandler = () => {
     setParam({
       ...param,
-      order: 'RECENT',
+      order: 'ASC',
       type: [],
       point: ['INCREASE', 'DECREASE'],
-      startDate: null,
-      endDate: null,
     });
     setSelectedDateTag('ALL');
+    setStartDate(null);
+    setEndDate(null);
   };
-
+  const isPositive =
+    param.point.length === 1
+      ? param.point[0] === 'INCREASE'
+      : param.point.length === 0
+        ? undefined
+        : undefined;
+  const { data, isLoading, isError } = useGetMemberPointHistoryQuery({
+    accountId,
+    startDate: startDate
+      ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
+      : undefined,
+    endDate: endDate ? dayjs(endDate).format('YYYY-MM-DDTHH:mm:ss') : undefined,
+    isPositive,
+    pageParam: {
+      page: currentPage,
+      size: 10,
+      sort: `createdAt,${param.order}`,
+    },
+  });
   return (
     <section className="flex w-full flex-col gap-y-10">
       <div className="flex w-full items-center justify-between">
@@ -86,36 +91,54 @@ const AdminMembersPointHistoryPage = () => {
           <TableHeaderAtom width="220px">일시</TableHeaderAtom>
           <TableHeaderAtom width="200px">변동</TableHeaderAtom>
           <TableHeaderAtom isLast width="200px">
-            확률
+            총합
           </TableHeaderAtom>
         </TableHeaderModule>
-
         <tbody>
-          {data.length <= 0 ? (
-            <EmptyContainer colSpan={5} />
+          {!data ? (
+            isLoading ? (
+              <EmptyContainer colSpan={6} text="로딩 중입니다..." />
+            ) : (
+              <EmptyContainer colSpan={6} text="error" />
+            )
+          ) : data.pageInfo.totalElements <= 0 ? (
+            <EmptyContainer colSpan={6} />
           ) : (
-            data.map((item, index) => (
-              <TableBodyModule key={item.id}>
-                <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
-                <TableBodyAtom>{item.분류}</TableBodyAtom>
-                <TableBodyAtom>{item.일시}</TableBodyAtom>
-                <TableBodyAtom color={item.변동.color}>
-                  {item.변동.text} P
-                </TableBodyAtom>
-                <TableBodyAtom isLast>{item.총합}</TableBodyAtom>
-              </TableBodyModule>
-            ))
+            [...data.pointInfos].reverse().map((item, index) => {
+              const { totalElements } = data.pageInfo;
+              const { pageSize } = data.pageInfo;
+              const currentIndex = (currentPage - 1) * pageSize + index;
+              const descendingIndex = totalElements - currentIndex;
+              return (
+                <TableBodyModule key={`${item.pointType}-${item.getTime}`}>
+                  <TableBodyAtom isFirst>{descendingIndex}</TableBodyAtom>
+                  <TableBodyAtom>{item.pointType}</TableBodyAtom>
+                  <TableBodyAtom>
+                    {dayjs(item.getTime).format('YYYY-MM-DD')}
+                  </TableBodyAtom>
+                  <TableBodyAtom
+                    color={
+                      item.usedPoint > 0 ? 'text-positive' : 'text-negative'
+                    }
+                  >
+                    {item.usedPoint} P
+                  </TableBodyAtom>
+                  <TableBodyAtom isLast>{item.totalPoint}</TableBodyAtom>
+                </TableBodyModule>
+              );
+            })
           )}
         </tbody>
       </TableContainer>
-      <div className="flex w-full items-center justify-center">
-        <PaginationModule
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          totalPages={Math.ceil(data.length / 10)}
-        />
-      </div>
-
+      {data && data.pageInfo.totalElements > 0 && (
+        <div className="flex w-full items-center justify-center">
+          <PaginationModule
+            totalPages={data.pageInfo.totalPages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        </div>
+      )}
       <FilteringBarContainer
         isOpen={isFilteringBarOpen}
         setIsOpen={setIsFilteringBarOpen}
@@ -132,13 +155,13 @@ const AdminMembersPointHistoryPage = () => {
           title="일시"
           selectedTag={selectedDateTag}
           setSelectedTag={setSelectedDateTag}
-          startDate={param.startDate}
+          startDate={startDate}
           setStartDate={(start: Date | null) => {
-            setParam({ ...param, startDate: start });
+            setStartDate(start);
           }}
-          endDate={param.endDate}
+          endDate={endDate}
           setEndDate={(end: Date | null) => {
-            setParam({ ...param, endDate: end });
+            setEndDate(end);
           }}
           startDatePlaceholder="시작일 선택"
           endDatePlaceholder="종료일 선택"
@@ -156,5 +179,4 @@ const AdminMembersPointHistoryPage = () => {
     </section>
   );
 };
-
 export default AdminMembersPointHistoryPage;

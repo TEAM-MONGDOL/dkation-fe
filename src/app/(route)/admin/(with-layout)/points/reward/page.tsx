@@ -14,12 +14,13 @@ import SearchingBoxModule from '@/_components/common/modules/SearchingBoxModule'
 import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
+import { useGetPointPolicyQuery } from '@/_hooks/admin/useGetPointPolicyQuery';
 import { useGetPointSupplyQuery } from '@/_hooks/admin/useGetPointSupplyQuery';
 import { orderList, pointRewardList } from '@/_types/adminType';
 import { DatePickerTagType } from '@/_types/commonType';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const AdminPointsRewardPage = () => {
   const router = useRouter();
@@ -34,17 +35,17 @@ const AdminPointsRewardPage = () => {
     type: string[];
     reason: string[]; // 포인트 정책 추가가 자유로우니 이는 Type으로 선언 불가
   }>({
-    order: 'RECENT',
+    order: 'ASC',
     type: ['PERSONAL', 'GROUP'],
-    reason: ['SELF_STUDY', 'VOLUNTEER', 'EVENT'],
+    reason: [],
   });
 
   const refreshHandler = () => {
     setParam({
       ...param,
-      order: 'RECENT',
+      order: 'ASC',
       type: ['PERSONAL', 'GROUP'],
-      reason: ['SELF_STUDY', 'VOLUNTEER', 'EVENT'],
+      reason: [],
     });
     setSelectedDateTag('ALL');
     setStartDate(null);
@@ -55,17 +56,39 @@ const AdminPointsRewardPage = () => {
     router.push(`/admin/points/reward/${id}`);
   };
 
-  const { data, isLoading, isError } = useGetPointSupplyQuery({
-    supplyType: param.type.length > 1 ? undefined : param.type[0],
-    pointTitle: param.reason.join(','),
-    startDate: startDate ? dayjs(startDate).format('YYYY-MM-DD') : undefined,
-    endDate: endDate ? dayjs(endDate).format('YYYY-MM-DD') : undefined,
-    pageParam: {
-      pageNum: currentPage,
-      pageSize: 10,
-      sort: param.order,
+  const { data: pointPolicyList } = useGetPointPolicyQuery({
+    pageable: {
+      page: 1,
+      size: 100,
     },
   });
+
+  const { data, isLoading, isError } = useGetPointSupplyQuery({
+    supplyType: param.type.length > 1 ? undefined : param.type[0],
+    pointTitle:
+      param.reason.length > 0 &&
+      pointPolicyList &&
+      param.reason.length < pointPolicyList?.pointPolicyList.length
+        ? param.reason.join(',')
+        : undefined,
+    startDate: startDate
+      ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
+      : undefined,
+    endDate: endDate ? dayjs(endDate).format('YYYY-MM-DDTHH:mm:ss') : undefined,
+    pageParam: {
+      page: currentPage,
+      size: 10,
+      sort: `createdAt,${param.order}`,
+    },
+  });
+
+  useEffect(() => {
+    data &&
+      setParam({
+        ...param,
+        reason: data.pointSupplyList.map((item) => item.pointTitle),
+      });
+  }, [data]);
 
   return (
     <section className="flex w-full flex-col gap-y-10 overflow-y-auto">
@@ -84,7 +107,7 @@ const AdminPointsRewardPage = () => {
           </TableHeaderAtom>
           <TableHeaderAtom width="150px">구분</TableHeaderAtom>
           <TableHeaderAtom>분류</TableHeaderAtom>
-          <TableHeaderAtom>이름</TableHeaderAtom>
+          <TableHeaderAtom width="200px">이름</TableHeaderAtom>
           <TableHeaderAtom width="200px">지급일</TableHeaderAtom>
           <TableHeaderAtom width="160px" isLast />
         </TableHeaderModule>
@@ -92,6 +115,8 @@ const AdminPointsRewardPage = () => {
           {!data ? (
             isLoading ? (
               <EmptyContainer colSpan={6} text="로딩 중입니다..." />
+            ) : isError ? (
+              <EmptyContainer colSpan={6} text="에러가 발생하였습니다." />
             ) : (
               <EmptyContainer colSpan={6} text="데이터가 없습니다." />
             )
@@ -101,10 +126,23 @@ const AdminPointsRewardPage = () => {
             data.pointSupplyList.map((item, index) => (
               <TableBodyModule key={item.id}>
                 <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
-                <TableBodyAtom>{item.pointSupplyType}</TableBodyAtom>
+                <TableBodyAtom
+                  color={
+                    item.pointSupplyType === 'GROUP'
+                      ? 'text-primary'
+                      : 'text-positive'
+                  }
+                >
+                  {item.pointSupplyType === 'GROUP' ? '단체' : '개인'}
+                </TableBodyAtom>
                 <TableBodyAtom>{item.pointTitle}</TableBodyAtom>
-                <TableBodyAtom>{item.name}</TableBodyAtom>
-                <TableBodyAtom>{item.supplyTime}</TableBodyAtom>
+                <TableBodyAtom>
+                  {item.name}
+                  {item.count > 1 && ` 외 ${item.count}`}
+                </TableBodyAtom>
+                <TableBodyAtom>
+                  {dayjs(item.supplyTime).format('YYYY.MM.DD')}
+                </TableBodyAtom>
                 <TableBodyAtom isLast>
                   <ShowDetailButtonAtom
                     onClick={() => onClickRowDetail(item.id)}
@@ -143,18 +181,19 @@ const AdminPointsRewardPage = () => {
           setSelectedOptions={(type: string[]) => setParam({ ...param, type })}
         />
         <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
-        <CheckboxContainer
-          title="구분"
-          options={[
-            ['SELF_STUDY', '자기계발'],
-            ['VOLUNTEER', '봉사활동'],
-            ['EVENT', '이벤트'],
-          ]}
-          selectedOptions={param.reason}
-          setSelectedOptions={(reason: string[]) =>
-            setParam({ ...param, reason })
-          }
-        />
+        {pointPolicyList && (
+          <CheckboxContainer
+            title="구분"
+            options={pointPolicyList.pointPolicyList.map((item) => [
+              item.id.toString(),
+              item.policyTitle,
+            ])}
+            selectedOptions={param.reason}
+            setSelectedOptions={(reason: string[]) =>
+              setParam({ ...param, reason })
+            }
+          />
+        )}
         <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         <DatePickerContainer
           title="신청 및 지급 일시"
