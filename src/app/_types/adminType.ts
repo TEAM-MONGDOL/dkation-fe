@@ -274,7 +274,18 @@ export type PointOrderType = 'POINT_HIGHEST' | 'POINT_LOWEST';
 export type PointChangeType = 'INCREASE' | 'DECREASE';
 
 // Convert Type / List
-export const statusList: { [key in StatusType]: string } = {
+export const applyStatusList: StatusType[] = [
+  'APPLIED',
+  'RAFFLE_WAIT',
+  'NO_WINNING',
+  'CONFIRM_WAIT',
+  'CANCEL',
+  'CONFIRM',
+  'WAIT',
+  'VISITED',
+];
+
+export const applyStatusListConverter: { [key in StatusType]: string } = {
   APPLIED: '신청완료',
   RAFFLE_WAIT: '추첨대기',
   NO_WINNING: '미당첨',
