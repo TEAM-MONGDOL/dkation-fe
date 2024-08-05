@@ -29,6 +29,7 @@ const config: Config = {
         'cus-300': '#323232',
         'stroke-100': '#DBDBDB',
         footer: '#888888',
+        button: '#2A2A2A',
       },
       fontSize: {
         '1': '20px',

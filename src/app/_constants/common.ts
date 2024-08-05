@@ -7,7 +7,6 @@ export const DragDropContent = {
   SUBCOMMENT: '파일은 jpeg, png 형식만 첨부할 수 있습니다.',
 } as const;
 
-export const NoticeOptions = ['ANNOUNCEMENT', 'RESULT', 'EVENT'];
 export const PlaceOptions = ['양양', '제주도'];
 export const MembersSearchQueryOptions = {
   NAME: '이름',

@@ -8,16 +8,16 @@ import FileContainer from '@/_components/common/containers/FileContainer';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import DropdownModule from '@/_components/common/modules/DropdownModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
-import { NoticeOptions } from '@/_constants/common';
+import { noticeList, NoticeType } from '@/_types/adminType';
 import { usePostNoticeMutation } from '@/_hooks/admin/usePostNoticeMutation';
 import FileModule from '@/_components/common/modules/FileModule';
 
 const WriteNoticesPage = () => {
   const router = useRouter();
   const [values, setValues] = useState({
-    announcementType: '',
+    announcementType: '' as NoticeType | '',
     title: '',
-    fileUrls: [] as string[],
+    fileInfos: [] as { url: string; fileName: string }[],
     description: '',
   });
 
@@ -31,7 +31,10 @@ const WriteNoticesPage = () => {
   });
 
   const handleSelect = (option: string) => {
-    setValues({ ...values, announcementType: option });
+    const selectedKey = Object.keys(noticeList).find(
+      (key) => noticeList[key as NoticeType] === option,
+    ) as NoticeType;
+    setValues({ ...values, announcementType: selectedKey });
   };
 
   const handleChange = (
@@ -43,28 +46,32 @@ const WriteNoticesPage = () => {
     });
   };
 
-  const handleFilesChange = (fileUrls: string[]) => {
+  const handleFilesChange = (
+    fileInfos: { url: string; fileName: string }[],
+  ) => {
     setValues((prevValues) => ({
       ...prevValues,
-      fileUrls: [...prevValues.fileUrls, ...fileUrls],
+      fileInfos: [...prevValues.fileInfos, ...fileInfos],
     }));
   };
 
   const handleDeleteFile = (index: number) => {
     setValues((prevValues) => {
-      const updatedFileUrls = prevValues.fileUrls.filter(
+      const updatedFileInfos = prevValues.fileInfos.filter(
         (_, idx) => idx !== index,
       );
       return {
         ...prevValues,
-        fileUrls: updatedFileUrls,
+        fileInfos: updatedFileInfos,
       };
     });
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    postAnnouncement(values);
+    const fileUrls = values.fileInfos.map((info) => info.url);
+    const payload = { ...values, fileUrls };
+    postAnnouncement(payload);
   };
 
   const getFileType = (url: string) => {
@@ -83,35 +90,37 @@ const WriteNoticesPage = () => {
           <div className="flex w-full gap-4">
             <DropdownModule
               size="large"
-              options={NoticeOptions}
+              options={Object.values(noticeList)}
               onSelect={handleSelect}
               placeholder="구분 선택"
-              selectedOption={values.announcementType}
+              selectedOption={noticeList[values.announcementType as NoticeType]}
             />
             <InputModule
               name="title"
-              placeholder="제목을 입력하세요"
+              placeholder={
+                values.announcementType === 'RESULT'
+                  ? '해당 게시글의 제목이 메인 페이지 배너에 노출됩니다.'
+                  : '제목을 입력하세요.'
+              }
               textCount={20}
               value={values.title}
               onChange={handleChange}
             />
           </div>
           <div className="py-7">
-            {values.fileUrls.length > 0 && (
+            {values.fileInfos.length > 0 && (
               <div className="py-2">
                 <div className="flex flex-col gap-2">
-                  {values.fileUrls.map((fileUrl, index) => {
-                    const fileName = decodeURIComponent(
-                      fileUrl.split('/').pop()?.split('-').slice(1).join('-') ||
-                        '',
-                    );
-
-                    const fileType = getFileType(fileUrl);
+                  {values.fileInfos.map((fileInfo, index) => {
+                    const fileType = getFileType(fileInfo.url);
                     return (
-                      <div key={fileName} className="flex items-center gap-2">
+                      <div
+                        key={fileInfo.fileName}
+                        className="flex items-center gap-2"
+                      >
                         <FileModule
-                          preview={fileUrl}
-                          fileName={fileName}
+                          preview={fileInfo.url}
+                          fileName={fileInfo.fileName}
                           fileType={fileType}
                           buttonType="delete"
                           onDelete={() => handleDeleteFile(index)}

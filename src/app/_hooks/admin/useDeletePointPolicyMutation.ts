@@ -1,14 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../Axios';
 import { useGetPointPolicyQueryKey } from './useGetPointPolicyQuery';
+import { useGetPointPolicyDetailQueryKey } from './useGetPointPolicyDetailQuery';
 
-interface PostPointPolicyRequest {
-  policyTitle: string;
-  detail: string;
-  quantity: number;
-}
-
-export const usePostPointPolicyMutation = ({
+export const useDeletePointPolicyMutation = ({
   successCallback,
   errorCallback,
 }: {
@@ -16,15 +11,14 @@ export const usePostPointPolicyMutation = ({
   errorCallback?: (error: Error) => void;
 }) => {
   const queryClient = useQueryClient();
-
   return useMutation({
-    mutationFn: async (request: PostPointPolicyRequest) => {
-      const response = await api.post('/api/point/policy', request);
-      return response;
+    mutationFn: async (id: string) => {
+      const res = await api.delete(`/api/point/policy/${id}`);
+      return res;
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [useGetPointPolicyQueryKey],
+        queryKey: [useGetPointPolicyQueryKey, useGetPointPolicyDetailQueryKey],
       });
       queryClient.refetchQueries({
         queryKey: [useGetPointPolicyQueryKey],
