@@ -21,7 +21,7 @@ export const useWkNewPlaceMutation = (successCallback?: () => void) => {
       address,
       description,
     }: PostWkPlaceProps) => {
-      await api.post(`/api/wkt-place`, {
+      await api.post(`/api/wkt/place`, {
         place,
         thumbnailUrls,
         maxPeople,
