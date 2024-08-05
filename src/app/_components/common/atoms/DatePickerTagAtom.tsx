@@ -11,7 +11,7 @@ const DatePickerTagAtom = ({
 }: DatePickerTagProps) => {
   return (
     <button
-      className={`flex items-center justify-center px-4 py-1.5 rounded-lg text-4 border ${isClicked ? 'border-primary text-primary bg-primary/10' : 'border-sub-100 text-sub-100 bg-sub-100/10'}`}
+      className={`flex items-center justify-center rounded-lg border px-4 py-1.5 text-4 ${isClicked ? 'border-primary bg-primary/10 text-primary' : 'border-sub-100 bg-sub-100/10 text-sub-100'}`}
       onClick={onClick}
     >
       {text}

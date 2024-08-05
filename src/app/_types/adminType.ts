@@ -50,6 +50,18 @@ export const ReviewListInfoSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
+export const wktPlaceDetailShema = z.object({
+  wktPlaceDetailInfo: z.object({
+    id: z.number(),
+    place: z.string(),
+    address: z.string(),
+    maxPeople: z.number(),
+    createdAt: z.string(),
+    description: z.string(),
+    thumbnailUrls: z.array(z.string().nullable()),
+  }),
+});
+
 export const pointSupplyInfo = z.object({
   id: z.number(),
   count: z.number(),
@@ -102,6 +114,44 @@ export const pointPolicyDetailSchema = z.object({
   quantity: z.number(),
 });
 
+export const pointApplyTypeSchema = z.union([
+  z.literal('PENDING'),
+  z.literal('APPROVED'),
+  z.literal('DECLINED'),
+]);
+
+export const pointApplyInfoSchema = z.object({
+  pointApplyId: z.number(),
+  pointTitle: z.string(),
+  name: z.string(),
+  applyTime: z.string(),
+  reviewTime: z.string(),
+  applyType: pointApplyTypeSchema,
+});
+
+export const pointApplyInfoListSchema = z.object({
+  pointApplyInfos: z.array(pointApplyInfoSchema),
+  pageInfo: pageInfoSchema,
+});
+
+export const fileInfoSchema = z.object({
+  url: z.string(),
+  fileName: z.string(),
+});
+
+export const pointApplyDetailInfoSchema = z.object({
+  pointApplyId: z.number(),
+  name: z.string(),
+  accountId: z.string(),
+  pointTitle: z.string(),
+  description: z.string(),
+  fileInfo: fileInfoSchema.nullable().optional(),
+  applyType: pointApplyTypeSchema,
+  declineReason: z.string().nullable().optional(),
+  createdAt: z.string(),
+  reviewTime: z.string().nullable().optional(),
+});
+
 export const fileUrlSchema = z.string();
 
 export const fileUrlsSchema = z.object({
@@ -126,14 +176,14 @@ export const announcementListSchema = z.object({
 
 export const announcementDetailSchema = z.object({
   id: z.number(),
-  announncementType: z.union([
+  announcementType: z.union([
     z.literal('ANNOUNCEMENT'),
     z.literal('RESULT'),
     z.literal('EVENT'),
   ]),
   title: z.string(),
-  content: z.string(),
-  fileUrls: fileUrlSchema.array(),
+  description: z.string(),
+  fileInfos: fileInfoSchema.array().nullable().optional(),
 });
 
 export const applyStatusSchema = z.union([
@@ -180,6 +230,27 @@ export const memberDetailSchema = z.object({
   pointQuantity: z.number(),
 });
 
+export const penaltyInfoSchema = z.object({
+  wktName: z.string().nullable(),
+  penaltyType: z.union([
+    z.literal('NOSHOW'),
+    z.literal('REPORT'),
+    z.literal('NEGLIGENCE'),
+    z.literal('ABUSE'),
+  ]),
+  createdAt: z.string(),
+});
+
+export const penaltyListSchema = z.object({
+  penaltyInfos: penaltyInfoSchema.array(),
+  penaltyAmount: z.number(),
+  memberType: z.union([
+    z.literal('EMPLOYMENT'),
+    z.literal('LEAVE'),
+    z.literal('PENALTY'),
+  ]),
+});
+
 export const wktPlaceInfoSchema = z.object({
   id: z.number(),
   thumbnailUrl: z.string(),
@@ -205,6 +276,20 @@ export type PageableType = {
 export type StatusType = z.infer<typeof applyStatusSchema>;
 
 export type MemberType = z.infer<typeof memberInfoSchema>;
+
+export type PointApplyType = z.infer<typeof pointApplyTypeSchema>;
+
+export const pointApplyTypeList: PointApplyType[] = [
+  'PENDING',
+  'APPROVED',
+  'DECLINED',
+];
+
+export const pointApplyTypeConvertList: { [key in PointApplyType]: string } = {
+  PENDING: '대기',
+  APPROVED: '승인',
+  DECLINED: '반려',
+};
 
 export type OrderType = 'DESC' | 'ASC';
 
@@ -292,8 +377,8 @@ export const teamList: { [key in TeamType]: string } = {
 };
 
 export const orderList: { [key in OrderType]: string } = {
-  ASC: '최신순',
-  DESC: '오래된순',
+  DESC: '최신순',
+  ASC: '오래된순',
 };
 
 export const reviewOrderList: { [key in ReviewOrderType]: string } = {
