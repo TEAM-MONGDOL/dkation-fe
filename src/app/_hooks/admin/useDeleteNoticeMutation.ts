@@ -20,6 +20,9 @@ export const useDeleteNoticeMutation = ({
       queryClient.invalidateQueries({
         queryKey: [useGetNoticeListQueryKey, useGetNoticeDetailQueryKey],
       });
+      queryClient.refetchQueries({
+        queryKey: [useGetNoticeListQueryKey, useGetNoticeDetailQueryKey],
+      });
       successCallback && successCallback();
     },
     onError: (error: Error) => {
