@@ -113,6 +113,25 @@ export const pointPolicyDetailSchema = z.object({
   quantity: z.number(),
 });
 
+export const pointApplyTypeSchema = z.union([
+  z.literal('PENDING'),
+  z.literal('APPROVED'),
+  z.literal('DECLINED'),
+]);
+
+export const pointApplyInfoSchema = z.object({
+  pointTitle: z.string(),
+  name: z.string(),
+  applyTime: z.string(),
+  reviewTime: z.string(),
+  applyType: pointApplyTypeSchema,
+});
+
+export const pointApplyInfoListSchema = z.object({
+  pointApplyInfos: z.array(pointApplyInfoSchema),
+  pageInfo: pageInfoSchema,
+});
+
 export const fileUrlSchema = z.string();
 
 export const fileUrlsSchema = z.object({
@@ -243,7 +262,21 @@ export type StatusType = z.infer<typeof applyStatusSchema>;
 
 export type MemberType = z.infer<typeof memberInfoSchema>;
 
-export type OrderType = 'ASC' | 'DESC';
+export type PointApplyType = z.infer<typeof pointApplyTypeSchema>;
+
+export const pointApplyTypeList: PointApplyType[] = [
+  'PENDING',
+  'APPROVED',
+  'DECLINED',
+];
+
+export const pointApplyTypeConvertList: { [key in PointApplyType]: string } = {
+  PENDING: '대기',
+  APPROVED: '승인',
+  DECLINED: '반려',
+};
+
+export type OrderType = 'DESC' | 'ASC';
 
 export type ReviewOrderType = 'ASC' | 'DESC' | 'STARASC' | 'STARDESC';
 
@@ -329,8 +362,8 @@ export const teamList: { [key in TeamType]: string } = {
 };
 
 export const orderList: { [key in OrderType]: string } = {
-  ASC: '최신순',
-  DESC: '오래된순',
+  DESC: '최신순',
+  ASC: '오래된순',
 };
 
 export const reviewOrderList: { [key in ReviewOrderType]: string } = {
