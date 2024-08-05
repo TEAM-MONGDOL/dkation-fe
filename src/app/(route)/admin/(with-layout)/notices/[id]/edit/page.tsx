@@ -27,14 +27,6 @@ interface FileInfo {
   fileName: string;
 }
 
-interface PatchNoticeRequest {
-  announcementId: number;
-  title: string;
-  description: string;
-  announcementType: 'ANNOUNCEMENT' | 'RESULT' | 'EVENT';
-  fileUrls: string[];
-}
-
 const getFileType = (url: string) => {
   const parts = url.split('.');
   const extension = parts.length > 1 ? parts.pop()?.toLowerCase() : '';
@@ -65,14 +57,10 @@ const AdminWriteNoticesEditPage = ({ params }: NoticeEditPageProps) => {
         description: data.description,
       });
     }
-    console.log(data);
   }, [data]);
 
-  const handleSelect = (option: string) => {
-    setValues({
-      ...values,
-      announcementType: option as 'ANNOUNCEMENT' | 'RESULT' | 'EVENT',
-    });
+  const handleSelect = (option: { label: string; key: string }) => {
+    setValues({ ...values, announcementType: option.key });
   };
 
   const handleChange = (
@@ -116,7 +104,6 @@ const AdminWriteNoticesEditPage = ({ params }: NoticeEditPageProps) => {
   };
 
   const confirmEdit = () => {
-    console.log(values);
     PatchNotice({
       announcementId: id,
       title: values.title || '',
@@ -144,7 +131,9 @@ const AdminWriteNoticesEditPage = ({ params }: NoticeEditPageProps) => {
               options={NoticeOptions}
               onSelect={handleSelect}
               placeholder="구분 선택"
-              selectedOption={values.announcementType}
+              selectedOption={NoticeOptions.find(
+                (option) => option.key === values.announcementType,
+              )}
             />
             <div className="w-full">
               <InputModule
