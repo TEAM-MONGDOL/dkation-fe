@@ -61,12 +61,10 @@ const AdminMembersPenaltyHistoryPage = ({ params }: Props) => {
     successCallback: () => {
       alert('페널티 등록 완료');
       setIsPenaltyModelOpen(false);
-      router.refresh();
     },
     errorCallback: (error) => {
       alert(`${error.message}`);
       setIsPenaltyModelOpen(false);
-      router.refresh();
     },
   });
 
