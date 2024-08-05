@@ -1,22 +1,32 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
 
 const UserNavButtonAtom = () => {
-  const handleLogout = () => {};
-
   const router = useRouter();
+  const handleLogout = () => {
+    // 세션스토리지에서 토큰 삭제코드 추가
+    router.push('/login');
+  };
+
   return (
     <div className="ml-auto flex gap-3 text-4">
-      <button
+      <UserButtonAtom
+        className="font-semibold"
+        buttonStyle="yellow"
+        text="1650 Point"
+        type="button"
+        size="header"
         onClick={() => router.push('/id/point')} // 라우팅 주소 변경 예정
-        className="flex h-[34px] items-center rounded-[8px] border bg-primary px-4"
-      >
-        1650 Point
-      </button>
-      <div className="flex h-[34px] items-center rounded-[8px] border border-stroke-100 px-4">
-        로그아웃
-      </div>
+      />
+      <UserButtonAtom
+        text="로그아웃"
+        size="header"
+        buttonStyle="white"
+        type="button"
+        onClick={handleLogout}
+      />
     </div>
   );
 };
