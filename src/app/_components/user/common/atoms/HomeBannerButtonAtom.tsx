@@ -1,8 +1,11 @@
 import Link from 'next/link';
 
-const HomeBannerButtonAtom = () => {
+export interface HomeBannerProps {
+  link: string;
+}
+const HomeBannerButtonAtom = ({ link }: HomeBannerProps) => {
   return (
-    <Link href="/notice">
+    <Link href={link}>
       <button className="h-7 w-16 items-center justify-center rounded-[17px] bg-primary text-5 text-black">
         확인하기
       </button>
