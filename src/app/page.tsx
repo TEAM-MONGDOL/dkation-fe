@@ -1,11 +1,5 @@
-import HomeBannerContainer from '@/_components/user/common/containers/HomeBannerContainer';
-
 const Home = () => {
-  return (
-    <div>
-      <HomeBannerContainer />
-    </div>
-  );
+  return <div>main page</div>;
 };
 
 export default Home;
