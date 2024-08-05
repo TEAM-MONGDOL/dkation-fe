@@ -19,34 +19,30 @@ import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
 import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAtom';
+import { useGetNoticeListQuery } from '@/_hooks/admin/useGetNoticeListQuery';
+import dayjs from 'dayjs';
 
-const data = [
-  {
-    id: 1,
-    구분: '공지사항',
-    제목: '공지입니다',
-    작성일: '2024-07-20',
-  },
-];
+const noticeTypeMapping = {
+  ANNOUNCEMENT: '공지사항',
+  EVENT: '이벤트 안내',
+  RESULT: '결과 발표',
+};
 
 const NoticesListPage = () => {
+  const router = useRouter();
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
   const [selectedDateTag, setSelectedDateTag] =
     useState<DatePickerTagType>('ALL');
   const [currentPage, setCurrentPage] = useState(1);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
   const [param, setParam] = useState<{
     order: string;
     noticeType: string[];
-    startDate: Date | null;
-    endDate: Date | null;
   }>({
-    order: 'RECENT',
-    noticeType: ['NOTICE', 'RESULT', 'EVENT'],
-    startDate: null,
-    endDate: null,
+    order: 'DESC',
+    noticeType: ['ANNOUNCEMENT', 'RESULT', 'EVENT'],
   });
-
-  const router = useRouter();
 
   const moveToWritePage = () => {
     router.push('/admin/notices/new');
@@ -59,17 +55,30 @@ const NoticesListPage = () => {
   const handleRefresh = () => {
     setParam({
       ...param,
-      order: 'RECENT',
-      noticeType: ['NOTICE', 'RESULT', 'EVENT'],
-      startDate: null,
-      endDate: null,
+      order: 'DESC',
+      noticeType: ['ANNOUNCEMENT', 'RESULT', 'EVENT'],
     });
     setSelectedDateTag('ALL');
+    setStartDate(null);
+    setEndDate(null);
   };
 
   function moveToNoticesDetail(id: number) {
     router.push(`/admin/notices/${id}`);
   }
+
+  const { data, isLoading, isError } = useGetNoticeListQuery({
+    type: param.noticeType.join(','),
+    startDate: startDate
+      ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
+      : undefined,
+    endDate: endDate ? dayjs(endDate).format('YYYY-MM-DDTHH:mm:ss') : undefined,
+    pageParam: {
+      page: currentPage,
+      size: 10,
+      sort: `createdAt,${param.order}`,
+    },
+  });
 
   return (
     <section className="w-full">
@@ -108,13 +117,13 @@ const NoticesListPage = () => {
           title="등록 일시"
           selectedTag={selectedDateTag}
           setSelectedTag={setSelectedDateTag}
-          startDate={param.startDate}
+          startDate={startDate}
           setStartDate={(start: Date | null) => {
-            setParam({ ...param, startDate: start });
+            setStartDate(start);
           }}
-          endDate={param.endDate}
+          endDate={endDate}
           setEndDate={(end: Date | null) => {
-            setParam({ ...param, endDate: end });
+            setEndDate(end);
           }}
           startDatePlaceholder="시작일 선택"
           endDatePlaceholder="마감일 선택"
@@ -132,17 +141,25 @@ const NoticesListPage = () => {
         </TableHeaderModule>
 
         <tbody>
-          {data.length <= 0 ? (
-            <td colSpan={5}>
-              <EmptyContainer />
-            </td>
+          {!data ? (
+            isLoading ? (
+              <EmptyContainer colSpan={5} text="loading" />
+            ) : (
+              <EmptyContainer colSpan={5} text="error" />
+            )
+          ) : data.pageInfo.totalElements <= 0 ? (
+            <EmptyContainer colSpan={5} />
           ) : (
-            data.map((item, index) => (
+            data.announcementInfos.map((item, index) => (
               <TableBodyModule key={item.id}>
                 <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
-                <TableBodyAtom>{item.구분}</TableBodyAtom>
-                <TableBodyAtom>{item.제목}</TableBodyAtom>
-                <TableBodyAtom>{item.작성일}</TableBodyAtom>
+                <TableBodyAtom>
+                  {noticeTypeMapping[item.announcementType]}
+                </TableBodyAtom>
+                <TableBodyAtom>{item.title}</TableBodyAtom>
+                <TableBodyAtom>
+                  {dayjs(item.createdAt).format('YYYY-MM-DD')}
+                </TableBodyAtom>
                 <TableBodyAtom isLast>
                   <ShowDetailButtonAtom
                     onClick={() => moveToNoticesDetail(item.id)}
@@ -154,13 +171,15 @@ const NoticesListPage = () => {
         </tbody>
       </TableContainer>
       <div className="relative mt-8">
-        <div className="flex justify-center">
-          <PaginationModule
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            totalPages={Math.ceil(data.length / 10)}
-          />
-        </div>
+        {data && data.pageInfo.totalElements > 0 && (
+          <div className="flex justify-center">
+            <PaginationModule
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              totalPages={data.pageInfo.totalPages}
+            />
+          </div>
+        )}
         <div className="absolute right-0 top-0">
           <ButtonAtom
             type="button"

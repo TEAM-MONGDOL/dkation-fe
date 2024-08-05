@@ -6,6 +6,13 @@ import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import { useRouter } from 'next/navigation';
 import FileModule from '@/_components/common/modules/FileModule';
+import { useGetWkPlaceDetailQuery } from '@/_hooks/admin/useGetWkPlaceDetailQuery';
+import dayjs from 'dayjs';
+import React, { useState } from 'react';
+import ModalModule from '@/_components/common/modules/ModalModule';
+import Image from 'next/image';
+import logo from '@/_assets/images/logo_imsy.png';
+import { useDeleteWkPlaceMutation } from '@/_hooks/admin/useDeleteWkPlaceQuery';
 
 interface FileItem {
   name: string;
@@ -13,41 +20,41 @@ interface FileItem {
   type: 'image' | 'other';
 }
 
-const workationPlaceExample = {
-  id: 1,
-  placeName: '양양',
-  address: '강원도 양양군 손양면 도화길 14',
-  maxPeople: '2',
-  registrationDate: '2024.07.14',
-  description: '상세내용입니다.',
-  files: [
-    {
-      name: '첨부파일1.pdf',
-      url: '/file/path/example/file1.pdf',
-      type: 'other',
-    },
-    {
-      name: '첨부파일2.pdf',
-      url: '/file/path/example/file2.pdf',
-      type: 'other',
-    },
-  ] as FileItem[],
-};
-const AdminWorkationPlaceDetailPage = () => {
+interface WkPlaceDetailProps {
+  params: { id: number };
+}
+const AdminWorkationPlaceDetailPage = ({ params }: WkPlaceDetailProps) => {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const { id } = params;
+  const { data, isLoading, isError } = useGetWkPlaceDetailQuery({
+    wktPlaceId: id,
+  });
+
   const router = useRouter();
+  const { mutate: deleteWkPlaceMutation } = useDeleteWkPlaceMutation(id);
+
+  if (isLoading) {
+    return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
+  }
+  if (isError) {
+    return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정
+  }
+  if (!data) {
+    return <div>No data</div>;
+  }
   return (
     <section className="flex flex-col gap-7">
       <TitleBarModule title="장소 추가" type="LEFT" />
       <div className="flex w-full gap-7">
         <InputModule
           subtitle="이름"
-          value={workationPlaceExample.placeName}
+          value={data.wktPlaceDetailInfo.place}
           name="placeName"
           status="readonly"
         />
         <InputModule
           subtitle="주소"
-          value={workationPlaceExample.address}
+          value={data.wktPlaceDetailInfo.address}
           name="address"
           status="readonly"
         />
@@ -55,30 +62,31 @@ const AdminWorkationPlaceDetailPage = () => {
       <div className="flex w-full gap-7">
         <InputModule
           subtitle="최대 인원"
-          value={workationPlaceExample.maxPeople}
+          value={data.wktPlaceDetailInfo.maxPeople}
           name="maxPeople"
           status="readonly"
         />
         <InputModule
           subtitle="등록 일시"
           status="disabled"
-          value={workationPlaceExample.registrationDate}
+          value={dayjs(data.wktPlaceDetailInfo.createdAt).format('YYYY-MM-DD')}
         />
       </div>
       <div className="py-4">
-        {workationPlaceExample.files.length > 0 && (
+        {data.wktPlaceDetailInfo.thumbnailUrls.length > 0 && (
           <div className="py-2">
             <div className="flex flex-col gap-2">
-              {workationPlaceExample.files.map((file) => (
-                <FileModule
-                  key={file.url}
-                  fileName={file.name}
-                  fileType={file.type}
-                  fileUrl={file.url}
-                  buttonType="download"
-                  onDownload={() => console.log(`Edit ${file.name}`)} // 추후 수정 예정
-                />
-              ))}
+              {/* 파일업로드 수정 시 변경정예정 */}
+              {/* {data.thumbnailUrls.map((file) => ( */}
+              {/*  <FileModule */}
+              {/*    key={file.length} */}
+              {/*    fileName={file.name} */}
+              {/*    fileType={file.type} */}
+              {/*    fileUrl={file.url} */}
+              {/*    buttonType="download" */}
+              {/*    onDownload={() => console.log(`Edit ${file.name}`)} // 추후 수정 예정 */}
+              {/*  /> */}
+              {/* ))} */}
             </div>
           </div>
         )}
@@ -89,22 +97,44 @@ const AdminWorkationPlaceDetailPage = () => {
           readonly
           size="MEDIUM"
           name="상세내용"
-          value={workationPlaceExample.description}
+          value={data.wktPlaceDetailInfo.description}
         />
       </div>
-      <div className="flex justify-end">
+      <div className="flex justify-end gap-5">
+        <ButtonAtom
+          width="fixed"
+          text="삭제"
+          type="button"
+          buttonStyle="red"
+          onClick={() => setIsDeleteModalOpen(true)}
+        />
         <ButtonAtom
           text="수정"
           type="button"
           width="fixed"
           buttonStyle="dark"
-          onClick={() =>
-            router.push(
-              `/admin/workation/place/${workationPlaceExample.id}/edit`,
-            )
-          }
+          onClick={() => router.push(`/admin/workation/place/${id}/edit`)}
         />
       </div>
+      {isDeleteModalOpen && (
+        <ModalModule
+          title="해당 게시글을 삭제하시겠습니까?"
+          cancelText="취소"
+          confirmText="삭제"
+          confirmButtonStyle="red"
+          onCancel={() => {
+            setIsDeleteModalOpen(false);
+          }}
+          onConfirm={() => {
+            deleteWkPlaceMutation();
+            setIsDeleteModalOpen(false);
+          }}
+        >
+          <div className="flex justify-center">
+            <Image className="h-5 w-24" src={logo} alt="logo" />
+          </div>
+        </ModalModule>
+      )}
     </section>
   );
 };

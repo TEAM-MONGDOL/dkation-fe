@@ -15,41 +15,12 @@ import PaginationModule from '@/_components/common/modules/PaginationModule';
 import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
+import { useGetPointPolicyQuery } from '@/_hooks/admin/useGetPointPolicyQuery';
 import { orderList } from '@/_types/adminType';
 import { DatePickerTagType } from '@/_types/commonType';
+import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-
-const data = [
-  {
-    id: 1,
-    분류: '토이프로젝트',
-    포인트: 100,
-    '상세 내용': '자기계발하면 줌',
-    '등록 일시': '2024-07-20',
-  },
-  {
-    id: 2,
-    분류: '봉사활동',
-    포인트: 200,
-    '등록 일시': '2024-07-21',
-    '상세 내용': '봉사하면 줌',
-  },
-  {
-    id: 3,
-    분류: '인강 완강',
-    포인트: 300,
-    '상세 내용': '공부하면 줌',
-    '등록 일시': '2024-07-21',
-  },
-  {
-    id: 4,
-    분류: '사내 교육',
-    포인트: 400,
-    '상세 내용': '참여하면 줌',
-    '등록 일시': '2024-07-21',
-  },
-];
 
 const AdminPointsPolicyPage = () => {
   const router = useRouter();
@@ -60,19 +31,28 @@ const AdminPointsPolicyPage = () => {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [param, setParam] = useState<{
     order: string;
-    startPoint: number;
-    endPoint: number;
   }>({
-    order: 'RECENT',
-    startPoint: 0,
-    endPoint: 1100,
+    order: 'DESC',
+  });
+  const { data, isLoading, isError } = useGetPointPolicyQuery({
+    pageable: {
+      page,
+      size: 10,
+      sort: `lastModifiedAt,${param.order}`,
+    },
+    searchParam: {
+      startDate: startDate
+        ? dayjs(startDate.setHours(0, 0, 0, 0)).format('YYYY-MM-DDTHH:mm:ss')
+        : undefined,
+      endDate: endDate
+        ? dayjs(endDate.setHours(23, 59, 59, 999)).format('YYYY-MM-DDTHH:mm:ss')
+        : undefined,
+    },
   });
 
   const refreshHandler = () => {
     setParam({
-      order: 'RECENT',
-      startPoint: 0,
-      endPoint: 1100,
+      order: 'DESC',
     });
     setSelectedTag('ALL');
     setStartDate(null);
@@ -97,20 +77,30 @@ const AdminPointsPolicyPage = () => {
           <TableHeaderAtom width="200px">분류</TableHeaderAtom>
           <TableHeaderAtom width="200px">포인트</TableHeaderAtom>
           <TableHeaderAtom>상세 내용</TableHeaderAtom>
-          <TableHeaderAtom>등록 일시</TableHeaderAtom>
+          <TableHeaderAtom>등록/수정 일시</TableHeaderAtom>
           <TableHeaderAtom isLast width="160px" />
         </TableHeaderModule>
         <tbody>
-          {data.length < 1 ? (
+          {!data ? (
+            isLoading ? (
+              <EmptyContainer colSpan={6} text="로딩 중..." />
+            ) : isError ? (
+              <EmptyContainer colSpan={6} text="에러가 발생했습니다." />
+            ) : (
+              <EmptyContainer colSpan={6} text="데이터가 없습니다." />
+            )
+          ) : data.pointPolicyList.length < 1 ? (
             <EmptyContainer colSpan={6} />
           ) : (
-            data.map((item, idx) => (
+            data.pointPolicyList.map((item, idx) => (
               <TableBodyModule key={item.id}>
                 <TableBodyAtom isFirst>{idx + 1}</TableBodyAtom>
-                <TableBodyAtom>{item.분류}</TableBodyAtom>
-                <TableBodyAtom>{item.포인트}</TableBodyAtom>
-                <TableBodyAtom>{item['상세 내용']}</TableBodyAtom>
-                <TableBodyAtom>{item['등록 일시']}</TableBodyAtom>
+                <TableBodyAtom>{item.policyTitle}</TableBodyAtom>
+                <TableBodyAtom>{item.quantity}</TableBodyAtom>
+                <TableBodyAtom>{item.detail}</TableBodyAtom>
+                <TableBodyAtom>
+                  {dayjs(item.modifiedAt).format('YYYY.MM.DD')}
+                </TableBodyAtom>
                 <TableBodyAtom isLast>
                   <ShowDetailButtonAtom
                     onClick={() => onClickRowDetail(item.id)}
@@ -122,11 +112,13 @@ const AdminPointsPolicyPage = () => {
         </tbody>
       </TableContainer>
       <div className="relative flex w-full items-center justify-center">
-        <PaginationModule
-          currentPage={page}
-          setCurrentPage={setPage}
-          totalPages={Math.ceil(data.length / 10)}
-        />
+        {data && data?.pageInfo.totalElements > 0 && (
+          <PaginationModule
+            currentPage={page}
+            setCurrentPage={setPage}
+            totalPages={data.pageInfo.totalPages}
+          />
+        )}
         <div className="absolute bottom-0 right-0 top-0">
           <ButtonAtom
             type="button"
@@ -148,15 +140,6 @@ const AdminPointsPolicyPage = () => {
           options={Object.entries(orderList) as [string, string][]}
           selectedOption={param.order}
           setSelectedOption={(order: string) => setParam({ ...param, order })}
-        />
-        <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
-        <RangeContainer
-          title="포인트 점수"
-          min={0}
-          max={1580}
-          onChange={({ min, max }) =>
-            setParam({ ...param, startPoint: min, endPoint: max })
-          }
         />
         <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         <DatePickerContainer

@@ -9,18 +9,29 @@ import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import DropdownModule from '@/_components/common/modules/DropdownModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import { NoticeOptions } from '@/_constants/common';
+import { usePostNoticeMutation } from '@/_hooks/admin/usePostNoticeMutation';
+import FileModule from '@/_components/common/modules/FileModule';
 
 const WriteNoticesPage = () => {
   const router = useRouter();
   const [values, setValues] = useState({
-    category: '',
+    announcementType: '',
     title: '',
-    files: [] as File[],
-    content: '',
+    fileUrls: [] as string[],
+    description: '',
+  });
+
+  const { mutate: postAnnouncement } = usePostNoticeMutation({
+    successCallback: () => {
+      router.replace('/admin/notices');
+    },
+    errorCallback: (error: Error) => {
+      console.error('failed upload announcement : ', error);
+    },
   });
 
   const handleSelect = (option: string) => {
-    setValues({ ...values, category: option });
+    setValues({ ...values, announcementType: option });
   };
 
   const handleChange = (
@@ -32,16 +43,35 @@ const WriteNoticesPage = () => {
     });
   };
 
-  const handleFilesChange = (newFiles: File[]) => {
-    setValues({
-      ...values,
-      files: newFiles,
+  const handleFilesChange = (fileUrls: string[]) => {
+    setValues((prevValues) => ({
+      ...prevValues,
+      fileUrls: [...prevValues.fileUrls, ...fileUrls],
+    }));
+  };
+
+  const handleDeleteFile = (index: number) => {
+    setValues((prevValues) => {
+      const updatedFileUrls = prevValues.fileUrls.filter(
+        (_, idx) => idx !== index,
+      );
+      return {
+        ...prevValues,
+        fileUrls: updatedFileUrls,
+      };
     });
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.push('/admin/notices'); // 추후 수정 예정
+    postAnnouncement(values);
+  };
+
+  const getFileType = (url: string) => {
+    const parts = url.split('.');
+    const extension = parts.length > 1 ? parts.pop()?.toLowerCase() : '';
+    const imageExtensions = ['jpg', 'jpeg', 'png'];
+    return imageExtensions.includes(extension || '') ? 'image' : 'other';
   };
 
   return (
@@ -52,11 +82,11 @@ const WriteNoticesPage = () => {
           <p className="mb-4 text-3 font-bold">제목</p>
           <div className="flex w-full gap-4">
             <DropdownModule
-              fixed
+              size="large"
               options={NoticeOptions}
               onSelect={handleSelect}
               placeholder="구분 선택"
-              selectedOption={values.category}
+              selectedOption={values.announcementType}
             />
             <InputModule
               name="title"
@@ -67,15 +97,43 @@ const WriteNoticesPage = () => {
             />
           </div>
           <div className="py-7">
-            <FileContainer onFileChange={handleFilesChange} />{' '}
+            {values.fileUrls.length > 0 && (
+              <div className="py-2">
+                <div className="flex flex-col gap-2">
+                  {values.fileUrls.map((fileUrl, index) => {
+                    const fileName = decodeURIComponent(
+                      fileUrl.split('/').pop()?.split('-').slice(1).join('-') ||
+                        '',
+                    );
+
+                    const fileType = getFileType(fileUrl);
+                    return (
+                      <div key={fileName} className="flex items-center gap-2">
+                        <FileModule
+                          preview={fileUrl}
+                          fileName={fileName}
+                          fileType={fileType}
+                          buttonType="delete"
+                          onDelete={() => handleDeleteFile(index)}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+            <FileContainer
+              onFileChange={handleFilesChange}
+              fileDomainType="ANNOUNCEMENT"
+            />
           </div>
           <p className="mb-4 text-3 font-bold">내용</p>
           <TextAreaModule
-            name="content"
+            name="description"
             placeholder="상세 내용을 입력하세요."
             size="LARGE"
             maxLength={2000}
-            value={values.content}
+            value={values.description}
             onChange={handleChange}
           />
           <div className="flex justify-end pt-14">
