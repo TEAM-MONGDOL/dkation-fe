@@ -357,6 +357,8 @@ export type PointOrderType = 'POINT_HIGHEST' | 'POINT_LOWEST';
 
 export type PointChangeType = 'INCREASE' | 'DECREASE';
 
+export type PenaltyType = 'NOSHOW' | 'REPORT' | 'NEGLIGENCE' | 'ABUSE';
+
 // Convert Type / List
 export const applyStatusList: StatusType[] = [
   'APPLIED',
@@ -443,4 +445,11 @@ export const resultList: { [key in ResultType]: string } = {
   NAME: '가나다순',
   LOWEST: '확률 낮은 순',
   HIGHEST: '확률 높은 순',
+};
+
+export const penaltyList: { [key in PenaltyType]: string } = {
+  NOSHOW: '노쇼',
+  REPORT: '협력체 신고',
+  NEGLIGENCE: '근무 태만',
+  ABUSE: '포인트 제도 악용',
 };
