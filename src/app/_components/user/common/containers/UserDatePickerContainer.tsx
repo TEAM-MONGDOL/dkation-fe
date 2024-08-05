@@ -2,15 +2,24 @@ import { DatePickerTagType } from '@/_types/commonType';
 import UserFilteringTitleAtom from '../atoms/UserFilteringTitleAtom';
 import UserDateTagListModule from '../modules/UserDateTagListModule';
 import UserFilteringSubContainer from './UserFilteringSubContainer';
+import UserDatePickersModule from '../modules/UserDatePickerModule';
 
 interface UserDatePickerContainerProps {
   selectedTag: DatePickerTagType;
   onClickTag: (tag: DatePickerTagType) => void;
+  startDate: Date | null;
+  setStartDate: (date: Date | null) => void;
+  endDate: Date | null;
+  setEndDate: (date: Date | null) => void;
 }
 
 const UserDatePickerContainer = ({
   selectedTag,
   onClickTag,
+  startDate,
+  setStartDate,
+  endDate,
+  setEndDate,
 }: UserDatePickerContainerProps) => {
   return (
     <UserFilteringSubContainer>
@@ -19,6 +28,12 @@ const UserDatePickerContainer = ({
         <UserDateTagListModule
           selectedTag={selectedTag}
           onClickTag={onClickTag}
+        />
+        <UserDatePickersModule
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
         />
       </div>
     </UserFilteringSubContainer>
