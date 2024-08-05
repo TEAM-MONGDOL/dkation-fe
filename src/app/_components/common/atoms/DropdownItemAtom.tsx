@@ -1,30 +1,19 @@
-import React from 'react';
-
-interface Option {
-  label: string;
-  key: string;
-}
-
 interface DropdownItemProps {
-  option: Option;
+  option: string;
   isSelect: boolean;
-  onSelect: (option: Option) => void;
+  onSelect: (option: string) => void;
 }
 
-const DropdownItemAtom = ({
-  option,
-  isSelect,
-  onSelect,
-}: DropdownItemProps) => {
+const DropdownItem = ({ option, isSelect, onSelect }: DropdownItemProps) => {
   return (
     <button
-      onClick={() => onSelect(option)} // Pass Option instead of string
+      onClick={() => onSelect(option)}
       className={`w-full px-4 py-3.5 text-left text-4 ${isSelect ? 'font-semibold text-sub-400' : 'text-sub-300'}`}
       role="menuitem"
     >
-      {option.label} {/* Use option.label */}
+      {option}
     </button>
   );
 };
 
-export default DropdownItemAtom;
+export default DropdownItem;
