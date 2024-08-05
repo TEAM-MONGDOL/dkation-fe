@@ -6,10 +6,10 @@ import DropdownItemAtom from '@/_components/common/atoms/DropdownItemAtom';
 import { KeyboardArrowDownIcon } from '@/_assets/icons';
 
 interface DropdownModuleProps {
-  options: [number, string][];
-  onSelect: (option: number | null) => void;
+  options: string[];
+  onSelect: (option: string) => void;
   placeholder: string;
-  selectedOption: string | undefined | number | null;
+  selectedOption: string | undefined | null;
   size?: 'small' | 'large' | 'full';
 }
 
@@ -58,11 +58,11 @@ const DropdownModule = ({
             <div className="w-full">
               {options.map((option) => (
                 <DropdownItemAtom
-                  key={option[0]}
-                  option={option[1]}
-                  isSelect={selectedOption === option[0]}
+                  key={option}
+                  option={option}
+                  isSelect={selectedOption === option}
                   onSelect={() => {
-                    onSelect(option[0]);
+                    onSelect(option);
                     setIsOpen(false);
                   }}
                 />

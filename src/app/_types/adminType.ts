@@ -50,14 +50,16 @@ export const ReviewListInfoSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
-export const wkPlaceDetailInfoSchema = z.object({
-  id: z.number(),
-  place: z.string(),
-  address: z.string(),
-  maxPeople: z.number(),
-  createAt: z.string(),
-  description: z.string(),
-  thumbnailUrls: z.array(z.string()),
+export const wktPlaceDetailShema = z.object({
+  wktPlaceDetailInfo: z.object({
+    id: z.number(),
+    place: z.string(),
+    address: z.string(),
+    maxPeople: z.number(),
+    createdAt: z.string(),
+    description: z.string(),
+    thumbnailUrls: z.array(z.string().nullable()),
+  }),
 });
 
 export const pointSupplyInfo = z.object({
@@ -171,6 +173,11 @@ export const announcementListSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
+export const fileInfoSchema = z.object({
+  url: z.string(),
+  fileName: z.string(),
+});
+
 export const announcementDetailSchema = z.object({
   id: z.number(),
   announcementType: z.union([
@@ -180,7 +187,7 @@ export const announcementDetailSchema = z.object({
   ]),
   title: z.string(),
   description: z.string(),
-  fileUrls: fileUrlSchema.array().nullable(),
+  fileInfos: fileInfoSchema.array().nullable().optional(),
 });
 
 export const applyStatusSchema = z.union([
@@ -225,6 +232,27 @@ export const memberDetailSchema = z.object({
   accountId: z.string(),
   department: z.string(),
   pointQuantity: z.number(),
+});
+
+export const penaltyInfoSchema = z.object({
+  wktName: z.string().nullable(),
+  penaltyType: z.union([
+    z.literal('NOSHOW'),
+    z.literal('REPORT'),
+    z.literal('NEGLIGENCE'),
+    z.literal('ABUSE'),
+  ]),
+  createdAt: z.string(),
+});
+
+export const penaltyListSchema = z.object({
+  penaltyInfos: penaltyInfoSchema.array(),
+  penaltyAmount: z.number(),
+  memberType: z.union([
+    z.literal('EMPLOYMENT'),
+    z.literal('LEAVE'),
+    z.literal('PENALTY'),
+  ]),
 });
 
 export const wktPlaceInfoSchema = z.object({

@@ -196,6 +196,7 @@ const WorkationEdit = ({ params }: WkEditProps) => {
         <div className="-mt-4">
           <p className="mb-3 text-3 font-semibold">내용</p>
           <TextAreaModule
+            placeholder="상세 내용을 입력하세요"
             maxLength={2000}
             size="LARGE"
             value={values.description}
