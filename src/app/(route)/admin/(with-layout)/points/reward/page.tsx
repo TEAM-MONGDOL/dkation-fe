@@ -33,7 +33,7 @@ const AdminPointsRewardPage = () => {
   const [param, setParam] = useState<{
     order: string;
     type: string[];
-    reason: string[]; // 포인트 정책 추가가 자유로우니 이는 Type으로 선언 불가
+    reason: string[];
   }>({
     order: 'ASC',
     type: ['PERSONAL', 'GROUP'],
@@ -63,9 +63,13 @@ const AdminPointsRewardPage = () => {
     },
   });
 
+  useEffect(() => {
+    console.log(param.reason);
+  }, [param.reason]);
+
   const { data, isLoading, isError } = useGetPointSupplyQuery({
     supplyType: param.type.length > 1 ? undefined : param.type[0],
-    pointTitle:
+    pointPolicyIds:
       param.reason.length > 0 &&
       pointPolicyList &&
       param.reason.length < pointPolicyList?.pointPolicyList.length
