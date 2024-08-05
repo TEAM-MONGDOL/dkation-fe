@@ -12,7 +12,7 @@ export const useGetWkPlaceDetailQuery = ({
   return useQuery({
     queryKey: [useGetWkPlaceDetailQueryKey, wktPlaceId],
     queryFn: async () => {
-      const res = await api.get(`/api/wkt-place/${wktPlaceId}`, {
+      const res = await api.get(`/api/wkt/place/${wktPlaceId}`, {
         params: {
           wktPlaceId,
         },
