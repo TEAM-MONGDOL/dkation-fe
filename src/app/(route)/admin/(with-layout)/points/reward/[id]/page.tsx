@@ -11,6 +11,7 @@ import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import { useGetPointSupplyDetailQuery } from '@/_hooks/admin/useGetPointSupplyDetailQuery';
+import { pointSupplyTypeConvertList } from '@/_types/adminType';
 import { useState } from 'react';
 
 interface RewardDetailPageProps {
@@ -28,7 +29,6 @@ const AdminPointsRewardDetailPage = ({ params }: RewardDetailPageProps) => {
 
   return (
     <section className="flex w-full flex-col gap-y-10 overflow-y-auto">
-      {/* TODO : Left onClick에 -1 적용 필요 */}
       <TitleBarModule title="포인트 지급 내역 상세" type="LEFT" />
       {!data ? (
         isLoading ? (
@@ -39,22 +39,25 @@ const AdminPointsRewardDetailPage = ({ params }: RewardDetailPageProps) => {
       ) : (
         <div className="flex w-full items-start gap-x-3xl">
           <div className="flex min-w-[400px] basis-1/3 flex-col gap-y-3xl">
-            {/* TODO : InputModule에 Readonly 필요, gap 추가 필요 */}
             <InputModule
               subtitle="구분"
-              value={data.pointSupplyInfo.pointSupplyType}
+              value={
+                pointSupplyTypeConvertList[
+                  data.pointSupplyDetailInfo.pointSupplyType
+                ]
+              }
               onChange={() => {}}
               status="readonly"
             />
             <InputModule
               subtitle="분류"
-              value={data.pointSupplyInfo.pointTitle}
+              value={data.pointSupplyDetailInfo.pointTitle}
               onChange={() => {}}
               status="readonly"
             />
             <InputModule
               subtitle="지급일시"
-              value={data.pointSupplyInfo.supplyTime}
+              value={data.pointSupplyDetailInfo.supplyTime}
               onChange={() => {}}
               status="readonly"
             />
@@ -65,11 +68,11 @@ const AdminPointsRewardDetailPage = ({ params }: RewardDetailPageProps) => {
             </h4>
             <div className="flex w-full flex-col gap-y-10">
               {/* TODO : value, onChange, width 전달해야됨 */}
-              <SearchingBoxModule
+              {/* <SearchingBoxModule
                 placeholder="이름을 검색하세요."
                 onClick={() => {}}
                 widthFull
-              />
+              /> */}
               <TableContainer>
                 <TableHeaderModule bgColor="bg-cus-100">
                   <TableHeaderAtom isFirst width="80px">
