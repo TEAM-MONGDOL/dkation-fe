@@ -1,6 +1,6 @@
 const LogoutButtonAtom = () => {
   return (
-    <button className="bg-cus-100 rounded-full font-bold text-5 px-4 py-1.5">
+    <button className="rounded-full bg-cus-100 px-4 py-1.5 text-5 font-bold">
       로그아웃
     </button>
   );

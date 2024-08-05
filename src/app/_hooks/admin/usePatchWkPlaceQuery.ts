@@ -27,7 +27,7 @@ export const usePatchWkPlaceQuery = (
       address,
       description,
     }: PatchWkPlaceProps) => {
-      const response = await api.patch(`/api/wkt-place/${wktPlaceId}`, {
+      const response = await api.patch(`/api/wkt/place/${wktPlaceId}`, {
         place,
         thumbnailUrls,
         maxPeople,

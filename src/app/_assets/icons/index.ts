@@ -32,3 +32,4 @@ export { default as StarRateIcon } from './starRate.svg';
 export { default as StarRateEmptyIcon } from './starRateEmpty.svg';
 export { default as IsolationModeIcon } from './isolationMode.svg';
 export { default as FilterIcon } from './filter.svg';
+export { default as DktechinLogo } from './dktechinLogo.svg';
