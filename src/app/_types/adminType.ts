@@ -191,6 +191,27 @@ export const memberDetailSchema = z.object({
   pointQuantity: z.number(),
 });
 
+
+export const penaltyInfoSchema = z.object({
+  wktName: z.string().nullable(),
+  penaltyType: z.union([
+    z.literal('NOSHOW'),
+    z.literal('REPORT'),
+    z.literal('NEGLIGENCE'),
+    z.literal('ABUSE'),
+  ]),
+  createdAt: z.string(),
+});
+
+export const penaltyListSchema = z.object({
+  penaltyInfos: penaltyInfoSchema.array(),
+  penaltyAmount: z.number(),
+  memberType: z.union([
+    z.literal('EMPLOYMENT'),
+    z.literal('LEAVE'),
+    z.literal('PENALTY'),
+  ]),
+
 export const wktPlaceInfoSchema = z.object({
   id: z.number(),
   thumbnailUrl: z.string(),
