@@ -12,9 +12,9 @@ const UserFilteringContainer = ({
   onRefresh,
 }: UserFilteringContainerProps) => {
   return (
-    <div className="flex w-[380px] flex-col rounded-xl border border-sub-100/50 shadow-[2px_2px_2px_2px_rgba(0,0,0,0.02)]">
+    <div className="flex w-[350px] flex-col rounded-xl border border-sub-100/50 shadow-[2px_2px_2px_2px_rgba(0,0,0,0.02)]">
       <div className="flex w-full items-center justify-between px-8 py-9">
-        <span>필터</span>
+        <span className="text-1 font-semibold">필터</span>
         <Image
           src={RefreshIcon}
           alt="refresh"
