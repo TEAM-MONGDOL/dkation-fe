@@ -107,7 +107,7 @@ const AdminPointsRewardPage = () => {
           </TableHeaderAtom>
           <TableHeaderAtom width="150px">구분</TableHeaderAtom>
           <TableHeaderAtom>분류</TableHeaderAtom>
-          <TableHeaderAtom>이름</TableHeaderAtom>
+          <TableHeaderAtom width="200px">이름</TableHeaderAtom>
           <TableHeaderAtom width="200px">지급일</TableHeaderAtom>
           <TableHeaderAtom width="160px" isLast />
         </TableHeaderModule>
@@ -126,10 +126,23 @@ const AdminPointsRewardPage = () => {
             data.pointSupplyList.map((item, index) => (
               <TableBodyModule key={item.id}>
                 <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
-                <TableBodyAtom>{item.pointSupplyType}</TableBodyAtom>
+                <TableBodyAtom
+                  color={
+                    item.pointSupplyType === 'GROUP'
+                      ? 'text-primary'
+                      : 'text-positive'
+                  }
+                >
+                  {item.pointSupplyType === 'GROUP' ? '단체' : '개인'}
+                </TableBodyAtom>
                 <TableBodyAtom>{item.pointTitle}</TableBodyAtom>
-                <TableBodyAtom>{item.name}</TableBodyAtom>
-                <TableBodyAtom>{item.supplyTime}</TableBodyAtom>
+                <TableBodyAtom>
+                  {item.name}
+                  {item.count > 1 && ` 외 ${item.count}`}
+                </TableBodyAtom>
+                <TableBodyAtom>
+                  {dayjs(item.supplyTime).format('YYYY.MM.DD')}
+                </TableBodyAtom>
                 <TableBodyAtom isLast>
                   <ShowDetailButtonAtom
                     onClick={() => onClickRowDetail(item.id)}
