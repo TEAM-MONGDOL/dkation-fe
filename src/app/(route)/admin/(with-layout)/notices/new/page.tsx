@@ -30,8 +30,8 @@ const WriteNoticesPage = () => {
     },
   });
 
-  const handleSelect = (option: string) => {
-    setValues({ ...values, announcementType: option });
+  const handleSelect = (option: { label: string; key: string }) => {
+    setValues({ ...values, announcementType: option.key });
   };
 
   const handleChange = (
@@ -90,7 +90,9 @@ const WriteNoticesPage = () => {
               options={NoticeOptions}
               onSelect={handleSelect}
               placeholder="구분 선택"
-              selectedOption={values.announcementType}
+              selectedOption={NoticeOptions.find(
+                (option) => option.key === values.announcementType,
+              )}
             />
             <InputModule
               name="title"
