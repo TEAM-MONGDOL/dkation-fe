@@ -8,6 +8,11 @@ import { useRouter } from 'next/navigation';
 import FileModule from '@/_components/common/modules/FileModule';
 import { useGetWkPlaceDetailQuery } from '@/_hooks/admin/useGetWkPlaceDetailQuery';
 import dayjs from 'dayjs';
+import React, { useState } from 'react';
+import ModalModule from '@/_components/common/modules/ModalModule';
+import Image from 'next/image';
+import logo from '@/_assets/images/logo_imsy.png';
+import { useDeleteWkPlaceMutation } from '@/_hooks/admin/useDeleteWkPlaceQuery';
 
 interface FileItem {
   name: string;
@@ -19,12 +24,15 @@ interface WkPlaceDetailProps {
   params: { id: number };
 }
 const AdminWorkationPlaceDetailPage = ({ params }: WkPlaceDetailProps) => {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const { id } = params;
   const { data, isLoading, isError } = useGetWkPlaceDetailQuery({
     wktPlaceId: id,
   });
 
   const router = useRouter();
+  const { mutate: deleteWkPlaceMutation } = useDeleteWkPlaceMutation(id);
+
   if (isLoading) {
     return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
   }
@@ -92,7 +100,14 @@ const AdminWorkationPlaceDetailPage = ({ params }: WkPlaceDetailProps) => {
           value={data.wktPlaceDetailInfo.description}
         />
       </div>
-      <div className="flex justify-end">
+      <div className="flex justify-end gap-5">
+        <ButtonAtom
+          width="fixed"
+          text="삭제"
+          type="button"
+          buttonStyle="red"
+          onClick={() => setIsDeleteModalOpen(true)}
+        />
         <ButtonAtom
           text="수정"
           type="button"
@@ -101,6 +116,25 @@ const AdminWorkationPlaceDetailPage = ({ params }: WkPlaceDetailProps) => {
           onClick={() => router.push(`/admin/workation/place/${id}/edit`)}
         />
       </div>
+      {isDeleteModalOpen && (
+        <ModalModule
+          title="해당 게시글을 삭제하시겠습니까?"
+          cancelText="취소"
+          confirmText="삭제"
+          confirmButtonStyle="red"
+          onCancel={() => {
+            setIsDeleteModalOpen(false);
+          }}
+          onConfirm={() => {
+            deleteWkPlaceMutation();
+            setIsDeleteModalOpen(false);
+          }}
+        >
+          <div className="flex justify-center">
+            <Image className="h-5 w-24" src={logo} alt="logo" />
+          </div>
+        </ModalModule>
+      )}
     </section>
   );
 };
