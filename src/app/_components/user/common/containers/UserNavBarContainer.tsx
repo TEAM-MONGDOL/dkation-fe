@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import logo from '@/_assets/images/logo_imsy.png';
-import NavButtonAtom from '@/_components/user/common/atoms/NavButtonAtom';
+import UserNavButtonAtom from '@/_components/user/common/atoms/UserNavButtonAtom';
 
-export default function Header() {
+const UserNavBarContainer = () => {
   const [path, setPath] = useState('');
   const router = useRouter();
 
@@ -31,22 +31,23 @@ export default function Header() {
       <div className="mr-32 flex">
         <Image src={logo} alt="logo" className="w-[121px]" />
       </div>
-      <div className="mr-10 mt-2 flex gap-16">
+      <div className="flex gap-16">
         {menuItems.map((item) => (
           <div
             role="presentation"
             key={item.href}
-            className="flex w-[90px] cursor-pointer flex-col items-center gap-2"
-            onClick={() => handleNavigation(item.href)}
+            className="flex h-20 w-[90px] cursor-pointer flex-col items-center justify-center gap-2"
           >
             <p className={path === item.href ? 'font-bold' : ''}>{item.text}</p>
             {path === item.href && (
-              <div className="h-[3px] w-[90px] bg-primary" />
+              <div className="h-[3px] w-[100px] bg-primary" />
             )}
           </div>
         ))}
       </div>
-      <NavButtonAtom />
+      <UserNavButtonAtom />
     </div>
   );
-}
+};
+
+export default UserNavBarContainer;
