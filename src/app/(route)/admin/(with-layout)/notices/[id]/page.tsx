@@ -18,10 +18,11 @@ interface NoticeDetailPageProps {
   };
 }
 
-const getFileType = (url) => {
-  const extension = url.split('.').pop().toLowerCase();
+const getFileType = (url: string | undefined) => {
+  if (!url) return 'other';
+  const extension = url.split('.').pop()?.toLowerCase();
   const imageExtensions = ['jpg', 'jpeg', 'png'];
-  return imageExtensions.includes(extension) ? 'image' : 'other';
+  return extension && imageExtensions.includes(extension) ? 'image' : 'other';
 };
 
 const NoticeDetailPage = ({ params }: NoticeDetailPageProps) => {
@@ -61,20 +62,16 @@ const NoticeDetailPage = ({ params }: NoticeDetailPageProps) => {
             </div>
           </div>
           <div className="py-4">
-            {data.fileUrls && data.fileUrls.length > 0 ? (
+            {data.fileInfos && data.fileInfos.length > 0 ? (
               <div className="py-2">
                 <div className="flex flex-col gap-2">
-                  {data.fileUrls.map((file, index) => {
-                    const fileName = decodeURIComponent(
-                      file.split('/').pop().split('-').slice(1).join('-'),
-                    );
-
-                    const fileType = getFileType(file);
+                  {data.fileInfos.map((file, index) => {
+                    const fileType = getFileType(file.url);
                     return (
-                      <div key={fileName} className="flex items-center gap-2">
+                      <div key={file.url} className="flex items-center gap-2">
                         <FileModule
-                          preview={file}
-                          fileName={fileName}
+                          preview={file.url}
+                          fileName={file.fileName}
                           fileType={fileType}
                           buttonType="download"
                         />
