@@ -38,8 +38,9 @@ const NoticeDetailPage = ({ params }: NoticeDetailPageProps) => {
 
   const { mutate: DeleteNotice } = useDeleteNoticeMutation({
     successCallback: () => {
+      alert('삭제가 완료되었습니다.');
       setIsDeleteModalOpen(false);
-      router.push('/admin/notices');
+      router.replace('/admin/notices');
     },
   });
 
@@ -124,8 +125,6 @@ const NoticeDetailPage = ({ params }: NoticeDetailPageProps) => {
               }}
               onConfirm={() => {
                 DeleteNotice(id);
-                setIsDeleteModalOpen(false);
-                router.replace('/admin/notices');
               }}
             >
               <div className="flex justify-center">
