@@ -22,7 +22,14 @@ export const useGetPointSupplyQuery = ({
   };
 }) => {
   return useQuery({
-    queryKey: [useGetPointSupplyQueryKey],
+    queryKey: [
+      useGetPointSupplyQueryKey,
+      supplyType,
+      pointTitle,
+      startDate,
+      endDate,
+      pageParam,
+    ],
     queryFn: async () => {
       const res = await api.get(`/api/point/supply`, {
         params: {
