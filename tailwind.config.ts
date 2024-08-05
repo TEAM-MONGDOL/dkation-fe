@@ -28,6 +28,7 @@ const config: Config = {
         'cus-200': '#374553',
         'cus-300': '#323232',
         'stroke-100': '#DBDBDB',
+        footer: '#888888',
       },
       fontSize: {
         '1': '20px',
