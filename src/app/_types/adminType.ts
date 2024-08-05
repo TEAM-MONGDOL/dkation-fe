@@ -120,6 +120,7 @@ export const pointApplyTypeSchema = z.union([
 ]);
 
 export const pointApplyInfoSchema = z.object({
+  pointApplyId: z.number(),
   pointTitle: z.string(),
   name: z.string(),
   applyTime: z.string(),
@@ -130,6 +131,24 @@ export const pointApplyInfoSchema = z.object({
 export const pointApplyInfoListSchema = z.object({
   pointApplyInfos: z.array(pointApplyInfoSchema),
   pageInfo: pageInfoSchema,
+});
+
+export const fileInfoSchema = z.object({
+  url: z.string(),
+  fileName: z.string(),
+});
+
+export const pointApplyDetailInfoSchema = z.object({
+  pointApplyId: z.number(),
+  name: z.string(),
+  accountId: z.string(),
+  pointTitle: z.string(),
+  description: z.string(),
+  fileInfo: fileInfoSchema.nullable().optional(),
+  applyType: pointApplyTypeSchema,
+  declineReason: z.string().nullable().optional(),
+  createdAt: z.string(),
+  reviewTime: z.string().nullable().optional(),
 });
 
 export const fileUrlSchema = z.string();

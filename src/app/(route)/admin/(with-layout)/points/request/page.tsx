@@ -72,12 +72,7 @@ const AdminPointsRequestPage = () => {
         param.state.length > 0 && param.state.length < 3
           ? param.state.join(',')
           : undefined,
-      pointTitle:
-        param.type.length > 0 &&
-        pointPolicyList &&
-        param.type.length < pointPolicyList.pointPolicyList.length
-          ? param.type.join(',')
-          : undefined,
+      pointPolicyIds: param.type.length > 0 ? param.type.join(',') : undefined,
       startDate: startDate
         ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
         : undefined,
@@ -158,7 +153,7 @@ const AdminPointsRequestPage = () => {
             <EmptyContainer colSpan={7} />
           ) : (
             data.pointApplyInfos.map((item, idx) => (
-              <TableBodyModule key={item.name}>
+              <TableBodyModule key={item.pointApplyId}>
                 <TableBodyAtom isFirst>{idx + 1}</TableBodyAtom>
                 <TableBodyAtom>{item.pointTitle}</TableBodyAtom>
                 <TableBodyAtom>{item.name}</TableBodyAtom>
@@ -173,7 +168,7 @@ const AdminPointsRequestPage = () => {
                 </TableBodyAtom>
                 <TableBodyAtom isLast>
                   <ShowDetailButtonAtom
-                    onClick={() => onClickRowDetail(idx + 1)}
+                    onClick={() => onClickRowDetail(item.pointApplyId)}
                   />
                 </TableBodyAtom>
               </TableBodyModule>

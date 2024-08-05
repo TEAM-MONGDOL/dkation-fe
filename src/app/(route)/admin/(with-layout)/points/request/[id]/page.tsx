@@ -7,146 +7,146 @@ import InputModule from '@/_components/common/modules/InputModule';
 import ModalModule from '@/_components/common/modules/ModalModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
+import { useGetPointApplyDetailQuery } from '@/_hooks/admin/useGetPointApplyDetailQuery';
+import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-const waitingData = {
-  id: 1,
-  status: 'WAITING',
-  name: '홍길동',
-  personalId: 'hong.gil',
-  type: '봉사활동',
-  createdAt: '2024.06.12',
-  approvedAt: null,
-  content: '봉사활동을 했습니다.',
-  fileName: 'file.pdf',
-  fileType: 'other',
-  fileUrl: 'www.naver.com',
-};
+interface AdminPointsRequestDetailPageProps {
+  params: {
+    id: string;
+  };
+}
 
-const acceptedData = {
-  id: 1,
-  status: 'ACCEPTED',
-  name: '홍길동',
-  personalId: 'hong.gil',
-  type: '봉사활동',
-  createdAt: '2024.06.12',
-  approvedAt: '2024.06.13',
-  content: '봉사활동을 했습니다.',
-  fileName: 'file.pdf',
-  fileType: 'other',
-  fileUrl: 'www.naver.com',
-};
-
-const rejectedData = {
-  id: 1,
-  status: 'REJECTED',
-  name: '홍길동',
-  personalId: 'hong.gil',
-  type: '봉사활동',
-  createdAt: '2024.06.12',
-  approvedAt: '2024.06.13',
-  content: '봉사활동을 했습니다.',
-  fileName: 'file.pdf',
-  fileType: 'other',
-  fileUrl: 'www.naver.com',
-};
-
-const data = waitingData;
-
-const AdminPointsRequestDetailPage = () => {
+const AdminPointsRequestDetailPage = ({
+  params,
+}: AdminPointsRequestDetailPageProps) => {
+  const { id } = params;
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState<'accept' | 'reject' | null>(
     null,
   );
+  const { data, isLoading, isError } = useGetPointApplyDetailQuery({
+    id: Number(id),
+  });
+
   return (
     <section className="flex w-full flex-col gap-y-10 overflow-y-auto">
       <TitleBarModule title="포인트 신청 내역 상세" type="LEFT" />
       <section className="flex w-full flex-col gap-y-3xl">
-        {data.status !== 'WAITING' && (
+        {data && data.applyType !== 'PENDING' && (
           <p
-            className={`flex w-full items-center rounded-regular px-5 py-4 font-semibold ${data.status === 'ACCEPTED' ? 'border border-primary bg-[#FEEC66]' : 'border border-sub-100 bg-[#E1E1E1]'}`}
+            className={`flex w-full items-center rounded-regular px-5 py-4 font-semibold ${data?.applyType === 'APPROVED' ? 'border border-primary bg-[#FEEC66]' : 'border border-sub-100 bg-[#E1E1E1]'}`}
           >
-            {data.status === 'ACCEPTED'
+            {data?.applyType === 'APPROVED'
               ? '이미 승인된 내역입니다.'
               : '이미 반려된 내역입니다.'}
           </p>
         )}
-        <div className="flex w-full flex-col gap-y-3xl">
-          <div className="flex w-full items-center justify-around gap-x-3xl">
-            <InputModule
-              subtitle="회원 정보"
-              value={`${data.name} (${data.personalId})`}
-              status="readonly"
-            />
-            <InputModule subtitle="분류" value={data.type} status="readonly" />
-          </div>
-          <div className="flex w-full items-center justify-around gap-x-3xl">
-            <InputModule
-              subtitle="신청 일시"
-              value={data.createdAt}
-              status="readonly"
-            />
-            <InputModule
-              subtitle="지급 일시"
-              value={!data.approvedAt ? '-' : data.approvedAt}
-              status="disabled"
-            />
-          </div>
-          <div className="flex h-full grow flex-col gap-y-[30px]">
-            <div className="flex flex-col gap-y-4">
-              <h3 className="font-bold">증빙 서류</h3>
-              <FileModule
-                fileName={data.fileName}
-                fileType="other"
-                fileUrl={data.fileUrl}
-                buttonType="download"
-                onDownload={() => {}}
-              />
-            </div>
-            <TextAreaModule
-              placeholder="내용을 입력하세요."
-              size="SMALL"
-              maxLength={500}
-              value={data.content}
-              name="content"
-              onChange={() => {}}
-              readonly
-            />
-          </div>
-        </div>
-        <div className="flex w-full items-center justify-end gap-x-5 pt-[30px]">
-          {/* TODO : 좀 더 길게 버튼 길이 고정 필요 */}
-          {data.status === 'WAITING' ? (
-            <>
-              <ButtonAtom
-                type="button"
-                buttonStyle="dark"
-                onClick={() => {
-                  setIsModalOpen('reject');
-                }}
-                text="반려"
-              />
-              <ButtonAtom
-                type="button"
-                buttonStyle="yellow"
-                onClick={() => {
-                  setIsModalOpen('accept');
-                }}
-                text="승인"
-              />
-            </>
+        {!data ? (
+          isLoading ? (
+            <p className="flex h-[100px] w-full items-center justify-center">
+              로딩 중...
+            </p>
+          ) : isError ? (
+            <p className="flex h-[100px] w-full items-center justify-center">
+              에러가 발생했습니다.
+            </p>
           ) : (
-            <ButtonAtom
-              type="button"
-              buttonStyle="dark"
-              onClick={() => {
-                router.back();
-              }}
-              text="닫기"
-            />
-          )}
-        </div>
+            <p className="flex h-[100px] w-full items-center justify-center">
+              알 수 없는 에러가 발생했습니다.
+            </p>
+          )
+        ) : (
+          <>
+            <div className="flex w-full flex-col gap-y-3xl">
+              <div className="flex w-full items-center justify-around gap-x-3xl">
+                <InputModule
+                  subtitle="회원 정보"
+                  value={`${data.name} (${data.accountId})`}
+                  status="readonly"
+                />
+                <InputModule
+                  subtitle="분류"
+                  value={data.pointTitle}
+                  status="readonly"
+                />
+              </div>
+              <div className="flex w-full items-center justify-around gap-x-3xl">
+                <InputModule
+                  subtitle="신청 일시"
+                  value={dayjs(data.createdAt).format('YYYY.MM.DD')}
+                  status="readonly"
+                />
+                <InputModule
+                  subtitle="지급 일시"
+                  value={
+                    data.reviewTime && data.applyType !== 'PENDING'
+                      ? dayjs(data.reviewTime).format('YYYY.MM.DD')
+                      : '-'
+                  }
+                  status="disabled"
+                />
+              </div>
+              <div className="flex h-full grow flex-col gap-y-[30px]">
+                {data.fileInfo && (
+                  <div className="flex flex-col gap-y-4">
+                    <h3 className="font-bold">증빙 서류</h3>
+                    <FileModule
+                      fileName={data.fileInfo.fileName}
+                      fileType="other"
+                      fileUrl={data.fileInfo.url}
+                      buttonType="download"
+                      onDownload={() => {}}
+                    />
+                  </div>
+                )}
+                <TextAreaModule
+                  placeholder="내용을 입력하세요."
+                  size="SMALL"
+                  value={data.description}
+                  name="content"
+                  onChange={() => {}}
+                  readonly
+                />
+              </div>
+            </div>
+            <div className="flex w-full items-center justify-end gap-x-5 pt-[30px]">
+              {data.applyType === 'PENDING' ? (
+                <>
+                  <ButtonAtom
+                    type="button"
+                    buttonStyle="dark"
+                    onClick={() => {
+                      setIsModalOpen('reject');
+                    }}
+                    text="반려"
+                    width="fixed"
+                  />
+                  <ButtonAtom
+                    type="button"
+                    buttonStyle="yellow"
+                    onClick={() => {
+                      setIsModalOpen('accept');
+                    }}
+                    text="승인"
+                    width="fixed"
+                  />
+                </>
+              ) : (
+                <ButtonAtom
+                  type="button"
+                  buttonStyle="dark"
+                  onClick={() => {
+                    router.back();
+                  }}
+                  text="닫기"
+                  width="fixed"
+                />
+              )}
+            </div>
+          </>
+        )}
         {isModalOpen &&
           (isModalOpen === 'accept' ? (
             <ModalModule
@@ -186,20 +186,22 @@ const AdminPointsRequestDetailPage = () => {
                     bgColor="bg-cus-100"
                   />
                 </div>
-                <div className="flex w-full flex-col items-start gap-y-5">
-                  <InfoContentAtom
-                    isStartAlign
-                    data={{ subtitle: '구분', content: data.type }}
-                  />
-                  <InfoContentAtom
-                    isStartAlign
-                    data={{ subtitle: '신청자', content: data.name }}
-                  />
-                  <InfoContentAtom
-                    isStartAlign
-                    data={{ subtitle: '신청 일시', content: data.createdAt }}
-                  />
-                </div>
+                {data && (
+                  <div className="flex w-full flex-col items-start gap-y-5">
+                    <InfoContentAtom
+                      isStartAlign
+                      data={{ subtitle: '구분', content: data.pointTitle }}
+                    />
+                    <InfoContentAtom
+                      isStartAlign
+                      data={{ subtitle: '신청자', content: data.name }}
+                    />
+                    <InfoContentAtom
+                      isStartAlign
+                      data={{ subtitle: '신청 일시', content: data.createdAt }}
+                    />
+                  </div>
+                )}
               </div>
             </ModalModule>
           ))}
