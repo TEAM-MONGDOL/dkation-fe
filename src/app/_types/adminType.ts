@@ -191,7 +191,6 @@ export const memberDetailSchema = z.object({
   pointQuantity: z.number(),
 });
 
-
 export const penaltyInfoSchema = z.object({
   wktName: z.string().nullable(),
   penaltyType: z.union([
@@ -211,6 +210,7 @@ export const penaltyListSchema = z.object({
     z.literal('LEAVE'),
     z.literal('PENALTY'),
   ]),
+});
 
 export const wktPlaceInfoSchema = z.object({
   id: z.number(),
