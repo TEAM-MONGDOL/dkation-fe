@@ -17,7 +17,7 @@ const WriteNoticesPage = () => {
   const [values, setValues] = useState({
     announcementType: '',
     title: '',
-    fileUrls: [] as string[],
+    fileInfos: [] as { url: string; fileName: string }[],
     description: '',
   });
 
@@ -43,28 +43,32 @@ const WriteNoticesPage = () => {
     });
   };
 
-  const handleFilesChange = (fileUrls: string[]) => {
+  const handleFilesChange = (
+    fileInfos: { url: string; fileName: string }[],
+  ) => {
     setValues((prevValues) => ({
       ...prevValues,
-      fileUrls: [...prevValues.fileUrls, ...fileUrls],
+      fileInfos: [...prevValues.fileInfos, ...fileInfos],
     }));
   };
 
   const handleDeleteFile = (index: number) => {
     setValues((prevValues) => {
-      const updatedFileUrls = prevValues.fileUrls.filter(
+      const updatedFileInfos = prevValues.fileInfos.filter(
         (_, idx) => idx !== index,
       );
       return {
         ...prevValues,
-        fileUrls: updatedFileUrls,
+        fileInfos: updatedFileInfos,
       };
     });
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    postAnnouncement(values);
+    const fileUrls = values.fileInfos.map((info) => info.url);
+    const payload = { ...values, fileUrls };
+    postAnnouncement(payload);
   };
 
   const getFileType = (url: string) => {
@@ -97,21 +101,19 @@ const WriteNoticesPage = () => {
             />
           </div>
           <div className="py-7">
-            {values.fileUrls.length > 0 && (
+            {values.fileInfos.length > 0 && (
               <div className="py-2">
                 <div className="flex flex-col gap-2">
-                  {values.fileUrls.map((fileUrl, index) => {
-                    const fileName = decodeURIComponent(
-                      fileUrl.split('/').pop()?.split('-').slice(1).join('-') ||
-                        '',
-                    );
-
-                    const fileType = getFileType(fileUrl);
+                  {values.fileInfos.map((fileInfo, index) => {
+                    const fileType = getFileType(fileInfo.url);
                     return (
-                      <div key={fileName} className="flex items-center gap-2">
+                      <div
+                        key={fileInfo.fileName}
+                        className="flex items-center gap-2"
+                      >
                         <FileModule
-                          preview={fileUrl}
-                          fileName={fileName}
+                          preview={fileInfo.url}
+                          fileName={fileInfo.fileName}
                           fileType={fileType}
                           buttonType="delete"
                           onDelete={() => handleDeleteFile(index)}
