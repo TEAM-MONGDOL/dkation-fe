@@ -6,11 +6,12 @@ import InputModule from '@/_components/common/modules/InputModule';
 import ModalModule from '@/_components/common/modules/ModalModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
+import { useDeletePointPolicyMutation } from '@/_hooks/admin/useDeletePointPolicyMutation';
 import { useGetPointPolicyDetailQuery } from '@/_hooks/admin/useGetPointPolicyDetailQuery';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { z } from 'zod';
+import { set, z } from 'zod';
 
 interface AdminPointsPolicyDetailPageProps {
   params: {
@@ -25,6 +26,12 @@ const AdminPointsPolicyDetailPage = ({
   const router = useRouter();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const { data, isLoading, isError } = useGetPointPolicyDetailQuery(Number(id));
+  const { mutate: tryDeletePointPolicy } = useDeletePointPolicyMutation({
+    successCallback: () => {
+      setIsDeleteModalOpen(false);
+      router.push('/admin/points/policy');
+    },
+  });
 
   return (
     <div className="flex w-full flex-col gap-y-10 overflow-y-auto">
@@ -103,20 +110,13 @@ const AdminPointsPolicyDetailPage = ({
             confirmButtonStyle="red"
             confirmText="삭제"
             onConfirm={() => {
-              alert('삭제하기');
-              // TODO : API 연동
-              router.replace(`/admin/points/policy/${id}/edit`);
+              tryDeletePointPolicy(id);
             }}
             onCancel={() => {
               setIsDeleteModalOpen(false);
             }}
           >
-            <TextAreaModule
-              name="deleteReason"
-              placeholder="삭제 사유를 입력하세요."
-              maxLength={200}
-              size="SMALL"
-            />
+            <p>삭제 시 복구할 수 없습니다.</p>
           </ModalModule>
         )}
       </section>
