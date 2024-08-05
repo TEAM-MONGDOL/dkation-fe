@@ -63,10 +63,6 @@ const AdminPointsRewardPage = () => {
     },
   });
 
-  useEffect(() => {
-    console.log(param.reason);
-  }, [param.reason]);
-
   const { data, isLoading, isError } = useGetPointSupplyQuery({
     supplyType: param.type.length > 1 ? undefined : param.type[0],
     pointPolicyIds:
