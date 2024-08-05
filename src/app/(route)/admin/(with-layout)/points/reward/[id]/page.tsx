@@ -67,12 +67,6 @@ const AdminPointsRewardDetailPage = ({ params }: RewardDetailPageProps) => {
               지급대상 ({data.pointSupplyMemberList.length})
             </h4>
             <div className="flex w-full flex-col gap-y-10">
-              {/* TODO : value, onChange, width 전달해야됨 */}
-              {/* <SearchingBoxModule
-                placeholder="이름을 검색하세요."
-                onClick={() => {}}
-                widthFull
-              /> */}
               <TableContainer>
                 <TableHeaderModule bgColor="bg-cus-100">
                   <TableHeaderAtom isFirst width="80px">
