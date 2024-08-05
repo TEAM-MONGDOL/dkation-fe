@@ -11,6 +11,7 @@ import InfoSectionContainer from '@/_components/common/containers/InfoSectionCon
 import { useRouter } from 'next/navigation';
 import { useWkNewPlaceMutation } from '@/_hooks/admin/useWkPlaceNewMutate';
 import dayjs from 'dayjs';
+import FileModule from '@/_components/common/modules/FileModule';
 
 const AdminWorkationPlaceNewPage = () => {
   const router = useRouter();
@@ -18,6 +19,7 @@ const AdminWorkationPlaceNewPage = () => {
   const [formData, setFormData] = useState({
     placeName: '',
     address: '',
+    fileInfos: [] as { url: string; fileName: string }[],
     maxPeople: 0,
     description: '',
   });
@@ -41,13 +43,40 @@ const AdminWorkationPlaceNewPage = () => {
   const handleSubmit = () => {
     postWkPlace({
       place: formData.placeName,
-      thumbnailUrls: ['https://example.com/images/gangnam_workation.jpg'],
+      thumbnailUrls: formData.fileInfos.map((fileInfo) => fileInfo.url),
       maxPeople: formData.maxPeople,
       address: formData.address,
       description: formData.description,
     });
     setIsConfirmModelOpen(false);
   };
+
+  const handleFilesChange = (
+    fileInfos: { url: string; fileName: string }[],
+  ) => {
+    setFormData((prevValues) => ({
+      ...prevValues,
+      fileInfos: [...prevValues.fileInfos, ...fileInfos],
+    }));
+  };
+  const handleDeleteFile = (index: number) => {
+    setFormData((prevValues) => {
+      const updatedFileInfos = prevValues.fileInfos.filter(
+        (_, idx) => idx !== index,
+      );
+      return {
+        ...prevValues,
+        fileInfos: updatedFileInfos,
+      };
+    });
+  };
+  const getFileType = (url: string) => {
+    const parts = url.split('.');
+    const extension = parts.length > 1 ? parts.pop()?.toLowerCase() : '';
+    const imageExtensions = ['jpg', 'jpeg', 'png'];
+    return imageExtensions.includes(extension || '') ? 'image' : 'other';
+  };
+
   return (
     <section className="flex flex-col gap-7">
       <TitleBarModule title="장소 추가" type="LEFT" />
@@ -82,14 +111,42 @@ const AdminWorkationPlaceNewPage = () => {
           value={dayjs().format('YYYY.MM.DD')}
         />
       </div>
-      {/* <FileContainer /> */}
+      <div className="py-7">
+        {formData.fileInfos.length > 0 && (
+          <div className="py-2">
+            <div className="flex flex-col gap-2">
+              {formData.fileInfos.map((fileInfo, index) => {
+                const fileType = getFileType(fileInfo.url);
+                return (
+                  <div
+                    key={fileInfo.fileName}
+                    className="flex items-center gap-2"
+                  >
+                    <FileModule
+                      preview={fileInfo.url}
+                      fileName={fileInfo.fileName}
+                      fileType={fileType}
+                      buttonType="delete"
+                      onDelete={() => handleDeleteFile(index)}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+        <FileContainer
+          onFileChange={handleFilesChange}
+          fileDomainType="WKT_PLACE"
+        />
+      </div>
       <div>
         <p className="mb-4 text-3 font-bold">상세 내용</p>
         <TextAreaModule
           placeholder="상세 내용을 입력하세요"
           size="MEDIUM"
           maxLength={500}
-          name="상세내용"
+          name="description"
           onChange={handleChange}
         />
       </div>
