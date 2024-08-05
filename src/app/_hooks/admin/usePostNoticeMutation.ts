@@ -27,6 +27,9 @@ export const usePostNoticeMutation = ({
       queryClient.invalidateQueries({
         queryKey: [useGetNoticeDetailQueryKey],
       });
+      queryClient.refetchQueries({
+        queryKey: [useGetNoticeDetailQueryKey],
+      });
       successCallback && successCallback();
     },
     onError: (error: Error) => {
