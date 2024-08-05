@@ -1,13 +1,12 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
-import { datePickerTagList, DatePickerTagType } from '@/_types/commonType';
+import { useCallback, useState } from 'react';
+import { datePickerTagConverter, DatePickerTagType } from '@/_types/commonType';
 import AccordionHeaderModule from '@/_components/common/modules/AccordionHeaderModule';
 import AccordionBodyModule from '@/_components/common/modules/AccordionBodyModule';
 import DatePickersModule from '@/_components/common/modules/DatePickersModule';
 import DatePickerTagListModule from '@/_components/common/modules/DatePickerTagListModule';
 import dayjs from 'dayjs';
-import { set } from 'zod';
 
 interface DatePickerContainerProps {
   title: string;
@@ -71,7 +70,10 @@ const DatePickerContainer = ({
         <div className="flex w-full flex-col gap-y-4">
           <DatePickerTagListModule
             tags={
-              Object.entries(datePickerTagList) as [DatePickerTagType, string][]
+              Object.entries(datePickerTagConverter) as [
+                DatePickerTagType,
+                string,
+              ][]
             }
             selectedTag={selectedTag}
             setSelectedTag={handleTagClick}

@@ -23,7 +23,6 @@ const UserDatePickerAtom = ({
       onChange={setSelectedDate}
       dateFormat="yyyy.MM.dd"
       minDate={minDate === null ? undefined : minDate}
-      maxDate={new Date()}
       showIcon
       icon={<Image src={CalendarIcon} alt="calendar" width={24} height={24} />}
       formatWeekDay={(nameOfDay) => nameOfDay.substring(0, 1)}
