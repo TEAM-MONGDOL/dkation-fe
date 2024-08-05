@@ -146,7 +146,7 @@ const AdminPointsRewardPage = () => {
                       : 'text-positive'
                   }
                 >
-                  {item.pointSupplyType === 'GROUP' ? '단체' : '개인'}
+                  {pointRewardList[item.pointSupplyType]}
                 </TableBodyAtom>
                 <TableBodyAtom>{item.pointTitle}</TableBodyAtom>
                 <TableBodyAtom>
