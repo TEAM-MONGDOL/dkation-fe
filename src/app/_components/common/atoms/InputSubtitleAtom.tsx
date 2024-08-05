@@ -6,7 +6,7 @@ interface SubtitleProps {
 
 const InputSubtitleAtom = ({ subtitle, status, message }: SubtitleProps) => {
   return (
-    <div className="flex justify-between items-center">
+    <div className="flex items-center justify-between">
       <p className="text-3 font-semibold">{subtitle}</p>
       {(status === 'error' || status === 'correct') && (
         <p

@@ -2,36 +2,58 @@
 
 import PointPolicyInfoModule from '@/_components/admin/points/modules/PointPolicyInfoModule';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
-import InputAreaAtom from '@/_components/common/atoms/InputAreaAtom';
 import InputModule from '@/_components/common/modules/InputModule';
 import ModalModule from '@/_components/common/modules/ModalModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
+import { useGetPointPolicyDetailQuery } from '@/_hooks/admin/useGetPointPolicyDetailQuery';
+import { usePatchPointPolicyMutation } from '@/_hooks/admin/usePatchPointPolicyMutation';
 import dayjs from 'dayjs';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-const data = {
-  id: 1,
-  type: '토이프로젝트',
-  score: 100,
-  content: '자기계발하면 줌',
-  createdAt: '2024-07-20',
-};
+interface AdminPointsPolicyEditPageProps {
+  params: {
+    id: string;
+  };
+}
 
-const AdminPointsPolicyEditPage = () => {
+const AdminPointsPolicyEditPage = ({
+  params,
+}: AdminPointsPolicyEditPageProps) => {
+  const { id } = params;
   const router = useRouter();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const { data: policyDetail } = useGetPointPolicyDetailQuery(Number(id));
+  const { mutate: tryPatchPointPolicy } = usePatchPointPolicyMutation({
+    policyId: Number(id),
+    successCallback: () => {
+      alert('수정되었습니다.');
+      router.replace(`/admin/points/policy/${id}`);
+    },
+    errorCallback: (error: Error) => {
+      alert('수정에 실패했습니다.');
+    },
+  });
   const [form, setForm] = useState<{
     type: string;
     score: number;
     content: string;
   }>({
-    type: data.type,
-    score: data.score,
-    content: data.content,
+    type: policyDetail?.policyTitle || '',
+    score: policyDetail?.quantity || 0,
+    content: policyDetail?.detail || '',
   });
+
+  useEffect(() => {
+    if (policyDetail) {
+      setForm({
+        type: policyDetail.policyTitle,
+        score: policyDetail.quantity,
+        content: policyDetail.detail,
+      });
+    }
+  }, [policyDetail]);
 
   const onChange = (
     e:
@@ -76,7 +98,9 @@ const AdminPointsPolicyEditPage = () => {
                 <InputModule
                   name="createdAt"
                   subtitle="등록일시"
-                  value={dayjs(data.createdAt).format('YYYY.MM.DD')}
+                  value={dayjs(policyDetail?.lastModifiedAt).format(
+                    'YYYY.MM.DD',
+                  )}
                   status="disabled"
                   onChange={onChange}
                 />
@@ -102,7 +126,7 @@ const AdminPointsPolicyEditPage = () => {
               type="button"
               buttonStyle="dark"
               onClick={() => {
-                router.push(`/admin/points/policy/${data.id}`);
+                router.replace(`/admin/points/policy/${id}`);
               }}
               text="닫기"
             />
@@ -121,9 +145,11 @@ const AdminPointsPolicyEditPage = () => {
               title="정책을 수정하시겠습니까?"
               confirmText="수정"
               onConfirm={() => {
-                alert('수정하기');
-                // TODO : API 연동
-                router.push(`/admin/points/policy/${data.id}`);
+                tryPatchPointPolicy({
+                  policyTitle: form.type,
+                  detail: form.content,
+                  quantity: form.score,
+                });
               }}
               onCancel={() => {
                 setIsEditModalOpen(false);

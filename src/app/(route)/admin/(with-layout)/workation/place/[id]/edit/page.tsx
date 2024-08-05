@@ -94,7 +94,7 @@ const AdminWorkationPlaceEditPage = ({ params }: WkPlaceEditProps) => {
       thumbnailUrls: values.files,
       maxPeople: values.maxPeople,
       address: values.address,
-      description: values.description,
+      description: values.description || '',
     };
     patchWkPlaceQuery.mutate(patchData);
   };

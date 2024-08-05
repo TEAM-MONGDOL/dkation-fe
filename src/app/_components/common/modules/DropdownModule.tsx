@@ -9,7 +9,7 @@ interface DropdownModuleProps {
   options: string[];
   onSelect: (option: string) => void;
   placeholder: string;
-  selectedOption: string | undefined | number | null;
+  selectedOption: string | undefined | null;
   size?: 'small' | 'large' | 'full';
 }
 
