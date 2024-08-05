@@ -8,7 +8,16 @@ export type DatePickerTagType =
   | '6_MONTH'
   | '1_YEAR';
 
-export const datePickerTagList: { [key in DatePickerTagType]: string } = {
+export const datePickerTagList: DatePickerTagType[] = [
+  'ALL',
+  '1_WEEK',
+  '1_MONTH',
+  '3_MONTH',
+  '6_MONTH',
+  '1_YEAR',
+];
+
+export const datePickerTagConverter: { [key in DatePickerTagType]: string } = {
   ALL: '전체',
   '1_WEEK': '1주일',
   '1_MONTH': '1개월',
