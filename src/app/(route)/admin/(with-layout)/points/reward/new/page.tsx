@@ -43,7 +43,7 @@ const AdminPointsRewardNewPage = () => {
     isLoading: memberListIsLoading,
   } = useGetMemberListInifiniteQuery({
     // department: selectedOptions.join(','),
-    pageable: { page: 1, size: 10 },
+    pageable: { page: 1, size: 100 },
   });
 
   const {
@@ -346,7 +346,10 @@ const AdminPointsRewardNewPage = () => {
                 },
                 {
                   subtitle: '지급 포인트',
-                  content: '1000P',
+                  content:
+                    policyList?.pointPolicyList
+                      .find((policy) => policy.id === selectedType)
+                      ?.quantity.toLocaleString() || '0',
                 },
               ]}
             />

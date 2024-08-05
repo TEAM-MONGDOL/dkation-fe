@@ -64,6 +64,7 @@ export const wktPlaceDetailShema = z.object({
 
 export const pointSupplyInfo = z.object({
   id: z.number(),
+  count: z.number(),
   pointSupplyType: z.union([z.literal('PERSONAL'), z.literal('GROUP')]),
   pointTitle: z.string(),
   name: z.string(),
