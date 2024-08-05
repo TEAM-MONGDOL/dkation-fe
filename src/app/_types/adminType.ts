@@ -173,11 +173,6 @@ export const announcementListSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
-export const fileInfoSchema = z.object({
-  url: z.string(),
-  fileName: z.string(),
-});
-
 export const announcementDetailSchema = z.object({
   id: z.number(),
   announcementType: z.union([
