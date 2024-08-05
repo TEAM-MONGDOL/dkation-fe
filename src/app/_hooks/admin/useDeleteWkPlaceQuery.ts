@@ -10,7 +10,7 @@ export const useDeleteWkPlaceMutation = (wktPlaceId: number) => {
 
   return useMutation({
     mutationFn: async () => {
-      await api.delete(`api/wkt-place/${wktPlaceId}`);
+      await api.delete(`api/wkt/place/${wktPlaceId}`);
     },
     onSuccess: () => {
       router.push('/admin/workation/place');
