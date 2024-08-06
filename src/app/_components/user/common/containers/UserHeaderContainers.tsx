@@ -8,7 +8,7 @@ interface HeaderProps {
 
 const UserHeaderContainers = ({ title, content }: HeaderProps) => {
   return (
-    <div className="flex h-[380px] flex-col gap-2 bg-primary px-48 pt-52">
+    <div className="flex h-[380px] flex-col gap-2 bg-primary px-40 pt-52">
       <UserHeaderTitle title={title} />
       <UserHeaderContent content={content} />
     </div>
