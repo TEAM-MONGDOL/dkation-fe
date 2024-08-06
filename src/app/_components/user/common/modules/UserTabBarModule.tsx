@@ -21,11 +21,7 @@ const UserTabBarModule = ({ tabs }: UserTabBarModuleProps) => {
             currentPath === tab.path ||
             (currentPath.includes(tab.path) && tab.path !== '/')
           }
-          onClick={
-            tab.path === '/'
-              ? () => router.push('/')
-              : () => router.push(tab.path)
-          }
+          onClick={() => router.push(tab.path)}
         />
       ))}
     </div>
