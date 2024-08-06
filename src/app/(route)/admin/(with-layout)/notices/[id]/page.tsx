@@ -38,7 +38,7 @@ const NoticeDetailPage = ({ params }: NoticeDetailPageProps) => {
     announcementId: id,
   });
 
-  const { mutate: DeleteNotice } = useDeleteNoticeMutation({
+  const { mutate: deleteNotice } = useDeleteNoticeMutation({
     successCallback: () => {
       alert('삭제가 완료되었습니다.');
       setIsDeleteModalOpen(false);
@@ -127,7 +127,7 @@ const NoticeDetailPage = ({ params }: NoticeDetailPageProps) => {
                 setIsDeleteModalOpen(false);
               }}
               onConfirm={() => {
-                DeleteNotice(String(id));
+                deleteNotice(String(id));
               }}
             >
               <div className="flex justify-center">
