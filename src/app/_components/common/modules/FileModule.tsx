@@ -45,7 +45,7 @@ const FileModule = ({
   return (
     <div
       className={`flex w-full items-center rounded-regular border border-stroke-100 ${
-        isUser ? 'border-0 bg-sub-100/30' : 'bg-[#F4F4f4]'
+        isUser ? 'border-0 bg-sub-100/30' : 'bg-cus-100'
       } pr-4`}
     >
       {fileType === 'image' ? (
