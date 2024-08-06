@@ -7,9 +7,9 @@ import Image from 'next/image';
 import place from '@/_assets/images/place_impy.png';
 import UserTextLabelAtom from '@/_components/user/common/atoms/UserTextLabelAtom';
 import UserFilteringAtom from '@/_components/user/common/atoms/UserFilteringAtom';
-import UserFilteringContainer from '@/_components/user/common/containers/UserFilteringContainer';
 import UserStateFilteringContainer from '@/_components/user/common/containers/UserStateFilteringContainer';
 import UserPlaceFilteringContainer from '@/_components/user/common/containers/UserPlaceFilteringContainer';
+import UserFilteringSectionContainer from '@/_components/user/common/containers/UserFilteringSectionContainer';
 
 const Workation = () => {
   const [activeTab, setActiveTab] = useState<number>(0);
@@ -22,16 +22,17 @@ const Workation = () => {
       },
     },
   ];
-  const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
-  const [isOrderBarOpen, setIsOrderBarOpen] = useState(false);
-  const [selectedState, setSelectedState] = useState('모집 전');
-  const [selectedPlace, setSelectedPlace] = useState(['']);
-
+  const [isFilteringSectionOpen, setIsFilteringSectionOpen] = useState<
+    'FILTER' | 'ORDER' | null
+  >(null);
+  const [selectedState, setSelectedState] = useState<string>('PLANNED');
+  const [selectedSpace, setSelectedSpace] = useState<string[]>(['양양 쏠비치']);
+  const [selectedOrder, setSelectedOrder] = useState<string>('createdAt,DESC');
   const handleFilteringBar = () => {
-    setIsFilteringBarOpen(true);
+    setIsFilteringSectionOpen('FILTER');
   };
   const handleOrderBar = () => {
-    setIsOrderBarOpen(true);
+    setIsFilteringSectionOpen('ORDER');
   };
 
   return (
@@ -41,9 +42,48 @@ const Workation = () => {
         content="워케이션(Workation)을 통해 업무의 효율과 재충전의 기회를 놓치지 마세요!"
       />
       <UserTabBarModule tabs={tabs} />
-      <div className="mr-24 mt-8 flex justify-end gap-2">
-        <UserFilteringAtom type="FILTER" onClick={handleFilteringBar} />
-        <UserFilteringAtom type="SORT" onClick={handleOrderBar} />
+      <div className="mr-24 mt-8 flex justify-end">
+        <UserFilteringSectionContainer
+          filterOption={{
+            onClickFilter: () => {
+              setIsFilteringSectionOpen(
+                isFilteringSectionOpen === 'FILTER' ? null : 'FILTER',
+              );
+            },
+            isFilterOpen: isFilteringSectionOpen === 'FILTER',
+            filterChildren: (
+              <>
+                <UserStateFilteringContainer
+                  type="WKT"
+                  selectedOption={selectedState}
+                  onClickOption={setSelectedState}
+                />
+                <UserPlaceFilteringContainer
+                  places={['양양 쏠비치', '양양 쏠비치2', '양양 쏠비치3']}
+                  clickedPlace={selectedSpace}
+                  onClickPlace={setSelectedSpace}
+                />
+              </>
+            ),
+            onRefresh: () => console.log('refresh'),
+          }}
+          orderOption={{
+            onClickOrder: () => {
+              setIsFilteringSectionOpen(
+                isFilteringSectionOpen === 'ORDER' ? null : 'ORDER',
+              );
+            },
+            isOrderOpen: isFilteringSectionOpen === 'ORDER',
+            orderProps: {
+              orders: [
+                { key: 'createdAt,DESC', value: '최신순' },
+                { key: 'createdAt,ASC', value: '오래된순' },
+              ],
+              selectedOrder,
+              setSelectedOrder,
+            },
+          }}
+        />
       </div>
       <div className="mt-10 px-40">
         <div className="flex w-full">
@@ -64,20 +104,6 @@ const Workation = () => {
           />
         </div>
       </div>
-      {/* {isFilteringBarOpen && ( */}
-      {/*  <UserFilteringContainer onRefresh={() => {}}> */}
-      {/*    <UserStateFilteringContainer */}
-      {/*      type="WKT" */}
-      {/*      selectedOption={selectedState} */}
-      {/*      onClickOption={setSelectedState} */}
-      {/*    /> */}
-      {/*    <UserPlaceFilteringContainer */}
-      {/*      places={['양양 워케이션', '부산워케이션']} */}
-      {/*      clickedPlace={selectedPlace} */}
-      {/*      onClickPlace={setSelectedPlace} */}
-      {/*    /> */}
-      {/*  </UserFilteringContainer> */}
-      {/* )} */})
     </div>
   );
 };
