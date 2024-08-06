@@ -23,7 +23,7 @@ const UserStateFilteringContainer = ({
 }: UserStateFilteringContainerProps) => {
   return (
     <UserFilteringSubContainer>
-      <UserFilteringTitleAtom text="진행 상태" />
+      {type !== 'NOTICE' && <UserFilteringTitleAtom text="진행 상태" />}
       <div className="flex w-full flex-col gap-y-1.5">
         {type === 'WKT'
           ? WktStatusList.map((option, idx) => {
