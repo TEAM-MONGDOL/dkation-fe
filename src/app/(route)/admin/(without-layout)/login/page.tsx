@@ -8,9 +8,11 @@ import { useLoginMutation } from '@/_hooks/common/useLoginMutation';
 import { AxiosErrorResponse } from '@/_types/commonType';
 import axios from 'axios';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 const AdminLogin = () => {
+  const router = useRouter();
   const [form, setForm] = useState<{
     accountId: string;
     password: string;
@@ -19,7 +21,7 @@ const AdminLogin = () => {
 
   const { mutate: tryLogin } = useLoginMutation({
     successCallback: (data) => {
-      console.log(data);
+      router.replace('/admin');
     },
     errorCallback: (err) => {
       if (axios.isAxiosError<AxiosErrorResponse>(err)) {
