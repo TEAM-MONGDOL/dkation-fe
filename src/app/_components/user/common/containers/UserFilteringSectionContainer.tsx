@@ -9,6 +9,7 @@ import UserFilteringContainer from './UserFilteringContainer';
 
 interface UserFilteringSectionContainerProps {
   filterOption?: {
+    type: 'FILTER' | 'NOTICE';
     onClickFilter: () => void;
     isFilterOpen: boolean;
     filterChildren: ReactNode;
@@ -30,12 +31,13 @@ const UserFilteringSectionContainer = ({
       {filterOption && (
         <>
           <UserFilteringAtom
-            type="FILTER"
+            type={filterOption.type}
             onClick={filterOption.onClickFilter}
           />
           {filterOption.isFilterOpen && (
             <div className="absolute bottom-[-10px] right-0 translate-y-full">
               <UserFilteringContainer
+                type={filterOption.type}
                 filterChildren={filterOption.filterChildren}
                 onRefresh={filterOption.onRefresh}
               />
