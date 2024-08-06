@@ -10,7 +10,7 @@ const UserArticleRowAtom = ({
   optionalContent,
 }: UserArticleRowAtomProps) => {
   return (
-    <div className="flex h-14 w-full items-center justify-between border-b border-b-sub-100 px-3 text-3">
+    <div className="flex h-14 w-full items-center justify-between border-b border-b-sub-100 px-3">
       <div className="flex flex-1 items-center">
         <div className="mr-4 flex items-center">
           <p>{leftTitle}</p>
