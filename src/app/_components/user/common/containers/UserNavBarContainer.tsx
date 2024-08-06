@@ -23,7 +23,7 @@ const UserNavBarContainer = () => {
     { href: '/mypage', text: '마이페이지' },
   ];
   return (
-    <div className="mx-28 mt-2 flex h-20 items-center">
+    <div className="mx-28 flex h-20 items-center">
       <div className="mr-28 flex">
         <Image src={logo} alt="logo" className="w-[145px]" />
       </div>
