@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 const UserFooterContainer = () => {
   return (
-    <div className="flex w-full min-w-[780px] flex-col gap-y-10 border-t border-sub-100 px-[120px] pb-11 pt-16">
+    <div className="flex w-full min-w-[780px] flex-col gap-y-10 border-t border-sub-100 px-28 pb-11 pt-16">
       <div className="flex w-full items-end justify-between gap-x-5">
         <div className="flex flex-col gap-y-16">
           <Image src={DktechinLogo} alt="company_logo" />

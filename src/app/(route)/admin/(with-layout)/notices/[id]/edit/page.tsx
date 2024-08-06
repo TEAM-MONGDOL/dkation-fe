@@ -8,7 +8,7 @@ import FileContainer from '@/_components/common/containers/FileContainer';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import DropdownModule from '@/_components/common/modules/DropdownModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
-import { noticeList, NoticeType } from '@/_types/adminType';
+import { noticeTypeConverter, NoticeType } from '@/_types/adminType';
 import FileModule from '@/_components/common/modules/FileModule';
 import ModalModule from '@/_components/common/modules/ModalModule';
 import Image from 'next/image';
@@ -18,7 +18,7 @@ import { usePatchNoticeMutation } from '@/_hooks/admin/usePatchNoticeMutation';
 
 interface NoticeEditPageProps {
   params: {
-    id: string;
+    id: number;
   };
 }
 
@@ -39,29 +39,31 @@ const AdminWriteNoticesEditPage = ({ params }: NoticeEditPageProps) => {
   const router = useRouter();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  const { data, isLoading, isError } = useGetNoticeDetailQuery(Number(id));
+  const { data, isLoading, isError } = useGetNoticeDetailQuery({
+    announcementId: id,
+  });
 
   const [values, setValues] = useState({
-    announcementType: data?.announcementType || '',
-    title: data?.title || '',
-    fileInfos: data?.fileInfos || [],
-    description: data?.description || '',
+    announcementType: data?.announcementDetailInfo.announcementType || '',
+    title: data?.announcementDetailInfo.title || '',
+    fileInfos: data?.announcementDetailInfo.fileInfos || [],
+    description: data?.announcementDetailInfo.description || '',
   });
 
   useEffect(() => {
     if (data) {
       setValues({
-        announcementType: data.announcementType,
-        title: data.title,
-        fileInfos: data.fileInfos || [],
-        description: data.description,
+        announcementType: data.announcementDetailInfo.announcementType,
+        title: data.announcementDetailInfo.title,
+        fileInfos: data.announcementDetailInfo.fileInfos || [],
+        description: data.announcementDetailInfo.description,
       });
     }
   }, [data]);
 
   const handleSelect = (option: string) => {
-    const selectedKey = Object.keys(noticeList).find(
-      (key) => noticeList[key as NoticeType] === option,
+    const selectedKey = Object.keys(noticeTypeConverter).find(
+      (key) => noticeTypeConverter[key as NoticeType] === option,
     ) as NoticeType;
     setValues({ ...values, announcementType: selectedKey });
   };
@@ -95,6 +97,7 @@ const AdminWriteNoticesEditPage = ({ params }: NoticeEditPageProps) => {
   };
 
   const { mutate: PatchNotice } = usePatchNoticeMutation({
+    announcementId: id,
     successCallback: () => {
       setIsEditModalOpen(false);
       router.replace(`/admin/notices`);
@@ -108,7 +111,6 @@ const AdminWriteNoticesEditPage = ({ params }: NoticeEditPageProps) => {
 
   const confirmEdit = () => {
     PatchNotice({
-      announcementId: id,
       title: values.title || '',
       description: values.description || '',
       announcementType: values.announcementType as
@@ -131,10 +133,12 @@ const AdminWriteNoticesEditPage = ({ params }: NoticeEditPageProps) => {
           <div className="flex w-full gap-4">
             <DropdownModule
               size="large"
-              options={Object.values(noticeList)}
+              options={Object.values(noticeTypeConverter)}
               onSelect={handleSelect}
               placeholder="구분 선택"
-              selectedOption={noticeList[values.announcementType as NoticeType]}
+              selectedOption={
+                noticeTypeConverter[values.announcementType as NoticeType]
+              }
             />
             <div className="w-full">
               <InputModule

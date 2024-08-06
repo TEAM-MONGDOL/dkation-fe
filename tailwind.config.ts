@@ -55,6 +55,7 @@ const config: Config = {
         '4xl': '40px',
         '5xl': '50px',
         '6xl': '60px',
+        18: '72px',
       },
       gap: {
         '3xl': '30px',

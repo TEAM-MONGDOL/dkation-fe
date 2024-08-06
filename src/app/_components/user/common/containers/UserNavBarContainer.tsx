@@ -37,14 +37,14 @@ const UserNavBarContainer = () => {
             <Link href={item.href}>
               <p
                 className={
-                  path === item.href
+                  path.startsWith(item.href)
                     ? 'text-center font-semibold'
                     : 'text-center'
                 }
               >
                 {item.text}
               </p>
-              {path === item.href && (
+              {path.startsWith(item.href) && (
                 <div className="h-[3px] w-[100px] translate-y-2 bg-primary" />
               )}
             </Link>

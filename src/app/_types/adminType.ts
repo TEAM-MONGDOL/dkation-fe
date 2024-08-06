@@ -49,7 +49,10 @@ export const ReviewListInfoSchema = z.object({
   reviewList: reviewListInfoSchema.array(),
   pageInfo: pageInfoSchema,
 });
-
+export const fileInfoSchema = z.object({
+  url: z.string(),
+  fileName: z.string(),
+});
 export const wktPlaceDetailShema = z.object({
   wktPlaceDetailInfo: z.object({
     id: z.number(),
@@ -58,7 +61,7 @@ export const wktPlaceDetailShema = z.object({
     maxPeople: z.number(),
     createdAt: z.string(),
     description: z.string(),
-    thumbnailUrls: z.array(z.string().nullable()),
+    fileInfos: fileInfoSchema.array().nullable().optional(),
   }),
 });
 
@@ -157,11 +160,6 @@ export const pointApplyInfoListSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
-export const fileInfoSchema = z.object({
-  url: z.string(),
-  fileName: z.string(),
-});
-
 export const pointApplyDetailInfoSchema = z.object({
   pointApplyId: z.number(),
   name: z.string(),
@@ -207,6 +205,12 @@ export const announcementDetailSchema = z.object({
   title: z.string(),
   description: z.string(),
   fileInfos: fileInfoSchema.array().nullable().optional(),
+});
+
+export const announcementDetailListSchema = z.object({
+  announcementDetailInfo: announcementDetailSchema,
+  previousId: z.number().nullable().optional(),
+  postId: z.number().nullable().optional(),
 });
 
 export const applyStatusSchema = z.union([
@@ -330,6 +334,14 @@ export type PointRewardType = 'PERSONAL' | 'GROUP';
 
 export type NoticeType = 'ANNOUNCEMENT' | 'RESULT' | 'EVENT';
 
+export const noticeTypeList: NoticeType[] = ['ANNOUNCEMENT', 'RESULT', 'EVENT'];
+
+export const noticeTypeConverter: { [key in NoticeType]: string } = {
+  ANNOUNCEMENT: '공지',
+  RESULT: '결과 발표',
+  EVENT: '이벤트 안내',
+};
+
 export type ResultType = 'NAME' | 'LOWEST' | 'HIGHEST';
 
 export type WktStatusType = 'PLANNED' | 'ONGOING' | 'CLOSED';
@@ -436,11 +448,7 @@ export const pointRewardList: { [key in PointRewardType]: string } = {
   PERSONAL: '개인',
   GROUP: '단체',
 };
-export const noticeList: { [key in NoticeType]: string } = {
-  ANNOUNCEMENT: '공지',
-  RESULT: '결과 발표',
-  EVENT: '이벤트 안내',
-};
+
 export const resultList: { [key in ResultType]: string } = {
   NAME: '가나다순',
   LOWEST: '확률 낮은 순',
