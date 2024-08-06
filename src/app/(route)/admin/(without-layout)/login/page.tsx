@@ -4,6 +4,7 @@ import { DkationLogo } from '@/_assets/icons';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import HeaderModule from '@/_components/common/modules/HeaderModule';
 import InputModule from '@/_components/common/modules/InputModule';
+import { useLoginMutation } from '@/_hooks/common/useLoginMutation';
 import Image from 'next/image';
 import { useState } from 'react';
 
@@ -12,6 +13,15 @@ const AdminLogin = () => {
     email: string;
     password: string;
   }>({ email: '', password: '' });
+
+  const { mutate: tryLogin } = useLoginMutation({
+    successCallback: (data) => {
+      console.log(data);
+    },
+    errorCallback: (error) => {
+      console.log(error);
+    },
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -26,7 +36,13 @@ const AdminLogin = () => {
             <Image src={DkationLogo} alt="company_logo" width={300} />
             <span className="text-2xl font-bold">관리자 로그인</span>
           </div>
-          <form className="flex w-full flex-col items-center justify-center gap-y-4xl">
+          <form
+            className="flex w-full flex-col items-center justify-center gap-y-4xl"
+            onSubmit={(e) => {
+              e.preventDefault();
+              tryLogin(form);
+            }}
+          >
             <div className="flex w-full flex-col items-center gap-y-3">
               <InputModule
                 type="text"
