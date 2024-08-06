@@ -8,7 +8,10 @@ interface UserFilteringAtomProps {
 
 const UserFilteringAtom = ({ type, onClick }: UserFilteringAtomProps) => {
   return (
-    <button className="flex items-center justify-center gap-x-2.5 rounded-lg border border-sub-100 px-[14px] py-[7px]">
+    <button
+      className="flex items-center justify-center gap-x-2.5 rounded-lg border border-sub-100 px-[14px] py-[7px]"
+      onClick={onClick}
+    >
       <Image
         src={type === 'FILTER' ? FilterIcon : IsolationModeIcon}
         alt="filter"
