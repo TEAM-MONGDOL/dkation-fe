@@ -1,15 +1,20 @@
 import { useQuery } from '@tanstack/react-query';
-import { announcementDetailSchema } from '@/_types/adminType';
+import { announcementDetailListSchema } from '@/_types/adminType';
 import api from '../Axios';
 
 export const useGetNoticeDetailQueryKey = 'useGetNoticeDetailQuery';
 
-export const useGetNoticeDetailQuery = (id: number) => {
+export const useGetNoticeDetailQuery = ({
+  announcementId,
+}: {
+  announcementId: number;
+}) => {
   return useQuery({
-    queryKey: [useGetNoticeDetailQueryKey, id],
+    queryKey: [useGetNoticeDetailQueryKey, announcementId],
     queryFn: async () => {
-      const res = await api.get(`/api/announcement/${id}`);
-      return announcementDetailSchema.parse(res.data.data);
+      const res = await api.get(`/api/announcement/${announcementId}`);
+      console.log('api response : ', res.data);
+      return announcementDetailListSchema.parse(res.data.data);
     },
   });
 };
