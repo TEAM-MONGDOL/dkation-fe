@@ -79,10 +79,16 @@ const UserNoticePage = () => {
                 <UserStateFilteringContainer
                   type="NOTICE"
                   selectedOption={selectedState}
-                  onClickOption={setSelectedState}
+                  onClickOption={(newFilter) => {
+                    setSelectedState(newFilter);
+                    setParam((prevParam) => ({
+                      ...prevParam,
+                      noticeType: [newFilter],
+                    }));
+                  }}
                 />
               ),
-              onRefresh: () => console.log('refresh'),
+              onRefresh: () => {}, // 추후 수정 예정
             }}
             orderOption={{
               onClickOrder: () =>
@@ -96,7 +102,13 @@ const UserNoticePage = () => {
                   { key: 'createdAt,ASC', value: '오래된순' },
                 ],
                 selectedOrder,
-                setSelectedOrder,
+                setSelectedOrder: (newOrder) => {
+                  setSelectedOrder(newOrder);
+                  setParam((prevParam) => ({
+                    ...prevParam,
+                    order: newOrder.split(',')[1],
+                  }));
+                },
               },
             }}
           />
