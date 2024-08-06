@@ -28,7 +28,9 @@ const UserFAQModule = ({ title, content }: UserFAQModuleProps) => {
         />
       </div>
       <div
-        className={`transition-max-height overflow-hidden duration-300 ease-in-out ${isOpen ? 'max-h-96' : 'max-h-0'}`}
+        className={`transition-max-height overflow-hidden duration-500 ease-in-out ${
+          isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
+        }`}
       >
         <div className="my-2 bg-sub-100/10 px-3xl py-6 text-sub-300">
           <UserFAQText text={content} />
