@@ -11,7 +11,7 @@ import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
 import UserShowDetailButtonAtom from '@/_components/user/common/atoms/UserShowDetailButtonAtom';
 import UserTextLabelAtom from '@/_components/user/common/atoms/UserTextLabelAtom';
-import { noticeTypeConverter } from '@/_types/adminType'; // Adjust the path as necessary
+import { noticeTypeConverter } from '@/_types/adminType';
 import UserFilteringSectionContainer from '@/_components/user/common/containers/UserFilteringSectionContainer';
 import UserStateFilteringContainer from '@/_components/user/common/containers/UserStateFilteringContainer';
 
