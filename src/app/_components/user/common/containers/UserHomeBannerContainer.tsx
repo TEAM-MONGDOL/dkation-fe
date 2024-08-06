@@ -8,7 +8,7 @@ export interface HomeBannerProps {
 
 const UserHomeBannerContainer = ({ title, link }: HomeBannerProps) => {
   return (
-    <div className="bg-button flex h-[74px] items-center justify-center gap-7 text-white">
+    <div className="flex h-[74px] items-center justify-center gap-7 bg-button text-white">
       <UserHomeBannerTitleAtom title={title} />
       <UserHomeBannerButtonAtom link={link} />
     </div>
