@@ -6,6 +6,7 @@ import { StarRateIcon } from '@/_assets/icons';
 import UserFilteringAtom from '@/_components/user/common/atoms/UserFilteringAtom';
 import UserFilteringSectionContainer from '@/_components/user/common/containers/UserFilteringSectionContainer';
 import UserStateFilteringContainer from '@/_components/user/common/containers/UserStateFilteringContainer';
+import { ReviewInfo } from '@/_constants/common';
 
 const WkReviewInfo = () => {
   const [isFilteringSectionOpen, setIsFilteringSectionOpen] = useState<
@@ -48,7 +49,7 @@ const WkReviewInfo = () => {
                 <Image src={StarRateIcon} alt="StarRateIcon" />
                 <Image src={StarRateIcon} alt="StarRateIcon" />
               </div>
-              <p>5점(정말 최고에요)</p>
+              <p>5점({ReviewInfo['5']})</p>
             </div>
           </div>
           <hr />
