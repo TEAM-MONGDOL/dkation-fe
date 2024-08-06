@@ -6,7 +6,7 @@ import PaginationModule from '@/_components/common/modules/PaginationModule';
 import FilteringButtonAtom from '@/_components/common/atoms/FilteringButtonAtom';
 import { ExtensionIcon } from '@/_assets/icons';
 import SubtitleModule from '@/_components/common/modules/SubtitleModule';
-import { orderList, pointOrderList, statusList } from '@/_types/adminType';
+import { applyStatusList, orderList, pointOrderList } from '@/_types/adminType';
 import { DatePickerTagType } from '@/_types/commonType';
 import RadioButtonContainer from '@/_components/common/containers/RadioButtonContainer';
 import DatePickerContainer from '@/_components/common/containers/DatePickerContainer';
@@ -181,7 +181,7 @@ const AdminMembersWkHistoryPage = ({ params }: Props) => {
         <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         <CheckboxContainer
           title="진행 상태"
-          options={Object.entries(statusList) as [string, string][]}
+          options={Object.entries(applyStatusList) as [string, string][]}
           selectedOptions={param.type}
           setSelectedOptions={(type: string[]) => setParam({ ...param, type })}
         />
