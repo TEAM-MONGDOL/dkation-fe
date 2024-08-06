@@ -45,6 +45,7 @@ const Workation = () => {
       <div className="mr-24 mt-8 flex justify-end">
         <UserFilteringSectionContainer
           filterOption={{
+            type: 'FILTER',
             onClickFilter: () => {
               setIsFilteringSectionOpen(
                 isFilteringSectionOpen === 'FILTER' ? null : 'FILTER',
