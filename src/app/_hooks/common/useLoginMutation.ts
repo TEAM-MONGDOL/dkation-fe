@@ -9,7 +9,7 @@ export const useLoginMutation = ({
   errorCallback?: (error: Error) => void;
 }) => {
   return useMutation({
-    mutationFn: async (request: { email: string; password: string }) => {
+    mutationFn: async (request: { accountId: string; password: string }) => {
       const response = await api.post('/api/auth/login', request);
       return response.data;
     },
