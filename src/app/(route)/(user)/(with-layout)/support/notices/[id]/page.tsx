@@ -80,18 +80,20 @@ const UserNoticeDetailPage = () => {
           {data.postId && (
             <div className={`border-y ${!data.previousId ? '' : ''}`}>
               <UserNavigationButtonAtom
-                text="다음 글"
+                text="다음글"
                 iconSrc={UserNextNoticeButton}
-                onClick={() => router.push(`/notice/${data.postId}`)}
+                onClick={() => router.push(`/support/notices/${data.postId}`)}
               />
             </div>
           )}
           {data.previousId && (
             <div className={`border-y ${data.postId ? 'border-t-0' : ''}`}>
               <UserNavigationButtonAtom
-                text="이전 글"
+                text="이전글"
                 iconSrc={UserPreviousNoticeButton}
-                onClick={() => router.push(`/notice/${data.previousId}`)}
+                onClick={() =>
+                  router.push(`/support/notices/${data.previousId}`)
+                }
               />
             </div>
           )}
