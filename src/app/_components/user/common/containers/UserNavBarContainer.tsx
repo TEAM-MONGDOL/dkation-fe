@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import logo from '@/_assets/images/logo.png';
 import UserNavButtonAtom from '@/_components/user/common/atoms/UserNavButtonAtom';
+import Link from 'next/link';
 
 const UserNavBarContainer = () => {
   const [path, setPath] = useState('');
@@ -15,17 +16,12 @@ const UserNavBarContainer = () => {
   }, []);
 
   const menuItems = [
-    { href: '/', text: '홈' },
+    { href: '/home', text: '홈' },
     { href: '/workation', text: '워케이션' },
     { href: '/point', text: '포인트' },
     { href: '/support', text: '고객지원' },
     { href: '/mypage', text: '마이페이지' },
   ];
-
-  const handleNavigation = (href: string) => {
-    router.push(href);
-  };
-
   return (
     <div className="mx-28 mt-2 flex h-20 items-center">
       <div className="mr-28 flex">
@@ -38,10 +34,20 @@ const UserNavBarContainer = () => {
             key={item.href}
             className="flex h-20 w-[90px] cursor-pointer flex-col items-center justify-center gap-2"
           >
-            <p className={path === item.href ? 'font-bold' : ''}>{item.text}</p>
-            {path === item.href && (
-              <div className="h-[3px] w-[100px] bg-primary" />
-            )}
+            <Link href={item.href}>
+              <p
+                className={
+                  path === item.href
+                    ? 'text-center font-semibold'
+                    : 'text-center'
+                }
+              >
+                {item.text}
+              </p>
+              {path === item.href && (
+                <div className="h-[3px] w-[100px] translate-y-2 bg-primary" />
+              )}
+            </Link>
           </div>
         ))}
       </div>
