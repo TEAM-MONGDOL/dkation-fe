@@ -22,3 +22,11 @@ export const ServiceInfo = {
   businessRegistrationNumber: '606-87-00134',
   communicationSalesReportNumber: '2020-성남분당A-1114',
 };
+
+export const ReviewInfo = {
+  5: '정말 최고예요 🥰',
+  4: '아주 좋아요 😊',
+  3: '적당해요 🙂',
+  2: '그저 그래요 😞',
+  1: '별로예요 😨',
+};
