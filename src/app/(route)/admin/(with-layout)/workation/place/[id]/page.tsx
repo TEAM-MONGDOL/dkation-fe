@@ -14,18 +14,19 @@ import Image from 'next/image';
 import logo from '@/_assets/images/logo_imsy.png';
 import { useDeleteWkPlaceMutation } from '@/_hooks/admin/useDeleteWkPlaceQuery';
 
-interface FileItem {
-  name: string;
-  url: string;
-  type: 'image' | 'other';
-}
-
 interface WkPlaceDetailProps {
   params: { id: number };
 }
+const getFileType = (url: string | undefined) => {
+  if (!url) return 'other';
+  const extension = url.split('.').pop()?.toLowerCase();
+  const imageExtensions = ['jpg', 'jpeg', 'png'];
+  return extension && imageExtensions.includes(extension) ? 'image' : 'other';
+};
+
 const AdminWorkationPlaceDetailPage = ({ params }: WkPlaceDetailProps) => {
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const { id } = params;
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const { data, isLoading, isError } = useGetWkPlaceDetailQuery({
     wktPlaceId: id,
   });
@@ -73,30 +74,34 @@ const AdminWorkationPlaceDetailPage = ({ params }: WkPlaceDetailProps) => {
         />
       </div>
       <div className="py-4">
-        {data.wktPlaceDetailInfo.thumbnailUrls.length > 0 && (
+        {data.wktPlaceDetailInfo.fileInfos &&
+        data.wktPlaceDetailInfo.fileInfos.length > 0 ? (
           <div className="py-2">
             <div className="flex flex-col gap-2">
-              {/* 파일업로드 수정 시 변경정예정 */}
-              {/* {data.thumbnailUrls.map((file) => ( */}
-              {/*  <FileModule */}
-              {/*    key={file.length} */}
-              {/*    fileName={file.name} */}
-              {/*    fileType={file.type} */}
-              {/*    fileUrl={file.url} */}
-              {/*    buttonType="download" */}
-              {/*    onDownload={() => console.log(`Edit ${file.name}`)} // 추후 수정 예정 */}
-              {/*  /> */}
-              {/* ))} */}
+              {data.wktPlaceDetailInfo.fileInfos.map((file, index) => {
+                const fileType = getFileType(file.url);
+                return (
+                  <div key={file.url} className="flex items-center gap-2">
+                    <FileModule
+                      preview={file.url}
+                      fileName={file.fileName}
+                      fileType={fileType}
+                      buttonType="download"
+                    />
+                  </div>
+                );
+              })}
             </div>
           </div>
-        )}
-      </div>{' '}
+        ) : null}
+      </div>
       <div>
         <p className="mb-4 text-3 font-bold">상세 내용</p>
         <TextAreaModule
           readonly
+          placeholder="내용이 존재하지 않습니다."
           size="MEDIUM"
-          name="상세내용"
+          name="description"
           value={data.wktPlaceDetailInfo.description}
         />
       </div>
