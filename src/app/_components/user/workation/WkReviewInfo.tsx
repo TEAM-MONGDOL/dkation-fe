@@ -1,14 +1,39 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { StarRateIcon } from '@/_assets/icons';
 import UserFilteringAtom from '@/_components/user/common/atoms/UserFilteringAtom';
+import UserFilteringSectionContainer from '@/_components/user/common/containers/UserFilteringSectionContainer';
+import UserStateFilteringContainer from '@/_components/user/common/containers/UserStateFilteringContainer';
 
 const WkReviewInfo = () => {
+  const [isFilteringSectionOpen, setIsFilteringSectionOpen] = useState<
+    'FILTER' | 'ORDER' | null
+  >(null);
+  const [selectedOrder, setSelectedOrder] = useState<string>('createdAt,DESC');
+
   return (
     <div>
-      {/* 필터링 추가예정 */}
-      <UserFilteringAtom type="SORT" onClick={() => {}} />
-      <div className="rounded-lg border">
+      <UserFilteringSectionContainer
+        orderOption={{
+          onClickOrder: () => {
+            setIsFilteringSectionOpen(
+              isFilteringSectionOpen === 'ORDER' ? null : 'ORDER',
+            );
+          },
+          isOrderOpen: isFilteringSectionOpen === 'ORDER',
+          orderProps: {
+            orders: [
+              { key: 'createdAt,DESC', value: '최신순' },
+              { key: 'createdAt,ASC', value: '오래된순' },
+            ],
+            selectedOrder,
+            setSelectedOrder,
+          },
+        }}
+      />
+      <div className="mt-5 rounded-lg border">
         <div className="flex flex-col px-8">
           <div className="my-5 flex items-center">
             <p className="mr-4 text-h3 font-semibold">홍길동</p>
