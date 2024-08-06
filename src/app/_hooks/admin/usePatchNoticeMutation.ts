@@ -4,7 +4,6 @@ import { useGetNoticeDetailQueryKey } from '@/_hooks/admin/useGetNoticeDetailQue
 import api from '../Axios';
 
 interface PatchNoticeRequest {
-  announcementId: string;
   title: string;
   description: string;
   announcementType: string;
@@ -12,9 +11,11 @@ interface PatchNoticeRequest {
 }
 
 export const usePatchNoticeMutation = ({
+  announcementId,
   successCallback,
   errorCallback,
 }: {
+  announcementId: number;
   successCallback?: () => void;
   errorCallback?: (error: Error) => void;
 }) => {
@@ -22,7 +23,10 @@ export const usePatchNoticeMutation = ({
   return useMutation({
     mutationFn: async (request: PatchNoticeRequest) => {
       try {
-        const response = await api.patch('/api/announcement', request);
+        const response = await api.patch(
+          `/api/announcement/${announcementId}`,
+          request,
+        );
         return response.data;
       } catch (error) {
         console.error('Error patch notice :', error);

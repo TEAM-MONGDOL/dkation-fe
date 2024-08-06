@@ -15,7 +15,7 @@ import { useDeleteNoticeMutation } from '@/_hooks/admin/useDeleteNoticeMutation'
 
 interface NoticeDetailPageProps {
   params: {
-    id: string;
+    id: number;
   };
 }
 
@@ -34,9 +34,11 @@ const NoticeDetailPage = ({ params }: NoticeDetailPageProps) => {
     router.push(`/admin/notices/${id}/edit`);
   };
 
-  const { data, isLoading, isError } = useGetNoticeDetailQuery(Number(id));
+  const { data, isLoading, isError } = useGetNoticeDetailQuery({
+    announcementId: id,
+  });
 
-  const { mutate: DeleteNotice } = useDeleteNoticeMutation({
+  const { mutate: deleteNotice } = useDeleteNoticeMutation({
     successCallback: () => {
       alert('삭제가 완료되었습니다.');
       setIsDeleteModalOpen(false);
@@ -62,15 +64,16 @@ const NoticeDetailPage = ({ params }: NoticeDetailPageProps) => {
                 name="title"
                 placeholder="제목이 존재하지 않습니다."
                 status="readonly"
-                value={data.title}
+                value={data.announcementDetailInfo.title}
               />
             </div>
           </div>
           <div className="py-4">
-            {data.fileInfos && data.fileInfos.length > 0 ? (
+            {data.announcementDetailInfo.fileInfos &&
+            data.announcementDetailInfo.fileInfos.length > 0 ? (
               <div className="py-2">
                 <div className="flex flex-col gap-2">
-                  {data.fileInfos.map((file, index) => {
+                  {data.announcementDetailInfo.fileInfos.map((file, index) => {
                     const fileType = getFileType(file.url);
                     return (
                       <div key={file.url} className="flex items-center gap-2">
@@ -95,7 +98,7 @@ const NoticeDetailPage = ({ params }: NoticeDetailPageProps) => {
               placeholder="내용이 존재하지 않습니다."
               size="LARGE"
               readonly
-              value={data.description}
+              value={data.announcementDetailInfo.description}
             />
           </div>
           <div className="flex justify-end gap-5 pt-14">
@@ -124,7 +127,7 @@ const NoticeDetailPage = ({ params }: NoticeDetailPageProps) => {
                 setIsDeleteModalOpen(false);
               }}
               onConfirm={() => {
-                DeleteNotice(id);
+                deleteNotice(String(id));
               }}
             >
               <div className="flex justify-center">
