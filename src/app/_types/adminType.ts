@@ -49,7 +49,10 @@ export const ReviewListInfoSchema = z.object({
   reviewList: reviewListInfoSchema.array(),
   pageInfo: pageInfoSchema,
 });
-
+export const fileInfoSchema = z.object({
+  url: z.string(),
+  fileName: z.string(),
+});
 export const wktPlaceDetailShema = z.object({
   wktPlaceDetailInfo: z.object({
     id: z.number(),
@@ -58,7 +61,7 @@ export const wktPlaceDetailShema = z.object({
     maxPeople: z.number(),
     createdAt: z.string(),
     description: z.string(),
-    thumbnailUrls: z.array(z.string().nullable()),
+    fileInfos: fileInfoSchema.array().nullable().optional(),
   }),
 });
 
@@ -155,11 +158,6 @@ export const pointApplyInfoSchema = z.object({
 export const pointApplyInfoListSchema = z.object({
   pointApplyInfos: z.array(pointApplyInfoSchema),
   pageInfo: pageInfoSchema,
-});
-
-export const fileInfoSchema = z.object({
-  url: z.string(),
-  fileName: z.string(),
 });
 
 export const pointApplyDetailInfoSchema = z.object({

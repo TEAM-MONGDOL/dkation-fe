@@ -2,26 +2,33 @@
 
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import InputModule from '@/_components/common/modules/InputModule';
-import FileContainer from '@/_components/common/containers/FileContainer';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import FileModule from '@/_components/common/modules/FileModule';
 import ModalModule from '@/_components/common/modules/ModalModule';
 import InfoSectionContainer from '@/_components/common/containers/InfoSectionContainer';
 import { usePatchWkPlaceQuery } from '@/_hooks/admin/usePatchWkPlaceQuery';
 import { useGetWkPlaceDetailQuery } from '@/_hooks/admin/useGetWkPlaceDetailQuery';
 import dayjs from 'dayjs';
+import { usePatchNoticeMutation } from '@/_hooks/admin/usePatchNoticeMutation';
+import FileModule from '@/_components/common/modules/FileModule';
+import FileContainer from '@/_components/common/containers/FileContainer';
 
 interface WkPlaceEditProps {
   params: { id: number };
 }
-interface FileItem {
-  name: string;
+interface FileInfo {
   url: string;
-  type: 'image' | 'other';
+  fileName: string;
 }
+const getFileType = (url: string) => {
+  const parts = url.split('.');
+  const extension = parts.length > 1 ? parts.pop()?.toLowerCase() : '';
+  const imageExtensions = ['jpg', 'jpeg', 'png'];
+  return imageExtensions.includes(extension || '') ? 'image' : 'other';
+};
+
 const AdminWorkationPlaceEditPage = ({ params }: WkPlaceEditProps) => {
   const router = useRouter();
   const { id } = params;
@@ -30,7 +37,6 @@ const AdminWorkationPlaceEditPage = ({ params }: WkPlaceEditProps) => {
     alert('워케이션 장소 수정 완료');
     router.push('/admin/workation/place');
   };
-  const patchWkPlaceQuery = usePatchWkPlaceQuery(id, successCallback);
   const { data, isLoading, isError } = useGetWkPlaceDetailQuery({
     wktPlaceId: id,
   });
@@ -39,9 +45,11 @@ const AdminWorkationPlaceEditPage = ({ params }: WkPlaceEditProps) => {
     address: '',
     maxPeople: 0,
     registrationDate: '',
-    files: [] as string[],
+    fileInfos: data?.wktPlaceDetailInfo.fileInfos || [],
     description: data?.wktPlaceDetailInfo.description,
   });
+  const { mutate: PatchData } = usePatchWkPlaceQuery(id, successCallback);
+
   React.useEffect(() => {
     if (data) {
       setValues({
@@ -51,10 +59,7 @@ const AdminWorkationPlaceEditPage = ({ params }: WkPlaceEditProps) => {
         registrationDate: dayjs(data.wktPlaceDetailInfo.createdAt).format(
           'YYYY.MM.DD',
         ),
-        // files: data.wktPlaceDetailInfo.thumbnailUrls.filter(
-        //   (url: string | null): url is string => url !== null,
-        // ),
-        files: ['https://example.com/images/gangnam_workation.jpg'],
+        fileInfos: data.wktPlaceDetailInfo.fileInfos || [],
         description: data.wktPlaceDetailInfo.description,
       });
     }
@@ -76,27 +81,32 @@ const AdminWorkationPlaceEditPage = ({ params }: WkPlaceEditProps) => {
       [e.target.name]: e.target.value,
     });
   };
-  // const handleFilesChange = (newFiles: File[]) => {
-  //   const fileItems: FileItem[] = newFiles.map((file) => ({
-  //     name: file.name,
-  //     url: URL.createObjectURL(file),
-  //     type: file.type.startsWith('image') ? 'image' : 'other',
-  //   }));
-  //
-  //   setValues({
-  //     ...values,
-  //     // files: fileItems,
-  //   });
-  // };
+  const handleFilesChange = (fileInfos: FileInfo[]) => {
+    setValues((prevValues) => ({
+      ...prevValues,
+      fileInfos: [...prevValues.fileInfos, ...fileInfos],
+    }));
+  };
+  const handleDeleteFile = (index: number) => {
+    setValues((prevValues) => {
+      const updatedFileInfos = prevValues.fileInfos.filter(
+        (_, idx) => idx !== index,
+      );
+      return {
+        ...prevValues,
+        fileInfos: updatedFileInfos,
+      };
+    });
+  };
+
   const handleConfirmEdit = () => {
-    const patchData = {
+    PatchData({
       place: values.placeName,
-      thumbnailUrls: values.files,
+      fileUrls: values.fileInfos.map((file) => file.url),
       maxPeople: values.maxPeople,
       address: values.address,
       description: values.description || '',
-    };
-    patchWkPlaceQuery.mutate(patchData);
+    });
   };
 
   return (
@@ -135,31 +145,29 @@ const AdminWorkationPlaceEditPage = ({ params }: WkPlaceEditProps) => {
         />
       </div>
       <div className="flex flex-col gap-4 py-7">
-        {values.files.length > 0 ? (
-          <div className="flex flex-col gap-2">
-            {/* {values.files.map((file) => ( */}
-            {/*  <FileModule */}
-            {/*    key={file.url} */}
-            {/*    fileName={file.name} */}
-            {/*    fileType={file.type} */}
-            {/*    fileUrl={file.url} */}
-            {/*    buttonType="delete" */}
-            {/*    onDelete={() => console.log(`Delete ${file.name}`)} // 추후 수정 예정 */}
-            {/*  /> */}
-            {/* ))} */}
+        {values.fileInfos.length > 0 && (
+          <div className="py-2">
+            <div className="flex flex-col gap-2">
+              {values.fileInfos.map((file, index) => {
+                const fileType = getFileType(file.url);
+                return (
+                  <div key={file.url} className="flex items-center gap-2">
+                    <FileModule
+                      preview={file.url}
+                      fileName={file.fileName}
+                      fileType={fileType}
+                      buttonType="delete"
+                      onDelete={() => handleDeleteFile(index)}
+                    />
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        ) : (
-          ''
         )}
-        {/* <FileContainer onFileChange={handleFilesChange} /> <div /> */}
-        <p className="mb-4 text-3 font-bold">상세 내용</p>
-        <TextAreaModule
-          placeholder="상세 내용을 입력하세요"
-          size="MEDIUM"
-          maxLength={500}
-          name="상세내용"
-          value={values.description}
-          onChange={handleChange}
+        <FileContainer
+          onFileChange={handleFilesChange}
+          fileDomainType="ANNOUNCEMENT"
         />
       </div>
       <div className="mt-12 flex justify-end gap-5">
@@ -209,5 +217,4 @@ const AdminWorkationPlaceEditPage = ({ params }: WkPlaceEditProps) => {
     </section>
   );
 };
-
 export default AdminWorkationPlaceEditPage;
