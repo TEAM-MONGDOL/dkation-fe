@@ -24,8 +24,13 @@ const PaginationModule = ({
   user,
 }: PageProps) => {
   const [startPage, setStartPage] = useState(1);
+  const MoveToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handlePageClick = (page: number) => {
     setCurrentPage(page);
+    MoveToTop();
   };
   const handleNext = () => {
     const nextStartPage = startPage + 5;
@@ -33,6 +38,7 @@ const PaginationModule = ({
       setStartPage(nextStartPage);
       setCurrentPage(nextStartPage);
     }
+    MoveToTop();
   };
 
   const handlePrev = () => {
@@ -41,6 +47,7 @@ const PaginationModule = ({
       setStartPage(prevStartPage);
       setCurrentPage(prevStartPage);
     }
+    MoveToTop();
   };
 
   const getLeftArrowIcon = () =>
