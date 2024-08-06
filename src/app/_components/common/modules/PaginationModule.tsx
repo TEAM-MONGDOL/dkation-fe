@@ -1,7 +1,7 @@
 'use client';
 
 import PaginationButtonAtom from '@/_components/common/atoms/PaginationButtonAtom';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Image from 'next/image';
 import {
   ChevronLeftBlackIcon,
@@ -24,21 +24,21 @@ const PaginationModule = ({
   user,
 }: PageProps) => {
   const [startPage, setStartPage] = useState(1);
-  const MoveToTop = () => {
+
+  useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  }, [currentPage]);
 
   const handlePageClick = (page: number) => {
     setCurrentPage(page);
-    MoveToTop();
   };
+
   const handleNext = () => {
     const nextStartPage = startPage + 5;
     if (nextStartPage <= totalPages) {
       setStartPage(nextStartPage);
       setCurrentPage(nextStartPage);
     }
-    MoveToTop();
   };
 
   const handlePrev = () => {
@@ -47,7 +47,6 @@ const PaginationModule = ({
       setStartPage(prevStartPage);
       setCurrentPage(prevStartPage);
     }
-    MoveToTop();
   };
 
   const getLeftArrowIcon = () =>
