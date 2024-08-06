@@ -13,7 +13,6 @@ export const useGetNoticeDetailQuery = ({
     queryKey: [useGetNoticeDetailQueryKey, announcementId],
     queryFn: async () => {
       const res = await api.get(`/api/announcement/${announcementId}`);
-      console.log('api response : ', res.data);
       return announcementDetailListSchema.parse(res.data.data);
     },
   });
