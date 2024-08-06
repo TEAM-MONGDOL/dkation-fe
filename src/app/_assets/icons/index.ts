@@ -38,3 +38,5 @@ export { default as FilterIcon } from './filter.svg';
 export { default as DktechinLogo } from './dktechinLogo.svg';
 export { default as DkationLogo } from './dkation.svg';
 export { default as UserShowDetailButtonIcon } from './userShowDetailButton.svg';
+export { default as DkationLogoIllust } from './logoIllust.svg';
+export { default as ErrorIcon } from './error.svg';
