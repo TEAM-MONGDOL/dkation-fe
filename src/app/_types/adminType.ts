@@ -209,6 +209,12 @@ export const announcementDetailSchema = z.object({
   fileInfos: fileInfoSchema.array().nullable().optional(),
 });
 
+export const announcementDetailListSchema = z.object({
+  announcementDetailInfo: announcementDetailSchema,
+  previousId: z.number().nullable().optional(),
+  postId: z.number().nullable().optional(),
+});
+
 export const applyStatusSchema = z.union([
   z.literal('APPLIED'),
   z.literal('RAFFLE_WAIT'),
