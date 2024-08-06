@@ -25,7 +25,7 @@ const UserButtonAtom = ({
     md: 'px-5 py-2.5',
     lg: 'px-7 py-4',
     xl: 'px-9 py-2.5',
-    header: 'px-4 py-2',
+    header: 'rounded-[8px] px-4 py-2',
   };
 
   const buttonStyles = {
