@@ -7,7 +7,7 @@ import api from '@/_hooks/Axios';
 
 interface PatchWkPlaceProps {
   place: string;
-  fileUrls: string[];
+  thumbnailUrls: string[];
   maxPeople: number;
   address: string;
   description: string;
@@ -22,14 +22,14 @@ export const usePatchWkPlaceQuery = (
   return useMutation({
     mutationFn: async ({
       place,
-      fileUrls,
+      thumbnailUrls,
       maxPeople,
       address,
       description,
     }: PatchWkPlaceProps) => {
       const response = await api.patch(`/api/wkt/place/${wktPlaceId}`, {
         place,
-        fileUrls,
+        thumbnailUrls,
         maxPeople,
         address,
         description,

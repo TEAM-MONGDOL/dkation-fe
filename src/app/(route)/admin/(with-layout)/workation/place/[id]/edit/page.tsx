@@ -2,7 +2,6 @@
 
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import InputModule from '@/_components/common/modules/InputModule';
-import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -11,9 +10,9 @@ import InfoSectionContainer from '@/_components/common/containers/InfoSectionCon
 import { usePatchWkPlaceQuery } from '@/_hooks/admin/usePatchWkPlaceQuery';
 import { useGetWkPlaceDetailQuery } from '@/_hooks/admin/useGetWkPlaceDetailQuery';
 import dayjs from 'dayjs';
-import { usePatchNoticeMutation } from '@/_hooks/admin/usePatchNoticeMutation';
 import FileModule from '@/_components/common/modules/FileModule';
 import FileContainer from '@/_components/common/containers/FileContainer';
+import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 
 interface WkPlaceEditProps {
   params: { id: number };
@@ -92,6 +91,7 @@ const AdminWorkationPlaceEditPage = ({ params }: WkPlaceEditProps) => {
       const updatedFileInfos = prevValues.fileInfos.filter(
         (_, idx) => idx !== index,
       );
+      console.log('Files after deletion:', updatedFileInfos);
       return {
         ...prevValues,
         fileInfos: updatedFileInfos,
@@ -102,7 +102,7 @@ const AdminWorkationPlaceEditPage = ({ params }: WkPlaceEditProps) => {
   const handleConfirmEdit = () => {
     PatchData({
       place: values.placeName,
-      fileUrls: values.fileInfos.map((file) => file.url),
+      thumbnailUrls: values.fileInfos.map((file) => file.url),
       maxPeople: values.maxPeople,
       address: values.address,
       description: values.description || '',
@@ -167,7 +167,16 @@ const AdminWorkationPlaceEditPage = ({ params }: WkPlaceEditProps) => {
         )}
         <FileContainer
           onFileChange={handleFilesChange}
-          fileDomainType="ANNOUNCEMENT"
+          fileDomainType="WKT_PLACE"
+        />
+        <p className="mb-4 text-3 font-bold">상세 내용</p>
+        <TextAreaModule
+          placeholder="상세 내용을 입력하세요"
+          size="MEDIUM"
+          maxLength={500}
+          name="상세내용"
+          value={values.description}
+          onChange={handleChange}
         />
       </div>
       <div className="mt-12 flex justify-end gap-5">
