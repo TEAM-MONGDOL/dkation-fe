@@ -3,6 +3,7 @@
 import FileControlButtonAtom from '@/_components/common/atoms/FileControlButtonAtom';
 import ImagePreviewAtom from '@/_components/common/atoms/ImagePreviewAtoms';
 import FileNameAtom from '@/_components/common/atoms/FileNameAtom';
+import { UserDownloadIcon } from '@/_assets/icons';
 
 interface FileModuleProps {
   fileName: string;
@@ -11,6 +12,7 @@ interface FileModuleProps {
   buttonType: 'delete' | 'download';
   onDelete?: () => void;
   onDownload?: () => void;
+  isUser?: boolean;
 }
 
 const FileModule = ({
@@ -20,6 +22,7 @@ const FileModule = ({
   buttonType,
   onDelete,
   onDownload,
+  isUser = false,
 }: FileModuleProps) => {
   const handleClick = () => {
     if (buttonType === 'download') {
@@ -40,7 +43,11 @@ const FileModule = ({
   const buttonTypeClass = buttonType === 'delete' ? 'delete' : 'download';
 
   return (
-    <div className="flex w-full items-center rounded-regular border border-stroke-100 bg-[#F4F4f4] pr-4">
+    <div
+      className={`flex w-full items-center rounded-regular border border-stroke-100 ${
+        isUser ? 'border-0 bg-sub-100/30' : 'bg-[#F4F4f4]'
+      } pr-4`}
+    >
       {fileType === 'image' ? (
         <div className="py-2 pl-2.5">
           <ImagePreviewAtom src={preview} />
@@ -52,7 +59,15 @@ const FileModule = ({
       <div className={`flex-1 ${fileType === 'image' ? 'pl-10' : 'py-4 pl-4'}`}>
         <FileNameAtom fileName={fileName} />
       </div>
-      <FileControlButtonAtom type={buttonTypeClass} onClick={handleClick} />
+      <div className={isUser ? 'px-2' : ''}>
+        <FileControlButtonAtom
+          type={buttonTypeClass}
+          onClick={handleClick}
+          iconSrc={
+            isUser && buttonType === 'download' ? UserDownloadIcon : undefined
+          }
+        />
+      </div>
     </div>
   );
 };
