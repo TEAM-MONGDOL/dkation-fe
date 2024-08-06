@@ -8,7 +8,7 @@ import FileContainer from '@/_components/common/containers/FileContainer';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import DropdownModule from '@/_components/common/modules/DropdownModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
-import { noticeList, NoticeType } from '@/_types/adminType';
+import { NoticeType, noticeTypeConverter } from '@/_types/adminType';
 import { usePostNoticeMutation } from '@/_hooks/admin/usePostNoticeMutation';
 import FileModule from '@/_components/common/modules/FileModule';
 
@@ -31,8 +31,8 @@ const WriteNoticesPage = () => {
   });
 
   const handleSelect = (option: string) => {
-    const selectedKey = Object.keys(noticeList).find(
-      (key) => noticeList[key as NoticeType] === option,
+    const selectedKey = Object.keys(noticeTypeConverter).find(
+      (key) => noticeTypeConverter[key as NoticeType] === option,
     ) as NoticeType;
     setValues({ ...values, announcementType: selectedKey });
   };
@@ -90,10 +90,12 @@ const WriteNoticesPage = () => {
           <div className="flex w-full gap-4">
             <DropdownModule
               size="large"
-              options={Object.values(noticeList)}
+              options={Object.values(noticeTypeConverter)}
               onSelect={handleSelect}
               placeholder="구분 선택"
-              selectedOption={noticeList[values.announcementType as NoticeType]}
+              selectedOption={
+                noticeTypeConverter[values.announcementType as NoticeType]
+              }
             />
             <InputModule
               name="title"

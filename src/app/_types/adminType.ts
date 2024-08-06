@@ -334,6 +334,14 @@ export type PointRewardType = 'PERSONAL' | 'GROUP';
 
 export type NoticeType = 'ANNOUNCEMENT' | 'RESULT' | 'EVENT';
 
+export const noticeTypeList: NoticeType[] = ['ANNOUNCEMENT', 'RESULT', 'EVENT'];
+
+export const noticeTypeConverter: { [key in NoticeType]: string } = {
+  ANNOUNCEMENT: '공지',
+  RESULT: '결과 발표',
+  EVENT: '이벤트 안내',
+};
+
 export type ResultType = 'NAME' | 'LOWEST' | 'HIGHEST';
 
 export type WktStatusType = 'PLANNED' | 'ONGOING' | 'CLOSED';
@@ -440,11 +448,7 @@ export const pointRewardList: { [key in PointRewardType]: string } = {
   PERSONAL: '개인',
   GROUP: '단체',
 };
-export const noticeList: { [key in NoticeType]: string } = {
-  ANNOUNCEMENT: '공지',
-  RESULT: '결과 발표',
-  EVENT: '이벤트 안내',
-};
+
 export const resultList: { [key in ResultType]: string } = {
   NAME: '가나다순',
   LOWEST: '확률 낮은 순',

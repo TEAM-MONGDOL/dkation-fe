@@ -12,7 +12,7 @@ import RadioButtonContainer from '@/_components/common/containers/RadioButtonCon
 import CheckboxContainer from '@/_components/common/containers/CheckboxContainer';
 import DatePickerContainer from '@/_components/common/containers/DatePickerContainer';
 import { DatePickerTagType } from '@/_types/commonType';
-import { noticeList, orderList } from '@/_types/adminType';
+import { noticeTypeConverter, orderList } from '@/_types/adminType';
 import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
 import TableHeaderAtom from '@/_components/common/atoms/TableHeaderAtom';
 import EmptyContainer from '@/_components/common/containers/EmptyContainer';
@@ -100,7 +100,7 @@ const NoticesListPage = () => {
         <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         <CheckboxContainer
           title="분류"
-          options={Object.entries(noticeList) as [string, string][]}
+          options={Object.entries(noticeTypeConverter) as [string, string][]}
           selectedOptions={param.noticeType}
           setSelectedOptions={(noticeType: string[]) =>
             setParam({ ...param, noticeType })
@@ -148,7 +148,7 @@ const NoticesListPage = () => {
               <TableBodyModule key={item.id}>
                 <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
                 <TableBodyAtom>
-                  {noticeList[item.announcementType]}
+                  {noticeTypeConverter[item.announcementType]}
                 </TableBodyAtom>
                 <TableBodyAtom>{item.title}</TableBodyAtom>
                 <TableBodyAtom>
