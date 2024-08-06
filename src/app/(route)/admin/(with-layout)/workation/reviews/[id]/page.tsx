@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { useGetWkReviewListQuery } from '@/_hooks/admin/useGetWkReviewDetailQuery';
 import React from 'react';
 import dayjs from 'dayjs';
+import { usePatchWkReviewMutation } from '@/_hooks/admin/usePatchWkReviewMutation';
 
 interface WkDetailProps {
   params: { id: number };
@@ -16,11 +17,11 @@ interface WkDetailProps {
 const AdminWorkationReviewDetailPage = ({ params }: WkDetailProps) => {
   const router = useRouter();
   const { id } = params;
-
-  const blindReview = () => {
-    router.push('/admin/notices/write');
+  const successCallback = () => {
+    alert('리뷰 블라인드 완료');
+    router.push('/admin/workation/review');
   };
-
+  const patchReviewQuery = usePatchWkReviewMutation(successCallback);
   const { data, isLoading, isError } = useGetWkReviewListQuery({
     reviewId: id,
   });
@@ -33,6 +34,13 @@ const AdminWorkationReviewDetailPage = ({ params }: WkDetailProps) => {
   if (!data) {
     return <div>No data</div>;
   }
+  const handleConfirmBlind = () => {
+    const patchData = {
+      id,
+      blindedType: data.reviewDetailInfo.blindedType,
+    };
+    patchReviewQuery.mutate(patchData);
+  };
 
   return (
     <div className="">
@@ -86,7 +94,7 @@ const AdminWorkationReviewDetailPage = ({ params }: WkDetailProps) => {
           type="submit"
           width="fixed"
           buttonStyle="red"
-          onClick={blindReview}
+          onClick={handleConfirmBlind}
         />
       </div>
     </div>
