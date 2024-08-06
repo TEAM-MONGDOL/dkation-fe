@@ -52,6 +52,7 @@ const UserNoticePage = () => {
           <h2 className="text-h2 font-semibold">공지사항</h2>
           <UserFilteringSectionContainer
             filterOption={{
+              type: 'NOTICE',
               onClickFilter: () =>
                 setIsFilteringSectionOpen(
                   isFilteringSectionOpen === 'FILTER' ? null : 'FILTER',
