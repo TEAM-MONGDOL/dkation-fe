@@ -37,3 +37,4 @@ export { default as IsolationModeIcon } from './isolationMode.svg';
 export { default as FilterIcon } from './filter.svg';
 export { default as DktechinLogo } from './dktechinLogo.svg';
 export { default as DkationLogo } from './dkation.svg';
+export { default as UserShowDetailButtonIcon } from './userShowDetailButton.svg';
