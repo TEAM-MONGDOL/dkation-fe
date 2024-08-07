@@ -17,83 +17,50 @@ import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
 import WkResultSide from '@/(route)/admin/(with-layout)/workation/[id]/result/wkResultSide';
+import { useGetWkResultQuery } from '@/_hooks/admin/useGetWkResultQuery';
 
 interface WkResultProps {
   params: { id: number };
 }
-
-const data = [
-  {
-    id: 1,
-    이름: '홍길동',
-    아이디: 'hong.gil',
-    소속: '개발팀',
-    확률: { text: '3.8%', color: 'text-primaryDark' },
-    상태: { text: '미당첨', color: 'text-gray' },
-  },
-  {
-    id: 2,
-    이름: '홍길동',
-    아이디: 'hong.gil',
-    소속: '개발팀',
-    확률: { text: '3.8%', color: 'text-primaryDark' },
-    상태: { text: '당첨취소', color: 'text-negative' },
-  },
-  {
-    id: 3,
-    이름: '홍길동',
-    아이디: 'hong.gil',
-    소속: '개발팀',
-    확률: { text: '3.8%', color: 'text-primaryDark' },
-    상태: { text: '당첨확정', color: 'text-[#008726]' },
-  },
-];
+//
+// const data = [
+//   {
+//     id: 1,
+//     이름: '홍길동',
+//     아이디: 'hong.gil',
+//     소속: '개발팀',
+//     확률: { text: '3.8%', color: 'text-primaryDark' },
+//     상태: { text: '미당첨', color: 'text-gray' },
+//   },
+//   {
+//     id: 2,
+//     이름: '홍길동',
+//     아이디: 'hong.gil',
+//     소속: '개발팀',
+//     확률: { text: '3.8%', color: 'text-primaryDark' },
+//     상태: { text: '당첨취소', color: 'text-negative' },
+//   },
+//   {
+//     id: 3,
+//     이름: '홍길동',
+//     아이디: 'hong.gil',
+//     소속: '개발팀',
+//     확률: { text: '3.8%', color: 'text-primaryDark' },
+//     상태: { text: '당첨확정', color: 'text-[#008726]' },
+//   },
+// ];
 const AdminWorkationListResultPage = ({ params }: WkResultProps) => {
   const { id } = params;
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
-  const [param, setParam] = useState<{
-    order: string;
-    status: string[];
-    probabilityRange: { min: number; max: number };
-  }>({
-    order: 'NAME',
-    status: [
-      'COMPLETE',
-      'NOTYET',
-      'FAIL',
-      'WAITING',
-      'CANCEL',
-      'SURE',
-      'WAIT',
-      'FINISH',
-    ],
-    probabilityRange: { min: 0, max: 6 },
-  });
-  const refreshHandler = () => {
-    setParam({
-      ...param,
-      order: 'NAME',
-      status: [
-        'COMPLETE',
-        'NOTYET',
-        'FAIL',
-        'WAITING',
-        'CANCEL',
-        'SURE',
-        'WAIT',
-        'FINISH',
-      ],
-      probabilityRange: { min: 0, max: 6 },
-    });
-  };
-  const handleRangeChange = ({ min, max }: { min: number; max: number }) => {
-    setParam((prevParam) => ({
-      ...prevParam,
-      range: { min, max },
-    }));
-  };
+  const { data, isLoading, isError } = useGetWkResultQuery({ wktId: id });
+  if (isLoading) {
+    return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
+  }
+  if (isError) {
+    return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정
+  }
+  if (!data) {
+    return <div>No data</div>;
+  }
   return (
     <section className="flex">
       <WkResultSide id={id} />
@@ -103,7 +70,6 @@ const AdminWorkationListResultPage = ({ params }: WkResultProps) => {
             <Image src={ExtensionIcon} alt="ResultIcon" />
             <p className="text-h3 font-bold">추첨 결과</p>
           </div>
-          <FilteringButtonAtom onClick={() => setIsFilteringBarOpen(true)} />
         </div>
         <TableContainer>
           <TableHeaderModule>
@@ -119,68 +85,27 @@ const AdminWorkationListResultPage = ({ params }: WkResultProps) => {
             </TableHeaderAtom>
           </TableHeaderModule>
           <tbody>
-            {data.length <= 0 ? (
+            {data.wktWinningUserInfos.length <= 0 ? (
               <EmptyContainer colSpan={6} />
             ) : (
-              data.map((item, index) => (
-                <TableBodyModule key={item.id}>
+              data.wktWinningUserInfos.map((item, index) => (
+                <TableBodyModule key={item.accountId}>
                   <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
-                  <TableBodyAtom>{item.이름}</TableBodyAtom>
-                  <TableBodyAtom>{item.아이디}</TableBodyAtom>
-                  <TableBodyAtom>{item.소속}</TableBodyAtom>
-                  <TableBodyAtom color={item.확률.color}>
-                    {item.확률.text}
+                  <TableBodyAtom>{item.name}</TableBodyAtom>
+                  <TableBodyAtom>{item.accountId}</TableBodyAtom>
+                  <TableBodyAtom>{item.department}</TableBodyAtom>
+                  <TableBodyAtom color="text-primaryDart">
+                    {/* {item.확률.text} */}확률
                   </TableBodyAtom>
-                  <TableBodyAtom color={item.상태.color} isLast>
-                    {item.상태.text}
-                  </TableBodyAtom>
+                  {/* <TableBodyAtom color={item.상태.color} isLast> */}
+                  {/*  {item.상태.text} */}
+                  {/* </TableBodyAtom> */}
+                  <TableBodyAtom isLast>상태</TableBodyAtom>
                 </TableBodyModule>
               ))
             )}
           </tbody>
         </TableContainer>
-        <div className="mt-28 flex w-full items-center justify-center">
-          <PaginationModule
-            totalPages={1}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-          />
-        </div>
-        <FilteringBarContainer
-          isOpen={isFilteringBarOpen}
-          setIsOpen={setIsFilteringBarOpen}
-          refreshHandler={refreshHandler}
-        >
-          <RadioButtonContainer
-            title="정렬"
-            options={Object.entries(resultList) as [string, string][]}
-            selectedOption={param.order}
-            setSelectedOption={(order: string) => setParam({ ...param, order })}
-          />
-          <CheckboxContainer
-            title="진행 상태"
-            options={[
-              ['COMPLETE', '신청완료'],
-              ['NOTYET', '추첨대기'],
-              ['FAIL', '미당첨'],
-              ['WAITING', '확정대기'],
-              ['CANCEL', '당첨취소'],
-              ['SURE', '당첨확정'],
-              ['WAIT', '대기'],
-              ['FINISH', '일정종료'],
-            ]}
-            selectedOptions={param.status}
-            setSelectedOptions={(status: string[]) =>
-              setParam({ ...param, status })
-            }
-          />
-          <RangeContainer
-            title="당첨 확률"
-            min={0}
-            max={6}
-            onChange={handleRangeChange}
-          />
-        </FilteringBarContainer>
       </div>
     </section>
   );

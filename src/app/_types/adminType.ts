@@ -36,6 +36,31 @@ export const wkDetailInfoSchema = z.object({
   wktPlaceId: z.number(),
 });
 
+export const wktResultInfoSchema = z.object({
+  totalApply: z.number(),
+  totalRecruit: z.number(),
+  maxPoint: z.number(),
+  minPoint: z.number(),
+  avgPoint: z.number(),
+});
+
+export const wktWinningUserInfosSchema = z.object({
+  penaltyAssignDate: z.string(),
+  name: z.string(),
+  accountId: z.string(),
+  department: z.string(),
+  penaltyType: z.union([
+    z.literal('NOSHOW'),
+    z.literal('REPORT'),
+    z.literal('NEGLIGENCE'),
+    z.literal('ABUSE'),
+  ]),
+});
+export const WkResultInfoSchema = z.object({
+  wktResultInfo: wktResultInfoSchema,
+  wktWinningUserInfos: wktWinningUserInfosSchema.array(),
+});
+
 export const reviewListInfoSchema = z.object({
   id: z.number(),
   reviewer: z.string(),
