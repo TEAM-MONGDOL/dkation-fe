@@ -8,14 +8,21 @@ import React, { useState, useEffect, useRef } from 'react';
 import WkDetailInfo from '@/_components/user/workation/WkDetailInfo';
 import WkResultInfo from '@/_components/user/workation/WkResultInfo';
 import WkReviewInfo from '@/_components/user/workation/WkReviewInfo';
+import { useGetUserWkDetailQuery } from '@/_hooks/user/useGetUserWkDetailQuery';
 
-const UserWkDetailPage = () => {
+interface UserWkDetailProps {
+  params: { id: number };
+}
+const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
+  const { id } = params;
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('상세정보');
   const detailRef = useRef<HTMLDivElement | null>(null);
   const resultRef = useRef<HTMLDivElement | null>(null);
   const reviewRef = useRef<HTMLDivElement | null>(null);
-
+  const { data, isLoading, isError } = useGetUserWkDetailQuery({
+    wktId: id,
+  });
   const handleScroll = () => {
     if (detailRef.current && resultRef.current && reviewRef.current) {
       const detailPos = detailRef.current.getBoundingClientRect().top;
@@ -38,6 +45,15 @@ const UserWkDetailPage = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+  if (isLoading) {
+    return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
+  }
+  if (isError) {
+    return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정
+  }
+  if (!data) {
+    return <div>No data</div>;
+  }
 
   const scrollToSection = (section: string) => {
     if (section === '상세정보' && detailRef.current) {
@@ -57,7 +73,7 @@ const UserWkDetailPage = () => {
         <div className="flex w-full">
           <Image width={402} height={304} src={place} alt="place" />
           <div className="ml-8 flex-col">
-            <p className="mb-3 text-sub-300">2024년 7월 3주차 워케이션</p>
+            <p className="mb-3 text-sub-300">{data.title}</p>
             <h2 className="mb-12 text-h2 font-semibold text-sub-400">양양</h2>
             <p className="mb-4 inline-block rounded-regular border border-primary bg-primary/10 px-5 py-1.5 text-3 text-primary">
               모집인원 : 2명
