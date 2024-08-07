@@ -4,6 +4,7 @@ import { DkationLogo } from '@/_assets/icons';
 import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
 import UserLoginInput from '@/_components/user/login/UserLoginInput';
 import { useLoginMutation } from '@/_hooks/common/useLoginMutation';
+import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import { useState } from 'react';
 
@@ -26,14 +27,19 @@ const Login = () => {
     },
   });
 
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!form.accountId || !form.password) {
       return;
     }
-
-    tryLogin(form);
+    console.log('tryLogin');
+    console.log(form);
+    await signIn('credentials', {
+      accountId: form.accountId,
+      password: form.password,
+      redirect: false,
+    });
   };
 
   return (
