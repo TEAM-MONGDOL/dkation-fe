@@ -16,6 +16,11 @@ import TableHeaderAtom from '@/_components/common/atoms/TableHeaderAtom';
 import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
+import WkResultSide from '@/(route)/admin/(with-layout)/workation/[id]/result/wkResultSide';
+
+interface WkResultProps {
+  params: { id: number };
+}
 
 const data = [
   {
@@ -43,7 +48,8 @@ const data = [
     상태: { text: '당첨확정', color: 'text-[#008726]' },
   },
 ];
-const AdminWorkationListResultPage = () => {
+const AdminWorkationListResultPage = ({ params }: WkResultProps) => {
+  const { id } = params;
   const [currentPage, setCurrentPage] = useState(1);
 
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
@@ -89,91 +95,93 @@ const AdminWorkationListResultPage = () => {
     }));
   };
   return (
-    <section>
-      <div className="mb-6 flex w-full items-center justify-between">
-        <div className="flex gap-2">
-          <Image src={ExtensionIcon} alt="ResultIcon" />
-          <p className="text-h3 font-bold">추첨 결과</p>
+    <section className="flex">
+      <WkResultSide id={id} />
+      <div className="w-full">
+        <div className="mb-6 flex items-center justify-between">
+          <div className="flex gap-2">
+            <Image src={ExtensionIcon} alt="ResultIcon" />
+            <p className="text-h3 font-bold">추첨 결과</p>
+          </div>
+          <FilteringButtonAtom onClick={() => setIsFilteringBarOpen(true)} />
         </div>
-
-        <FilteringButtonAtom onClick={() => setIsFilteringBarOpen(true)} />
+        <TableContainer>
+          <TableHeaderModule>
+            <TableHeaderAtom width="80px" isFirst>
+              번호
+            </TableHeaderAtom>
+            <TableHeaderAtom width="130px">이름</TableHeaderAtom>
+            <TableHeaderAtom>아이디</TableHeaderAtom>
+            <TableHeaderAtom>소속</TableHeaderAtom>
+            <TableHeaderAtom width="100px">확률</TableHeaderAtom>
+            <TableHeaderAtom width="130px" isLast>
+              상태
+            </TableHeaderAtom>
+          </TableHeaderModule>
+          <tbody>
+            {data.length <= 0 ? (
+              <EmptyContainer colSpan={6} />
+            ) : (
+              data.map((item, index) => (
+                <TableBodyModule key={item.id}>
+                  <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
+                  <TableBodyAtom>{item.이름}</TableBodyAtom>
+                  <TableBodyAtom>{item.아이디}</TableBodyAtom>
+                  <TableBodyAtom>{item.소속}</TableBodyAtom>
+                  <TableBodyAtom color={item.확률.color}>
+                    {item.확률.text}
+                  </TableBodyAtom>
+                  <TableBodyAtom color={item.상태.color} isLast>
+                    {item.상태.text}
+                  </TableBodyAtom>
+                </TableBodyModule>
+              ))
+            )}
+          </tbody>
+        </TableContainer>
+        <div className="mt-28 flex w-full items-center justify-center">
+          <PaginationModule
+            totalPages={1}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        </div>
+        <FilteringBarContainer
+          isOpen={isFilteringBarOpen}
+          setIsOpen={setIsFilteringBarOpen}
+          refreshHandler={refreshHandler}
+        >
+          <RadioButtonContainer
+            title="정렬"
+            options={Object.entries(resultList) as [string, string][]}
+            selectedOption={param.order}
+            setSelectedOption={(order: string) => setParam({ ...param, order })}
+          />
+          <CheckboxContainer
+            title="진행 상태"
+            options={[
+              ['COMPLETE', '신청완료'],
+              ['NOTYET', '추첨대기'],
+              ['FAIL', '미당첨'],
+              ['WAITING', '확정대기'],
+              ['CANCEL', '당첨취소'],
+              ['SURE', '당첨확정'],
+              ['WAIT', '대기'],
+              ['FINISH', '일정종료'],
+            ]}
+            selectedOptions={param.status}
+            setSelectedOptions={(status: string[]) =>
+              setParam({ ...param, status })
+            }
+          />
+          <RangeContainer
+            title="당첨 확률"
+            min={0}
+            max={6}
+            onChange={handleRangeChange}
+          />
+        </FilteringBarContainer>
       </div>
-      <TableContainer>
-        <TableHeaderModule>
-          <TableHeaderAtom width="80px" isFirst>
-            번호
-          </TableHeaderAtom>
-          <TableHeaderAtom width="130px">이름</TableHeaderAtom>
-          <TableHeaderAtom>아이디</TableHeaderAtom>
-          <TableHeaderAtom>소속</TableHeaderAtom>
-          <TableHeaderAtom width="100px">확률</TableHeaderAtom>
-          <TableHeaderAtom width="130px" isLast>
-            상태
-          </TableHeaderAtom>
-        </TableHeaderModule>
-        <tbody>
-          {data.length <= 0 ? (
-            <EmptyContainer colSpan={6} />
-          ) : (
-            data.map((item, index) => (
-              <TableBodyModule key={item.id}>
-                <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
-                <TableBodyAtom>{item.이름}</TableBodyAtom>
-                <TableBodyAtom>{item.아이디}</TableBodyAtom>
-                <TableBodyAtom>{item.소속}</TableBodyAtom>
-                <TableBodyAtom color={item.확률.color}>
-                  {item.확률.text}
-                </TableBodyAtom>
-                <TableBodyAtom color={item.상태.color} isLast>
-                  {item.상태.text}
-                </TableBodyAtom>
-              </TableBodyModule>
-            ))
-          )}
-        </tbody>
-      </TableContainer>
-      <div className="mt-28 flex w-full items-center justify-center">
-        <PaginationModule
-          totalPages={1}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-        />
-      </div>
-      <FilteringBarContainer
-        isOpen={isFilteringBarOpen}
-        setIsOpen={setIsFilteringBarOpen}
-        refreshHandler={refreshHandler}
-      >
-        <RadioButtonContainer
-          title="정렬"
-          options={Object.entries(resultList) as [string, string][]}
-          selectedOption={param.order}
-          setSelectedOption={(order: string) => setParam({ ...param, order })}
-        />
-        <CheckboxContainer
-          title="진행 상태"
-          options={[
-            ['COMPLETE', '신청완료'],
-            ['NOTYET', '추첨대기'],
-            ['FAIL', '미당첨'],
-            ['WAITING', '확정대기'],
-            ['CANCEL', '당첨취소'],
-            ['SURE', '당첨확정'],
-            ['WAIT', '대기'],
-            ['FINISH', '일정종료'],
-          ]}
-          selectedOptions={param.status}
-          setSelectedOptions={(status: string[]) =>
-            setParam({ ...param, status })
-          }
-        />
-        <RangeContainer
-          title="당첨 확률"
-          min={0}
-          max={6}
-          onChange={handleRangeChange}
-        />
-      </FilteringBarContainer>
     </section>
   );
 };

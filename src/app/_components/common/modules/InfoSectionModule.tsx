@@ -2,7 +2,7 @@ import InfoContentAtom from '@/_components/common/atoms/InfoContentAtom';
 
 interface InfoSectionModuleProps {
   isStartAlign?: boolean;
-  data: { subtitle: string; content: string }[];
+  data: { subtitle: string; content: string }[] | undefined;
 }
 const InfoSectionModule = ({
   data,
@@ -10,7 +10,7 @@ const InfoSectionModule = ({
 }: InfoSectionModuleProps) => {
   return (
     <div className="flex flex-col gap-5 px-5">
-      {data.map((item, index) => (
+      {data?.map((item, index) => (
         <InfoContentAtom
           key={`data-${item}`}
           data={item}
