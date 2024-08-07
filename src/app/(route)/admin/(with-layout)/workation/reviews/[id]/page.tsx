@@ -17,14 +17,19 @@ interface WkDetailProps {
 const AdminWorkationReviewDetailPage = ({ params }: WkDetailProps) => {
   const router = useRouter();
   const { id } = params;
-  const successCallback = () => {
-    alert('리뷰 블라인드 완료');
-    router.push('/admin/workation/review');
-  };
-  const patchReviewQuery = usePatchWkReviewMutation(successCallback);
   const { data, isLoading, isError } = useGetWkReviewListQuery({
     reviewId: id,
   });
+  const successCallback = () => {
+    alert(
+      data?.reviewDetailInfo.blindedType === 'FALSE'
+        ? '블라인드 완료'
+        : '블라인드 해제 완료',
+    );
+    router.push('/admin/workation/reviews');
+  };
+  const patchReviewQuery = usePatchWkReviewMutation(successCallback);
+
   if (isLoading) {
     return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
   }
@@ -34,10 +39,12 @@ const AdminWorkationReviewDetailPage = ({ params }: WkDetailProps) => {
   if (!data) {
     return <div>No data</div>;
   }
+
   const handleConfirmBlind = () => {
     const patchData = {
       id,
-      blindedType: data.reviewDetailInfo.blindedType,
+      blindedType:
+        data.reviewDetailInfo.blindedType === 'TRUE' ? 'FALSE' : 'TRUE',
     };
     patchReviewQuery.mutate(patchData);
   };
@@ -90,10 +97,16 @@ const AdminWorkationReviewDetailPage = ({ params }: WkDetailProps) => {
       </div>
       <div className="mt-24 flex justify-end">
         <ButtonAtom
-          text="블라인드"
+          text={
+            data.reviewDetailInfo.blindedType === 'FALSE'
+              ? '블라인드'
+              : '블라인드 해제'
+          }
           type="submit"
           width="fixed"
-          buttonStyle="red"
+          buttonStyle={
+            data.reviewDetailInfo.blindedType === 'FALSE' ? 'red' : 'dark'
+          }
           onClick={handleConfirmBlind}
         />
       </div>
