@@ -60,10 +60,11 @@ const UserNoticeDetailPage = ({ params }: NoticeDetailPageProps) => {
                 data.announcementDetailInfo.createdAt,
               ).format('YYYY.MM.DD')}
             />
-            <div className="py-5">
+            <div className="py-2.5">
               {data.announcementDetailInfo.fileInfos &&
-              data.announcementDetailInfo.fileInfos.length > 0
-                ? data.announcementDetailInfo.fileInfos.map((file) => (
+              data.announcementDetailInfo.fileInfos.length > 0 ? (
+                <div className="space-y-1.5">
+                  {data.announcementDetailInfo.fileInfos.map((file) => (
                     <FileModule
                       isUser
                       key={file.url}
@@ -78,8 +79,9 @@ const UserNoticeDetailPage = ({ params }: NoticeDetailPageProps) => {
                       preview={file.url}
                       buttonType="download"
                     />
-                  ))
-                : null}
+                  ))}
+                </div>
+              ) : null}
             </div>
             <div className="border-t border-t-sub-100">
               <p className="whitespace-pre-line py-5 pl-3">
