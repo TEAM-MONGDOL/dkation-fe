@@ -207,6 +207,7 @@ export const announcementDetailSchema = z.object({
   title: z.string(),
   description: z.string(),
   fileInfos: fileInfoSchema.array().nullable().optional(),
+  createdAt: z.string().optional(),
 });
 
 export const applyStatusSchema = z.union([
