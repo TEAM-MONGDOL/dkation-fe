@@ -50,7 +50,7 @@ const UserNoticePage = () => {
   const [selectedOrder, setSelectedOrder] = useState<string>('createdAt,DESC');
 
   const { data, isLoading, isError } = useGetNoticeListQuery({
-    type: param.noticeType.join(','),
+    types: param.noticeType.join(','),
     startDate: startDate
       ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
       : undefined,
@@ -63,7 +63,7 @@ const UserNoticePage = () => {
   });
 
   return (
-    <section className="pt-18 px-40">
+    <section className="px-40 pt-18">
       <div className="flex flex-col gap-y-14">
         <div className="flex justify-between">
           <h2 className="text-h2 font-semibold">공지사항</h2>
