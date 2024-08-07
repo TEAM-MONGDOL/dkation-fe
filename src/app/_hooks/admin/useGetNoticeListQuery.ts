@@ -5,12 +5,12 @@ import api from '../Axios';
 export const useGetNoticeListQueryKey = 'useGetNoticeListQuery';
 
 export const useGetNoticeListQuery = ({
-  type,
+  types,
   startDate,
   endDate,
   pageParam,
 }: {
-  type?: string;
+  types?: string;
   startDate?: string;
   endDate?: string;
   pageParam: {
@@ -20,11 +20,11 @@ export const useGetNoticeListQuery = ({
   };
 }) => {
   return useQuery({
-    queryKey: [useGetNoticeListQueryKey, type, startDate, endDate, pageParam],
+    queryKey: [useGetNoticeListQueryKey, types, startDate, endDate, pageParam],
     queryFn: async () => {
       const res = await api.get('api/announcement', {
         params: {
-          type,
+          types,
           startDate,
           endDate,
           ...pageParam,

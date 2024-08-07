@@ -65,6 +65,22 @@ export const wktPlaceDetailShema = z.object({
   }),
 });
 
+export const wktReviewDetailShema = z.object({
+  reviewDetailInfo: z.object({
+    id: z.number(),
+    reviewer: z.string(),
+    department: z.string(),
+    wktTitle: z.string(),
+    wktPlace: z.string(),
+    rating: z.number(),
+    lastModifiedAt: z.string(),
+    contents: z.string(),
+    imageUrls: z.array(z.string().nullable()),
+    blindedType: z.union([z.literal('TRUE'), z.literal('FALSE')]),
+    openedType: z.union([z.literal('TRUE'), z.literal('FALSE')]),
+  }),
+});
+
 export const pointSupplyTypeSchema = z.union([
   z.literal('PERSONAL'),
   z.literal('GROUP'),
@@ -205,6 +221,7 @@ export const announcementDetailSchema = z.object({
   title: z.string(),
   description: z.string(),
   fileInfos: fileInfoSchema.array().nullable().optional(),
+  createdAt: z.string().optional(),
 });
 
 export const announcementDetailListSchema = z.object({
