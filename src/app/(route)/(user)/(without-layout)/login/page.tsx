@@ -3,7 +3,6 @@
 import { DkationLogo } from '@/_assets/icons';
 import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
 import UserLoginInput from '@/_components/user/login/UserLoginInput';
-import { useLoginMutation } from '@/_hooks/common/useLoginMutation';
 import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -21,12 +20,6 @@ const Login = () => {
     });
   };
 
-  const { mutate: tryLogin } = useLoginMutation({
-    successCallback: () => {
-      console.log('로그인 성공');
-    },
-  });
-
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -35,11 +28,25 @@ const Login = () => {
     }
     console.log('tryLogin');
     console.log(form);
-    await signIn('credentials', {
+    const result = await signIn('credentials', {
       accountId: form.accountId,
       password: form.password,
       redirect: false,
     });
+
+    if (result?.error) {
+      console.log('로그인 실패');
+      console.log(result);
+    } else {
+      const response = await fetch('/api/auth/session');
+      const session = await response.json();
+
+      if (session.user.isAdmin) {
+        window.location.href = '/admin';
+      } else {
+        window.location.href = '/';
+      }
+    }
   };
 
   return (
