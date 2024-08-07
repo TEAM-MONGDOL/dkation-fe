@@ -19,7 +19,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={notoSansKR.className}>
-        <ReactQueryProvider>{children}</ReactQueryProvider>
+        <AuthContext>
+          <ReactQueryProvider>{children}</ReactQueryProvider>
+        </AuthContext>
       </body>
     </html>
   );
