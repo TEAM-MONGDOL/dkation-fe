@@ -127,9 +127,13 @@ const AdminWorkationReviewsPage = () => {
                   {item.lastModifiedAt.slice(0, 10)}
                 </TableBodyAtom>
                 <TableBodyAtom
-                  color={item.blindedType ? 'text-positive' : 'text-negative'}
+                  color={
+                    item.blindedType === 'TRUE'
+                      ? 'text-negative'
+                      : 'text-positive'
+                  }
                 >
-                  {item.blindedType ? '등록' : '블라인드'}
+                  {item.blindedType === 'TRUE' ? '블라인드' : '등록'}
                 </TableBodyAtom>
                 <TableBodyAtom isLast>
                   <ShowDetailButtonAtom
