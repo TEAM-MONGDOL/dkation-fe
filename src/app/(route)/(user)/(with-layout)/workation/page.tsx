@@ -113,7 +113,7 @@ const Workation = () => {
     setParam({
       order: 'DESC',
       status: ['PLANNED', 'ONGOING', 'CLOSED'],
-      places: placeOptions.map((place) => place.id.toString()), // Convert id to string
+      places: placeOptions.map((place) => place.id.toString()),
       startDate: null,
       endDate: null,
     });
@@ -124,12 +124,12 @@ const Workation = () => {
   const { data, isLoading, isError } = useGetWkListQuery({
     status: param.status.join(','),
     wktPlaceIdList: param.places.join(','),
-    wktStartDate: param.startDate || '',
-    wktEndDate: param.endDate || '',
+    wktStartDate: param.startDate || null,
+    wktEndDate: param.endDate || null,
     pageParam: {
       page: 1,
       size: 10,
-      sort: `createdAt,${param.order}`,
+      sort: `${param.order}`,
     },
   });
 
