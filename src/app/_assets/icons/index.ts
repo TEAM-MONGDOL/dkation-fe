@@ -40,3 +40,6 @@ export { default as DkationLogo } from './dkation.svg';
 export { default as UserShowDetailButtonIcon } from './userShowDetailButton.svg';
 export { default as DkationLogoIllust } from './logoIllust.svg';
 export { default as ErrorIcon } from './error.svg';
+export { default as UserDownloadIcon } from './userDownload.svg';
+export { default as UserNextNoticeButton } from './userNextNoticeButton.svg';
+export { default as UserPreviousNoticeButton } from './userPreviousNoticeButton.svg';
