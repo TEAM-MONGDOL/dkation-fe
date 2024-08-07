@@ -4,6 +4,7 @@ declare module 'next-auth' {
   interface Session {
     user: {
       name: number;
+      admin: boolean;
       sub: string;
       type: string;
       token: string;
@@ -13,6 +14,5 @@ declare module 'next-auth' {
       jti: string;
     };
     accessToken: string;
-    refreshToken: string;
   }
 }
