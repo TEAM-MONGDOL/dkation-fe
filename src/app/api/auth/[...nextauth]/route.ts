@@ -4,6 +4,7 @@ import NextAuth, { User } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 
 type ExtendedUser = User & {
+  isAdmin: boolean;
   accessToken: string;
 };
 
@@ -17,14 +18,30 @@ const handler = NextAuth({
       },
       async authorize(credentials) {
         console.log('credentials');
-        const authResponse = await api.post('/api/auth/login', credentials);
-        // 토큰+기본 유저 정보가 담겨져 있는 user 객체를 반환
-        console.log(authResponse.data.data);
 
-        if (authResponse.data.data) {
-          return authResponse.data.data;
+        if (!credentials) {
+          throw new Error('로그인 정보가 없습니다.');
         }
-        throw new Error('로그인 실패');
+
+        try {
+          const authResponse = await api.post('/api/auth/login', credentials);
+          console.log(authResponse);
+
+          if (authResponse.data.data) {
+            return {
+              id: authResponse.data.data.accountId, // id 필드 추가
+              ...authResponse.data.data,
+            };
+          }
+          throw new Error(authResponse.data.message);
+        } catch (error) {
+          console.error(error);
+          if (axios.isAxiosError(error) && error.response) {
+            throw new Error(error.response?.data.message || '로그인 실패');
+          } else {
+            throw new Error('로그인 실패');
+          }
+        }
       },
     }),
   ],
@@ -39,6 +56,7 @@ const handler = NextAuth({
         const extendedUser = user as ExtendedUser;
         return {
           ...token,
+          isAdmin: extendedUser.isAdmin,
           accessToken: extendedUser.accessToken,
         };
       }
@@ -54,11 +72,20 @@ const handler = NextAuth({
       // 4.Jwt Callback으로부터 반환받은 token값을 기존 세션에 추가한다
       if (token) {
         /* eslint-disable no-param-reassign */
+        session.expires;
+        session.user.admin = token.isAdmin as boolean;
         session.accessToken = token.accessToken as string;
       }
       console.log(session);
       return session;
     },
+  },
+  pages: {
+    signIn: '/login',
+  },
+  session: {
+    strategy: 'jwt',
+    maxAge: 60 * 60, // 1 hour
   },
   secret: process.env.NEXTAUTH_SECRET,
 });
