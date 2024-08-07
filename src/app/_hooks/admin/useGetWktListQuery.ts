@@ -17,8 +17,8 @@ export const useGetWkListQuery = ({
   wktPlaceIdList?: string;
   applyStartDate?: string;
   applyEndDate?: string;
-  wktStartDate?: string;
-  wktEndDate?: string;
+  wktStartDate?: string | null;
+  wktEndDate?: string | null;
   pageParam: {
     page: number;
     size: number;
