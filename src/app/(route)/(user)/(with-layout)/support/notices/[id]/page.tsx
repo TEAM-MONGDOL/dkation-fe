@@ -11,6 +11,7 @@ import {
 import { useRouter } from 'next/navigation';
 import UserNavigationButtonAtom from '@/_components/user/common/atoms/UserNavigationButtonAtom';
 import { useGetNoticeDetailQuery } from '@/_hooks/admin/useGetNoticeDetailQuery';
+import dayjs from 'dayjs';
 
 interface NoticeDetailPageProps {
   params: {
@@ -55,7 +56,9 @@ const UserNoticeDetailPage = ({ params }: NoticeDetailPageProps) => {
                     .announcementType as keyof typeof noticeTypeConverter
                 ]
               }
-              optionalContent="yyyy.mm.dd"
+              optionalContent={dayjs(
+                data.announcementDetailInfo.createdAt,
+              ).format('YYYY.MM.DD')}
             />
             <div className="py-5">
               {data.announcementDetailInfo.fileInfos &&
