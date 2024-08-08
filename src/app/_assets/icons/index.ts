@@ -43,3 +43,4 @@ export { default as ErrorIcon } from './error.svg';
 export { default as UserDownloadIcon } from './userDownload.svg';
 export { default as UserNextNoticeButton } from './userNextNoticeButton.svg';
 export { default as UserPreviousNoticeButton } from './userPreviousNoticeButton.svg';
+export { default as LocationIcon } from './location.svg';
