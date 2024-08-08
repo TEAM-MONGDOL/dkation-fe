@@ -1,6 +1,5 @@
 import place from '@/_assets/images/place_impy.png';
 import WkBannerPeriodModule from '@/_components/user/common/modules/WkBannerPeriodModule';
-import WkBannerInfoModule from '@/_components/user/common/modules/WkBannerInfoModule';
 import Image from 'next/image';
 import { LocationIcon } from '@/_assets/icons';
 
@@ -28,7 +27,15 @@ const UserWkApplyPage = () => {
           endDate="2020.07.14"
         />
       </div>
-      <div className="px-40" />
+      <div className="px-40">
+        <div>
+          <p className="text-h2 font-semibold">나의 당첨 확률</p>
+          <div className="flex items-end gap-10">
+            <p className="text-[78px] font-bold">2.1%</p>
+            <p className="mb-5 text-h3">±N%</p>
+          </div>
+        </div>
+      </div>
     </section>
   );
 };
