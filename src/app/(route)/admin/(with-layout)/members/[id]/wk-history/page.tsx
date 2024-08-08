@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import TableContainer from '@/_components/common/containers/TableContainer';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
 import FilteringButtonAtom from '@/_components/common/atoms/FilteringButtonAtom';
 import { ExtensionIcon } from '@/_assets/icons';
 import SubtitleModule from '@/_components/common/modules/SubtitleModule';
-import { orderList, pointOrderList, statusList } from '@/_types/adminType';
+import { applyStatusList, orderList, pointOrderList } from '@/_types/adminType';
 import { DatePickerTagType } from '@/_types/commonType';
 import RadioButtonContainer from '@/_components/common/containers/RadioButtonContainer';
 import DatePickerContainer from '@/_components/common/containers/DatePickerContainer';
@@ -17,32 +17,20 @@ import TableHeaderAtom from '@/_components/common/atoms/TableHeaderAtom';
 import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
+import { useGetMemberWkHistoryQuery } from '@/_hooks/admin/useGetMemberWkHistoryQuery';
+import dayjs from 'dayjs';
 
 const wkHistoryOrderList = {
   ...orderList,
   ...pointOrderList,
 };
 
-const data = [
-  {
-    id: 1,
-    워케이션: '9월 2주차 워케이션 : 양양',
-    신청일시: '2024.07.04',
-    배팅포인트: { text: '350 P', color: 'text-primaryDark' },
-    확률: { text: '3.8%', color: 'text-primaryDark' },
-    상태: { text: '신청완료', color: 'text-positive' },
-  },
-  {
-    id: 2,
-    워케이션: '9월 2주차 워케이션 : 양양',
-    신청일시: '2024.07.04',
-    배팅포인트: { text: '350 P', color: 'text-primaryDark' },
-    확률: { text: '3.8%', color: 'text-primaryDark' },
-    상태: { text: '추첨대기', color: 'text-green-700' },
-  },
-];
+interface Props {
+  params: { id: string };
+}
 
-const AdminMembersWkHistoryPage = () => {
+const AdminMembersWkHistoryPage = ({ params }: Props) => {
+  const accountId = params.id;
   const [currentPage, setCurrentPage] = useState(1);
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
   const [selectedDateTag, setSelectedDateTag] =
@@ -53,38 +41,52 @@ const AdminMembersWkHistoryPage = () => {
     order: string;
     type: string[];
   }>({
-    order: 'RECENT',
+    order: 'ASC',
     type: [
       'APPLIED',
-      'DRAW_WAITING',
-      'FAIL',
-      'CONFIRMED_WAITING',
+      'RAFFLE_WAIT',
+      'NO_WINNING',
+      'CONFIRM_WAIT',
       'CANCEL',
       'CONFIRM',
-      'WAITING',
-      'COMPLETED',
+      'WAIT',
+      'VISITED',
     ],
   });
 
   const refreshHandler = () => {
     setParam({
       ...param,
-      order: 'RECENT',
+      order: 'ASC',
       type: [
         'APPLIED',
-        'DRAW_WAITING',
-        'FAIL',
-        'CONFIRMED_WAITING',
+        'RAFFLE_WAIT',
+        'NO_WINNING',
+        'CONFIRM_WAIT',
         'CANCEL',
         'CONFIRM',
-        'WAITING',
-        'COMPLETED',
+        'WAIT',
+        'VISITED',
       ],
     });
     setSelectedDateTag('ALL');
     setStartDate(null);
     setEndDate(null);
   };
+
+  const { data, isLoading, isError } = useGetMemberWkHistoryQuery({
+    accountId,
+    statuses: param.type.join(','),
+    startDate: startDate
+      ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
+      : undefined,
+    endDate: endDate ? dayjs(endDate).format('YYYY-MM-DDTHH:mm:ss') : undefined,
+    pageParam: {
+      page: currentPage,
+      size: 10,
+      sort: `createdAt,${param.order}`,
+    },
+  });
 
   return (
     <section className="flex w-full flex-col gap-y-10">
@@ -111,36 +113,44 @@ const AdminMembersWkHistoryPage = () => {
         </TableHeaderModule>
 
         <tbody>
-          {data.length <= 0 ? (
+          {!data ? (
+            isLoading ? (
+              <EmptyContainer colSpan={6} text="로딩 중입니다..." />
+            ) : (
+              <EmptyContainer colSpan={6} text="error" />
+            )
+          ) : data.pageInfo.totalElements <= 0 ? (
             <EmptyContainer colSpan={6} />
           ) : (
-            data.map((item, index) => (
-              <TableBodyModule key={item.id}>
-                <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
-                <TableBodyAtom>{item.워케이션}</TableBodyAtom>
-                <TableBodyAtom>{item.신청일시}</TableBodyAtom>
-                <TableBodyAtom color={item.배팅포인트.color}>
-                  {item.배팅포인트.text}
-                </TableBodyAtom>
-                <TableBodyAtom color={item.확률.color}>
-                  {item.확률.text}
-                </TableBodyAtom>
-                <TableBodyAtom isLast color={item.상태.color}>
-                  {item.상태.text}
-                </TableBodyAtom>
-              </TableBodyModule>
-            ))
+            [...data.applyInfoList].reverse().map((item, index) => {
+              const { totalElements, pageSize } = data.pageInfo;
+              const currentIndex = (currentPage - 1) * pageSize + index;
+              const descendingIndex = totalElements - currentIndex;
+              return (
+                <TableBodyModule key={item.wktName}>
+                  <TableBodyAtom isFirst>{descendingIndex}</TableBodyAtom>
+                  <TableBodyAtom>{item.wktName}</TableBodyAtom>
+                  <TableBodyAtom>
+                    {dayjs(item.applicationDate).format('YYYY.MM.DD')}
+                  </TableBodyAtom>
+                  <TableBodyAtom>{item.bettingPoint}</TableBodyAtom>
+                  <TableBodyAtom>{item.winningProbability}</TableBodyAtom>
+                  <TableBodyAtom isLast>{item.applyStatusType}</TableBodyAtom>
+                </TableBodyModule>
+              );
+            })
           )}
         </tbody>
       </TableContainer>
-      <div className="flex w-full items-center justify-center">
-        <PaginationModule
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          totalPages={Math.ceil(data.length / 10)}
-        />
-      </div>
-
+      {data && data.pageInfo.totalElements > 0 && (
+        <div className="flex w-full items-center justify-center">
+          <PaginationModule
+            totalPages={data.pageInfo.totalPages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        </div>
+      )}
       <FilteringBarContainer
         isOpen={isFilteringBarOpen}
         setIsOpen={setIsFilteringBarOpen}
@@ -171,7 +181,7 @@ const AdminMembersWkHistoryPage = () => {
         <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         <CheckboxContainer
           title="진행 상태"
-          options={Object.entries(statusList) as [string, string][]}
+          options={Object.entries(applyStatusList) as [string, string][]}
           selectedOptions={param.type}
           setSelectedOptions={(type: string[]) => setParam({ ...param, type })}
         />

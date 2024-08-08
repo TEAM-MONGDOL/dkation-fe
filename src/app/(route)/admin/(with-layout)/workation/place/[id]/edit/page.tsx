@@ -2,52 +2,76 @@
 
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import InputModule from '@/_components/common/modules/InputModule';
-import FileContainer from '@/_components/common/containers/FileContainer';
-import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import FileModule from '@/_components/common/modules/FileModule';
 import ModalModule from '@/_components/common/modules/ModalModule';
 import InfoSectionContainer from '@/_components/common/containers/InfoSectionContainer';
+import { usePatchWkPlaceQuery } from '@/_hooks/admin/usePatchWkPlaceQuery';
+import { useGetWkPlaceDetailQuery } from '@/_hooks/admin/useGetWkPlaceDetailQuery';
 import dayjs from 'dayjs';
+import FileModule from '@/_components/common/modules/FileModule';
+import FileContainer from '@/_components/common/containers/FileContainer';
+import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 
-interface FileItem {
-  name: string;
-  url: string;
-  type: 'image' | 'other';
+interface WkPlaceEditProps {
+  params: { id: number };
 }
-
-const data = {
-  placeName: '양양',
-  address: '강원도 양양군 손양면 도화길 14',
-  maxPeople: '2',
-  registrationDate: '2024.07.14',
-  description: '상세내용입니다.',
-  files: [
-    {
-      name: '첨부파일1.pdf',
-      url: '/file/path/example/file1.pdf',
-      type: 'other',
-    },
-    {
-      name: '첨부파일2.pdf',
-      url: '/file/path/example/file2.pdf',
-      type: 'other',
-    },
-  ] as FileItem[],
+interface FileInfo {
+  url: string;
+  fileName: string;
+}
+const getFileType = (url: string) => {
+  const parts = url.split('.');
+  const extension = parts.length > 1 ? parts.pop()?.toLowerCase() : '';
+  const imageExtensions = ['jpg', 'jpeg', 'png'];
+  return imageExtensions.includes(extension || '') ? 'image' : 'other';
 };
-const AdminWorkationPlaceEditPage = () => {
-  const router = useRouter();
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  const [values, setValues] = useState({
-    placeName: data.placeName,
-    address: data.address,
-    maxPeople: data.maxPeople,
-    registrationDate: data.registrationDate,
-    files: data.files,
+const AdminWorkationPlaceEditPage = ({ params }: WkPlaceEditProps) => {
+  const router = useRouter();
+  const { id } = params;
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const successCallback = () => {
+    alert('워케이션 장소 수정 완료');
+    router.push('/admin/workation/place');
+  };
+  const { data, isLoading, isError } = useGetWkPlaceDetailQuery({
+    wktPlaceId: id,
   });
+  const [values, setValues] = useState({
+    placeName: '',
+    address: '',
+    maxPeople: 0,
+    registrationDate: '',
+    fileInfos: data?.wktPlaceDetailInfo.fileInfos || [],
+    description: data?.wktPlaceDetailInfo.description,
+  });
+  const { mutate: PatchData } = usePatchWkPlaceQuery(id, successCallback);
+
+  React.useEffect(() => {
+    if (data) {
+      setValues({
+        placeName: data.wktPlaceDetailInfo.place,
+        address: data.wktPlaceDetailInfo.address,
+        maxPeople: data.wktPlaceDetailInfo.maxPeople,
+        registrationDate: dayjs(data.wktPlaceDetailInfo.createdAt).format(
+          'YYYY.MM.DD',
+        ),
+        fileInfos: data.wktPlaceDetailInfo.fileInfos || [],
+        description: data.wktPlaceDetailInfo.description,
+      });
+    }
+  }, [data]);
+  if (isLoading) {
+    return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
+  }
+  if (isError) {
+    return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정
+  }
+  if (!data) {
+    return <div>No data</div>;
+  }
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -56,16 +80,32 @@ const AdminWorkationPlaceEditPage = () => {
       [e.target.name]: e.target.value,
     });
   };
-  const handleFilesChange = (newFiles: File[]) => {
-    const fileItems: FileItem[] = newFiles.map((file) => ({
-      name: file.name,
-      url: URL.createObjectURL(file),
-      type: file.type.startsWith('image') ? 'image' : 'other',
+  const handleFilesChange = (fileInfos: FileInfo[]) => {
+    setValues((prevValues) => ({
+      ...prevValues,
+      fileInfos: [...prevValues.fileInfos, ...fileInfos],
     }));
+  };
+  const handleDeleteFile = (index: number) => {
+    setValues((prevValues) => {
+      const updatedFileInfos = prevValues.fileInfos.filter(
+        (_, idx) => idx !== index,
+      );
+      console.log('Files after deletion:', updatedFileInfos);
+      return {
+        ...prevValues,
+        fileInfos: updatedFileInfos,
+      };
+    });
+  };
 
-    setValues({
-      ...values,
-      files: fileItems,
+  const handleConfirmEdit = () => {
+    PatchData({
+      place: values.placeName,
+      thumbnailUrls: values.fileInfos.map((file) => file.url),
+      maxPeople: values.maxPeople,
+      address: values.address,
+      description: values.description || '',
     });
   };
 
@@ -105,30 +145,38 @@ const AdminWorkationPlaceEditPage = () => {
         />
       </div>
       <div className="flex flex-col gap-4 py-7">
-        {values.files.length > 0 ? (
-          <div className="flex flex-col gap-2">
-            {values.files.map((file) => (
-              <FileModule
-                key={file.url}
-                fileName={file.name}
-                fileType={file.type}
-                fileUrl={file.url}
-                buttonType="delete"
-                onDelete={() => console.log(`Delete ${file.name}`)} // 추후 수정 예정
-              />
-            ))}
+        {values.fileInfos.length > 0 && (
+          <div className="py-2">
+            <div className="flex flex-col gap-2">
+              {values.fileInfos.map((file, index) => {
+                const fileType = getFileType(file.url);
+                return (
+                  <div key={file.url} className="flex items-center gap-2">
+                    <FileModule
+                      preview={file.url}
+                      fileName={file.fileName}
+                      fileType={fileType}
+                      buttonType="delete"
+                      onDelete={() => handleDeleteFile(index)}
+                    />
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        ) : (
-          ''
         )}
-        <FileContainer onFileChange={handleFilesChange} /> <div />
+        <FileContainer
+          onFileChange={handleFilesChange}
+          fileDomainType="WKT_PLACE"
+        />
         <p className="mb-4 text-3 font-bold">상세 내용</p>
         <TextAreaModule
           placeholder="상세 내용을 입력하세요"
           size="MEDIUM"
           maxLength={500}
           name="상세내용"
-          value={data.description}
+          value={values.description}
+          onChange={handleChange}
         />
       </div>
       <div className="mt-12 flex justify-end gap-5">
@@ -152,12 +200,7 @@ const AdminWorkationPlaceEditPage = () => {
           title="워케이션 장소를 수정하시겠습니까?"
           confirmText="확인"
           cancelText="취소"
-          onConfirm={() => {
-            //  TODO : 워케이션 장소 수정 API 호출
-            alert('워케이션 장소 수정 완료');
-            setIsEditModalOpen(false);
-            router.push('/admin/workation/place');
-          }}
+          onConfirm={handleConfirmEdit}
           onCancel={() => {
             setIsEditModalOpen(false);
           }}
@@ -174,7 +217,7 @@ const AdminWorkationPlaceEditPage = () => {
               },
               {
                 subtitle: '최대 인원',
-                content: values.maxPeople,
+                content: values.maxPeople.toString(),
               },
             ]}
           />
@@ -183,5 +226,4 @@ const AdminWorkationPlaceEditPage = () => {
     </section>
   );
 };
-
 export default AdminWorkationPlaceEditPage;

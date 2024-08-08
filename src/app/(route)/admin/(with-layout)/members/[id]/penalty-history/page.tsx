@@ -3,7 +3,6 @@
 import TableContainer from '@/_components/common/containers/TableContainer';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import EmptyContainer from '@/_components/common/containers/EmptyContainer';
-import InfoSectionModule from '@/_components/common/modules/InfoSectionModule';
 import { WarningIcon } from '@/_assets/icons';
 import SubtitleModule from '@/_components/common/modules/SubtitleModule';
 import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
@@ -14,49 +13,60 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import ModalModule from '@/_components/common/modules/ModalModule';
 import InputModule from '@/_components/common/modules/InputModule';
-import DropdownModule from '@/_components/common/modules/DropdownModule';
+import { useGetMemberPenaltyHistoryQuery } from '@/_hooks/admin/useGetMemberPenaltyHistoryQuery';
 import dayjs from 'dayjs';
+import InfoContentAtom from '@/_components/common/atoms/InfoContentAtom';
+import { penaltyList } from '@/_types/adminType';
+import { usePostPenaltyMutation } from '@/_hooks/admin/usePostPenaltyMutation';
 
-const headers = [
-  { title: '번호', width: '90px' },
-  { title: '워케이션', flexGrow: true },
-  { title: '사유', width: '200px' },
-  { title: '일시', width: '190px' },
-];
+interface Props {
+  params: { id: string };
+}
 
-const pastPenalties = [
-  {
-    id: 1,
-    워케이션: '9월 2주차 워케이션 : 양양',
-    사유: '노쇼',
-    일시: '2024.07.04',
-  },
-];
-
-const currentPenalty = {
-  워케이션: '9월 2주차 워케이션 : 양양',
-  사유: '노쇼',
-  일시: '2024.07.04',
-  '페널티 기간': '2024.10.04 까지 (3개월)',
+const calculateExpiryDate = (penaltyCount: number, penaltyDate: string) => {
+  const penaltyDateObj = dayjs(penaltyDate);
+  switch (penaltyCount) {
+    case 1:
+      return `${penaltyDateObj.add(6, 'month').format('YYYY.MM.DD')} (6개월)`;
+    case 2:
+      return `${penaltyDateObj.add(12, 'month').format('YYYY.MM.DD')} (12개월)`;
+    case 3:
+      return '영구정지';
+    default:
+      return '';
+  }
 };
 
-// 현재 패널티 데이터를 InfoSectionModule 형식으로 변환
-const transformCurrentPenaltyData = (penalty: any) => {
-  return [
-    { subtitle: '워케이션', content: penalty.워케이션, id: 'workation' },
-    { subtitle: '사유', content: penalty.사유, id: 'reason' },
-    { subtitle: '일시', content: penalty.일시, id: 'date' },
-    { subtitle: '페널티 기간', content: penalty['페널티 기간'], id: 'period' },
-  ];
-};
-
-const AdminMembersPenaltyHistoryPage = () => {
+const AdminMembersPenaltyHistoryPage = ({ params }: Props) => {
+  const accountId = params.id;
   const router = useRouter();
   const [isPenaltyModelOpen, setIsPenaltyModelOpen] = useState(false);
   const [selectedType, setSelectedType] = useState<string>('');
+  const [wktId, setWktId] = useState<number>(0); // State to store wktId
 
-  const transformedCurrentPenaltyData =
-    transformCurrentPenaltyData(currentPenalty);
+  const { data, isLoading, isError } = useGetMemberPenaltyHistoryQuery({
+    accountId,
+  });
+
+  const penaltyInfos = data?.penaltyInfos || [];
+  const mostRecentPenalty = [...penaltyInfos].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+  )[0];
+
+  const expiryDate = mostRecentPenalty
+    ? calculateExpiryDate(penaltyInfos.length, mostRecentPenalty.createdAt)
+    : null;
+
+  const { mutate: PostPenalty } = usePostPenaltyMutation({
+    successCallback: () => {
+      alert('페널티 등록 완료');
+      setIsPenaltyModelOpen(false);
+    },
+    errorCallback: (error) => {
+      alert(`${error.message}`);
+      setIsPenaltyModelOpen(false);
+    },
+  });
 
   return (
     <section className="flex w-full flex-col gap-y-10">
@@ -69,19 +79,49 @@ const AdminMembersPenaltyHistoryPage = () => {
       </div>
       <div className="flex flex-col gap-y-5">
         <p className="text-3 font-bold">현재 페널티</p>
-        {Object.keys(currentPenalty).length === 0 ? (
-          <EmptyContainer />
-        ) : (
+        {!data || data.memberType === 'PENALTY' ? (
           <div className="w-full rounded-regular border border-negative bg-negative bg-opacity-10 px-10 py-5">
-            <div className="grid grid-cols-2 gap-5">
-              {transformedCurrentPenaltyData.slice(0, 2).map((item) => (
-                <InfoSectionModule key={item.id} data={[item]} />
-              ))}
-              {transformedCurrentPenaltyData.slice(2).map((item) => (
-                <InfoSectionModule key={item.id} data={[item]} />
-              ))}
-            </div>
+            {mostRecentPenalty ? (
+              <div className="grid grid-cols-2 gap-4">
+                <InfoContentAtom
+                  data={{
+                    subtitle: '워케이션',
+                    content: mostRecentPenalty.wktName || '',
+                  }}
+                />
+                <InfoContentAtom
+                  data={{
+                    subtitle: '부여 일시',
+                    content:
+                      dayjs(mostRecentPenalty.createdAt).format('YYYY.MM.DD') ||
+                      '',
+                  }}
+                />
+
+                <InfoContentAtom
+                  data={{
+                    subtitle: '사유',
+                    content: penaltyList[mostRecentPenalty.penaltyType] || '',
+                  }}
+                />
+
+                <InfoContentAtom
+                  data={{
+                    subtitle: '페널티 기간',
+                    content: expiryDate || '',
+                  }}
+                />
+              </div>
+            ) : (
+              ''
+            )}
           </div>
+        ) : (
+          <table>
+            <tbody>
+              <EmptyContainer />
+            </tbody>
+          </table>
         )}
       </div>
       <div>
@@ -98,16 +138,23 @@ const AdminMembersPenaltyHistoryPage = () => {
           </TableHeaderModule>
 
           <tbody>
-            {pastPenalties.length <= 0 ||
-            dayjs(pastPenalties[0].일시).add(3, 'month').isBefore(dayjs()) ? (
-              <EmptyContainer colSpan={4} />
+            {!data ? (
+              isLoading ? (
+                <EmptyContainer colSpan={6} text="로딩 중입니다..." />
+              ) : (
+                <EmptyContainer colSpan={6} text="error" />
+              )
+            ) : data.penaltyAmount <= 0 ? (
+              <EmptyContainer colSpan={6} />
             ) : (
-              pastPenalties.map((item, index) => (
-                <TableBodyModule key={item.id}>
+              penaltyInfos.map((item, index) => (
+                <TableBodyModule key={item.wktName}>
                   <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
-                  <TableBodyAtom>{item.워케이션}</TableBodyAtom>
-                  <TableBodyAtom>{item.사유}</TableBodyAtom>
-                  <TableBodyAtom isLast>{item.일시}</TableBodyAtom>
+                  <TableBodyAtom>{item.wktName}</TableBodyAtom>
+                  <TableBodyAtom>{penaltyList[item.penaltyType]}</TableBodyAtom>
+                  <TableBodyAtom isLast>
+                    {dayjs(item.createdAt).format('YYYY.MM.DD')}
+                  </TableBodyAtom>
                 </TableBodyModule>
               ))
             )}
@@ -130,27 +177,27 @@ const AdminMembersPenaltyHistoryPage = () => {
           confirmButtonStyle="dark"
           cancelButtonStyle="yellow"
           onConfirm={() => {
-            alert('페널티 등록 완료');
-            setIsPenaltyModelOpen(false);
-            router.back();
+            PostPenalty({
+              accountId,
+              penaltyType: 'ABUSE',
+            });
           }}
           onCancel={() => {
             setIsPenaltyModelOpen(false);
           }}
         >
-          <InputModule
-            subtitle="해당 워케이션"
-            status="disabled"
-            placeholder="워케이션 없음"
-            value=""
-          />
-          <div className="mt-4 flex flex-col gap-4">
-            <p className="text-3 font-semibold">분류</p>
-            <DropdownModule
-              options={['노쇼', '고성방가', '포인트 정책 오남용']}
-              onSelect={setSelectedType}
-              placeholder="페널티 사유를 선택하세요."
-              selectedOption={selectedType}
+          <div className="flex flex-col gap-4">
+            <InputModule
+              subtitle="해당 워케이션"
+              status="disabled"
+              placeholder="워케이션 없음"
+              value=""
+            />
+
+            <InputModule
+              subtitle="분류"
+              status="readonly"
+              value="포인트 제도 악용"
             />
           </div>
         </ModalModule>

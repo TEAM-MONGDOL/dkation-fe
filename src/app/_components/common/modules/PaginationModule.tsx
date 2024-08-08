@@ -1,7 +1,7 @@
 'use client';
 
 import PaginationButtonAtom from '@/_components/common/atoms/PaginationButtonAtom';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Image from 'next/image';
 import {
   ChevronLeftBlackIcon,
@@ -14,17 +14,25 @@ interface PageProps {
   totalPages: number;
   currentPage: number;
   setCurrentPage: Dispatch<SetStateAction<number>>;
+  user?: boolean;
 }
 
 const PaginationModule = ({
   totalPages,
   currentPage,
   setCurrentPage,
+  user,
 }: PageProps) => {
   const [startPage, setStartPage] = useState(1);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentPage]);
+
   const handlePageClick = (page: number) => {
     setCurrentPage(page);
   };
+
   const handleNext = () => {
     const nextStartPage = startPage + 5;
     if (nextStartPage <= totalPages) {
@@ -58,6 +66,7 @@ const PaginationModule = ({
       <div className="flex">
         {Array.from({ length: endPage - startPage + 1 }, (_, index) => (
           <PaginationButtonAtom
+            user={user}
             key={index}
             onPage={index + startPage === currentPage}
             page={index + startPage}

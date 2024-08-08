@@ -5,7 +5,6 @@ import React, { useState } from 'react';
 import { ImageIcon } from '@/_assets/icons';
 import Image from 'next/image';
 import DropdownModule from '@/_components/common/modules/DropdownModule';
-import { PlaceOptions } from '@/_constants/common';
 import dayjs from 'dayjs';
 import DatePickersModule from '@/_components/common/modules/DatePickersModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
@@ -14,34 +13,29 @@ import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import ModalModule from '@/_components/common/modules/ModalModule';
 import { useRouter } from 'next/navigation';
 import InfoSectionContainer from '@/_components/common/containers/InfoSectionContainer';
+import { useWkNewMutation } from '@/_hooks/admin/useWkNewMutation';
+import { useGetWkPlaceListQuery } from '@/_hooks/admin/useGetWkPlaceListQuery';
 
 const WorkationNew = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     title: '',
     number: '',
     place: '',
     description: '',
   });
-  const handleChange = (e: any) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-  const handleSelect = (option: string) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      place: option,
-    }));
-  };
+  const { data, isLoading, isError } = useGetWkPlaceListQuery({
+    pageParam: {
+      page: 1,
+      size: 100,
+    },
+  });
   const [startDateRecruitment, setStartDateRecruitment] = useState<Date | null>(
     dayjs().subtract(1, 'year').toDate(),
   );
   const [endDateRecruitment, setEndDateRecruitment] = useState<Date | null>(
     dayjs().toDate(),
   );
-
   const [startDateWorkation, setStartDateWorkation] = useState<Date | null>(
     dayjs().subtract(1, 'year').toDate(),
   );
@@ -49,7 +43,64 @@ const WorkationNew = () => {
     dayjs().toDate(),
   );
   const [isConfirmModelOpen, setIsConfirmModelOpen] = useState(false);
-  const router = useRouter();
+  const successCallback = () => {
+    alert('워케이션 등록 완료');
+    router.push('/admin/workation');
+  };
+  const { mutate: postWk } = useWkNewMutation(successCallback);
+
+  if (isLoading) {
+    return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
+  }
+  if (isError) {
+    return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정
+  }
+  if (!data) {
+    return <div>No data</div>;
+  }
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+  const handleSelect = (option: string) => {
+    const selectedPlace = data.wktPlaceInfos.find(
+      (place) => place.place === option,
+    );
+    setFormData((prevValues) => ({
+      ...prevValues,
+      place: selectedPlace ? selectedPlace.id.toString() : '',
+    }));
+  };
+
+  const handleSubmit = () => {
+    const selectedPlace = data.wktPlaceInfos.find(
+      (place) => place.id.toString() === formData.place,
+    );
+    if (!selectedPlace) {
+      alert('선택한 장소를 찾을 수 없습니다.');
+      return;
+    }
+    postWk({
+      wktPlaceId: selectedPlace.id, // 워케이션 목록 api 가져와서 id 주기
+      thumbnailUrl: '썸네일 주소',
+      title: formData.title,
+      address: formData.place, // 주소 삭제 예정
+      startDate: dayjs(startDateWorkation!).format('YYYY-MM-DD'),
+      endDate: dayjs(endDateWorkation!).format('YYYY-MM-DD'),
+      applyStartDate: dayjs(startDateRecruitment!).format('YYYY-MM-DD'),
+      applyEndDate: dayjs(endDateRecruitment!).format('YYYY-MM-DD'),
+      description: formData.description,
+      totalRecruit: parseInt(formData.number, 10),
+    });
+    setIsConfirmModelOpen(false);
+  };
+  const placeOptions = data.wktPlaceInfos.map((place) => place.place);
+
   return (
     <section className="flex flex-col">
       <TitleBarModule title="워케이션 등록" type="LEFT" />
@@ -88,8 +139,12 @@ const WorkationNew = () => {
             <div className="mt-6 flex w-full flex-col gap-4">
               <p className="text-3 font-semibold">장소</p>
               <DropdownModule
-                selectedOption={formData.place}
-                options={PlaceOptions}
+                selectedOption={
+                  data.wktPlaceInfos.find(
+                    (place) => place.id.toString() === formData.place,
+                  )?.place
+                }
+                options={placeOptions}
                 onSelect={handleSelect}
                 placeholder="장소를 선택해주세요."
               />
@@ -128,7 +183,8 @@ const WorkationNew = () => {
             placeholder="상세내용을 입력해주세요."
             size="LARGE"
             maxLength={2000}
-            name="워케이션 상세내용"
+            name="description"
+            onChange={handleChange}
           />
         </div>
       </div>
@@ -146,12 +202,7 @@ const WorkationNew = () => {
           title="워케이션을 등록하시겠습니까?"
           confirmText="확인"
           cancelText="취소"
-          onConfirm={() => {
-            //  TODO : 워케이션 등록 API 호출
-            alert('워케이션 등록 완료');
-            setIsConfirmModelOpen(false);
-            router.push('/admin/workation');
-          }}
+          onConfirm={handleSubmit}
           onCancel={() => {
             setIsConfirmModelOpen(false);
           }}
@@ -164,7 +215,10 @@ const WorkationNew = () => {
               },
               {
                 subtitle: '장소',
-                content: formData.place,
+                content:
+                  data.wktPlaceInfos.find(
+                    (place) => place.id.toString() === formData.place,
+                  )?.place || 'Unknown place',
               },
               {
                 subtitle: '모집 기간',

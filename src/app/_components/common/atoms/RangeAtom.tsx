@@ -5,11 +5,18 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 interface RangeAtomProps {
   min: number;
   max: number;
+  step?: number;
   onChange: ({ min, max }: { min: number; max: number }) => void;
   suffix?: string;
 }
 
-const RangeAtom = ({ min, max, onChange, suffix }: RangeAtomProps) => {
+const RangeAtom = ({
+  min,
+  max,
+  step = 1,
+  onChange,
+  suffix,
+}: RangeAtomProps) => {
   const [minVal, setMinVal] = useState(min);
   const [maxVal, setMaxVal] = useState(max);
   const minValRef = useRef(min);
@@ -45,16 +52,16 @@ const RangeAtom = ({ min, max, onChange, suffix }: RangeAtomProps) => {
   }, [minVal, maxVal]);
 
   return (
-    <div className="w-full flex flex-col items-center justify-center gap-y-1.5">
-      <div className="w-full rounded-full bg-cus-100 h-1 relative my-2.5">
-        <div className="absolute top-0 bottom-0 bg-primary" ref={rangeRef} />
+    <div className="flex w-full flex-col items-center justify-center gap-y-1.5">
+      <div className="relative my-2.5 h-1 w-full rounded-full bg-cus-100">
+        <div className="absolute bottom-0 top-0 bg-primary" ref={rangeRef} />
         <input
-          className="thumb absolute left-0 w-full top-0 bottom-0 bg-transparent pointer-events-none"
+          className="thumb pointer-events-none absolute bottom-0 left-0 top-0 w-full bg-transparent"
           type="range"
           min={min}
           max={max}
           value={minVal}
-          step="1"
+          step={step}
           onChange={(event) => {
             const value = Math.min(Number(event.target.value), maxVal);
             setMinVal(value);
@@ -62,12 +69,12 @@ const RangeAtom = ({ min, max, onChange, suffix }: RangeAtomProps) => {
           }}
         />
         <input
-          className="thumb absolute left-0 w-full top-0 bottom-0 bg-transparent pointer-events-none"
+          className="thumb pointer-events-none absolute bottom-0 left-0 top-0 w-full bg-transparent"
           type="range"
           min={min}
           max={max}
           value={maxVal}
-          step="1"
+          step={step}
           onChange={(event) => {
             const value = Math.max(Number(event.target.value), minVal);
             setMaxVal(value);
@@ -75,7 +82,7 @@ const RangeAtom = ({ min, max, onChange, suffix }: RangeAtomProps) => {
           }}
         />
       </div>
-      <div className="w-full flex items-center justify-between text-4 text-sub-200">
+      <div className="flex w-full items-center justify-between text-4 text-sub-200">
         <span className="text-start">{`${minVal} ${suffix || ''}`}</span>
         <span className="text-end">{`${maxVal} ${suffix || ''}`}</span>
       </div>

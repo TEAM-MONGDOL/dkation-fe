@@ -7,10 +7,17 @@ import {
   RadioButtonUncheckedIcon,
 } from '@/_assets/icons';
 
-const RadioButtonAtom = ({ isChecked }: { isChecked: boolean }) => {
+interface RadioButtonAtomProps {
+  isChecked: boolean;
+  size?: number;
+}
+
+const RadioButtonAtom = ({ isChecked, size = 24 }: RadioButtonAtomProps) => {
   return (
     <div className="inline-block" role="presentation">
       <Image
+        width={size}
+        height={size}
         src={isChecked ? RadioButtonCheckedIcon : RadioButtonUncheckedIcon}
         alt={isChecked ? 'Checked' : 'Unchecked'}
       />

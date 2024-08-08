@@ -13,38 +13,19 @@ import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
 import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAtom';
 import RadioButtonContainer from '@/_components/common/containers/RadioButtonContainer';
-import { LocationList, orderList, reviewOrderList } from '@/_types/adminType';
 import CheckboxContainer from '@/_components/common/containers/CheckboxContainer';
 import FilteringBarContainer from '@/_components/common/containers/FilteringBarContainer';
 import RangeContainer from '@/_components/common/containers/RangeContainer';
+import { useGetWkReviewListQuery } from '@/_hooks/admin/useGetWkReviewListQuery';
+import { StarRateEmptyIcon, StarRateIcon } from '@/_assets/icons';
+import Image from 'next/image';
+import { reviewOrderList } from '@/_types/adminType';
 
-const data = [
-  {
-    id: 1,
-    평점: '⭐⭐⭐⭐⭐',
-    워케이션: '1월 2주차 워케이션 : 양양',
-    작성자: '홍길동',
-    등록일: '2024.05.06',
-    상태: { text: '블라인드', color: 'text-negative' },
-  },
-  {
-    id: 2,
-    평점: '⭐⭐⭐⭐⭐',
-    워케이션: '1월 2주차 워케이션 : 양양',
-    작성자: '홍길동',
-    등록일: '2024.05.06',
-    상태: { text: '등록', color: 'text-positive' },
-  },
-  {
-    id: 3,
-    평점: '⭐⭐⭐⭐⭐',
-    워케이션: '1월 2주차 워케이션 : 양양',
-    작성자: '홍길동',
-    등록일: '2024.05.06',
-    상태: { text: '등록', color: 'text-positive' },
-  },
-];
-
+// 워케이션 장소 목록 api가져와서 변경
+const placeOrderList = {
+  '201': 'Region 1',
+  '202': 'Region 2',
+};
 const AdminWorkationReviewsPage = () => {
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
   const router = useRouter();
@@ -54,43 +35,43 @@ const AdminWorkationReviewsPage = () => {
   const handleFilteringBar = () => {
     setIsFilteringBarOpen(true);
   };
+
   const [currentPage, setCurrentPage] = useState(1);
   const [param, setParam] = useState<{
     order: string;
     type: string[];
+    startPoint: number;
+    endPoint: number;
   }>({
-    order: 'RECENT',
-    type: [
-      'SEOUL',
-      'GANGWON',
-      'CHUNGCEOUNG',
-      'JEONLA',
-      'GYEONGSANG',
-      'JEJU',
-      'ABROAD',
-    ],
+    order: 'ASC',
+    type: Object.keys(placeOrderList),
+    startPoint: 0,
+    endPoint: 5,
   });
+  const getSortField = (order: string) => {
+    if (order === 'STARASC' || order === 'STARDESC') {
+      return `starRating,${order === 'STARASC' ? 'DESC' : 'ASC'}`;
+    }
+    return `lastModifiedAt,${order}`;
+  };
+
   const refreshHandler = () => {
     setParam({
       ...param,
       order: 'RECENT',
-      type: [
-        'SEOUL',
-        'GANGWON',
-        'CHUNGCEOUNG',
-        'JEONLA',
-        'GYEONGSANG',
-        'JEJU',
-        'ABROAD',
-      ],
+      type: Object.keys(placeOrderList),
     });
   };
-  const handleRangeChange = ({ min, max }: { min: number; max: number }) => {
-    setParam((prevParam) => ({
-      ...prevParam,
-      range: { min, max },
-    }));
-  };
+  const { data, isLoading, isError } = useGetWkReviewListQuery({
+    wktPlaceFilter: param.type.join(','),
+    minRating: param.startPoint,
+    maxRating: param.endPoint,
+    pageParam: {
+      page: currentPage,
+      size: 10,
+      sort: getSortField(param.order),
+    },
+  });
   return (
     <div className="flex flex-col">
       <div className="mb-9 flex items-center justify-between">
@@ -110,18 +91,49 @@ const AdminWorkationReviewsPage = () => {
           <TableHeaderAtom width="160px" isLast />
         </TableHeaderModule>
         <tbody>
-          {data.length <= 0 ? (
-            <EmptyContainer colSpan={6} />
+          {!data ? (
+            isLoading ? (
+              <EmptyContainer colSpan={7} text="loading" />
+            ) : (
+              <EmptyContainer colSpan={7} text="no data" />
+            )
+          ) : data.pageInfo.totalElements <= 0 ? (
+            <EmptyContainer colSpan={7} />
           ) : (
-            data.map((item, index) => (
+            data.reviewList.map((item, order) => (
               <TableBodyModule key={item.id}>
-                <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
-                <TableBodyAtom>{item.평점}</TableBodyAtom>
-                <TableBodyAtom>{item.워케이션}</TableBodyAtom>
-                <TableBodyAtom>{item.작성자}</TableBodyAtom>
-                <TableBodyAtom>{item.등록일}</TableBodyAtom>
-                <TableBodyAtom color={item.상태.color}>
-                  {item.상태.text}
+                <TableBodyAtom isFirst>{order + 1}</TableBodyAtom>
+                <TableBodyAtom>
+                  <div className="flex justify-center">
+                    {[...Array(item.rating)].map((_, index) => (
+                      <Image
+                        key={item.id}
+                        src={StarRateIcon}
+                        alt="StarRateIcon"
+                      />
+                    ))}
+                    {[...Array(5 - item.rating)].map((_, index) => (
+                      <Image
+                        key={item.id}
+                        src={StarRateEmptyIcon}
+                        alt="StarRateEmptyIcon"
+                      />
+                    ))}
+                  </div>
+                </TableBodyAtom>
+                <TableBodyAtom>{item.wktPlace}</TableBodyAtom>
+                <TableBodyAtom>{item.reviewer}</TableBodyAtom>
+                <TableBodyAtom>
+                  {item.lastModifiedAt.slice(0, 10)}
+                </TableBodyAtom>
+                <TableBodyAtom
+                  color={
+                    item.blindedType === 'TRUE'
+                      ? 'text-negative'
+                      : 'text-positive'
+                  }
+                >
+                  {item.blindedType === 'TRUE' ? '블라인드' : '등록'}
                 </TableBodyAtom>
                 <TableBodyAtom isLast>
                   <ShowDetailButtonAtom
@@ -133,13 +145,15 @@ const AdminWorkationReviewsPage = () => {
           )}
         </tbody>
       </TableContainer>
-      <div className="mt-6 flex justify-center">
-        <PaginationModule
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          totalPages={1}
-        />
-      </div>
+      {data && data.pageInfo.totalPages > 0 && (
+        <div className="mt-6 flex justify-center">
+          <PaginationModule
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalPages={1}
+          />
+        </div>
+      )}
       <FilteringBarContainer
         isOpen={isFilteringBarOpen}
         setIsOpen={setIsFilteringBarOpen}
@@ -154,13 +168,15 @@ const AdminWorkationReviewsPage = () => {
         <hr />
         <CheckboxContainer
           title="지역"
-          options={Object.entries(LocationList) as [string, string][]}
+          options={Object.entries(placeOrderList) as [string, string][]}
           selectedOptions={param.type}
           setSelectedOptions={(type: string[]) => setParam({ ...param, type })}
         />
         <hr />
         <RangeContainer
-          onChange={handleRangeChange}
+          onChange={({ min, max }) =>
+            setParam({ ...param, startPoint: min, endPoint: max })
+          }
           title="평점"
           min={0}
           max={5}

@@ -1,5 +1,7 @@
-const User = () => {
-  return <div>user page</div>;
+import React from 'react';
+
+const UserPage = () => {
+  return <div>User Page</div>;
 };
 
-export default User;
+export default UserPage;

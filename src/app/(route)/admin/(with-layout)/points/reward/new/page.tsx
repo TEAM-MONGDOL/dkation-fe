@@ -9,77 +9,82 @@ import InfoSectionContainer from '@/_components/common/containers/InfoSectionCon
 import SelectContainer from '@/_components/common/containers/SelectContainer';
 import TableContainer from '@/_components/common/containers/TableContainer';
 import DropdownModule from '@/_components/common/modules/DropdownModule';
-import InputModule from '@/_components/common/modules/InputModule';
 import ModalModule from '@/_components/common/modules/ModalModule';
 import SearchingBoxModule from '@/_components/common/modules/SearchingBoxModule';
 import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
+import { useGetMemberListInifiniteQuery } from '@/_hooks/admin/useGetMemberListInfiniteQuery';
+import { useGetPointPolicyQuery } from '@/_hooks/admin/useGetPointPolicyQuery';
+import { usePostPointSupplyMutation } from '@/_hooks/admin/usePostPointSupplyMutation';
+import { MemberType } from '@/_types/adminType';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-
-// TODO : 타입 선언 필요
-type MemberType = {
-  id: number;
-  name: string;
-  team: string;
-  personalId: string;
-};
-
-const data: MemberType[] = [
-  {
-    id: 1,
-    name: '김철수',
-    team: '개발팀',
-    personalId: 'kim123',
-  },
-  {
-    id: 2,
-    name: '이영희',
-    team: '디자인팀',
-    personalId: 'lee123',
-  },
-  {
-    id: 3,
-    name: '박민수',
-    team: '기획팀',
-    personalId: 'park123',
-  },
-  {
-    id: 4,
-    name: '홍길동',
-    team: '개발팀',
-    personalId: 'hong123',
-  },
-];
+import { useRef, useState } from 'react';
 
 const AdminPointsRewardNewPage = () => {
   const router = useRouter();
+  const memberListRef = useRef<HTMLDivElement>(null);
   const [selectedRequest, setSelectedRequest] = useState<MemberType[]>([]);
   const [selectedDelete, setSelectedDelete] = useState<MemberType[]>([]);
   const [isConfirmModelOpen, setIsConfirmModelOpen] = useState(false);
   const [isTeamFilterOpen, setIsTeamFilterOpen] = useState(false);
-  const [selectedType, setSelectedType] = useState<string>('');
+  const [selectedType, setSelectedType] = useState<number | null>(null);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([
     '개발팀',
     '디자인팀',
     '기획팀',
   ]);
 
+  const {
+    data: memberList,
+    fetchNextPage: memberListFetchNextPage,
+    hasNextPage: memberListHasNextPage,
+    isLoading: memberListIsLoading,
+  } = useGetMemberListInifiniteQuery({
+    // department: selectedOptions.join(','),
+    pageable: { page: 1, size: 100 },
+  });
+
+  const {
+    data: policyList,
+    isLoading: policyListIsLoading,
+    isError: policyListIsError,
+  } = useGetPointPolicyQuery({
+    pageable: { page: 1, size: 100 },
+  });
+
+  const { mutate: tryPostPointSupply } = usePostPointSupplyMutation({
+    successCallback: () => {
+      setIsConfirmModelOpen(false);
+      router.push('/admin/points/reward');
+    },
+  });
+
   return (
     <section className="flex h-full w-full flex-col gap-y-10 overflow-y-auto">
       <TitleBarModule title="단체 포인트 등록" />
       <section className="flex w-full flex-col gap-y-[60px]">
-        <div className="flex w-[200px] flex-col gap-y-4">
+        <div className="flex flex-col gap-y-4">
           <h3 className="font-bold">분류</h3>
-          {/* TODO : 애니메이션 필요 */}
-          {/* TODO : Width 조정 필요 (기본, 아이템 모두) */}
-          {/* TODO : selectedOption도 전달받는 게 좋을 듯 */}
           <DropdownModule
-            options={['봉사활동', '자기계발']}
-            onSelect={setSelectedType}
-            selectedOption={selectedType}
+            options={
+              policyList?.pointPolicyList.map((policy) => policy.policyTitle) ||
+              []
+            }
+            size="large"
+            onSelect={(option) => {
+              setSelectedType(
+                policyList?.pointPolicyList.find(
+                  (policy) => policy.policyTitle === option,
+                )?.id || null,
+              );
+            }}
+            selectedOption={
+              policyList?.pointPolicyList.find(
+                (policy) => policy.id === selectedType,
+              )?.policyTitle || null
+            }
             placeholder="분류 선택"
           />
         </div>
@@ -122,17 +127,53 @@ const AdminPointsRewardNewPage = () => {
                   )}
                 </div>
               </div>
-              <TableContainer maxHeight="max-h-[500px]">
+              <TableContainer
+                maxHeight="max-h-[300px]"
+                isInfiniteScroll
+                infiniteScrollProps={{
+                  load: (
+                    <p
+                      key={`loading-${!memberList ? 0 : memberList.pages[memberList.pages.length - 1].pageInfo.pageNum}`}
+                      className="w-full text-center"
+                    >
+                      로딩 중...
+                    </p>
+                  ),
+                  hasMore: memberListHasNextPage,
+                  loadMore: () => {
+                    memberListFetchNextPage();
+                  },
+                  useWindow: false,
+                }}
+              >
                 <TableHeaderModule>
                   <TableHeaderAtom
                     isFirst
                     width="80px"
-                    isBoolean={selectedRequest.length === data.length}
+                    isBoolean={
+                      memberList &&
+                      selectedRequest.length ===
+                        memberList.pages.reduce(
+                          (acc, page) => acc + page.memberInfos.length,
+                          0,
+                        )
+                    }
                     onClickBoolean={() => {
-                      if (selectedRequest.length === data.length) {
+                      if (
+                        selectedRequest.length ===
+                        memberList?.pages.reduce(
+                          (acc, page) => acc + page.memberInfos.length,
+                          0,
+                        )
+                      ) {
                         setSelectedRequest([]);
                       } else {
-                        setSelectedRequest(data);
+                        setSelectedRequest(
+                          memberList?.pages.reduce(
+                            (acc, page) => [...acc, ...page.memberInfos],
+                            [] as MemberType[],
+                          ) || [],
+                        );
                       }
                     }}
                   />
@@ -141,27 +182,37 @@ const AdminPointsRewardNewPage = () => {
                   <TableHeaderAtom isLast>아이디</TableHeaderAtom>
                 </TableHeaderModule>
                 <tbody>
-                  {data.length <= 0 ? (
+                  {!memberList ? (
+                    memberListIsLoading ? (
+                      <EmptyContainer colSpan={4} text="is loading..." />
+                    ) : (
+                      <EmptyContainer colSpan={4} text="데이터가 없습니다." />
+                    )
+                  ) : memberList.pages[0].pageInfo.totalElements === 0 ? (
                     <EmptyContainer colSpan={4} />
                   ) : (
-                    data.map((item) => (
-                      <TableBodyModule key={item.id}>
-                        <TableBodyAtom
-                          isFirst
-                          isBoolean={selectedRequest.includes(item)}
-                          onClickBoolean={() => [
-                            setSelectedRequest((prev) =>
-                              prev.includes(item)
-                                ? prev.filter((current) => current !== item)
-                                : [...prev, item],
-                            ),
-                          ]}
-                        />
-                        <TableBodyAtom>{item.name}</TableBodyAtom>
-                        <TableBodyAtom>{item.team}</TableBodyAtom>
-                        <TableBodyAtom isLast>{item.personalId}</TableBodyAtom>
-                      </TableBodyModule>
-                    ))
+                    memberList.pages.map((page, pageIdx) =>
+                      page.memberInfos.map((member) => (
+                        <TableBodyModule key={member.accountId}>
+                          <TableBodyAtom
+                            isFirst
+                            isBoolean={selectedRequest.includes(member)}
+                            onClickBoolean={() => [
+                              setSelectedRequest((prev) =>
+                                prev.includes(member)
+                                  ? prev.filter((current) => current !== member)
+                                  : [...prev, member],
+                              ),
+                            ]}
+                          />
+                          <TableBodyAtom>{member.name}</TableBodyAtom>
+                          <TableBodyAtom>{member.department}</TableBodyAtom>
+                          <TableBodyAtom isLast>
+                            {member.accountId}
+                          </TableBodyAtom>
+                        </TableBodyModule>
+                      )),
+                    )
                   )}
                 </tbody>
               </TableContainer>
@@ -193,7 +244,7 @@ const AdminPointsRewardNewPage = () => {
                   }}
                 />
               </div>
-              <TableContainer maxHeight="max-h-[500px]">
+              <TableContainer maxHeight="max-h-[300px]">
                 <TableHeaderModule>
                   <TableHeaderAtom
                     isFirst
@@ -219,7 +270,7 @@ const AdminPointsRewardNewPage = () => {
                     <EmptyContainer colSpan={4} />
                   ) : (
                     selectedRequest.map((item) => (
-                      <TableBodyModule key={item.id}>
+                      <TableBodyModule key={item.accountId}>
                         <TableBodyAtom
                           isFirst
                           isBoolean={selectedDelete.includes(item)}
@@ -232,8 +283,8 @@ const AdminPointsRewardNewPage = () => {
                           ]}
                         />
                         <TableBodyAtom>{item.name}</TableBodyAtom>
-                        <TableBodyAtom>{item.team}</TableBodyAtom>
-                        <TableBodyAtom isLast>{item.personalId}</TableBodyAtom>
+                        <TableBodyAtom>{item.department}</TableBodyAtom>
+                        <TableBodyAtom isLast>{item.accountId}</TableBodyAtom>
                       </TableBodyModule>
                     ))
                   )}
@@ -244,10 +295,10 @@ const AdminPointsRewardNewPage = () => {
         </div>
         <div className="flex w-full items-center justify-end">
           <ButtonAtom
-            type="submit"
+            type="button"
             buttonStyle="yellow"
             onClick={() => {
-              if (selectedType === '') {
+              if (selectedType === null) {
                 // TODO : alert 디자인 적용 필요
                 alert('분류를 선택해주세요.');
                 return;
@@ -268,10 +319,10 @@ const AdminPointsRewardNewPage = () => {
             confirmText="등록"
             cancelText="취소"
             onConfirm={() => {
-              //  TODO : 포인트 등록 API 호출
-              alert('포인트 등록 완료');
-              setIsConfirmModelOpen(false);
-              router.push('/admin/points/reward');
+              tryPostPointSupply({
+                policyId: selectedType!,
+                body: selectedRequest.map((member) => member.accountId),
+              });
             }}
             onCancel={() => {
               setIsConfirmModelOpen(false);
@@ -281,7 +332,10 @@ const AdminPointsRewardNewPage = () => {
               data={[
                 {
                   subtitle: '분류',
-                  content: selectedType,
+                  content:
+                    policyList?.pointPolicyList.find(
+                      (policy) => policy.id === selectedType,
+                    )?.policyTitle || '',
                 },
                 {
                   subtitle: '지급 대상',
@@ -292,7 +346,10 @@ const AdminPointsRewardNewPage = () => {
                 },
                 {
                   subtitle: '지급 포인트',
-                  content: '1000P',
+                  content:
+                    policyList?.pointPolicyList
+                      .find((policy) => policy.id === selectedType)
+                      ?.quantity.toLocaleString() || '0',
                 },
               ]}
             />

@@ -12,6 +12,7 @@ const config: Config = {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'login-bg': 'url("./_assets/icons/logoIllust.svg")',
       },
       colors: {
         transparent: 'transparent',
@@ -28,6 +29,9 @@ const config: Config = {
         'cus-200': '#374553',
         'cus-300': '#323232',
         'stroke-100': '#DBDBDB',
+        footer: '#888888',
+        button: '#2A2A2A',
+        'yellow-button-line': '#E5CD07',
       },
       fontSize: {
         '1': '20px',
@@ -47,12 +51,21 @@ const config: Config = {
         height: 'height',
         maxHeight: 'max-height',
       },
+      margin: {
+        15: '3.75rem',
+        '3xl': '30px',
+        '4xl': '40px',
+        '5xl': '50px',
+        '6xl': '60px',
+        18: '72px',
+      },
       padding: {
         15: '3.75rem',
         '3xl': '30px',
         '4xl': '40px',
         '5xl': '50px',
         '6xl': '60px',
+        18: '72px',
       },
       gap: {
         '3xl': '30px',
