@@ -3,7 +3,7 @@ import { RightArrowIcon } from '@/_assets/icons';
 
 interface UserButtonAtomProps {
   text: string;
-  size: 'sm' | 'md' | 'lg' | 'xl' | 'header' | 'full';
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'header' | 'full';
   rightArrow?: boolean;
   buttonStyle: 'white' | 'red' | 'black' | 'lightGray' | 'darkGray' | 'yellow';
   type: 'button' | 'submit';
@@ -45,7 +45,7 @@ const UserButtonAtom = ({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`flex items-center justify-center gap-4 ${sizeStyles[size]} ${buttonStyles[buttonStyle]} ${disabled ? 'cursor-not-allowed' : ''} ${className}`}
+      className={`flex items-center justify-center gap-4 ${size ? sizeStyles[size] : ''} ${buttonStyles[buttonStyle]} ${disabled ? 'cursor-not-allowed' : ''} ${className}`}
     >
       {text}
       {rightArrow && <Image src={RightArrowIcon} alt="rightArrow" />}
