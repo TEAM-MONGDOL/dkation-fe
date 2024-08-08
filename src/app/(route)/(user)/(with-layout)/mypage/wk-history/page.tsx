@@ -44,6 +44,22 @@ const UserWkHistoryPage = () => {
     },
   });
 
+  const handleCardClick = (applyStatusType: string) => {
+    switch (applyStatusType) {
+      case 'APPLIED':
+        console.log('신청 취소하기 로직');
+        break;
+      case 'CONFIRM_WAIT':
+        console.log('방문 확정하기 로직');
+        break;
+      case 'VISITED':
+        console.log('후기 작성하기 로직');
+        break;
+      default:
+        console.log(`${applyStatusType}에 대한 동작이 정의되지 않았습니다.`);
+    }
+  };
+
   return (
     <section className="px-40 pt-18">
       <div className="flex flex-col gap-y-14">
@@ -103,6 +119,7 @@ const UserWkHistoryPage = () => {
           bettingPoint={400}
           applyStatusType="APPLIED"
           waitingNumber={4}
+          onClick={handleCardClick}
         />
       </div>
       {data && data.pageInfo.totalElements > 0 && (
