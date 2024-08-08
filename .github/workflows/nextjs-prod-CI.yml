@@ -43,8 +43,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}
       run: |
-        git config user.name github-actions
-        git config user.email github-actions@github.com
+        git config user.name MinhoJJang
+        git config user.email ahchjang@naver.com
         git tag ${{ steps.bump_version.outputs.NEW_TAG }}
         git push https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git ${{ steps.bump_version.outputs.NEW_TAG }}
 
