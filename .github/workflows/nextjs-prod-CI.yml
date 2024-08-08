@@ -1,0 +1,51 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [main, MF-255-Next.js-WEB-CI]
+  pull_request:
+    branches: [main]
+
+env:
+  PROJECT_NAME: dkation
+  REPOSITORY_NAME: dkation-prod-front
+  IMAGE_NAME: dkation-prod-fe
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up environment variables
+      run: |
+        echo "NEXT_PUBLIC_SERVER_URL=${{ secrets.NEXT_PUBLIC_SERVER_URL }}" >> .env.local
+        echo "ACCESS_KEY=${{ secrets.ACCESS_KEY }}" >> .env.local
+        echo "ACCESS_SECRET_KEY=${{ secrets.ACCESS_SECRET_KEY }}" >> .env.local
+
+    - name: Set version from commit message
+      run: echo "VERSION=${{ github.event.head_commit.message }}" >> $GITHUB_ENV
+
+    - name: Build the Docker image
+      run: |
+        docker build -t ${{ env.IMAGE_NAME }}:${{ env.VERSION }} --platform linux/amd64 .
+        docker tag ${{ env.IMAGE_NAME }}:${{ env.VERSION }} ${{ env.PROJECT_NAME }}.kr-central-2.kcr.dev/${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+
+    - name: Login to KCR
+      run: |
+        echo "${{ secrets.ACCESS_SECRET_KEY }}" | docker login ${{ env.PROJECT_NAME }}.kr-central-2.kcr.dev -u "${{ secrets.ACCESS_KEY }}" --password-stdin
+
+    - name: Push to KCR
+      run: |
+        docker push ${{ env.PROJECT_NAME }}.kr-central-2.kcr.dev/${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+
+    - name: Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ env.VERSION }}
+        release_name: ${{ env.VERSION }}
+        draft: false
+        prerelease: false
