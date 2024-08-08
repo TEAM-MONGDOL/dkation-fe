@@ -3,6 +3,7 @@
 import { DkationLogo } from '@/_assets/icons';
 import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
 import UserLoginInput from '@/_components/user/login/UserLoginInput';
+import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import { useState } from 'react';
 
@@ -19,12 +20,44 @@ const Login = () => {
     });
   };
 
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!form.accountId || !form.password) {
+      return;
+    }
+    console.log('tryLogin');
+    console.log(form);
+    const result = await signIn('credentials', {
+      accountId: form.accountId,
+      password: form.password,
+      redirect: false,
+    });
+
+    if (result?.error) {
+      console.log('로그인 실패');
+      console.log(result);
+    } else {
+      const response = await fetch('/api/auth/session');
+      const session = await response.json();
+
+      if (session.user.isAdmin) {
+        window.location.href = '/admin';
+      } else {
+        window.location.href = '/';
+      }
+    }
+  };
+
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center overflow-hidden bg-primary bg-login-bg bg-cover bg-center bg-origin-padding px-6xl">
       <section className="flex w-[400px] flex-col items-center gap-y-20">
         <Image src={DkationLogo} alt="Dkation Logo" width={255} />
         <div className="flex w-full flex-col items-center gap-y-4">
-          <form className="flex w-full flex-col gap-y-4xl">
+          <form
+            className="flex w-full flex-col gap-y-4xl"
+            onSubmit={handleLogin}
+          >
             <div className="flex w-full flex-col gap-y-2.5">
               <UserLoginInput
                 type="text"
