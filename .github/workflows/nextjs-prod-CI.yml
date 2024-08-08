@@ -93,6 +93,10 @@ jobs:
             ${{ env.PROJECT_NAME }}.kr-central-2.kcr.dev/${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_NAME }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            NEXT_PUBLIC_SERVER_URL=${{ secrets.NEXT_PUBLIC_SERVER_URL }}
+            NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
+            NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}
 
       - name: Create Release
         uses: actions/create-release@v1
