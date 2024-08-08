@@ -70,26 +70,14 @@ jobs:
             fi
           done
 
-      - name: Bump version
-        id: bump_version
-        run: |
-          latest_tag=${{ steps.get_latest_tag.outputs.LATEST_TAG }}
-          IFS='.' read -ra ADDR <<< "${latest_tag#v}"
-          major="${ADDR[0]}"
-          minor="${ADDR[1]}"
-          patch="${ADDR[2]}"
-          new_patch=$((patch + 1))
-          new_tag="v$major.$minor.$new_patch"
-          echo "NEW_TAG=$new_tag" >> $GITHUB_OUTPUT
-
       - name: Create and push new tag
         env:
           PAT: ${{ secrets.PAT }}
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git tag ${{ steps.bump_version.outputs.NEW_TAG }}
-          git push https://$PAT@github.com/${{ github.repository }}.git ${{ steps.bump_version.outputs.NEW_TAG }}
+          git tag ${{ steps.create_tag.outputs.NEW_TAG }}
+          git push https://$PAT@github.com/${{ github.repository }}.git ${{ steps.create_tag.outputs.NEW_TAG }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
