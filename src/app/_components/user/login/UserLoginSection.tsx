@@ -23,13 +23,14 @@ const UserLoginSection = ({ onFindPasswordClick }: UserLoginSectionProps) => {
   };
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    console.log('handleLogin');
     e.preventDefault();
 
     if (!form.accountId || !form.password) {
       return;
     }
-    // console.log('tryLogin');
-    // console.log(form);
+    console.log('tryLogin');
+    console.log(form);
     const result = await signIn('credentials', {
       accountId: form.accountId,
       password: form.password,
