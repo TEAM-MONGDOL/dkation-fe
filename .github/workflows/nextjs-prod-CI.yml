@@ -47,12 +47,28 @@ jobs:
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
 
-      - name: Get latest tag
-        id: get_latest_tag
+      - name: Get latest tag and create new tag
+        id: create_tag
         run: |
           git fetch --tags
           latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
-          echo "LATEST_TAG=$latest_tag" >> $GITHUB_OUTPUT
+          
+          while true; do
+            IFS='.' read -ra ADDR <<< "${latest_tag#v}"
+            major="${ADDR[0]}"
+            minor="${ADDR[1]}"
+            patch="${ADDR[2]}"
+            new_patch=$((patch + 1))
+            new_tag="v$major.$minor.$new_patch"
+          
+            if git rev-parse $new_tag >/dev/null 2>&1; then
+              echo "Tag $new_tag already exists, incrementing..."
+              latest_tag=$new_tag
+            else
+              echo "NEW_TAG=$new_tag" >> $GITHUB_OUTPUT
+              break
+            fi
+          done
 
       - name: Bump version
         id: bump_version
