@@ -5,7 +5,6 @@ import { NextResponse } from 'next/server';
 
 export default withAuth(
   async function middleware(req) {
-    const token = getToken({ req, secret: process.env.NEXTAUTH_SECRET });
     const { pathname } = req.nextUrl;
 
     if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
