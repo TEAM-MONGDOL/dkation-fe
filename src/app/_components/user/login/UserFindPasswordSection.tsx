@@ -3,6 +3,10 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import UserLoginInput from './UserLoginInput';
 import UserButtonAtom from '../common/atoms/UserButtonAtom';
+import { usePostCertificationSend } from '@/_hooks/user/usePostCertificationSend';
+import axios from 'axios';
+import { AxiosErrorResponse } from '@/_types/commonType';
+import UserModalAtom from '../common/atoms/UserModalAtom';
 
 interface UserFindPasswordSectionProps {
   onLoginClick: () => void;
@@ -18,6 +22,32 @@ const UserFindPasswordSection = ({
   const [isEmailSent, setIsEmailSent] = useState(false);
   const [verificationCode, setVerificationCode] = useState('');
   const [verificationTime, setVerificationTime] = useState(180);
+  const [modalContent, setModalContent] = useState<{
+    desc: string;
+    onClick: () => void;
+    buttonText: string;
+  } | null>(null);
+
+  const { mutate: trySendEmail, isPending: sendEmailIsPending } =
+    usePostCertificationSend({
+      successCallback: () => {
+        if (isEmailSent) {
+          setVerificationTime(180);
+        } else {
+          setIsEmailSent(true);
+        }
+      },
+      errorCallback: (error) => {
+        if (axios.isAxiosError<AxiosErrorResponse>(error)) {
+          setModalContent({
+            desc:
+              error.response?.data.message || '인증코드 전송에 실패했습니다.',
+            onClick: () => setModalContent(null),
+            buttonText: '확인',
+          });
+        }
+      },
+    });
 
   useEffect(() => {
     if (isEmailSent) {
@@ -37,11 +67,7 @@ const UserFindPasswordSection = ({
       setError(null);
     }
 
-    if (isEmailSent) {
-      setVerificationTime(180);
-    } else {
-      setIsEmailSent(true);
-    }
+    trySendEmail({ email });
   };
 
   return (
@@ -62,9 +88,9 @@ const UserFindPasswordSection = ({
                   <UserButtonAtom
                     text={isEmailSent ? '재전송' : '코드 전송'}
                     size="md"
-                    buttonStyle="white"
+                    buttonStyle={sendEmailIsPending ? 'lightGray' : 'white'}
                     type="button"
-                    className={`h-[34px] w-20 overflow-visible rounded text-4`}
+                    className={`h-[34px] w-20 overflow-visible rounded text-4 ${sendEmailIsPending ? 'animate-pulse text-sub-300' : ''}`}
                     onClick={handleClickCode}
                   />
                 }
@@ -104,6 +130,21 @@ const UserFindPasswordSection = ({
           </button>
         </div>
       </div>
+      {modalContent !== null && (
+        <UserModalAtom>
+          <div className="flex flex-col items-center justify-center gap-y-10">
+            <p>{modalContent.desc}</p>
+            <UserButtonAtom
+              size="md"
+              buttonStyle="yellow"
+              text={modalContent.buttonText}
+              onClick={modalContent.onClick}
+              className="rounded-md py-1.5"
+              type="button"
+            />
+          </div>
+        </UserModalAtom>
+      )}
     </section>
   );
 };
