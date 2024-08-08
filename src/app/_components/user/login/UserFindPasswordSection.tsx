@@ -1,13 +1,13 @@
 import { DkationLogo } from '@/_assets/icons';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-import UserLoginInput from './UserLoginInput';
-import UserButtonAtom from '../common/atoms/UserButtonAtom';
+import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
 import { usePostCertificationSend } from '@/_hooks/user/usePostCertificationSend';
 import axios from 'axios';
 import { AxiosErrorResponse } from '@/_types/commonType';
-import UserModalAtom from '../common/atoms/UserModalAtom';
+import UserModalAtom from '@/_components/user/common/atoms/UserModalAtom';
 import { usePostCertificationCheck } from '@/_hooks/user/usePostCertificationCheck';
+import UserLoginInput from '@/_components/user/login/UserLoginInput';
 
 interface UserFindPasswordSectionProps {
   onLoginClick: () => void;
@@ -42,11 +42,10 @@ const UserFindPasswordSection = ({
           setIsEmailSent(true);
         }
       },
-      errorCallback: (error) => {
-        if (axios.isAxiosError<AxiosErrorResponse>(error)) {
+      errorCallback: (err) => {
+        if (axios.isAxiosError<AxiosErrorResponse>(err)) {
           setModalContent({
-            desc:
-              error.response?.data.message || '인증코드 전송에 실패했습니다.',
+            desc: err.response?.data.message || '인증코드 전송에 실패했습니다.',
             onClick: () => setModalContent(null),
             buttonText: '확인',
           });
@@ -61,10 +60,10 @@ const UserFindPasswordSection = ({
     successCallback: () => {
       setIsVerificated(true);
     },
-    errorCallback: (error) => {
-      if (axios.isAxiosError<AxiosErrorResponse>(error)) {
+    errorCallback: (err) => {
+      if (axios.isAxiosError<AxiosErrorResponse>(err)) {
         setModalContent({
-          desc: error.response?.data.message || '인증코드 확인에 실패했습니다.',
+          desc: err.response?.data.message || '인증코드 확인에 실패했습니다.',
           onClick: () => setModalContent(null),
           buttonText: '확인',
         });
@@ -80,16 +79,16 @@ const UserFindPasswordSection = ({
 
       return () => clearInterval(timer);
     }
+    return () => {};
   }, [isEmailSent]);
 
   const handleClickEmail = () => {
     if (!emailRegex.test(email)) {
       setError('이메일 형식이 올바르지 않습니다.');
       return;
-    } else {
-      setError(null);
     }
 
+    setError(null);
     trySendEmail({ email });
   };
 
@@ -97,13 +96,13 @@ const UserFindPasswordSection = ({
     if (!isEmailSent) {
       setError('이메일 인증을 진행해주세요.');
       return;
-    } else if (verificationTime <= 0) {
+    }
+    if (verificationTime <= 0) {
       setVerificationError('인증시간이 만료되었습니다.');
       return;
-    } else {
-      setVerificationError(null);
     }
 
+    setVerificationError(null);
     checkCertificationCode({ email, code: verificationCode });
   };
 
