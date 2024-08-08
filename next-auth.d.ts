@@ -14,5 +14,6 @@ declare module 'next-auth' {
       jti: string;
     };
     accessToken: string;
+    accountId: number;
   }
 }
