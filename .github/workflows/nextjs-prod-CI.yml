@@ -95,7 +95,7 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ env.PROJECT_NAME }}.kr-central-2.kcr.dev/${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_NAME }}:${{ steps.bump_version.outputs.NEW_TAG }}
+            ${{ env.PROJECT_NAME }}.kr-central-2.kcr.dev/${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_NAME }}:${{ steps.create_tag.outputs.NEW_TAG }}
             ${{ env.PROJECT_NAME }}.kr-central-2.kcr.dev/${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_NAME }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -109,7 +109,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.bump_version.outputs.NEW_TAG }}
-          release_name: Release ${{ steps.bump_version.outputs.NEW_TAG }}
+          tag_name: ${{ steps.create_tag.outputs.NEW_TAG }}
+          release_name: Release ${{ steps.create_tag.outputs.NEW_TAG }}
           draft: false
           prerelease: false
