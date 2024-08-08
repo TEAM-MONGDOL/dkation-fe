@@ -6,7 +6,6 @@ import { useGetNoticeListQuery } from '@/_hooks/admin/useGetNoticeListQuery';
 import dayjs from 'dayjs';
 import UserFilteringSectionContainer from '@/_components/user/common/containers/UserFilteringSectionContainer';
 import UserStateFilteringContainer from '@/_components/user/common/containers/UserStateFilteringContainer';
-import PaginationModule from '@/_components/common/modules/PaginationModule';
 import UserPlaceFilteringContainer from '@/_components/user/common/containers/UserPlaceFilteringContainer';
 import WorkationCard from '@/_components/user/mypage/UserWktCard';
 import place from '@/_assets/images/place_impy.png';
@@ -122,15 +121,6 @@ const UserWkHistoryPage = () => {
           onClick={handleCardClick}
         />
       </div>
-      {data && data.pageInfo.totalElements > 0 && (
-        <div className="mt-40 flex justify-center">
-          <PaginationModule
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            totalPages={data.pageInfo.totalPages}
-          />
-        </div>
-      )}
     </section>
   );
 };
