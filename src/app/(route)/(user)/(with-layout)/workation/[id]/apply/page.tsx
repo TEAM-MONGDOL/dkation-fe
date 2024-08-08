@@ -27,12 +27,12 @@ const UserWkApplyPage = () => {
           endDate="2020.07.14"
         />
       </div>
-      <div className="px-40">
+      <div className="px-52">
         <div>
           <p className="text-h2 font-semibold">나의 당첨 확률</p>
-          <div className="flex items-end gap-10">
+          <div className="flex w-[348px] items-end justify-center gap-10 rounded-[17px] border border-[#E5CD07] bg-gradient-to-r from-[#E5CD07]/5 to-[#E5CD07]/60 pb-2.5">
             <p className="text-[78px] font-bold">2.1%</p>
-            <p className="mb-5 text-h3">±N%</p>
+            <p className="mb-5 text-h3 text-[#E5CD07]">±N%</p>
           </div>
         </div>
       </div>
