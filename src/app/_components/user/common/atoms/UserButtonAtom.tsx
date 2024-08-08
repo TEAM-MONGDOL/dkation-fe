@@ -41,7 +41,10 @@ const UserButtonAtom = ({
   return (
     <button
       type={type}
-      onClick={onClick}
+      onClick={(e) => {
+        e.preventDefault();
+        onClick && onClick();
+      }}
       className={`flex items-center justify-center gap-4 ${sizeStyles[size]} ${buttonStyles[buttonStyle]} ${className}`}
     >
       <span className="shrink-0">{text}</span>
