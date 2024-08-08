@@ -26,7 +26,7 @@ FROM node:18-alpine AS runner
 WORKDIR /app
 
 # Set node environment to production
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 # Add a non-root user
 RUN addgroup --system --gid 1001 nodejs
@@ -42,7 +42,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Set the correct permission for prerender cache
-RUN mkdir .next
+RUN mkdir -p .next
 RUN chown nextjs:nodejs .next
 
 # Switch to non-root user

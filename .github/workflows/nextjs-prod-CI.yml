@@ -35,9 +35,17 @@ jobs:
         run: |
           npm ci
           npm install -g npm@latest
+          npm install sharp
 
       - name: Lint
         run: npm run lint
+
+      - name: Build Next.js app
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SERVER_URL: ${{ secrets.NEXT_PUBLIC_SERVER_URL }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
 
       - name: Get latest tag
         id: get_latest_tag
@@ -87,10 +95,6 @@ jobs:
             ${{ env.PROJECT_NAME }}.kr-central-2.kcr.dev/${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_NAME }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          build-args: |
-            NEXT_PUBLIC_SERVER_URL=${{ secrets.NEXT_PUBLIC_SERVER_URL }}
-            NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
-            NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}
 
       - name: Create Release
         uses: actions/create-release@v1
