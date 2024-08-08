@@ -14,7 +14,7 @@ const FAQPage = () => {
   const currentPageItems = FAQData.slice(startIndex, startIndex + itemsPerPage);
 
   return (
-    <section className="pt-18 px-40">
+    <section className="px-40 pt-18">
       <div className="flex flex-col gap-y-14">
         <h2 className="text-h2 font-semibold">자주 묻는 질문</h2>
         <div>
