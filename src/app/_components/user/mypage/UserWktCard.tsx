@@ -170,7 +170,7 @@ const WorkationCard: React.FC<WorkationCardProps> = ({
   };
 
   return (
-    <div className="flex w-full rounded-lg border border-gray-200 bg-sky-50 p-4">
+    <div className="flex w-full p-4">
       <Image
         width={402}
         height={304}
