@@ -1,6 +1,5 @@
 'use client';
 
-import place from '@/_assets/images/place_impy.png';
 import Image from 'next/image';
 import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
 import { useRouter } from 'next/navigation';
@@ -9,6 +8,7 @@ import WkDetailInfo from '@/_components/user/workation/WkDetailInfo';
 import WkResultInfo from '@/_components/user/workation/WkResultInfo';
 import WkReviewInfo from '@/_components/user/workation/WkReviewInfo';
 import { useGetUserWkDetailQuery } from '@/_hooks/user/useGetUserWkDetailQuery';
+import dayjs from 'dayjs';
 
 interface UserWkDetailProps {
   params: { id: number };
@@ -65,22 +65,30 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
     }
     setActiveTab(section);
   };
-
+  const urls = data.files?.map((file) => file.url) || [''];
   return (
     <section>
       <hr />
       <div className="mt-20 px-40">
         <div className="flex w-full">
-          <Image width={402} height={304} src={place} alt="place" />
+          <Image width={402} height={304} src={urls[0]} alt="place" />
           <div className="ml-8 flex-col">
             <p className="mb-3 text-sub-300">{data.title}</p>
-            <h2 className="mb-12 text-h2 font-semibold text-sub-400">양양</h2>
+            <h2 className="mb-12 text-h2 font-semibold text-sub-400">
+              {data.place}
+            </h2>
             <p className="mb-4 inline-block rounded-regular border border-primary bg-primary/10 px-5 py-1.5 text-3 text-primary">
-              모집인원 : 2명
+              모집인원 : {data.totalRecruit}명
             </p>
-            <p className="mb-0.5">모집 기간 : yyyy.mm.dd - yyyy.mm.dd</p>
-            <p className="mb-0.5">워케이션 기간 : yyyy.mm.dd - yyyy.mm.dd</p>
-            <p>주소 : 강원 양양군 현북면 하조대해안길 119</p>
+            <p className="mb-0.5">
+              모집 기간 : {dayjs(data.applyStartDate).format('YYYY.MM.DD')} -{' '}
+              {dayjs(data.applyEndDate).format('YYYY.MM.DD')}
+            </p>
+            <p className="mb-0.5">
+              워케이션 기간 : {dayjs(data.startDate).format('YYYY.MM.DD')} -{' '}
+              {dayjs(data.endDate).format('YYYY.MM.DD')}
+            </p>
+            <p>주소 : {data.address}</p>
           </div>
           <UserButtonAtom
             onClick={() => router.push('/workation/submit')}
@@ -112,7 +120,7 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
           </button>
         </div>
         <div className="mt-16 flex flex-col" ref={detailRef}>
-          <WkDetailInfo />
+          <WkDetailInfo url={urls} description={data.description} />
         </div>
         <div className="mt-16 flex flex-col" ref={resultRef}>
           <WkResultInfo />
