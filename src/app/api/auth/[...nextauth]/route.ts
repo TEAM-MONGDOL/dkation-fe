@@ -6,6 +6,7 @@ import Credentials from 'next-auth/providers/credentials';
 type ExtendedUser = User & {
   isAdmin: boolean;
   accessToken: string;
+  accountId: number;
 };
 
 const handler = NextAuth({
@@ -58,6 +59,7 @@ const handler = NextAuth({
           ...token,
           isAdmin: extendedUser.isAdmin,
           accessToken: extendedUser.accessToken,
+          accountId: extendedUser.accountId,
         };
       }
       // user 객체가 없다는 것은 단순 세션 조회를 위한 요청
@@ -74,6 +76,7 @@ const handler = NextAuth({
         /* eslint-disable no-param-reassign */
         session.user.admin = token.isAdmin as boolean;
         session.accessToken = token.accessToken as string;
+        session.accountId = token.accountId as number;
       }
       console.log(session);
       return session;
