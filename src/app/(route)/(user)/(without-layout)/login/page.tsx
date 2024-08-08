@@ -23,7 +23,7 @@ const Login = () => {
           onFindPasswordClick={() => setType('FIND_PASSWORD')}
         />
       ) : (
-        <UserFindPasswordSection />
+        <UserFindPasswordSection onLoginClick={() => setType('LOGIN')} />
       )}
     </div>
   );
