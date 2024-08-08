@@ -7,6 +7,7 @@ import { usePostCertificationSend } from '@/_hooks/user/usePostCertificationSend
 import axios from 'axios';
 import { AxiosErrorResponse } from '@/_types/commonType';
 import UserModalAtom from '../common/atoms/UserModalAtom';
+import { usePostCertificationCheck } from '@/_hooks/user/usePostCertificationCheck';
 
 interface UserFindPasswordSectionProps {
   onLoginClick: () => void;
@@ -17,10 +18,14 @@ const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const UserFindPasswordSection = ({
   onLoginClick,
 }: UserFindPasswordSectionProps) => {
+  const [isVerificated, setIsVerificated] = useState(false);
   const [email, setEmail] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isEmailSent, setIsEmailSent] = useState(false);
   const [verificationCode, setVerificationCode] = useState('');
+  const [verificationError, setVerificationError] = useState<string | null>(
+    null,
+  );
   const [verificationTime, setVerificationTime] = useState(180);
   const [modalContent, setModalContent] = useState<{
     desc: string;
@@ -49,6 +54,31 @@ const UserFindPasswordSection = ({
       },
     });
 
+  const {
+    mutate: checkCertificationCode,
+    isPending: checkCertificationCodeIsPending,
+  } = usePostCertificationCheck({
+    successCallback: () => {
+      setModalContent({
+        desc: '인증이 완료되었습니다.',
+        onClick: () => {
+          setModalContent(null);
+          onLoginClick();
+        },
+        buttonText: '로그인하러 가기',
+      });
+    },
+    errorCallback: (error) => {
+      if (axios.isAxiosError<AxiosErrorResponse>(error)) {
+        setModalContent({
+          desc: error.response?.data.message || '인증코드 확인에 실패했습니다.',
+          onClick: () => setModalContent(null),
+          buttonText: '확인',
+        });
+      }
+    },
+  });
+
   useEffect(() => {
     if (isEmailSent) {
       const timer = setInterval(() => {
@@ -59,7 +89,7 @@ const UserFindPasswordSection = ({
     }
   }, [isEmailSent]);
 
-  const handleClickCode = () => {
+  const handleClickEmail = () => {
     if (!emailRegex.test(email)) {
       setError('이메일 형식이 올바르지 않습니다.');
       return;
@@ -70,12 +100,26 @@ const UserFindPasswordSection = ({
     trySendEmail({ email });
   };
 
+  const handleClickCode = () => {
+    if (!isEmailSent) {
+      setError('이메일 인증을 진행해주세요.');
+      return;
+    } else if (verificationTime <= 0) {
+      setVerificationError('인증시간이 만료되었습니다.');
+      return;
+    } else {
+      setVerificationError(null);
+    }
+
+    checkCertificationCode({ email, code: verificationCode });
+  };
+
   return (
     <section className="flex flex-1 flex-col items-center justify-center bg-white">
       <div className="flex w-[400px] flex-col items-center gap-y-20">
         <Image src={DkationLogo} alt="Dkation Logo" width={255} />
         <div className="flex w-full flex-col items-center gap-y-6">
-          <form className="flex w-full flex-col gap-y-4xl">
+          <div className="flex w-full flex-col gap-y-4xl">
             <div className="flex w-full flex-col gap-y-2.5">
               <UserLoginInput
                 type="text"
@@ -91,7 +135,7 @@ const UserFindPasswordSection = ({
                     buttonStyle={sendEmailIsPending ? 'lightGray' : 'white'}
                     type="button"
                     className={`h-[34px] w-20 overflow-visible rounded text-4 ${sendEmailIsPending ? 'animate-pulse text-sub-300' : ''}`}
-                    onClick={handleClickCode}
+                    onClick={handleClickEmail}
                   />
                 }
               />
@@ -115,12 +159,13 @@ const UserFindPasswordSection = ({
               )}
             </div>
             <UserButtonAtom
-              text="인증코드 확인"
+              text={isVerificated ? '비밀번호 변경' : '인증코드 확인'}
               size="full"
               buttonStyle="black"
-              type="submit"
+              type="button"
+              onClick={handleClickCode}
             />
-          </form>
+          </div>
           <hr className="w-full border-sub-100" />
           <button
             className="px-2 py-1.5 text-5 text-sub-400 underline-offset-4 hover:underline"
