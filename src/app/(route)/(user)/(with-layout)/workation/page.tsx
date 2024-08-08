@@ -10,16 +10,14 @@ import UserFilteringAtom from '@/_components/user/common/atoms/UserFilteringAtom
 import UserStateFilteringContainer from '@/_components/user/common/containers/UserStateFilteringContainer';
 import UserPlaceFilteringContainer from '@/_components/user/common/containers/UserPlaceFilteringContainer';
 import UserFilteringSectionContainer from '@/_components/user/common/containers/UserFilteringSectionContainer';
+import path from 'path';
 
 const Workation = () => {
   const [activeTab, setActiveTab] = useState<number>(0);
   const tabs = [
     {
       text: '워케이션 목록',
-      isActive: activeTab === 0,
-      onClick: () => {
-        setActiveTab(0);
-      },
+      path: '/workation',
     },
   ];
   const [isFilteringSectionOpen, setIsFilteringSectionOpen] = useState<
