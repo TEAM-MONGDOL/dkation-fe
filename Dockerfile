@@ -1,10 +1,10 @@
-# Base image
+# Build stage
 FROM node:18-alpine AS builder
 
 # Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json
+# Copy package files
 COPY package.json package-lock.json* ./
 
 # Install dependencies
@@ -13,29 +13,43 @@ RUN npm ci
 # Copy the rest of the application code
 COPY . .
 
+# Install sharp for improved image optimization
+RUN npm install sharp
+
 # Build the Next.js application
 RUN npm run build
 
-# Start a new stage for a smaller production image
-FROM node:18-alpine
+# Production stage
+FROM node:18-alpine AS runner
 
+# Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json
-COPY package.json package-lock.json* ./
+# Set node environment to production
+ENV NODE_ENV production
 
-# Install only production dependencies
-RUN npm ci --only=production
+# Add a non-root user
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
-# Copy the built app from the previous stage
-COPY --from=builder /app/.next ./.next
+# Copy necessary files from build stage
+COPY --from=builder /app/next.config.mjs ./
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./package.json
 
-# Copy next.config.mjs
-COPY --from=builder /app/next.config.mjs ./next.config.mjs
+# Copy the built app
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+# Set the correct permission for prerender cache
+RUN mkdir .next
+RUN chown nextjs:nodejs .next
+
+# Switch to non-root user
+USER nextjs
 
 # Expose the port the app runs on
 EXPOSE 3000
 
 # Start the application
-CMD ["npm", "start", "--", "-p", "3000"]
+CMD ["node", "server.js"]
