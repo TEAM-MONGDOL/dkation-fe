@@ -18,7 +18,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        fetch-depth: 0  
+        fetch-depth: 0  # This is important to fetch all history for all tags and branches
 
     - name: Get latest tag
       id: get_latest_tag
@@ -40,11 +40,13 @@ jobs:
         echo "NEW_TAG=$new_tag" >> $GITHUB_OUTPUT
 
     - name: Create and push new tag
+      env:
+        GITHUB_TOKEN: ${{ secrets.PAT }}
       run: |
         git config user.name github-actions
         git config user.email github-actions@github.com
         git tag ${{ steps.bump_version.outputs.NEW_TAG }}
-        git push origin ${{ steps.bump_version.outputs.NEW_TAG }}
+        git push https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git ${{ steps.bump_version.outputs.NEW_TAG }}
 
     - name: Set up environment variables
       run: |
