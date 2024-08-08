@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import { pointApplyInfoListSchema } from '@/_types/adminType';
-import { useSession } from 'next-auth/react';
 import api from '../Axios';
 
 export const useGetPointApplyKey = 'useGetPointApply';
@@ -23,7 +22,6 @@ export const useGetPointApply = ({
     sort?: string;
   };
 }) => {
-  const session = useSession();
   return useQuery({
     queryKey: [useGetPointApplyKey, params, pageable],
     queryFn: async () => {
@@ -31,9 +29,6 @@ export const useGetPointApply = ({
         params: {
           ...params,
           ...pageable,
-        },
-        headers: {
-          Authorization: `Bearer ${session.data?.accessToken}`,
         },
       });
       return pointApplyInfoListSchema.parse(res.data.data);
