@@ -1,5 +1,11 @@
 import { WktStatusType } from './adminType';
 
+export type AxiosErrorResponse = {
+  status: number;
+  message: string;
+  timestamp: string;
+};
+
 export type DatePickerTagType =
   | 'ALL'
   | '1_WEEK'

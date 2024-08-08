@@ -62,7 +62,7 @@ const NoticesListPage = () => {
   }
 
   const { data, isLoading, isError } = useGetNoticeListQuery({
-    type: param.noticeType.join(','),
+    types: param.noticeType.join(','),
     startDate: startDate
       ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
       : undefined,

@@ -14,12 +14,8 @@ import UserTextLabelAtom from '@/_components/user/common/atoms/UserTextLabelAtom
 import { noticeTypeConverter } from '@/_types/adminType';
 import UserFilteringSectionContainer from '@/_components/user/common/containers/UserFilteringSectionContainer';
 import UserStateFilteringContainer from '@/_components/user/common/containers/UserStateFilteringContainer';
-
-const data = [
-  { id: 1, 구분: 'ANNOUNCEMENT', 제목: '공지사항', 작성일: '2024-08-01' },
-  { id: 2, 구분: 'EVENT', 제목: '이벤트', 작성일: '2024-08-02' },
-  { id: 3, 구분: 'RESULT', 제목: '결과', 작성일: '2024-08-03' },
-];
+import { useGetNoticeListQuery } from '@/_hooks/admin/useGetNoticeListQuery';
+import dayjs from 'dayjs';
 
 const getCategoryStyle = (category: string) => {
   switch (category) {
@@ -37,7 +33,15 @@ const getCategoryStyle = (category: string) => {
 const UserNoticePage = () => {
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(data.length / 10);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [param, setParam] = useState<{
+    order: string;
+    noticeType: string[];
+  }>({
+    order: 'DESC',
+    noticeType: ['ANNOUNCEMENT', 'RESULT', 'EVENT'],
+  });
 
   const [isFilteringSectionOpen, setIsFilteringSectionOpen] = useState<
     'FILTER' | 'ORDER' | null
@@ -45,8 +49,21 @@ const UserNoticePage = () => {
   const [selectedState, setSelectedState] = useState<string>('ALL');
   const [selectedOrder, setSelectedOrder] = useState<string>('createdAt,DESC');
 
+  const { data, isLoading, isError } = useGetNoticeListQuery({
+    types: param.noticeType.join(','),
+    startDate: startDate
+      ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
+      : undefined,
+    endDate: endDate ? dayjs(endDate).format('YYYY-MM-DDTHH:mm:ss') : undefined,
+    pageParam: {
+      page: currentPage,
+      size: 10,
+      sort: `createdAt,${param.order}`,
+    },
+  });
+
   return (
-    <section className="pt-18 px-40">
+    <section className="px-40 pt-18">
       <div className="flex flex-col gap-y-14">
         <div className="flex justify-between">
           <h2 className="text-h2 font-semibold">공지사항</h2>
@@ -62,10 +79,16 @@ const UserNoticePage = () => {
                 <UserStateFilteringContainer
                   type="NOTICE"
                   selectedOption={selectedState}
-                  onClickOption={setSelectedState}
+                  onClickOption={(newFilter) => {
+                    setSelectedState(newFilter);
+                    setParam((prevParam) => ({
+                      ...prevParam,
+                      noticeType: [newFilter],
+                    }));
+                  }}
                 />
               ),
-              onRefresh: () => console.log('refresh'),
+              onRefresh: () => {}, // 추후 수정 예정
             }}
             orderOption={{
               onClickOrder: () =>
@@ -79,7 +102,13 @@ const UserNoticePage = () => {
                   { key: 'createdAt,ASC', value: '오래된순' },
                 ],
                 selectedOrder,
-                setSelectedOrder,
+                setSelectedOrder: (newOrder) => {
+                  setSelectedOrder(newOrder);
+                  setParam((prevParam) => ({
+                    ...prevParam,
+                    order: newOrder.split(',')[1],
+                  }));
+                },
               },
             }}
           />
@@ -95,21 +124,29 @@ const UserNoticePage = () => {
           </UserTableHeaderModule>
 
           <tbody>
-            {data.length <= 0 ? (
+            {!data ? (
+              isLoading ? (
+                <EmptyContainer colSpan={5} text="loading" />
+              ) : (
+                <EmptyContainer colSpan={5} text="error" />
+              )
+            ) : data.pageInfo.totalElements <= 0 ? (
               <EmptyContainer colSpan={5} />
             ) : (
-              data.map((item, index) => (
+              data.announcementInfos.map((item, index) => (
                 <UserTableBodyModule key={item.id}>
                   <UserTableBodyAtom isFirst>{index + 1}</UserTableBodyAtom>
                   <UserTableBodyAtom>
                     <UserTextLabelAtom
-                      text={noticeTypeConverter[item.구분]}
+                      text={noticeTypeConverter[item.announcementType]}
                       size="sm"
-                      className={getCategoryStyle(item.구분)}
+                      className={getCategoryStyle(item.announcementType)}
                     />
                   </UserTableBodyAtom>
-                  <UserTableBodyAtom>{item.제목}</UserTableBodyAtom>
-                  <UserTableBodyAtom>{item.작성일}</UserTableBodyAtom>
+                  <UserTableBodyAtom>{item.title}</UserTableBodyAtom>
+                  <UserTableBodyAtom>
+                    {dayjs(item.createdAt).format('YYYY.MM.DD')}
+                  </UserTableBodyAtom>
                   <UserTableBodyAtom isLast>
                     <UserShowDetailButtonAtom
                       onClick={() => router.push(`/support/notices/${item.id}`)}
@@ -121,13 +158,15 @@ const UserNoticePage = () => {
           </tbody>
         </UserTableContainer>
       </div>
-      <div className="mt-40 flex justify-center">
-        <PaginationModule
-          totalPages={totalPages}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-        />
-      </div>
+      {data && data.pageInfo.totalElements > 0 && (
+        <div className="mt-40 flex justify-center">
+          <PaginationModule
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalPages={data.pageInfo.totalPages}
+          />
+        </div>
+      )}
     </section>
   );
 };
