@@ -6,7 +6,7 @@ export const usePostCertificationSend = ({
   errorCallback,
 }: {
   successCallback?: () => void;
-  errorCallback?: (error: any) => void;
+  errorCallback?: (error: Error) => void;
 }) => {
   return useMutation({
     mutationFn: async (data: { email: string }) => {
