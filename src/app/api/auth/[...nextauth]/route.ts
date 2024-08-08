@@ -17,7 +17,7 @@ const handler = NextAuth({
         password: { label: '비밀번호', type: 'password' },
       },
       async authorize(credentials) {
-        console.log('credentials');
+        // console.log('credentials');
 
         if (!credentials) {
           throw new Error('로그인 정보가 없습니다.');
@@ -25,7 +25,7 @@ const handler = NextAuth({
 
         try {
           const authResponse = await api.post('/api/auth/login', credentials);
-          console.log(authResponse);
+          // console.log(authResponse);
 
           if (authResponse.data.data) {
             return {
@@ -47,9 +47,9 @@ const handler = NextAuth({
   ],
   callbacks: {
     async jwt({ token, user }) {
-      console.log('Jwt Callback()');
-      console.log(token);
-      console.log(user);
+      // console.log('Jwt Callback()');
+      // console.log(token);
+      // console.log(user);
       // authorize 함수의 반환값이 user에 담겨서 넘어온다.
       // user 객체가 있다는 것은 signin이 성공한 직후의 요청
       if (user) {
@@ -66,9 +66,9 @@ const handler = NextAuth({
     },
 
     async session({ session, token }) {
-      console.log('Session Callback()');
-      console.log(session);
-      console.log(token);
+      // console.log('Session Callback()');
+      // console.log(session);
+      // console.log(token);
       // 4.Jwt Callback으로부터 반환받은 token값을 기존 세션에 추가한다
       if (token) {
         /* eslint-disable no-param-reassign */

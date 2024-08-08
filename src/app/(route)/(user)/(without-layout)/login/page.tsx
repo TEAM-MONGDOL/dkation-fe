@@ -26,8 +26,8 @@ const Login = () => {
     if (!form.accountId || !form.password) {
       return;
     }
-    console.log('tryLogin');
-    console.log(form);
+    // console.log('tryLogin');
+    // console.log(form);
     const result = await signIn('credentials', {
       accountId: form.accountId,
       password: form.password,
