@@ -25,7 +25,7 @@ const UserLoginInput = ({
         name={name}
         value={value}
         onChange={onChange}
-        className={`h-14 w-full rounded-lg ${error ? 'border-2 border-negative' : 'border border-yellow-button-line'} px-5 py-2.5 font-medium text-sub-400 outline-none placeholder:text-sub-200 ${
+        className={`h-14 w-full rounded-lg ${error ? 'border-2 border-negative' : 'border border-sub-100'} px-5 py-2.5 font-medium text-sub-400 outline-none placeholder:text-sub-200 ${
           type === 'password' ? 'tracking-widest' : ''
         }`}
         placeholder={placeholder}
