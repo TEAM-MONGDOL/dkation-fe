@@ -24,6 +24,7 @@ interface WorkationCardProps {
     | 'WAIT'
     | 'VISITED';
   waitingNumber?: number;
+  onClick?: (applyStatusType: WorkationCardProps['applyStatusType']) => void;
 }
 
 type ButtonStyle =
@@ -117,11 +118,8 @@ const WorkationCard: React.FC<WorkationCardProps> = ({
   bettingPoint,
   applyStatusType,
   waitingNumber = -1,
+  onClick,
 }) => {
-  const OpenEditModal = () => {
-    alert('edit button click'); // 수정 예정
-  };
-
   const { textLabel, buttonText, textLabelClass, buttonStyle, buttonDisabled } =
     statusConfig[applyStatusType];
 
@@ -151,8 +149,8 @@ const WorkationCard: React.FC<WorkationCardProps> = ({
             <p className="flex items-center rounded-full bg-sub-100/40 px-5 py-2.5">
               베팅 포인트 : {bettingPoint} 점
             </p>
-            {applyStatusType === 'APPLIED' && (
-              <button onClick={OpenEditModal}>
+            {applyStatusType === 'APPLIED' && onClick && (
+              <button onClick={() => onClick(applyStatusType)}>
                 <Image src={PointEditIcon} alt="edit" />
               </button>
             )}
@@ -175,6 +173,11 @@ const WorkationCard: React.FC<WorkationCardProps> = ({
             type="button"
             className="rounded-md"
             disabled={buttonDisabled}
+            onClick={
+              !buttonDisabled && onClick
+                ? () => onClick(applyStatusType)
+                : undefined
+            }
           />
         </div>
       </div>
