@@ -5,6 +5,10 @@ on:
     branches: [main, MF-255-Next.js-WEB-CI]
   pull_request:
     branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 env:
   PROJECT_NAME: dkation
@@ -16,65 +20,65 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0  # This is important to fetch all history for all tags and branches
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Get latest tag
-      id: get_latest_tag
-      run: |
-        git fetch --tags
-        latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
-        echo "LATEST_TAG=$latest_tag" >> $GITHUB_OUTPUT
+      - name: Get latest tag
+        id: get_latest_tag
+        run: |
+          git fetch --tags
+          latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          echo "LATEST_TAG=$latest_tag" >> $GITHUB_OUTPUT
 
-    - name: Bump version
-      id: bump_version
-      run: |
-        latest_tag=${{ steps.get_latest_tag.outputs.LATEST_TAG }}
-        IFS='.' read -ra ADDR <<< "${latest_tag#v}"
-        major="${ADDR[0]}"
-        minor="${ADDR[1]}"
-        patch="${ADDR[2]}"
-        new_patch=$((patch + 1))
-        new_tag="v$major.$minor.$new_patch"
-        echo "NEW_TAG=$new_tag" >> $GITHUB_OUTPUT
+      - name: Bump version
+        id: bump_version
+        run: |
+          latest_tag=${{ steps.get_latest_tag.outputs.LATEST_TAG }}
+          IFS='.' read -ra ADDR <<< "${latest_tag#v}"
+          major="${ADDR[0]}"
+          minor="${ADDR[1]}"
+          patch="${ADDR[2]}"
+          new_patch=$((patch + 1))
+          new_tag="v$major.$minor.$new_patch"
+          echo "NEW_TAG=$new_tag" >> $GITHUB_OUTPUT
 
-    - name: Create and push new tag
-      env:
-        GITHUB_TOKEN: ${{ secrets.PAT }}
-      run: |
-        git config user.name MinhoJJang
-        git config user.email ahchjang@naver.com
-        git tag ${{ steps.bump_version.outputs.NEW_TAG }}
-        git push https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git ${{ steps.bump_version.outputs.NEW_TAG }}
+      - name: Create and push new tag
+        env:
+          PAT: ${{ secrets.PAT }}
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git tag ${{ steps.bump_version.outputs.NEW_TAG }}
+          git push https://$PAT@github.com/${{ github.repository }}.git ${{ steps.bump_version.outputs.NEW_TAG }}
 
-    - name: Set up environment variables
-      run: |
-        echo "NEXT_PUBLIC_SERVER_URL=${{ secrets.NEXT_PUBLIC_SERVER_URL }}" >> .env.local
-        echo "ACCESS_KEY=${{ secrets.ACCESS_KEY }}" >> .env.local
-        echo "ACCESS_SECRET_KEY=${{ secrets.ACCESS_SECRET_KEY }}" >> .env.local
-        echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> .env.local
-        echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" >> .env.local
+      - name: Set up environment variables
+        run: |
+          echo "NEXT_PUBLIC_SERVER_URL=${{ secrets.NEXT_PUBLIC_SERVER_URL }}" >> .env.local
+          echo "ACCESS_KEY=${{ secrets.ACCESS_KEY }}" >> .env.local
+          echo "ACCESS_SECRET_KEY=${{ secrets.ACCESS_SECRET_KEY }}" >> .env.local
+          echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> .env.local
+          echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" >> .env.local
 
-    - name: Build the Docker image
-      run: |
-        docker build -t ${{ env.IMAGE_NAME }}:${{ steps.bump_version.outputs.NEW_TAG }} --platform linux/amd64 .
-        docker tag ${{ env.IMAGE_NAME }}:${{ steps.bump_version.outputs.NEW_TAG }} ${{ env.PROJECT_NAME }}.kr-central-2.kcr.dev/${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_NAME }}:${{ steps.bump_version.outputs.NEW_TAG }}
+      - name: Build the Docker image
+        run: |
+          docker build -t ${{ env.IMAGE_NAME }}:${{ steps.bump_version.outputs.NEW_TAG }} --platform linux/amd64 .
+          docker tag ${{ env.IMAGE_NAME }}:${{ steps.bump_version.outputs.NEW_TAG }} ${{ env.PROJECT_NAME }}.kr-central-2.kcr.dev/${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_NAME }}:${{ steps.bump_version.outputs.NEW_TAG }}
 
-    - name: Login to KCR
-      run: |
-        echo "${{ secrets.ACCESS_SECRET_KEY }}" | docker login ${{ env.PROJECT_NAME }}.kr-central-2.kcr.dev -u "${{ secrets.ACCESS_KEY }}" --password-stdin
+      - name: Login to KCR
+        run: |
+          echo "${{ secrets.ACCESS_SECRET_KEY }}" | docker login ${{ env.PROJECT_NAME }}.kr-central-2.kcr.dev -u "${{ secrets.ACCESS_KEY }}" --password-stdin
 
-    - name: Push to KCR
-      run: |
-        docker push ${{ env.PROJECT_NAME }}.kr-central-2.kcr.dev/${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_NAME }}:${{ steps.bump_version.outputs.NEW_TAG }}
+      - name: Push to KCR
+        run: |
+          docker push ${{ env.PROJECT_NAME }}.kr-central-2.kcr.dev/${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_NAME }}:${{ steps.bump_version.outputs.NEW_TAG }}
 
-    - name: Create Release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ steps.bump_version.outputs.NEW_TAG }}
-        release_name: Release ${{ steps.bump_version.outputs.NEW_TAG }}
-        draft: false
-        prerelease: false
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.bump_version.outputs.NEW_TAG }}
+          release_name: Release ${{ steps.bump_version.outputs.NEW_TAG }}
+          draft: false
+          prerelease: false
