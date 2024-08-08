@@ -9,6 +9,7 @@ import WkResultInfo from '@/_components/user/workation/WkResultInfo';
 import WkReviewInfo from '@/_components/user/workation/WkReviewInfo';
 import { useGetUserWkDetailQuery } from '@/_hooks/user/useGetUserWkDetailQuery';
 import dayjs from 'dayjs';
+import { useGetUserWkPlaceReviewQuery } from '@/_hooks/user/useGetUserWkPlaceReviewQuery';
 
 interface UserWkDetailProps {
   params: { id: number };
@@ -22,6 +23,13 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
   const reviewRef = useRef<HTMLDivElement | null>(null);
   const { data, isLoading, isError } = useGetUserWkDetailQuery({
     wktId: id,
+  });
+  const {
+    data: reviewData,
+    isLoading: reviewIsLoading,
+    isError: reviewIsError,
+  } = useGetUserWkPlaceReviewQuery({
+    wktPlaceId: id,
   });
   const handleScroll = () => {
     if (detailRef.current && resultRef.current && reviewRef.current) {
@@ -45,13 +53,13 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-  if (isLoading) {
+  if (isLoading || reviewIsLoading) {
     return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
   }
-  if (isError) {
+  if (isError || reviewIsError) {
     return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정
   }
-  if (!data) {
+  if (!data || !reviewData) {
     return <div>No data</div>;
   }
 
@@ -126,7 +134,17 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
           <WkResultInfo />
         </div>
         <div className="flex flex-col pt-16" ref={reviewRef}>
-          <WkReviewInfo />
+          {reviewData.reviewInfosForWkt.map((review) => (
+            <WkReviewInfo
+              key={review.wktTitle}
+              title={review.wktTitle}
+              reviewer={review.reviewer}
+              lastModifiedAt={review.lastModifiedAt}
+              department={review.department}
+              contents={review.contents}
+              rating={review.rating}
+            />
+          ))}
         </div>
       </div>
     </section>

@@ -303,6 +303,21 @@ export const wkUserDetailInfoSchema = z.object({
   isApplied: z.boolean(),
   files: fileInfoSchema.array().nullable().optional(),
 });
+export const wkUserPlaceReviewInfoSchema = z.object({
+  id: z.number(),
+  reviewer: z.string(),
+  department: z.string(),
+  wktTitle: z.string(),
+  rating: z.number(),
+  contents: z.string(),
+  lastModifiedAt: z.string(),
+  files: fileInfoSchema.array().nullable().optional(),
+});
+
+export const workationUserPlaceReviewSchema = z.object({
+  reviewInfosForWkt: wkUserPlaceReviewInfoSchema.array(),
+  pageInfo: pageInfoSchema,
+});
 
 // Type
 export type PageableType = {
