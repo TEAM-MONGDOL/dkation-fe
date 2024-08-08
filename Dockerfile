@@ -19,14 +19,6 @@ RUN npm install sharp
 # Build the Next.js application
 RUN npm run build
 
-# Add debugging steps
-RUN echo "Contents of /app directory:"
-RUN ls -la /app
-RUN echo "Contents of /app/.next directory:"
-RUN ls -la /app/.next
-RUN echo "Contents of /app/.next/standalone directory (if it exists):"
-RUN ls -la /app/.next/standalone || echo "Standalone directory not found"
-
 # Production stage
 FROM node:18-alpine AS runner
 
