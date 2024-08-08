@@ -9,6 +9,7 @@ interface UserButtonAtomProps {
   type: 'button' | 'submit';
   className?: string;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
 const UserButtonAtom = ({
@@ -19,6 +20,7 @@ const UserButtonAtom = ({
   type,
   className = '',
   onClick,
+  disabled = false,
 }: UserButtonAtomProps) => {
   const sizeStyles = {
     sm: 'px-4 py-2.5',
@@ -42,7 +44,8 @@ const UserButtonAtom = ({
     <button
       type={type}
       onClick={onClick}
-      className={`flex items-center justify-center gap-4 ${sizeStyles[size]} ${buttonStyles[buttonStyle]} ${className}`}
+      disabled={disabled}
+      className={`flex items-center justify-center gap-4 ${sizeStyles[size]} ${buttonStyles[buttonStyle]} ${disabled ? 'cursor-not-allowed' : ''} ${className}`}
     >
       {text}
       {rightArrow && <Image src={RightArrowIcon} alt="rightArrow" />}
