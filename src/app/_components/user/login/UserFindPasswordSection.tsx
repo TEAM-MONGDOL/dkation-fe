@@ -59,14 +59,7 @@ const UserFindPasswordSection = ({
     isPending: checkCertificationCodeIsPending,
   } = usePostCertificationCheck({
     successCallback: () => {
-      setModalContent({
-        desc: '인증이 완료되었습니다.',
-        onClick: () => {
-          setModalContent(null);
-          onLoginClick();
-        },
-        buttonText: '로그인하러 가기',
-      });
+      setIsVerificated(true);
     },
     errorCallback: (error) => {
       if (axios.isAxiosError<AxiosErrorResponse>(error)) {
@@ -163,6 +156,7 @@ const UserFindPasswordSection = ({
               size="full"
               buttonStyle="black"
               type="button"
+              className={`${checkCertificationCodeIsPending ? 'animate-pulse text-sub-300' : ''}`}
               onClick={handleClickCode}
             />
           </div>
