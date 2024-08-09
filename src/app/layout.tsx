@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Noto_Sans_KR } from 'next/font/google';
 import './globals.css';
 import ReactQueryProvider from './_hooks/ReactQueryProvider';
+import { AuthContext } from './_context/AuthContext';
 
 const notoSansKR = Noto_Sans_KR({ subsets: ['latin'] });
 
@@ -18,7 +19,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={notoSansKR.className}>
-        <ReactQueryProvider>{children}</ReactQueryProvider>
+        <AuthContext>
+          <ReactQueryProvider>{children}</ReactQueryProvider>
+        </AuthContext>
       </body>
     </html>
   );

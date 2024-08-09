@@ -13,6 +13,7 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
         'login-bg': 'url("./_assets/icons/logoIllust.svg")',
+        'home-bg': 'url("./_assets/images/home_bg.png")',
       },
       colors: {
         transparent: 'transparent',

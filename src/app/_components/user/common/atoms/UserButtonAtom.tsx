@@ -44,7 +44,7 @@ const UserButtonAtom = ({
       onClick={onClick}
       className={`flex items-center justify-center gap-4 ${sizeStyles[size]} ${buttonStyles[buttonStyle]} ${className}`}
     >
-      {text}
+      <span className="shrink-0">{text}</span>
       {rightArrow && <Image src={RightArrowIcon} alt="rightArrow" />}
     </button>
   );
