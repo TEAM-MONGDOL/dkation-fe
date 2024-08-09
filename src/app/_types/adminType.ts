@@ -74,6 +74,7 @@ export const wktWinningUserInfosSchema = z.object({
   accountId: z.string(),
   department: z.string(),
   penaltyAssignDate: z.string().nullable(),
+  wktTitle: z.string(),
 });
 
 export const WkResultPenaltyInfoSchema = z.object({

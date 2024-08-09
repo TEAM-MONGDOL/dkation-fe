@@ -16,17 +16,43 @@ import InputModule from '@/_components/common/modules/InputModule';
 import DropdownModule from '@/_components/common/modules/DropdownModule';
 import WkResultSide from '@/(route)/admin/(with-layout)/workation/[id]/result/wkResultSide';
 import { useGetWkPenaltyQuery } from '@/_hooks/admin/useGetWkPenaltyQuery';
+import { usePostPenaltyMutation } from '@/_hooks/admin/usePostPenaltyMutation';
 
 interface WkResultProps {
   params: { id: number };
 }
 
+const penaltyTypeMapping: {
+  [key: string]: 'NOSHOW' | 'REPORT' | 'NEGLIGENCE' | 'ABUSE';
+} = {
+  노쇼: 'NOSHOW',
+  '협력체 신고': 'REPORT',
+  '근무 태만': 'NEGLIGENCE',
+  '포인트 제도 악용': 'ABUSE',
+};
+
 const AdminWorkationListPenaltyPage = ({ params }: WkResultProps) => {
   const [isConfirmModelOpen, setIsConfirmModelOpen] = useState(false);
-  const router = useRouter();
   const [selectedType, setSelectedType] = useState<string>('');
+  const [selectedAccountId, setSelectedAccountId] = useState<string | null>(
+    null,
+  );
+  const router = useRouter();
   const { id } = params;
   const { data, isLoading, isError } = useGetWkPenaltyQuery({ wktId: id });
+
+  const { mutate: PostPenalty } = usePostPenaltyMutation({
+    successCallback: () => {
+      alert('페널티 등록 완료');
+      setIsConfirmModelOpen(false);
+      setSelectedAccountId(null);
+      router.back();
+    },
+    errorCallback: (error) => {
+      alert(`${error.message}`);
+      setIsConfirmModelOpen(false);
+    },
+  });
 
   if (isLoading) {
     return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
@@ -120,7 +146,10 @@ const AdminWorkationListPenaltyPage = ({ params }: WkResultProps) => {
                       </TableBodyAtom>
                       <TableBodyAtom isLast>
                         <button
-                          onClick={() => setIsConfirmModelOpen(true)}
+                          onClick={() => {
+                            setSelectedAccountId(item.accountId); // Set selected accountId
+                            setIsConfirmModelOpen(true);
+                          }}
                           className="rounded-full bg-primary px-4 py-1.5 text-4"
                         >
                           부여하기
@@ -138,27 +167,34 @@ const AdminWorkationListPenaltyPage = ({ params }: WkResultProps) => {
             title="선택한 회원에게 페널티를 부여하시겠습니까?"
             cancelText="취소"
             confirmText="확인"
-            confirmButtonStyle="dark"
-            cancelButtonStyle="yellow"
             onConfirm={() => {
-              //  TODO : 페널티 등록 API 호출
-              alert('페널티 등록 완료');
-              setIsConfirmModelOpen(false);
-              router.back();
+              if (selectedAccountId) {
+                PostPenalty({
+                  wktId: Number(id),
+                  accountId: selectedAccountId,
+                  penaltyType: penaltyTypeMapping[selectedType],
+                });
+              }
             }}
             onCancel={() => {
               setIsConfirmModelOpen(false);
+              setSelectedAccountId(null); // Clear selected accountId on cancel
             }}
           >
             <InputModule
               subtitle="해당 워케이션"
               status="disabled"
-              value="1월 1주차 워케이션"
+              value={data.wktWinningUserInfos[0].wktTitle}
             />
             <div className="mt-4 flex flex-col gap-4">
               <p className="text-3 font-semibold">분류</p>
               <DropdownModule
-                options={['노쇼', '고성방가']}
+                options={[
+                  '노쇼',
+                  '협력체 신고',
+                  '근무 태만',
+                  '포인트 제도 악용',
+                ]}
                 onSelect={setSelectedType}
                 placeholder="페널티 사유를 선택하세요."
                 selectedOption={selectedType}
