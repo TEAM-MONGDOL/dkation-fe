@@ -267,18 +267,6 @@ export const memberListSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
-export const bannerInfoSchema = z.object({
-  id: z.number(),
-  title: z.string(),
-  linkUrl: z.string(),
-  backgroundColor: z.string(),
-});
-
-export const bannerInfoListSchema = z.object({
-  bannerInfoList: bannerInfoSchema.array(),
-  pageInfo: pageInfoSchema,
-});
-
 export const memberDetailSchema = z.object({
   name: z.string(),
   accountId: z.string(),
