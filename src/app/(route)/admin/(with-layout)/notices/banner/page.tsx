@@ -56,7 +56,7 @@ const AdminPointsRewardNewPage = () => {
               </TableHeaderAtom>
               <TableHeaderAtom>배너 문구</TableHeaderAtom>
               <TableHeaderAtom>링크</TableHeaderAtom>
-              <TableHeaderAtom width="200px">배경색</TableHeaderAtom>
+              <TableHeaderAtom width="200px">스타일</TableHeaderAtom>
               <TableHeaderAtom isLast width="130px" />
             </TableHeaderModule>
             <tbody>
