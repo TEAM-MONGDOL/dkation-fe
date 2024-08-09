@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import api from '../Axios';
 
-export const usePostCertificationSend = ({
+export const usePostCertificationSendMutation = ({
   successCallback,
   errorCallback,
 }: {
