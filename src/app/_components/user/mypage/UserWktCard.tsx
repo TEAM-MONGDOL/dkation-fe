@@ -65,8 +65,7 @@ const statusConfig: Record<
   },
   NO_WINNING: {
     textLabel: '미당첨',
-    buttonText: (waitingNumber) =>
-      waitingNumber === -1 ? '추첨 완료' : `대기번호 (${waitingNumber})번`,
+    buttonText: '미당첨',
     textLabelClass: 'border border-negative bg-negative text-white',
     buttonStyle: 'red',
     buttonDisabled: true,
