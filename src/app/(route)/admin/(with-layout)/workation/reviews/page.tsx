@@ -43,7 +43,7 @@ const AdminWorkationReviewsPage = () => {
     startPoint: number;
     endPoint: number;
   }>({
-    order: 'ASC',
+    order: 'DESC',
     type: Object.keys(placeOrderList),
     startPoint: 0,
     endPoint: 5,
