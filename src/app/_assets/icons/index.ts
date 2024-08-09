@@ -45,3 +45,5 @@ export { default as UserNextNoticeButton } from './userNextNoticeButton.svg';
 export { default as UserPreviousNoticeButton } from './userPreviousNoticeButton.svg';
 export { default as WalletIcon } from './wallet.svg';
 export { default as LogoTextIcon } from './logoText.svg';
+export { default as LeftKeyIcon } from './leftKey.svg';
+export { default as RightKeyIcon } from './rightKey.svg';
