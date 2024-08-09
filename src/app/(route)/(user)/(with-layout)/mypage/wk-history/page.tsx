@@ -9,6 +9,7 @@ import UserStateFilteringContainer from '@/_components/user/common/containers/Us
 import UserPlaceFilteringContainer from '@/_components/user/common/containers/UserPlaceFilteringContainer';
 import WorkationCard from '@/_components/user/mypage/UserWktCard';
 import place from '@/_assets/images/place_impy.png';
+import UserWktConfirmModal from '@/_components/user/mypage/UserWktConfirmModal';
 
 const UserWkHistoryPage = () => {
   const router = useRouter();
@@ -29,6 +30,9 @@ const UserWkHistoryPage = () => {
   const [selectedState, setSelectedState] = useState<string>('ALL');
   const [selectedOrder, setSelectedOrder] = useState<string>('createdAt,DESC');
   const [selectedSpace, setSelectedSpace] = useState<string[]>(['양양 쏠비치']);
+  const [openModal, setOpenModal] = useState<
+    'CANCEL' | 'CONFIRM' | 'CANCELLATION_CONFIRMATION' | null
+  >(null);
 
   const { data, isLoading, isError } = useGetNoticeListQuery({
     types: param.noticeType.join(','),
@@ -46,17 +50,24 @@ const UserWkHistoryPage = () => {
   const handleCardClick = (applyStatusType: string) => {
     switch (applyStatusType) {
       case 'APPLIED':
-        console.log('신청 취소하기 로직');
+        setOpenModal('CANCEL');
         break;
       case 'CONFIRM_WAIT':
-        console.log('방문 확정하기 로직');
+        setOpenModal('CONFIRM');
         break;
       case 'VISITED':
-        console.log('후기 작성하기 로직');
+        router.push('/mypage/review/new');
         break;
       default:
-        console.log(`${applyStatusType}에 대한 동작이 정의되지 않았습니다.`);
     }
+  };
+
+  const handleCancelConfirm = () => {
+    setOpenModal('CANCELLATION_CONFIRMATION');
+  };
+
+  const handleConfirmConfirm = () => {
+    // 수락 로직 처리
   };
 
   return (
@@ -116,11 +127,32 @@ const UserWkHistoryPage = () => {
           startDate="2024.07.10"
           endDate="2024.07.12"
           bettingPoint={400}
-          applyStatusType="APPLIED"
+          applyStatusType="CONFIRM_WAIT"
           waitingNumber={4}
           onClick={handleCardClick}
         />
       </div>
+
+      {openModal === 'CANCEL' && (
+        <UserWktConfirmModal
+          onClose={() => setOpenModal(null)}
+          onConfirm={handleCancelConfirm}
+          onCancel={handleCancelConfirm}
+        />
+      )}
+      {openModal === 'CONFIRM' && (
+        <UserWktConfirmModal
+          onClose={() => setOpenModal(null)}
+          onConfirm={handleConfirmConfirm}
+          onCancel={handleCancelConfirm}
+        />
+      )}
+      {openModal === 'CANCELLATION_CONFIRMATION' && (
+        <UserWktConfirmModal
+          onClose={() => setOpenModal(null)}
+          onConfirm={() => setOpenModal(null)}
+        />
+      )}
     </section>
   );
 };
