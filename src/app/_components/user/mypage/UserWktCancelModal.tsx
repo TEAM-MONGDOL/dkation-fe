@@ -3,7 +3,7 @@ import UserModalAtom from '@/_components/user/common/atoms/UserModalAtom';
 import UserModalTitleAtom from '@/_components/user/common/atoms/UserModalTextAtom';
 import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
 
-const CancelModal = ({
+const UserWktCancelModal = ({
   onClose,
   onConfirm,
 }: {
@@ -38,4 +38,4 @@ const CancelModal = ({
   </UserModalAtom>
 );
 
-export default CancelModal;
+export default UserWktCancelModal;

@@ -10,6 +10,7 @@ import UserPlaceFilteringContainer from '@/_components/user/common/containers/Us
 import WorkationCard from '@/_components/user/mypage/UserWktCard';
 import place from '@/_assets/images/place_impy.png';
 import UserWktConfirmModal from '@/_components/user/mypage/UserWktConfirmModal';
+import UserWktCancelModal from '@/_components/user/mypage/UserWktCancelModal';
 
 const UserWkHistoryPage = () => {
   const router = useRouter();
@@ -31,7 +32,7 @@ const UserWkHistoryPage = () => {
   const [selectedOrder, setSelectedOrder] = useState<string>('createdAt,DESC');
   const [selectedSpace, setSelectedSpace] = useState<string[]>(['양양 쏠비치']);
   const [openModal, setOpenModal] = useState<
-    'CANCEL' | 'CONFIRM' | 'CANCELLATION_CONFIRMATION' | null
+    'CANCEL' | 'CONFIRM' | 'CANCELLATION_CONFIRMATION' | 'APPLIED_CANCEL' | null
   >(null);
 
   const { data, isLoading, isError } = useGetNoticeListQuery({
@@ -50,7 +51,7 @@ const UserWkHistoryPage = () => {
   const handleCardClick = (applyStatusType: string) => {
     switch (applyStatusType) {
       case 'APPLIED':
-        setOpenModal('CANCEL');
+        setOpenModal('APPLIED_CANCEL'); // APPLIED 상태에서는 CancelModal을 표시하도록 설정
         break;
       case 'CONFIRM_WAIT':
         setOpenModal('CONFIRM');
@@ -131,6 +132,48 @@ const UserWkHistoryPage = () => {
           waitingNumber={4}
           onClick={handleCardClick}
         />
+        <WorkationCard
+          thumbnailUrl={place.src}
+          wktName="2024년 7월 3주차 워케이션"
+          place="양양"
+          totalRecruit={2}
+          applyStartDate="2024.07.01"
+          applyEndDate="2024.07.15"
+          startDate="2024.07.10"
+          endDate="2024.07.12"
+          bettingPoint={400}
+          applyStatusType="APPLIED"
+          waitingNumber={4}
+          onClick={handleCardClick}
+        />
+        <WorkationCard
+          thumbnailUrl={place.src}
+          wktName="2024년 7월 3주차 워케이션"
+          place="양양"
+          totalRecruit={2}
+          applyStartDate="2024.07.01"
+          applyEndDate="2024.07.15"
+          startDate="2024.07.10"
+          endDate="2024.07.12"
+          bettingPoint={400}
+          applyStatusType="VISITED"
+          waitingNumber={4}
+          onClick={handleCardClick}
+        />
+        <WorkationCard
+          thumbnailUrl={place.src}
+          wktName="2024년 7월 3주차 워케이션"
+          place="양양"
+          totalRecruit={2}
+          applyStartDate="2024.07.01"
+          applyEndDate="2024.07.15"
+          startDate="2024.07.10"
+          endDate="2024.07.12"
+          bettingPoint={400}
+          applyStatusType="NO_WINNING"
+          waitingNumber={4}
+          onClick={handleCardClick}
+        />
       </div>
 
       {openModal === 'CANCEL' && (
@@ -151,6 +194,12 @@ const UserWkHistoryPage = () => {
         <UserWktConfirmModal
           onClose={() => setOpenModal(null)}
           onConfirm={() => setOpenModal(null)}
+        />
+      )}
+      {openModal === 'APPLIED_CANCEL' && (
+        <UserWktCancelModal
+          onClose={() => setOpenModal(null)}
+          onConfirm={handleCancelConfirm}
         />
       )}
     </section>
