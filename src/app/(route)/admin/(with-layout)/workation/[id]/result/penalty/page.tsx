@@ -15,41 +15,28 @@ import { useRouter } from 'next/navigation';
 import InputModule from '@/_components/common/modules/InputModule';
 import DropdownModule from '@/_components/common/modules/DropdownModule';
 import WkResultSide from '@/(route)/admin/(with-layout)/workation/[id]/result/wkResultSide';
+import { useGetWkPenaltyQuery } from '@/_hooks/admin/useGetWkPenaltyQuery';
 
 interface WkResultProps {
   params: { id: number };
 }
-
-const data = [
-  { subtitle: '최대 포인트', content: '350 P' },
-  { subtitle: '최소 포인트', content: '350 P' },
-  { subtitle: '평균 포인트', content: '350 P' },
-];
-
-const tabledata = [
-  {
-    id: 1,
-    사유: '-',
-    이름: '홍길동',
-    아이디: 'hong.gil',
-    소속: '개발팀',
-    지급일시: '2024.05.05',
-  },
-  {
-    id: 2,
-    사유: '노쇼',
-    이름: '홍길동',
-    아이디: 'hong.gil',
-    소속: '개발팀',
-    지급일시: '2024.05.05',
-  },
-];
 
 const AdminWorkationListPenaltyPage = ({ params }: WkResultProps) => {
   const [isConfirmModelOpen, setIsConfirmModelOpen] = useState(false);
   const router = useRouter();
   const [selectedType, setSelectedType] = useState<string>('');
   const { id } = params;
+  const { data, isLoading, isError } = useGetWkPenaltyQuery({ wktId: id });
+
+  if (isLoading) {
+    return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
+  }
+  if (isError) {
+    return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정
+  }
+  if (!data) {
+    return <div>No data</div>;
+  }
   return (
     <section className="flex">
       <WkResultSide id={id} />
@@ -63,14 +50,33 @@ const AdminWorkationListPenaltyPage = ({ params }: WkResultProps) => {
             <div className="flex w-full flex-col gap-4">
               <p className="text-3 font-bold">경쟁률</p>
               <div className="flex w-full flex-col gap-1 border py-7 text-center">
-                <p className="text-h1 font-bold">30 : 1</p>
-                <p className="text-4 text-sub-300">신청 인원 250명</p>
+                <p className="text-h1 font-bold">
+                  {`${data.wktResultInfo.totalRecruit} : ${data.wktResultInfo.totalApply}`}
+                </p>
+                <p className="text-4 text-sub-300">
+                  신청 인원 {data.wktResultInfo.totalRecruit}명
+                </p>
               </div>
             </div>
             <div className="flex w-full flex-col gap-4">
               <p className="text-3 font-bold">모집 기간</p>
               <div className="w-full border px-10 py-5">
-                <InfoSectionModule data={data} />
+                <InfoSectionModule
+                  data={[
+                    {
+                      subtitle: '최대 포인트',
+                      content: `${data.wktResultInfo.maxPoint.toString()} P`,
+                    },
+                    {
+                      subtitle: '최소 포인트',
+                      content: `${data.wktResultInfo.minPoint.toString()} P`,
+                    },
+                    {
+                      subtitle: '평균 포인트',
+                      content: `${Math.floor(data.wktResultInfo.avgPoint).toString()} P`,
+                    },
+                  ]}
+                />
               </div>
             </div>
           </div>
@@ -97,17 +103,21 @@ const AdminWorkationListPenaltyPage = ({ params }: WkResultProps) => {
                 </TableHeaderAtom>
               </TableHeaderModule>
               <tbody>
-                {data.length <= 0 ? (
+                {data.wktWinningUserInfos.length <= 0 ? (
                   <EmptyContainer colSpan={8} />
                 ) : (
-                  tabledata.map((item, index) => (
-                    <TableBodyModule key={item.id}>
+                  data.wktWinningUserInfos.map((item, index) => (
+                    <TableBodyModule key={item.accountId}>
                       <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
-                      <TableBodyAtom>{item.사유}</TableBodyAtom>
-                      <TableBodyAtom>{item.이름}</TableBodyAtom>
-                      <TableBodyAtom>{item.아이디}</TableBodyAtom>
-                      <TableBodyAtom>{item.소속}</TableBodyAtom>
-                      <TableBodyAtom>{item.지급일시}</TableBodyAtom>
+                      <TableBodyAtom>
+                        {item.penaltyType ? item.penaltyType : '-'}
+                      </TableBodyAtom>
+                      <TableBodyAtom>{item.name}</TableBodyAtom>
+                      <TableBodyAtom>{item.accountId}</TableBodyAtom>
+                      <TableBodyAtom>{item.department}</TableBodyAtom>
+                      <TableBodyAtom>
+                        {item.penaltyAssignDate ? item.penaltyAssignDate : '-'}
+                      </TableBodyAtom>
                       <TableBodyAtom isLast>
                         <button
                           onClick={() => setIsConfirmModelOpen(true)}

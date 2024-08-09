@@ -62,16 +62,18 @@ export const wktResultInfosSchema = z.object({
 });
 
 export const wktWinningUserInfosSchema = z.object({
-  penaltyType: z.union([
-    z.literal('NOSHOW'),
-    z.literal('REPORT'),
-    z.literal('NEGLIGENCE'),
-    z.literal('ABUSE'),
-  ]),
+  penaltyType: z
+    .union([
+      z.literal('NOSHOW'),
+      z.literal('REPORT'),
+      z.literal('NEGLIGENCE'),
+      z.literal('ABUSE'),
+    ])
+    .nullable(),
   name: z.string(),
   accountId: z.string(),
   department: z.string(),
-  penaltyAssignDate: z.string(),
+  penaltyAssignDate: z.string().nullable(),
 });
 
 export const WkResultPenaltyInfoSchema = z.object({
