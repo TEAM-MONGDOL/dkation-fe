@@ -12,7 +12,7 @@ const WkBannerPeriodModule = ({
   endDate,
 }: WkBannerProps) => {
   return (
-    <div className="flex h-[52px] items-center justify-center gap-4 bg-primary text-3">
+    <div className="flex h-[75px] items-center justify-center gap-4 bg-primary text-3">
       <p>
         모집 기간 : {applyStartDate} - {applyEndDate}
       </p>

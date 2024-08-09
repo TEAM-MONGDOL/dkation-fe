@@ -67,7 +67,7 @@ const UserWkDetailPage = () => {
             <p>주소 : 강원 양양군 현북면 하조대해안길 119</p>
           </div>
           <UserButtonAtom
-            onClick={() => router.push('/workation/submit')}
+            onClick={() => router.push(`/workation/apply`)}
             className="ml-auto mt-auto rounded-[8px]"
             buttonStyle="black"
             text="응모하기"

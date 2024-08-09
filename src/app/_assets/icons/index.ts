@@ -43,6 +43,7 @@ export { default as ErrorIcon } from './error.svg';
 export { default as UserDownloadIcon } from './userDownload.svg';
 export { default as UserNextNoticeButton } from './userNextNoticeButton.svg';
 export { default as UserPreviousNoticeButton } from './userPreviousNoticeButton.svg';
+export { default as LocationIcon } from './location.svg';
 export { default as WalletIcon } from './wallet.svg';
 export { default as LogoTextIcon } from './logoText.svg';
 export { default as LeftKeyIcon } from './leftKey.svg';
