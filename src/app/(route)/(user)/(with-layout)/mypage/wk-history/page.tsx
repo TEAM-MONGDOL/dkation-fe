@@ -9,6 +9,7 @@ import UserPlaceFilteringContainer from '@/_components/user/common/containers/Us
 import WorkationCard from '@/_components/user/mypage/UserWktCard';
 import { useGetMyWktHistoryQuery } from '@/_hooks/user/useGetMyWktHistoryQuery';
 import UserWktCancelModal from '@/_components/user/mypage/UserWktCancelModal';
+import UserWktConfirmModal from '@/_components/user/mypage/UserWktConfirmModal';
 
 const UserWkHistoryPage = () => {
   const router = useRouter();
@@ -39,10 +40,17 @@ const UserWkHistoryPage = () => {
   const [selectedOrder, setSelectedOrder] = useState<string>('createdAt,DESC');
   const [selectedSpace, setSelectedSpace] = useState<string[]>(['양양 쏠비치']);
 
-  // 모달 상태 관리
   const [isCancelModalOpen, setIsCancelModalOpen] = useState<boolean>(false);
+  const [confirmModalType, setConfirmModalType] = useState<
+    | 'confirm'
+    | 'cancel'
+    | 'cancellationConfirmation'
+    | 'acceptConfirmation'
+    | null
+  >(null);
 
   const { data, isLoading, isError } = useGetMyWktHistoryQuery({
+    statuses: param.type.join(','),
     startDate: startDate
       ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
       : undefined,
@@ -55,24 +63,39 @@ const UserWkHistoryPage = () => {
   });
 
   const handleCardClick = (applyStatusType: string) => {
-    switch (applyStatusType) {
-      case 'APPLIED':
-        setIsCancelModalOpen(true);
-        break;
-      case 'CONFIRM_WAIT':
-        console.log('방문 확정하기 클릭');
-        break;
-      case 'VISITED':
-        router.push('/mypage/review/new');
-        break;
-      default:
-        break;
+    if (applyStatusType === 'APPLIED') {
+      setIsCancelModalOpen(true);
+    } else if (applyStatusType === 'CONFIRM_WAIT') {
+      setConfirmModalType('confirm');
+    } else if (applyStatusType === 'VISITED') {
+      router.push('/mypage/review/new');
     }
   };
 
   const handleCancelConfirm = () => {
-    alert('워케이션 신청이 취소되었습니다.');
+    if (confirmModalType === 'cancel') {
+      setConfirmModalType('cancellationConfirmation');
+    } else {
+      alert('워케이션 신청이 취소되었습니다.');
+      setIsCancelModalOpen(false);
+    }
+  };
+
+  const handleConfirm = () => {
+    if (confirmModalType === 'confirm') {
+      setConfirmModalType('acceptConfirmation');
+    } else if (confirmModalType === 'cancel') {
+      setConfirmModalType('cancellationConfirmation');
+    }
+  };
+
+  const handleCancelClick = () => {
+    setConfirmModalType('cancel');
+  };
+
+  const handleCloseModal = () => {
     setIsCancelModalOpen(false);
+    setConfirmModalType(null);
   };
 
   return (
@@ -138,8 +161,8 @@ const UserWkHistoryPage = () => {
               endDate={wkt.endDate}
               bettingPoint={wkt.bettingPoint}
               applyStatusType={wkt.applyStatusType}
-              waitingNumber={4} // Adjust as needed
-              onClick={handleCardClick}
+              waitingNumber={4} // 수정 필요
+              onClick={() => handleCardClick(wkt.applyStatusType)}
             />
           ))
         )}
@@ -147,8 +170,17 @@ const UserWkHistoryPage = () => {
 
       {isCancelModalOpen && (
         <UserWktCancelModal
-          onClose={() => setIsCancelModalOpen(false)}
+          onClose={handleCloseModal}
           onConfirm={handleCancelConfirm}
+        />
+      )}
+
+      {confirmModalType && (
+        <UserWktConfirmModal
+          modalType={confirmModalType}
+          onClose={handleCloseModal}
+          onConfirm={handleConfirm}
+          onCancel={handleCancelClick}
         />
       )}
     </section>
