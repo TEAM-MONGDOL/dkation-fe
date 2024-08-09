@@ -9,15 +9,15 @@ interface WktListItemProps {
 
 const WktListItem = ({ wktInfo }: WktListItemProps) => {
   return (
-    <div className="flex h-[474px] w-[513px] shrink-0 snap-start flex-col overflow-hidden rounded-xl bg-sub-100">
+    <div className="flex h-[474px] w-[513px] shrink-0 snap-start flex-col bg-white">
       <Image
-        className="object-cover"
+        className="rounded-t-xl object-cover"
         src={wktInfo.thumbnailUrl}
         alt="thumbnail"
         width={513}
         height={280}
       />
-      <div className="flex grow flex-col items-start justify-between px-7 pb-[30px] pt-8 text-sub-400">
+      <div className="flex grow flex-col items-start justify-between rounded-b-xl border-x border-b border-sub-100 px-7 pb-[30px] pt-8 text-sub-400">
         <div className="flex flex-col gap-y-2.5">
           <p className="text-4 font-medium text-sub-300">{wktInfo.title}</p>
           <p className="text-h3 font-semibold">{wktInfo.wktPlaceTitle}</p>
