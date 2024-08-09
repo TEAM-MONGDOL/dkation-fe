@@ -339,6 +339,8 @@ export type MemberType = z.infer<typeof memberInfoSchema>;
 
 export type PointApplyType = z.infer<typeof pointApplyTypeSchema>;
 
+export type WktInfoType = z.infer<typeof wktInfoSchema>;
+
 export const pointApplyTypeList: PointApplyType[] = [
   'PENDING',
   'APPROVED',
