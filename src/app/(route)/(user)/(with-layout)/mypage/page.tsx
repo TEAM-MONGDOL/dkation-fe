@@ -9,6 +9,7 @@ import UserModalTitleAtom from '@/_components/user/common/atoms/UserModalTextAto
 import UserPasswordInput from '@/_components/user/mypage/UserPasswordInput';
 import { useSession } from 'next-auth/react';
 import { useGetMemberDetailQuery } from '@/_hooks/admin/useGetMemberDetailQuery';
+import { usePostVerifyPasswordMutation } from '@/_hooks/user/usePostVerifyPasswordMutation';
 
 const UserMyPage = () => {
   const session = useSession();
@@ -27,6 +28,18 @@ const UserMyPage = () => {
     passwordError: null as string | null,
     newPasswordError: null as string | null,
     confirmPasswordError: null as string | null,
+  });
+
+  const { mutate: verifyPassword } = usePostVerifyPasswordMutation({
+    successCallback: () => {
+      setCurrentModal('newPassword');
+    },
+    errorCallback: () => {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        passwordError: '비밀번호가 일치하지 않습니다.',
+      }));
+    },
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,7 +90,7 @@ const UserMyPage = () => {
     e.preventDefault();
     if (currentModal === 'password') {
       if (validatePassword()) {
-        setCurrentModal('newPassword');
+        verifyPassword({ password: form.password });
       }
     } else if (currentModal === 'newPassword') {
       if (validateNewPasswords()) {
