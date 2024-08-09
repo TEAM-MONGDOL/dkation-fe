@@ -49,3 +49,5 @@ export { default as LogoTextIcon } from './logoText.svg';
 export { default as LeftKeyIcon } from './leftKey.svg';
 export { default as RightKeyIcon } from './rightKey.svg';
 export { default as TrashIcon } from './trash.svg';
+export { default as BalanceIcon } from './balance.svg';
+export { default as ImproveIcon } from './improve.svg';
