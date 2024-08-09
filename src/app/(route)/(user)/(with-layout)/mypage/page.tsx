@@ -12,6 +12,9 @@ import { useGetMemberDetailQuery } from '@/_hooks/admin/useGetMemberDetailQuery'
 import { usePostVerifyPasswordMutation } from '@/_hooks/user/usePostVerifyPasswordMutation';
 import { usePasswordChangeMutation } from '@/_hooks/user/usePasswordChangeMutation';
 
+const passwordValidationRegex =
+  /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
+
 const UserMyPage = () => {
   const session = useSession();
   const accountId = String(session.data?.accountId || '');
@@ -48,10 +51,7 @@ const UserMyPage = () => {
       setCurrentModal('completed');
     },
     errorCallback: (error) => {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        newPasswordError: error.message || '비밀번호 변경에 실패했습니다.',
-      }));
+      console.error(error);
     },
   });
 
@@ -80,6 +80,10 @@ const UserMyPage = () => {
 
     if (form.newPassword.trim() === '') {
       newErrors.newPasswordError = '새 비밀번호를 입력해 주세요.';
+      hasError = true;
+    } else if (!passwordValidationRegex.test(form.newPassword)) {
+      newErrors.newPasswordError =
+        '비밀번호는 8~16자의 영문 대소문자, 숫자, 특수문자를 포함해야 합니다.';
       hasError = true;
     } else {
       newErrors.newPasswordError = null;
