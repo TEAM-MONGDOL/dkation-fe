@@ -7,8 +7,14 @@ import MyPoint from '@/_components/user/mypage/MyPoint';
 import UserModalAtom from '@/_components/user/common/atoms/UserModalAtom';
 import UserModalTitleAtom from '@/_components/user/common/atoms/UserModalTextAtom';
 import UserPasswordInput from '@/_components/user/mypage/UserPasswordInput';
+import { useSession } from 'next-auth/react';
+import { useGetMemberDetailQuery } from '@/_hooks/admin/useGetMemberDetailQuery';
 
 const UserMyPage = () => {
+  const session = useSession();
+  const accountId = String(session.data?.accountId || '');
+  const { data, isLoading, isError } = useGetMemberDetailQuery({ accountId });
+
   const [currentModal, setCurrentModal] = useState<
     'none' | 'password' | 'newPassword' | 'completed'
   >('none');
@@ -90,31 +96,34 @@ const UserMyPage = () => {
     });
   };
 
+  if (isLoading) return <div>로딩 중...</div>;
+  if (isError) return <div>오류 발생</div>;
+
   return (
     <section className="px-40 pt-18">
       <div className="pb-14">
-        <MyPoint point={2000} />
+        <MyPoint point={Number(data?.pointQuantity)} />
       </div>
       <h2 className="text-h2 font-semibold">회원정보</h2>
       <div className="py-14">
         <UserInfosectionModule title="이름">
           <p className="flex h-4xl w-[300px] items-center bg-sub-100/20 pl-3">
-            홍길동
+            {data?.name}
           </p>
         </UserInfosectionModule>
         <UserInfosectionModule title="아이디">
           <p className="flex h-4xl w-[300px] items-center bg-sub-100/20 pl-3">
-            abcd.ef
+            {data?.accountId}
           </p>
         </UserInfosectionModule>
         <UserInfosectionModule title="부서">
           <p className="flex h-4xl w-[300px] items-center bg-sub-100/20 pl-3">
-            개발팀
+            {data?.department}
           </p>
         </UserInfosectionModule>
         <UserInfosectionModule title="총 포인트">
           <p className="flex h-4xl w-[300px] items-center bg-sub-100/20 pl-3">
-            2000 P
+            {data?.pointQuantity} P
           </p>
         </UserInfosectionModule>
       </div>
