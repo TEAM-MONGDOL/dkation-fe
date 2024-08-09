@@ -1,7 +1,12 @@
+import BannerSection from '@/_components/user/home/BannerSection';
 import React from 'react';
 
 const HomePage = () => {
-  return <div>User Page</div>;
+  return (
+    <div>
+      <BannerSection />
+    </div>
+  );
 };
 
 export default HomePage;
