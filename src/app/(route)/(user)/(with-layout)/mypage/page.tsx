@@ -10,6 +10,7 @@ import UserPasswordInput from '@/_components/user/mypage/UserPasswordInput';
 import { useSession } from 'next-auth/react';
 import { useGetMemberDetailQuery } from '@/_hooks/admin/useGetMemberDetailQuery';
 import { usePostVerifyPasswordMutation } from '@/_hooks/user/usePostVerifyPasswordMutation';
+import { usePasswordChangeMutation } from '@/_hooks/user/usePasswordChangeMutation';
 
 const UserMyPage = () => {
   const session = useSession();
@@ -38,6 +39,18 @@ const UserMyPage = () => {
       setErrors((prevErrors) => ({
         ...prevErrors,
         passwordError: '비밀번호가 일치하지 않습니다.',
+      }));
+    },
+  });
+
+  const { mutate: changePassword } = usePasswordChangeMutation({
+    successCallback: () => {
+      setCurrentModal('completed');
+    },
+    errorCallback: (error) => {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        newPasswordError: error.message || '비밀번호 변경에 실패했습니다.',
       }));
     },
   });
@@ -94,7 +107,7 @@ const UserMyPage = () => {
       }
     } else if (currentModal === 'newPassword') {
       if (validateNewPasswords()) {
-        setCurrentModal('completed');
+        changePassword({ accountId, password: form.newPassword });
       }
     }
   };
