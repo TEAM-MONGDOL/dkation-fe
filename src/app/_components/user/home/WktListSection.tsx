@@ -46,7 +46,7 @@ const WktListSection = () => {
   };
 
   return (
-    <section className="flex w-full flex-col gap-y-[100px] py-40">
+    <section className="flex w-full flex-col gap-y-[100px] border-b border-sub-100 py-40">
       <h2 className="px-40 text-h2 font-semibold text-sub-400">
         모집 중인 워케이션
       </h2>
