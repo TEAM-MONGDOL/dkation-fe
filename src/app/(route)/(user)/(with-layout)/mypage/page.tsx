@@ -8,7 +8,7 @@ import UserModalAtom from '@/_components/user/common/atoms/UserModalAtom';
 import UserModalTitleAtom from '@/_components/user/common/atoms/UserModalTextAtom';
 import UserPasswordInput from '@/_components/user/mypage/UserPasswordInput';
 import { useSession } from 'next-auth/react';
-import { useGetMemberDetailQuery } from '@/_hooks/admin/useGetMemberDetailQuery';
+import { useGetMemberDetailQuery } from '@/_hooks/common/useGetMemberDetailQuery';
 
 const UserMyPage = () => {
   const session = useSession();
