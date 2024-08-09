@@ -343,6 +343,8 @@ export type WktInfoType = z.infer<typeof wktInfoSchema>;
 
 export type BannerType = z.infer<typeof bannerInfoSchema>;
 
+export type ReviewType = z.infer<typeof reviewListInfoSchema>;
+
 export const pointApplyTypeList: PointApplyType[] = [
   'PENDING',
   'APPROVED',
