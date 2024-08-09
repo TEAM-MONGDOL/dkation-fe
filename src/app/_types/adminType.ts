@@ -310,6 +310,22 @@ export const workationPlaceListSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
+export const bannerInfoSchema = z.object({
+  id: z.number(),
+  title: z.string(),
+  linkUrl: z.string(),
+  backgroundColor: z.union([
+    z.literal('DARK'),
+    z.literal('YELLOW'),
+    z.literal('LIGHTGRAY'),
+  ]),
+});
+
+export const bannerInfoListSchema = z.object({
+  bannerInfoList: bannerInfoSchema.array(),
+  pageInfo: pageInfoSchema,
+});
+
 // Type
 export type PageableType = {
   page?: number;
@@ -322,6 +338,12 @@ export type StatusType = z.infer<typeof applyStatusSchema>;
 export type MemberType = z.infer<typeof memberInfoSchema>;
 
 export type PointApplyType = z.infer<typeof pointApplyTypeSchema>;
+
+export type WktInfoType = z.infer<typeof wktInfoSchema>;
+
+export type BannerType = z.infer<typeof bannerInfoSchema>;
+
+export type ReviewType = z.infer<typeof reviewListInfoSchema>;
 
 export const pointApplyTypeList: PointApplyType[] = [
   'PENDING',

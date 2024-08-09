@@ -6,6 +6,7 @@ export const useGetWkListQueryKey = 'useGetWkListQuery';
 
 export const useGetWkListQuery = ({
   status,
+  wktPlaceIdList,
   applyStartDate,
   applyEndDate,
   wktStartDate,
@@ -13,10 +14,11 @@ export const useGetWkListQuery = ({
   pageParam,
 }: {
   status?: string;
+  wktPlaceIdList?: string;
   applyStartDate?: string;
   applyEndDate?: string;
-  wktStartDate?: string;
-  wktEndDate?: string;
+  wktStartDate?: string | null;
+  wktEndDate?: string | null;
   pageParam: {
     page: number;
     size: number;
@@ -27,6 +29,7 @@ export const useGetWkListQuery = ({
     queryKey: [
       useGetWkListQueryKey,
       status,
+      wktPlaceIdList,
       pageParam,
       applyStartDate,
       applyEndDate,
@@ -37,6 +40,7 @@ export const useGetWkListQuery = ({
       const res = await api.get(`/api/wkt`, {
         params: {
           status,
+          wktPlaceIdList,
           applyStartDate,
           applyEndDate,
           wktStartDate,

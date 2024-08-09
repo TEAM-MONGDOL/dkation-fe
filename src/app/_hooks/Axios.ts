@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getSession } from 'next-auth/react';
 import { useNavigate } from 'react-router-dom';
 
 const api = axios.create({
@@ -6,22 +7,22 @@ const api = axios.create({
   withCredentials: true,
 });
 
-// api.interceptors.request.use(
-//   async (config) => {
-//     if (config.url !== '/refresh' && config.url !== '/login') {
-//       const accessToken = sessionStorage.getItem('accessToken');
-//       if (accessToken) {
-//         // eslint-disable-next-line no-param-reassign
-//         config.headers.Authorization = `Bearer ${accessToken}`;
-//       }
-//     }
-//
-//     return config;
-//   },
-//   (error) => {
-//     return Promise.reject(error);
-//   },
-// );
+api.interceptors.request.use(
+  async (config) => {
+    const session = await getSession();
+    if (config.url !== '/refresh' && config.url !== '/login') {
+      if (session) {
+        // eslint-disable-next-line no-param-reassign
+        config.headers.Authorization = `Bearer ${session.accessToken}`;
+      }
+    }
+
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  },
+);
 //
 // api.interceptors.response.use(
 //   async (response) => {
