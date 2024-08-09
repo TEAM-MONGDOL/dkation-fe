@@ -28,8 +28,6 @@ const UserLoginSection = ({ onFindPasswordClick }: UserLoginSectionProps) => {
     if (!form.accountId || !form.password) {
       return;
     }
-    // console.log('tryLogin');
-    // console.log(form);
     const result = await signIn('credentials', {
       accountId: form.accountId,
       password: form.password,
@@ -40,6 +38,7 @@ const UserLoginSection = ({ onFindPasswordClick }: UserLoginSectionProps) => {
       console.log('로그인 실패');
       console.log(result);
     } else {
+      // 추후 수정 예정
       const response = await fetch('/api/auth/session');
       const session = await response.json();
 
