@@ -23,7 +23,7 @@ export const usePasswordChangeMutation = ({
         },
         {
           params: {
-            accountId: accountId,
+            accountId,
           },
         },
       );
