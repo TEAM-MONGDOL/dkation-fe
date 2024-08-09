@@ -267,6 +267,18 @@ export const memberListSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
+export const bannerInfoSchema = z.object({
+  id: z.number(),
+  title: z.string(),
+  linkUrl: z.string(),
+  backgroundColor: z.string(),
+});
+
+export const bannerInfoListSchema = z.object({
+  bannerInfoList: bannerInfoSchema.array(),
+  pageInfo: pageInfoSchema,
+});
+
 export const memberDetailSchema = z.object({
   name: z.string(),
   accountId: z.string(),
@@ -322,6 +334,8 @@ export type StatusType = z.infer<typeof applyStatusSchema>;
 export type MemberType = z.infer<typeof memberInfoSchema>;
 
 export type PointApplyType = z.infer<typeof pointApplyTypeSchema>;
+
+export type BannerType = z.infer<typeof bannerInfoSchema>;
 
 export const pointApplyTypeList: PointApplyType[] = [
   'PENDING',
