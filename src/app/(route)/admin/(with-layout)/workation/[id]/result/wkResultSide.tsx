@@ -4,11 +4,36 @@ import InfoSectionContainer from '@/_components/common/containers/InfoSectionCon
 import SidebarModule from '@/_components/common/modules/SidebarModule';
 import { useGetWkDetailQuery } from '@/_hooks/admin/useGetWkDetailQuery';
 import dayjs from 'dayjs';
+import { useGetWkPlaceListQuery } from '@/_hooks/admin/useGetWkPlaceListQuery';
 
 const WkResultSide = ({ id }: { id: number }) => {
   const wktId = id;
   const { data, isLoading, isError } = useGetWkDetailQuery({ wktId });
 
+  const {
+    data: placeData,
+    isLoading: isPlaceLoading,
+    isError: isPlaceError,
+  } = useGetWkPlaceListQuery({
+    pageParam: {
+      page: 1,
+      size: 100,
+    },
+  });
+
+  if (isLoading || isPlaceLoading) {
+    return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
+  }
+  if (isError || isPlaceError) {
+    return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정
+  }
+  if (!data || !placeData) {
+    return <div>No data</div>;
+  }
+
+  const placeInfo = placeData.wktPlaceInfos.find(
+    (place) => place.id === data.wktPlaceId,
+  );
   const realData = [
     {
       subtitle: '모집 기간',
@@ -18,10 +43,12 @@ const WkResultSide = ({ id }: { id: number }) => {
       subtitle: '워케이션 기간',
       content: `${dayjs(data?.startDate).format('YYYY.MM.DD') ?? ''} - ${dayjs(data?.endDate).format('YYYY.MM.DD') ?? ''}`,
     },
-    { subtitle: '모집 인원', content: data?.totalRecruit?.toString() ?? '' },
-    { subtitle: '장소', content: data?.wktPlaceId?.toString() ?? '' },
+    {
+      subtitle: '모집 인원',
+      content: `${data?.totalRecruit?.toString()}명` ?? '',
+    },
+    { subtitle: '장소', content: placeInfo?.place ?? '' },
   ];
-
   const WkResultDetailSidebar = [
     {
       id: '1',

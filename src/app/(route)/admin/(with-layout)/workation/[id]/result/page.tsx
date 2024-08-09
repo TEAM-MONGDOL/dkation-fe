@@ -71,7 +71,7 @@ const AdminWorkationListResultPage = ({ params }: WkResultProps) => {
     status: filterOptions.status.join(','),
     pageParam: {
       page: currentPage,
-      size: 10,
+      size: 7,
       sort: getSortField(filterOptions.order),
     },
   });
