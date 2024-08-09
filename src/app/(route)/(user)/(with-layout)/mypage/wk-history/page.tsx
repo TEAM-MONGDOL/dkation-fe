@@ -10,7 +10,6 @@ import UserPlaceFilteringContainer from '@/_components/user/common/containers/Us
 import WorkationCard from '@/_components/user/mypage/UserWktCard';
 import place from '@/_assets/images/place_impy.png';
 import UserWktConfirmModal from '@/_components/user/mypage/UserWktConfirmModal';
-import UserWktCancelModal from '@/_components/user/mypage/UserWktCancelModal';
 
 const UserWkHistoryPage = () => {
   const router = useRouter();
@@ -176,30 +175,22 @@ const UserWkHistoryPage = () => {
         />
       </div>
 
-      {openModal === 'CANCEL' && (
-        <UserWktConfirmModal
-          onClose={() => setOpenModal(null)}
-          onConfirm={handleCancelConfirm}
-          onCancel={handleCancelConfirm}
-        />
-      )}
-      {openModal === 'CONFIRM' && (
+      {openModal && (
         <UserWktConfirmModal
           onClose={() => setOpenModal(null)}
           onConfirm={handleConfirmConfirm}
           onCancel={handleCancelConfirm}
-        />
-      )}
-      {openModal === 'CANCELLATION_CONFIRMATION' && (
-        <UserWktConfirmModal
-          onClose={() => setOpenModal(null)}
-          onConfirm={() => setOpenModal(null)}
-        />
-      )}
-      {openModal === 'APPLIED_CANCEL' && (
-        <UserWktCancelModal
-          onClose={() => setOpenModal(null)}
-          onConfirm={handleCancelConfirm}
+          modalType={
+            openModal === 'CANCEL'
+              ? 'cancel'
+              : openModal === 'CONFIRM'
+                ? 'confirm'
+                : openModal === 'CANCELLATION_CONFIRMATION'
+                  ? 'cancellationConfirmation'
+                  : openModal === 'APPLIED_CANCEL'
+                    ? 'cancel'
+                    : 'acceptConfirmation' // 여기서 추가할 경우, 모든 경우를 포괄합니다.
+          }
         />
       )}
     </section>

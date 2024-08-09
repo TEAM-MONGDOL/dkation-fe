@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+'use client';
+
+import React from 'react';
 import UserModalAtom from '@/_components/user/common/atoms/UserModalAtom';
 import UserModalTitleAtom from '@/_components/user/common/atoms/UserModalTextAtom';
 import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
@@ -7,41 +9,33 @@ const UserWktConfirmModal = ({
   onClose,
   onConfirm,
   onCancel,
+  modalType,
 }: {
   onClose: () => void;
   onConfirm: () => void;
   onCancel?: () => void;
-}) => {
-  const [currentModal, setCurrentModal] = useState<
+  modalType:
     | 'confirm'
     | 'cancel'
     | 'cancellationConfirmation'
-    | 'acceptConfirmation'
-    | 'none'
-  >('confirm');
-
+    | 'acceptConfirmation';
+}) => {
   const handleCancelClick = () => {
-    setCurrentModal('cancel');
+    if (onCancel) onCancel();
   };
 
-  const handleCancelConfirm = () => {
-    setCurrentModal('cancellationConfirmation');
-  };
-
-  const handleAcceptConfirm = () => {
-    onConfirm(); // 수락 로직 실행
-    setCurrentModal('acceptConfirmation');
+  const handleConfirmClick = () => {
+    onConfirm(); // Confirm logic execution
   };
 
   const closeModal = () => {
-    setCurrentModal('none');
     onClose();
   };
 
   return (
-    <>
-      {currentModal === 'confirm' && (
-        <UserModalAtom>
+    <UserModalAtom>
+      {modalType === 'confirm' && (
+        <>
           <UserModalTitleAtom className="text-2">
             해당 워케이션에 <p className="inline-block font-bold">당첨</p>{' '}
             되었습니다.
@@ -61,16 +55,16 @@ const UserWktConfirmModal = ({
               text="수락하기"
               buttonStyle="yellow"
               size="md"
-              onClick={handleAcceptConfirm}
+              onClick={handleConfirmClick}
               className="rounded-md"
               type="button"
             />
           </div>
-        </UserModalAtom>
+        </>
       )}
 
-      {currentModal === 'cancel' && (
-        <UserModalAtom>
+      {modalType === 'cancel' && (
+        <>
           <UserModalTitleAtom className="text-2">
             <p className="font-bold">포기하면 다시 수락이 어려워요!</p>
             그래도 포기하시겠습니까?
@@ -80,7 +74,7 @@ const UserWktConfirmModal = ({
               text="취소하기"
               buttonStyle="white"
               size="md"
-              onClick={() => setCurrentModal('confirm')}
+              onClick={closeModal}
               className="rounded-md"
               type="button"
             />
@@ -88,16 +82,16 @@ const UserWktConfirmModal = ({
               text="포기하기"
               buttonStyle="yellow"
               size="md"
-              onClick={handleCancelConfirm}
+              onClick={handleConfirmClick}
               className="rounded-md"
               type="button"
             />
           </div>
-        </UserModalAtom>
+        </>
       )}
 
-      {currentModal === 'cancellationConfirmation' && (
-        <UserModalAtom>
+      {modalType === 'cancellationConfirmation' && (
+        <>
           <UserModalTitleAtom className="text-2">
             워케이션이 취소되었습니다.
           </UserModalTitleAtom>
@@ -111,11 +105,11 @@ const UserWktConfirmModal = ({
               type="button"
             />
           </div>
-        </UserModalAtom>
+        </>
       )}
 
-      {currentModal === 'acceptConfirmation' && (
-        <UserModalAtom>
+      {modalType === 'acceptConfirmation' && (
+        <>
           <UserModalTitleAtom className="text-2">
             수락이 완료되었습니다.
           </UserModalTitleAtom>
@@ -129,9 +123,9 @@ const UserWktConfirmModal = ({
               type="button"
             />
           </div>
-        </UserModalAtom>
+        </>
       )}
-    </>
+    </UserModalAtom>
   );
 };
 
