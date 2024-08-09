@@ -9,7 +9,7 @@ export const useGetHomeBannerQuery = () => {
     queryKey: [useGetHomeBannerQueryKey],
     queryFn: async () => {
       const response = await api.get('/api/banner');
-      return bannerInfoListSchema.parse(response.data);
+      return bannerInfoListSchema.parse(response.data.data);
     },
   });
 };
