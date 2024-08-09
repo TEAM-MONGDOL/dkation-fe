@@ -29,6 +29,7 @@ const config: Config = {
         'cus-100': '#F4F6FA',
         'cus-200': '#374553',
         'cus-300': '#323232',
+        'cus-400': '#F9F9F9',
         'stroke-100': '#DBDBDB',
         footer: '#888888',
         button: '#2A2A2A',
