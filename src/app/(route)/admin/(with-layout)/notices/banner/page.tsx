@@ -28,83 +28,82 @@ const AdminPointsRewardNewPage = () => {
   return (
     <section className="flex h-full w-full flex-col gap-y-10 overflow-y-auto">
       <TitleBarModule title="배너 목록" />
-      <section className="flex w-full flex-col gap-y-[60px]">
-        <div className="flex w-full flex-1 gap-x-5">
-          <div className="flex flex-1 flex-col gap-y-4">
-            <div className="flex w-full items-center gap-x-5" />
-            <TableContainer
-              maxHeight="max-h-[550px]"
-              isInfiniteScroll
-              infiniteScrollProps={{
-                load: (
-                  <p
-                    key={`loading-${!bannerList ? 0 : bannerList.pages[bannerList.pages.length - 1].pageInfo.pageNum}`}
-                    className="w-full text-center"
-                  >
-                    loading ...
-                  </p>
-                ),
-                hasMore: bannerListHasNextPage,
-                loadMore: () => {
-                  bannerListFetchNextPage();
-                },
-                useWindow: false,
-              }}
-            >
-              <TableHeaderModule>
-                <TableHeaderAtom isFirst width="100px">
-                  번호
-                </TableHeaderAtom>
-                <TableHeaderAtom>배너 문구</TableHeaderAtom>
-                <TableHeaderAtom>링크</TableHeaderAtom>
-                <TableHeaderAtom width="200px">배경색</TableHeaderAtom>
-                <TableHeaderAtom isLast width="130px" />
-              </TableHeaderModule>
-              <tbody>
-                {!bannerList ? (
-                  bannerListIsLoading ? (
-                    <EmptyContainer colSpan={4} text="loading..." />
-                  ) : (
-                    <EmptyContainer colSpan={4} text="error" />
-                  )
-                ) : bannerList.pages[0].pageInfo.totalElements === 0 ? (
-                  <EmptyContainer colSpan={4} />
+      <section className="flex w-full flex-col gap-y-6xl">
+        <div className="flex flex-1 flex-col gap-y-4">
+          <div className="flex w-full items-center gap-x-5" />
+          <TableContainer
+            maxHeight="max-h-[550px]"
+            isInfiniteScroll
+            infiniteScrollProps={{
+              load: (
+                <p
+                  key={`loading-${!bannerList ? 0 : bannerList.pages[bannerList.pages.length - 1].pageInfo.pageNum}`}
+                  className="w-full text-center"
+                >
+                  loading ...
+                </p>
+              ),
+              hasMore: bannerListHasNextPage,
+              loadMore: () => {
+                bannerListFetchNextPage();
+              },
+              useWindow: false,
+            }}
+          >
+            <TableHeaderModule>
+              <TableHeaderAtom isFirst width="100px">
+                번호
+              </TableHeaderAtom>
+              <TableHeaderAtom>배너 문구</TableHeaderAtom>
+              <TableHeaderAtom>링크</TableHeaderAtom>
+              <TableHeaderAtom width="200px">배경색</TableHeaderAtom>
+              <TableHeaderAtom isLast width="130px" />
+            </TableHeaderModule>
+            <tbody>
+              {!bannerList ? (
+                bannerListIsLoading ? (
+                  <EmptyContainer colSpan={4} text="loading..." />
                 ) : (
-                  bannerList.pages.map((page) =>
-                    page.bannerInfoList.map((banner) => (
-                      <TableBodyModule key={banner.id}>
-                        <TableBodyAtom isFirst>{banner.id}</TableBodyAtom>
-                        <TableBodyAtom>{banner.title}</TableBodyAtom>
-                        <TableBodyAtom>{banner.linkUrl}</TableBodyAtom>
-                        <TableBodyAtom>
-                          <div className="flex items-center justify-center gap-x-2">
-                            <div
-                              className={`h-4 w-4 rounded-full ${
-                                banner.backgroundColor === 'DARK'
-                                  ? 'bg-sub-300'
-                                  : banner.backgroundColor === 'LIGHTGRAY'
-                                    ? 'bg-sub-100'
-                                    : banner.backgroundColor === 'YELLOW'
-                                      ? 'bg-primary'
-                                      : ''
-                              }`}
-                            />
-                            {banner.backgroundColor}
-                          </div>
-                        </TableBodyAtom>
-                        <TableBodyAtom isLast>
-                          <button>
-                            <Image src={TrashIcon} alt="trash" />
-                          </button>
-                        </TableBodyAtom>
-                      </TableBodyModule>
-                    )),
-                  )
-                )}
-              </tbody>
-            </TableContainer>
-          </div>
+                  <EmptyContainer colSpan={4} text="error" />
+                )
+              ) : bannerList.pages[0].pageInfo.totalElements === 0 ? (
+                <EmptyContainer colSpan={4} />
+              ) : (
+                bannerList.pages.map((page) =>
+                  page.bannerInfoList.map((banner) => (
+                    <TableBodyModule key={banner.id}>
+                      <TableBodyAtom isFirst>{banner.id}</TableBodyAtom>
+                      <TableBodyAtom>{banner.title}</TableBodyAtom>
+                      <TableBodyAtom>{banner.linkUrl}</TableBodyAtom>
+                      <TableBodyAtom>
+                        <div className="flex items-center justify-center gap-x-2">
+                          <div
+                            className={`h-4 w-4 rounded-full ${
+                              banner.backgroundColor === 'DARK'
+                                ? 'bg-sub-300'
+                                : banner.backgroundColor === 'LIGHTGRAY'
+                                  ? 'bg-sub-100'
+                                  : banner.backgroundColor === 'YELLOW'
+                                    ? 'bg-primary'
+                                    : ''
+                            }`}
+                          />
+                          {banner.backgroundColor}
+                        </div>
+                      </TableBodyAtom>
+                      <TableBodyAtom isLast>
+                        <button>
+                          <Image src={TrashIcon} alt="trash" />
+                        </button>
+                      </TableBodyAtom>
+                    </TableBodyModule>
+                  )),
+                )
+              )}
+            </tbody>
+          </TableContainer>
         </div>
+
         <div className="flex w-full items-center justify-end">
           <ButtonAtom
             type="button"
