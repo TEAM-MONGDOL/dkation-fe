@@ -10,7 +10,7 @@ export interface HomeBannerProps {
 const UserHomeBannerContainer = ({ title, link, bgColor }: HomeBannerProps) => {
   return (
     <div
-      className={`flex h-[74px] items-center justify-center gap-7 ${bgColor} text-white`}
+      className={`flex h-[74px] min-w-full shrink-0 items-center justify-center gap-7 ${bgColor === 'DARK' ? 'bg-sub-400' : bgColor === 'YELLOW' ? 'bg-primary' : 'bg-sub-100'} text-white`}
     >
       <UserHomeBannerTitleAtom
         title={title}
