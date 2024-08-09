@@ -29,7 +29,7 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
     isLoading: reviewIsLoading,
     isError: reviewIsError,
   } = useGetUserWkPlaceReviewQuery({
-    wktPlaceId: id,
+    wktPlaceId: Number(id), // 워케이션 장소 id 목록에서 넘겨주면 param으로 받기
   });
   const handleScroll = () => {
     if (detailRef.current && resultRef.current && reviewRef.current) {
@@ -133,7 +133,7 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
         <div className="mt-16 flex flex-col" ref={resultRef}>
           <WkResultInfo />
         </div>
-        <div className="flex flex-col pt-16" ref={reviewRef}>
+        <div className="flex flex-col gap-10 pt-16" ref={reviewRef}>
           {reviewData.reviewInfosForWkt.map((review) => (
             <WkReviewInfo
               key={review.wktTitle}

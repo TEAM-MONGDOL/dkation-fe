@@ -311,7 +311,7 @@ export const wkUserPlaceReviewInfoSchema = z.object({
   rating: z.number(),
   contents: z.string(),
   lastModifiedAt: z.string(),
-  files: fileInfoSchema.array().nullable().optional(),
+  fileInfos: fileInfoSchema.array().nullable().optional(),
 });
 
 export const workationUserPlaceReviewSchema = z.object({
