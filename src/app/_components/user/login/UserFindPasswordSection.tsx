@@ -2,18 +2,20 @@ import { DkationLogo } from '@/_assets/icons';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
-import { usePostCertificationSend } from '@/_hooks/user/usePostCertificationSend';
 import axios from 'axios';
 import { AxiosErrorResponse } from '@/_types/commonType';
 import UserModalAtom from '@/_components/user/common/atoms/UserModalAtom';
-import { usePostCertificationCheck } from '@/_hooks/user/usePostCertificationCheck';
 import UserLoginInput from '@/_components/user/login/UserLoginInput';
+import { usePostCertificationSendMutation } from '@/_hooks/user/usePostCertificationSendMutation';
+import { usePostCertificationCheckMutation } from '@/_hooks/user/usePostCertificationCheckMutation';
+import { usePasswordChangeMutation } from '@/_hooks/user/usePasswordChangeMutation';
 
 interface UserFindPasswordSectionProps {
   onLoginClick: () => void;
 }
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)(?!.*\s).{8,16}$/;
 
 const UserFindPasswordSection = ({
   onLoginClick,
@@ -32,9 +34,17 @@ const UserFindPasswordSection = ({
     onClick: () => void;
     buttonText: string;
   } | null>(null);
+  const [firstPassword, setFirstPassword] = useState('');
+  const [secondPassword, setSecondPassword] = useState('');
+  const [firstPasswordError, setFirstPasswordError] = useState<string | null>(
+    null,
+  );
+  const [secondPasswordError, setSecondPasswordError] = useState<string | null>(
+    null,
+  );
 
   const { mutate: trySendEmail, isPending: sendEmailIsPending } =
-    usePostCertificationSend({
+    usePostCertificationSendMutation({
       successCallback: () => {
         if (isEmailSent) {
           setVerificationTime(180);
@@ -56,7 +66,7 @@ const UserFindPasswordSection = ({
   const {
     mutate: checkCertificationCode,
     isPending: checkCertificationCodeIsPending,
-  } = usePostCertificationCheck({
+  } = usePostCertificationCheckMutation({
     successCallback: () => {
       setIsVerificated(true);
     },
@@ -70,6 +80,26 @@ const UserFindPasswordSection = ({
       }
     },
   });
+
+  const { mutate: tryPasswordChange, isPending: tryPasswordChangeIsPending } =
+    usePasswordChangeMutation({
+      successCallback: () => {
+        setModalContent({
+          desc: '비밀번호가 변경이 완료되었습니다.',
+          onClick: () => onLoginClick(),
+          buttonText: '로그인하러 가기',
+        });
+      },
+      errorCallback: (err) => {
+        if (axios.isAxiosError<AxiosErrorResponse>(err)) {
+          setModalContent({
+            desc: err.response?.data.message || '비밀번호 변경에 실패했습니다.',
+            onClick: () => setModalContent(null),
+            buttonText: '다시 시도하기',
+          });
+        }
+      },
+    });
 
   useEffect(() => {
     if (isEmailSent) {
@@ -106,67 +136,140 @@ const UserFindPasswordSection = ({
     checkCertificationCode({ email, code: verificationCode });
   };
 
+  const handleFirstPasswordChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setFirstPassword(e.target.value);
+    if (e.target.value && !passwordRegex.test(e.target.value)) {
+      setFirstPasswordError(
+        '8~16자의 영문 대소문자, 숫자, 특수문자를 포함해야 합니다.',
+      );
+    } else {
+      setFirstPasswordError(null);
+    }
+  };
+
+  const handleSecondPasswordChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setSecondPassword(e.target.value);
+    if (firstPassword !== e.target.value) {
+      setSecondPasswordError('비밀번호가 일치하지 않습니다.');
+    } else {
+      setSecondPasswordError(null);
+    }
+  };
+
+  const handleClickChangePassword = () => {
+    if (
+      !firstPassword ||
+      !secondPassword ||
+      firstPasswordError ||
+      secondPasswordError
+    ) {
+      return;
+    }
+
+    tryPasswordChange({
+      accountId: email.split('@')[0],
+      password: firstPassword,
+    });
+  };
+
   return (
     <section className="flex flex-1 flex-col items-center justify-center bg-white">
       <div className="flex w-[400px] flex-col items-center gap-y-20">
         <Image src={DkationLogo} alt="Dkation Logo" width={255} />
-        <div className="flex w-full flex-col items-center gap-y-6">
-          <div className="flex w-full flex-col gap-y-4xl">
-            <div className="flex w-full flex-col gap-y-2.5">
-              <UserLoginInput
-                type="text"
-                name="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="사내 이메일 입력"
-                error={error}
-                sideChildren={
-                  <UserButtonAtom
-                    text={isEmailSent ? '재전송' : '코드 전송'}
-                    size="md"
-                    buttonStyle={sendEmailIsPending ? 'lightGray' : 'white'}
-                    type="button"
-                    className={`h-[34px] w-20 overflow-visible rounded text-4 ${sendEmailIsPending ? 'animate-pulse text-sub-300' : ''}`}
-                    onClick={handleClickEmail}
-                  />
-                }
+        {isVerificated ? (
+          <div className="flex w-full flex-col items-center gap-y-6">
+            <div className="flex w-full flex-col gap-y-4xl">
+              <div className="flex w-full flex-col gap-y-2.5">
+                <UserLoginInput
+                  type="password"
+                  name="firstPassword"
+                  value={firstPassword}
+                  onChange={handleFirstPasswordChange}
+                  placeholder="비밀번호"
+                  error={firstPasswordError}
+                />
+                <UserLoginInput
+                  type="password"
+                  name="secondPassword"
+                  value={secondPassword}
+                  onChange={handleSecondPasswordChange}
+                  placeholder="비밀번호 재입력"
+                  error={secondPasswordError}
+                />
+              </div>
+              <UserButtonAtom
+                text="비밀번호 변경"
+                size="full"
+                buttonStyle="black"
+                type="button"
+                className={`${tryPasswordChangeIsPending ? 'animate-pulse text-sub-300' : ''}`}
+                onClick={handleClickChangePassword}
               />
-              {isEmailSent && (
+            </div>
+          </div>
+        ) : (
+          <div className="flex w-full flex-col items-center gap-y-6">
+            <div className="flex w-full flex-col gap-y-4xl">
+              <div className="flex w-full flex-col gap-y-2.5">
                 <UserLoginInput
                   type="text"
-                  name="verificationCode"
-                  value={verificationCode}
-                  onChange={(e) => setVerificationCode(e.target.value)}
-                  placeholder="인증코드 입력"
-                  error={null}
+                  name="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="사내 이메일 입력"
+                  error={error}
                   sideChildren={
-                    <span className="text-4 text-primary">
-                      {Math.floor(verificationTime / 60)}:
-                      {verificationTime % 60 < 10
-                        ? `0${verificationTime % 60}`
-                        : verificationTime % 60}
-                    </span>
+                    <UserButtonAtom
+                      text={isEmailSent ? '재전송' : '코드 전송'}
+                      size="md"
+                      buttonStyle={sendEmailIsPending ? 'lightGray' : 'white'}
+                      type="button"
+                      className={`h-[34px] w-20 overflow-visible rounded text-4 ${sendEmailIsPending ? 'animate-pulse text-sub-300' : ''}`}
+                      onClick={handleClickEmail}
+                    />
                   }
                 />
-              )}
+                {isEmailSent && (
+                  <UserLoginInput
+                    type="text"
+                    name="verificationCode"
+                    value={verificationCode}
+                    onChange={(e) => setVerificationCode(e.target.value)}
+                    placeholder="인증코드 입력"
+                    error={null}
+                    sideChildren={
+                      <span className="text-4 text-primary">
+                        {Math.floor(verificationTime / 60)}:
+                        {verificationTime % 60 < 10
+                          ? `0${verificationTime % 60}`
+                          : verificationTime % 60}
+                      </span>
+                    }
+                  />
+                )}
+              </div>
+              <UserButtonAtom
+                text={isEmailSent ? '비밀번호 변경' : '인증코드 확인'}
+                size="full"
+                buttonStyle="black"
+                type="button"
+                className={`${checkCertificationCodeIsPending ? 'animate-pulse text-sub-300' : ''}`}
+                onClick={handleClickCode}
+              />
             </div>
-            <UserButtonAtom
-              text={isVerificated ? '비밀번호 변경' : '인증코드 확인'}
-              size="full"
-              buttonStyle="black"
-              type="button"
-              className={`${checkCertificationCodeIsPending ? 'animate-pulse text-sub-300' : ''}`}
-              onClick={handleClickCode}
-            />
+            <hr className="w-full border-sub-100" />
+            <button
+              className="px-2 py-1.5 text-5 text-sub-400 underline-offset-4 hover:underline"
+              onClick={onLoginClick}
+            >
+              로그인하기
+            </button>
           </div>
-          <hr className="w-full border-sub-100" />
-          <button
-            className="px-2 py-1.5 text-5 text-sub-400 underline-offset-4 hover:underline"
-            onClick={onLoginClick}
-          >
-            로그인하기
-          </button>
-        </div>
+        )}
       </div>
       {modalContent !== null && (
         <UserModalAtom>
