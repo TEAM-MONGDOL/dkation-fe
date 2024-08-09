@@ -8,6 +8,7 @@ import UserStateFilteringContainer from '@/_components/user/common/containers/Us
 import UserPlaceFilteringContainer from '@/_components/user/common/containers/UserPlaceFilteringContainer';
 import WorkationCard from '@/_components/user/mypage/UserWktCard';
 import { useGetMyWktHistoryQuery } from '@/_hooks/user/useGetMyWktHistoryQuery';
+import UserWktCancelModal from '@/_components/user/mypage/UserWktCancelModal';
 
 const UserWkHistoryPage = () => {
   const router = useRouter();
@@ -38,6 +39,9 @@ const UserWkHistoryPage = () => {
   const [selectedOrder, setSelectedOrder] = useState<string>('createdAt,DESC');
   const [selectedSpace, setSelectedSpace] = useState<string[]>(['양양 쏠비치']);
 
+  // 모달 상태 관리
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState<boolean>(false);
+
   const { data, isLoading, isError } = useGetMyWktHistoryQuery({
     startDate: startDate
       ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
@@ -53,7 +57,7 @@ const UserWkHistoryPage = () => {
   const handleCardClick = (applyStatusType: string) => {
     switch (applyStatusType) {
       case 'APPLIED':
-        console.log('신청  취소하기 클릭');
+        setIsCancelModalOpen(true);
         break;
       case 'CONFIRM_WAIT':
         console.log('방문 확정하기 클릭');
@@ -64,6 +68,11 @@ const UserWkHistoryPage = () => {
       default:
         break;
     }
+  };
+
+  const handleCancelConfirm = () => {
+    alert('워케이션 신청이 취소되었습니다.');
+    setIsCancelModalOpen(false);
   };
 
   return (
@@ -129,12 +138,19 @@ const UserWkHistoryPage = () => {
               endDate={wkt.endDate}
               bettingPoint={wkt.bettingPoint}
               applyStatusType={wkt.applyStatusType}
-              waitingNumber={4} // 추후 수정 필요
+              waitingNumber={4} // Adjust as needed
               onClick={handleCardClick}
             />
           ))
         )}
       </div>
+
+      {isCancelModalOpen && (
+        <UserWktCancelModal
+          onClose={() => setIsCancelModalOpen(false)}
+          onConfirm={handleCancelConfirm}
+        />
+      )}
     </section>
   );
 };
