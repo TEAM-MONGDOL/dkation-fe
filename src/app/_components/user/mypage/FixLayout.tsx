@@ -1,7 +1,12 @@
+'use client';
+
 import UserTabBarModule from '@/_components/user/common/modules/UserTabBarModule';
 import UserHeaderContainers from '@/_components/user/common/containers/UserHeaderContainers';
+import { usePathname } from 'next/navigation';
 
 const UserMyPageFix = () => {
+  const pathname = usePathname();
+
   const tabs = [
     {
       text: '회원정보',
@@ -20,6 +25,10 @@ const UserMyPageFix = () => {
       path: '/mypage/review',
     },
   ];
+
+  if (pathname === '/mypage/review/new') {
+    return null;
+  }
 
   return (
     <div>
