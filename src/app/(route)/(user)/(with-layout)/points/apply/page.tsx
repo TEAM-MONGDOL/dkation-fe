@@ -28,14 +28,14 @@ const PointsApplyPage = () => {
     },
     pageable: {
       page: currentPage,
-      size: 6,
+      size: 10,
       sort: 'lastModifiedAt,DESC',
     },
     enable: !!session.data?.accountId,
   });
   return (
     <div className="flex w-full flex-col gap-y-14 px-40 pb-20 pt-18">
-      <h2 className="text-h2 font-semibold text-sub-400">포인트 사용 내역</h2>
+      <h2 className="text-h2 font-semibold text-sub-400">포인트 신청 내역</h2>
       <div className="flex w-full flex-col">
         <UserTableContainer>
           <UserTableHeaderModule>
@@ -60,7 +60,7 @@ const PointsApplyPage = () => {
               data.pointApplyInfos.map((item, idx) => (
                 <UserTableBodyModule key={item.pointApplyId}>
                   <UserTableBodyAtom isFirst>
-                    {(currentPage - 1) * 6 + idx + 1}
+                    {(currentPage - 1) * 10 + idx + 1}
                   </UserTableBodyAtom>
                   <UserTableBodyAtom>{item.pointTitle}</UserTableBodyAtom>
                   <UserTableBodyAtom>
