@@ -12,6 +12,7 @@ import { useGetBannerListInfiniteQuery } from '@/_hooks/admin/useGetBannerListIn
 import { useRouter } from 'next/navigation';
 import { TrashIcon } from '@/_assets/icons';
 import Image from 'next/image';
+import { NoticeType, noticeTypeConverter } from '@/_types/adminType';
 
 const AdminPointsRewardNewPage = () => {
   const router = useRouter();
@@ -55,8 +56,10 @@ const AdminPointsRewardNewPage = () => {
                 번호
               </TableHeaderAtom>
               <TableHeaderAtom>배너 문구</TableHeaderAtom>
+              <TableHeaderAtom>구분</TableHeaderAtom>
+              <TableHeaderAtom>공지사항 제목</TableHeaderAtom>
               <TableHeaderAtom>링크</TableHeaderAtom>
-              <TableHeaderAtom width="200px">스타일</TableHeaderAtom>
+              <TableHeaderAtom width="170px">스타일</TableHeaderAtom>
               <TableHeaderAtom isLast width="130px" />
             </TableHeaderModule>
             <tbody>
@@ -74,6 +77,14 @@ const AdminPointsRewardNewPage = () => {
                     <TableBodyModule key={banner.id}>
                       <TableBodyAtom isFirst>{banner.id}</TableBodyAtom>
                       <TableBodyAtom>{banner.title}</TableBodyAtom>
+                      <TableBodyAtom>
+                        {
+                          noticeTypeConverter[
+                            banner.announcementType as NoticeType
+                          ]
+                        }
+                      </TableBodyAtom>
+                      <TableBodyAtom>{banner.announcementTitle}</TableBodyAtom>
                       <TableBodyAtom>{banner.linkUrl}</TableBodyAtom>
                       <TableBodyAtom>
                         <div className="flex items-center justify-center gap-x-2">

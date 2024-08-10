@@ -271,6 +271,8 @@ export const bannerInfoSchema = z.object({
   id: z.number(),
   title: z.string(),
   linkUrl: z.string(),
+  announcementType: z.string(),
+  announcementTitle: z.string(),
   backgroundColor: z.string(),
 });
 
