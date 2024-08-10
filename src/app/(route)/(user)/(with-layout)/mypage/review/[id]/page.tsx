@@ -1,12 +1,15 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
 import RatingStar from '@/_components/user/review/userRatingStarContainer';
 import { useGetReviewDetailQuery } from '@/_hooks/user/useGetReviewDetailQuery';
+import { useDeleteReviewMutation } from '@/_hooks/user/useDeleteReviewMutation';
+import UserModalTextAtom from '@/_components/user/common/atoms/UserModalTextAtom';
+import UserModalAtom from '@/_components/user/common/atoms/UserModalAtom';
 
 interface UserReviewDetailPageProps {
   params: {
@@ -16,10 +19,19 @@ interface UserReviewDetailPageProps {
 
 const UserReviewDetailPage = ({ params }: UserReviewDetailPageProps) => {
   const { id } = params;
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const router = useRouter();
 
   const { data, isLoading, isError } = useGetReviewDetailQuery({
     reviewId: id,
+  });
+
+  const { mutate: deleteReview } = useDeleteReviewMutation({
+    successCallback: () => {
+      alert('삭제가 완료되었습니다.');
+      setIsDeleteModalOpen(false);
+      router.replace('/admin/notices');
+    },
   });
 
   return (
@@ -83,7 +95,7 @@ const UserReviewDetailPage = ({ params }: UserReviewDetailPageProps) => {
                   text="삭제"
                   type="button"
                   className="rounded-lg"
-                  onClick={() => router.back()}
+                  onClick={() => setIsDeleteModalOpen(true)}
                 />
                 <UserButtonAtom
                   size="xl"
@@ -97,6 +109,31 @@ const UserReviewDetailPage = ({ params }: UserReviewDetailPageProps) => {
             </>
           )}
         </div>
+        {isDeleteModalOpen && (
+          <UserModalAtom>
+            <UserModalTextAtom className="text-2">
+              리뷰를 삭제하시겠습니까?
+            </UserModalTextAtom>
+            <div className="mt-6 flex justify-center gap-x-2">
+              <UserButtonAtom
+                text="취소"
+                buttonStyle="lightGray"
+                size="md"
+                onClick={() => setIsDeleteModalOpen(false)}
+                className="rounded-md"
+                type="button"
+              />
+              <UserButtonAtom
+                text="삭제"
+                buttonStyle="yellow"
+                size="md"
+                onClick={() => deleteReview(id)}
+                className="rounded-md"
+                type="button"
+              />
+            </div>
+          </UserModalAtom>
+        )}
       </form>
     </section>
   );
