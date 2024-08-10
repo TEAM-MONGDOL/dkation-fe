@@ -1,24 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import logo from '@/_assets/images/logo.png';
 import UserNavButtonAtom from '@/_components/user/common/atoms/UserNavButtonAtom';
 import Link from 'next/link';
 
 const UserNavBarContainer = () => {
-  const [path, setPath] = useState('');
-  const router = useRouter();
-
-  useEffect(() => {
-    setPath(typeof window !== 'undefined' ? window.location.pathname : '');
-  }, []);
+  const currentPath = usePathname();
 
   const menuItems = [
-    { href: '/home', text: '홈' },
+    { href: '/', text: '홈' },
     { href: '/workation', text: '워케이션' },
-    { href: '/point', text: '포인트' },
+    { href: '/points', text: '포인트' },
     { href: '/support', text: '고객지원' },
     { href: '/mypage', text: '마이페이지' },
   ];
@@ -37,16 +31,17 @@ const UserNavBarContainer = () => {
             <Link href={item.href}>
               <p
                 className={
-                  path.startsWith(item.href)
+                  (item.href === '/' && currentPath === '/') ||
+                  (item.href !== '/' && currentPath.startsWith(item.href))
                     ? 'text-center font-semibold'
                     : 'text-center'
                 }
               >
                 {item.text}
               </p>
-              {path.startsWith(item.href) && (
-                <div className="h-[3px] w-[100px] translate-y-2 bg-primary" />
-              )}
+              <div
+                className={`h-[3px] w-[100px] translate-y-2 ${(item.href === '/' && currentPath === '/') || (item.href !== '/' && currentPath.startsWith(item.href)) ? 'bg-primary' : 'bg-transparent'}`}
+              />
             </Link>
           </div>
         ))}

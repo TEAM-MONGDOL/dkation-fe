@@ -58,7 +58,23 @@ export const wktPlaceDetailShema = z.object({
     maxPeople: z.number(),
     createdAt: z.string(),
     description: z.string(),
-    thumbnailUrls: z.array(z.string().nullable()),
+    fileInfos: fileInfoSchema.array().nullable().optional(),
+  }),
+});
+
+export const wktReviewDetailSchema = z.object({
+  reviewDetailInfo: z.object({
+    id: z.number(),
+    reviewer: z.string(),
+    department: z.string(),
+    wktTitle: z.string(),
+    wktPlace: z.string(),
+    rating: z.number(),
+    lastModifiedAt: z.string(),
+    contents: z.string(),
+    imageUrls: z.array(z.string().nullable()),
+    blindedType: z.union([z.literal('TRUE'), z.literal('FALSE')]),
+    openedType: z.union([z.literal('TRUE'), z.literal('FALSE')]),
   }),
 });
 
@@ -101,12 +117,7 @@ export const pointSupplyDetailSchema = z.object({
 });
 
 export const pointInfoSchema = z.object({
-  pointType: z.union([
-    z.literal('MONTHLY'),
-    z.literal('WELCOME'),
-    z.literal('SPECIAL'),
-    z.literal('WORKATION'),
-  ]),
+  pointTitle: z.string(),
   getTime: z.string(),
   usedPoint: z.number(),
   totalPoint: z.number(),
@@ -208,6 +219,12 @@ export const announcementDetailSchema = z.object({
   description: z.string(),
   fileInfos: fileInfoSchema.array().nullable().optional(),
   createdAt: z.string().optional(),
+});
+
+export const announcementDetailListSchema = z.object({
+  announcementDetailInfo: announcementDetailSchema,
+  previousId: z.number().nullable().optional(),
+  postId: z.number().nullable().optional(),
 });
 
 export const applyStatusSchema = z.union([
@@ -319,6 +336,33 @@ export const workationUserPlaceReviewSchema = z.object({
   reviewInfosForWkt: wkUserPlaceReviewInfoSchema.array(),
   pageInfo: pageInfoSchema,
 });
+  
+export const bannerInfoSchema = z.object({
+  id: z.number(),
+  title: z.string(),
+  linkUrl: z.string(),
+  backgroundColor: z.union([
+    z.literal('DARK'),
+    z.literal('YELLOW'),
+    z.literal('LIGHTGRAY'),
+  ]),
+});
+
+export const bannerInfoListSchema = z.object({
+  bannerInfoList: bannerInfoSchema.array(),
+  pageInfo: pageInfoSchema,
+});
+
+export const reviewsInfoForMeSchema = z.object({
+  id: z.number(),
+  wktTitle: z.string(),
+  lastModifiedAt: z.string(),
+});
+
+export const reviewsInfosForMeListSchema = z.object({
+  reviewInfosForMe: reviewsInfoForMeSchema.array(),
+  pageInfo: pageInfoSchema,
+});
 
 // Type
 export type PageableType = {
@@ -332,6 +376,10 @@ export type StatusType = z.infer<typeof applyStatusSchema>;
 export type MemberType = z.infer<typeof memberInfoSchema>;
 
 export type PointApplyType = z.infer<typeof pointApplyTypeSchema>;
+
+export type WktInfoType = z.infer<typeof wktInfoSchema>;
+
+export type BannerType = z.infer<typeof bannerInfoSchema>;
 
 export const pointApplyTypeList: PointApplyType[] = [
   'PENDING',
