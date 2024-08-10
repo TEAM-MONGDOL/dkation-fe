@@ -3,12 +3,13 @@ import { RightArrowIcon } from '@/_assets/icons';
 
 interface UserButtonAtomProps {
   text: string;
-  size: 'sm' | 'md' | 'lg' | 'xl' | 'header' | 'full';
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'header' | 'full';
   rightArrow?: boolean;
   buttonStyle: 'white' | 'red' | 'black' | 'lightGray' | 'darkGray' | 'yellow';
   type: 'button' | 'submit';
   className?: string;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
 const UserButtonAtom = ({
@@ -19,6 +20,7 @@ const UserButtonAtom = ({
   type,
   className = '',
   onClick,
+  disabled = false,
 }: UserButtonAtomProps) => {
   const sizeStyles = {
     sm: 'px-4 py-2.5',
@@ -42,7 +44,8 @@ const UserButtonAtom = ({
     <button
       type={type}
       onClick={onClick}
-      className={`flex items-center justify-center gap-4 ${sizeStyles[size]} ${buttonStyles[buttonStyle]} ${className}`}
+      disabled={disabled}
+      className={`flex items-center justify-center gap-4 ${size ? sizeStyles[size] : ''} ${buttonStyles[buttonStyle]} ${disabled ? 'cursor-not-allowed' : ''} ${className}`}
     >
       <span className="shrink-0">{text}</span>
       {rightArrow && <Image src={RightArrowIcon} alt="rightArrow" />}

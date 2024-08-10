@@ -14,6 +14,7 @@ import { useGetWkListQuery } from '@/_hooks/admin/useGetWktListQuery';
 import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 import { useGetWkPlaceListQuery } from '@/_hooks/admin/useGetWkPlaceListQuery';
 import UserDatePickerContainer from '@/_components/user/common/containers/UserDatePickerContainer';
+import path from 'path';
 
 const Workation = () => {
   const tabs = [
