@@ -36,6 +36,57 @@ export const wkDetailInfoSchema = z.object({
   wktPlaceId: z.number(),
 });
 
+export const wktResultInfoSchema = z.object({
+  name: z.string(),
+  accountId: z.string(),
+  department: z.string(),
+  percentage: z.number(),
+  applyStatusType: z.union([
+    z.literal('APPLIED'),
+    z.literal('RAFFLE_WAIT'),
+    z.literal('NO_WINNING'),
+    z.literal('CONFIRM_WAIT'),
+    z.literal('CANCEL'),
+    z.literal('CONFIRM'),
+    z.literal('WAIT'),
+    z.literal('VISITED'),
+  ]),
+});
+
+export const wktResultInfosSchema = z.object({
+  totalApply: z.number(),
+  totalRecruit: z.number(),
+  maxPoint: z.number(),
+  minPoint: z.number(),
+  avgPoint: z.number(),
+});
+
+export const wktWinningUserInfosSchema = z.object({
+  penaltyType: z
+    .union([
+      z.literal('NOSHOW'),
+      z.literal('REPORT'),
+      z.literal('NEGLIGENCE'),
+      z.literal('ABUSE'),
+    ])
+    .nullable(),
+  name: z.string(),
+  accountId: z.string(),
+  department: z.string(),
+  penaltyAssignDate: z.string().nullable(),
+  wktTitle: z.string(),
+});
+
+export const WkResultPenaltyInfoSchema = z.object({
+  wktResultInfo: wktResultInfosSchema,
+  wktWinningUserInfos: wktWinningUserInfosSchema.array(),
+});
+
+export const WkResultInfoSchema = z.object({
+  wktMemberResultInfos: wktResultInfoSchema.array(),
+  pageInfo: pageInfoSchema,
+});
+
 export const reviewListInfoSchema = z.object({
   id: z.number(),
   reviewer: z.string(),
@@ -409,7 +460,15 @@ export type PointRewardType = 'PERSONAL' | 'GROUP';
 
 export type NoticeType = 'ANNOUNCEMENT' | 'RESULT' | 'EVENT';
 
-export type ResultType = 'NAME' | 'LOWEST' | 'HIGHEST';
+export const noticeTypeList: NoticeType[] = ['ANNOUNCEMENT', 'RESULT', 'EVENT'];
+
+export const noticeTypeConverter: { [key in NoticeType]: string } = {
+  ANNOUNCEMENT: '공지',
+  RESULT: '결과 발표',
+  EVENT: '이벤트 안내',
+};
+
+export type ResultType = 'DESC' | 'PERCENTAGEDESC' | 'PERCENTAGEASC';
 
 export type WktStatusType = 'PLANNED' | 'ONGOING' | 'CLOSED';
 
@@ -505,8 +564,8 @@ export const orderList: { [key in OrderType]: string } = {
 };
 
 export const reviewOrderList: { [key in ReviewOrderType]: string } = {
-  ASC: '최신순',
-  DESC: '오래된순',
+  ASC: '오래된 순',
+  DESC: '최신순',
   STARASC: '별점 높은 순',
   STARDESC: '별점 낮은 순',
 };
@@ -515,11 +574,19 @@ export const pointRewardList: { [key in PointRewardType]: string } = {
   PERSONAL: '개인',
   GROUP: '단체',
 };
-export const noticeList: { [key in NoticeType]: string } = {
+
+export const resultOrderList: { [key in ResultType]: string } = {
+  DESC: '가나다 순',
+  PERCENTAGEASC: '확률 높은 순',
+  PERCENTAGEDESC: '확률 은 순',
+};
+
+  export const noticeList: { [key in NoticeType]: string } = {
   ANNOUNCEMENT: '공지',
   RESULT: '결과 발표',
   EVENT: '이벤트 안내',
 };
+
 export const resultList: { [key in ResultType]: string } = {
   NAME: '가나다순',
   LOWEST: '확률 낮은 순',
