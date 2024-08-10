@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
@@ -15,29 +15,34 @@ interface UserReviewEditPageProps {
   };
 }
 
-const WriteNoticesPage = ({ params }: UserReviewEditPageProps) => {
+const ReviewEditPage = ({ params }: UserReviewEditPageProps) => {
   const { id } = params;
   const router = useRouter();
 
-  const { data, isLoading, isError } = useGetReviewDetailQuery({
+  const { data } = useGetReviewDetailQuery({
     reviewId: id,
   });
 
-  const [rating, setRating] = useState<number>(
-    data?.reviewDetailInfo.rating || 0,
-  );
   const [values, setValues] = useState({
-    fileUrls: (data?.reviewDetailInfo.imageUrls || []).filter(
-      (url): url is string => url !== null,
-    ),
+    fileUrls: data?.reviewDetailInfo.imageUrls || [],
     contents: data?.reviewDetailInfo.contents || '',
     starRating: data?.reviewDetailInfo.rating || 0,
   });
 
-  const { mutate: patchPointPolicy } = usePatchReviewMutation({
+  useEffect(() => {
+    if (data) {
+      setValues({
+        fileUrls: data.reviewDetailInfo.imageUrls || [],
+        contents: data.reviewDetailInfo.contents,
+        starRating: data.reviewDetailInfo.rating,
+      });
+    }
+  }, [data]);
+
+  const { mutate: PatchReview } = usePatchReviewMutation({
     successCallback: () => {
       alert('후기가 수정되었습니다.');
-      router.push('/mypage/review'); // 성공 페이지로 리다이렉트하거나 다른 동작 수행
+      router.push('/mypage/review');
     },
     errorCallback: (error: Error) => {
       console.error('후기 수정 실패 :', error);
@@ -45,26 +50,21 @@ const WriteNoticesPage = ({ params }: UserReviewEditPageProps) => {
     },
   });
 
-  const handleRatingChange = (newRating: number) => {
-    setRating(newRating);
-    setValues((prevValues) => ({
-      ...prevValues,
-      starRating: newRating,
-    }));
-  };
-
   const handleFilesChange = (fileUrls: string[]) => {
+    console.log('Files added:', fileUrls);
     setValues((prevValues) => ({
       ...prevValues,
-      fileUrls: [...prevValues.fileUrls, ...fileUrls],
+      fileUrls,
     }));
   };
 
   const handleDeleteFile = (index: number) => {
+    console.log('Deleting file at index:', index);
     setValues((prevValues) => {
       const updatedFileUrls = prevValues.fileUrls.filter(
         (_, idx) => idx !== index,
       );
+      console.log('File URLs after delete:', updatedFileUrls);
       return {
         ...prevValues,
         fileUrls: updatedFileUrls,
@@ -74,13 +74,14 @@ const WriteNoticesPage = ({ params }: UserReviewEditPageProps) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log('Submitting values:', values);
 
-    patchPointPolicy({
+    PatchReview({
       reviewId: id,
       contents: values.contents,
       starRating: values.starRating,
       fileUrls: values.fileUrls,
-      openedType: 'TRUE', // 여기에 필요한 값을 설정하세요
+      openedType: 'TRUE',
     });
   };
 
@@ -96,7 +97,12 @@ const WriteNoticesPage = ({ params }: UserReviewEditPageProps) => {
             </p>
             <RatingStar
               rating={values.starRating}
-              onRatingChange={handleRatingChange}
+              onRatingChange={(newRating) =>
+                setValues((prevValues) => ({
+                  ...prevValues,
+                  starRating: newRating,
+                }))
+              }
             />
           </div>
           <div className="flex flex-col">
@@ -106,7 +112,7 @@ const WriteNoticesPage = ({ params }: UserReviewEditPageProps) => {
                 fileUrls={values.fileUrls}
                 onFileChange={handleFilesChange}
                 fileDomainType="REVIEW"
-                onDeleteFile={handleDeleteFile}
+                onDeleteFile={handleDeleteFile} // 파일 삭제를 부모 컴포넌트에서 처리
               />
               <TextAreaModule
                 name="contents"
@@ -115,7 +121,10 @@ const WriteNoticesPage = ({ params }: UserReviewEditPageProps) => {
                 maxLength={500}
                 value={values.contents}
                 onChange={(e) =>
-                  setValues({ ...values, contents: e.target.value })
+                  setValues((prevValues) => ({
+                    ...prevValues,
+                    contents: e.target.value,
+                  }))
                 }
               />
             </div>
@@ -143,4 +152,4 @@ const WriteNoticesPage = ({ params }: UserReviewEditPageProps) => {
   );
 };
 
-export default WriteNoticesPage;
+export default ReviewEditPage;
