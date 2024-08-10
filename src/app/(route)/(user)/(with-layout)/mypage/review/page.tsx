@@ -21,7 +21,7 @@ const UserMyReviewPage = () => {
     pageParam: {
       page: currentPage,
       size: 10,
-      // sort: `lastModifiedAt,DESC`,
+      sort: `lastModifiedAt,DESC`,
     },
   });
 
