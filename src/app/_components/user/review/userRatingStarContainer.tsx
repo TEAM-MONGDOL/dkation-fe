@@ -5,7 +5,7 @@ import { ReviewInfo } from '@/_constants/common';
 
 interface RatingStarProps {
   rating: number;
-  onRatingChange: (rating: number) => void;
+  onRatingChange?: (rating: number) => void;
   readonly?: boolean;
 }
 
@@ -33,7 +33,9 @@ const RatingStar = ({
   const handleClick = (value: number) => {
     if (!readonly) {
       setCurrentRating(value);
-      onRatingChange(value);
+      if (onRatingChange) {
+        onRatingChange(value);
+      }
     }
   };
 
@@ -41,7 +43,9 @@ const RatingStar = ({
     if (!readonly) {
       setIsDragging(true);
       setCurrentRating(value);
-      onRatingChange(value);
+      if (onRatingChange) {
+        onRatingChange(value);
+      }
     }
   };
 
@@ -62,7 +66,9 @@ const RatingStar = ({
       const newRating = Math.ceil((clickPosition / width) * 5);
       setHoveredRating(newRating);
       setCurrentRating(newRating);
-      onRatingChange(newRating);
+      if (onRatingChange) {
+        onRatingChange(newRating);
+      }
     }
   };
 
