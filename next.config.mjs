@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-
   reactStrictMode: false,
   redirects: async () => {
     return [
@@ -17,6 +16,11 @@ const nextConfig = {
       {
         source: '/support',
         destination: '/support/notices',
+        permanent: true,
+      },
+      {
+        source: '/points',
+        destination: '/points/history',
         permanent: true,
       },
     ];
