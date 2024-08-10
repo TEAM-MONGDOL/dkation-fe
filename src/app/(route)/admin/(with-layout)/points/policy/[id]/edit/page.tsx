@@ -24,7 +24,9 @@ const AdminPointsPolicyEditPage = ({
   const { id } = params;
   const router = useRouter();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const { data: policyDetail } = useGetPointPolicyDetailQuery(Number(id));
+  const { data: policyDetail } = useGetPointPolicyDetailQuery({
+    id: Number(id),
+  });
   const { mutate: tryPatchPointPolicy } = usePatchPointPolicyMutation({
     policyId: Number(id),
     successCallback: () => {

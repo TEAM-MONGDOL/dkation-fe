@@ -25,7 +25,9 @@ const AdminPointsPolicyDetailPage = ({
   const { id } = params;
   const router = useRouter();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const { data, isLoading, isError } = useGetPointPolicyDetailQuery(Number(id));
+  const { data, isLoading, isError } = useGetPointPolicyDetailQuery({
+    id: Number(id),
+  });
   const { mutate: tryDeletePointPolicy } = useDeletePointPolicyMutation({
     successCallback: () => {
       setIsDeleteModalOpen(false);
