@@ -99,6 +99,7 @@ const PointsApplyPage = () => {
             text="포인트 신청하기"
             type="button"
             className="rounded-lg"
+            onClick={() => router.push('/points/apply/new')}
           />
         </div>
         {data && data.pageInfo.totalElements > 0 && (
