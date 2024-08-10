@@ -95,14 +95,23 @@ const PointsApplyDetailPage = ({ params }: PointsApplyDetailPageProps) => {
                 buttonType="download"
               />
             )}
+            <div className="mt-8 flex w-full flex-col gap-y-6">
+              <TextAreaModule
+                name="description"
+                size="MEDIUM"
+                value={data.description}
+                readonly
+              />
+            </div>
             {data.applyType === 'DECLINED' && (
               <div className="mb-20 mt-8 flex w-full flex-col gap-y-6">
-                <h2 className="text-2 font-semibold">반려사유</h2>
+                <h2 className="text-2 font-semibold">반려 사유</h2>
                 <TextAreaModule
                   name="declineReason"
                   size="MEDIUM"
                   value={data.declineReason || '반려 사유가 없습니다.'}
                   readonly
+                  bgColor="bg-sub-100/30"
                 />
               </div>
             )}
