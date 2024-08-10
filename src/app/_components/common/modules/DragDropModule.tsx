@@ -7,9 +7,15 @@ import { DragDropContent } from '@/_constants/common';
 
 interface DragDropModuleProps {
   onFileAdd: (files: File[]) => void;
+  maxFileCount?: number;
+  fileDomainType?: 'ANNOUNCEMENT' | 'POINT_APPLY';
 }
 
-const DragDropModule = ({ onFileAdd }: DragDropModuleProps) => {
+const DragDropModule = ({
+  onFileAdd,
+  maxFileCount,
+  fileDomainType,
+}: DragDropModuleProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const dragRef = useRef<HTMLLabelElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -32,6 +38,11 @@ const DragDropModule = ({ onFileAdd }: DragDropModuleProps) => {
     setIsDragging(false);
 
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      if (maxFileCount && e.dataTransfer.files.length > maxFileCount) {
+        console.error(`최대 ${maxFileCount}개까지 업로드 가능합니다.`);
+        return;
+      }
+
       onFileAdd(Array.from(e.dataTransfer.files));
       e.dataTransfer.clearData();
     }
@@ -45,6 +56,15 @@ const DragDropModule = ({ onFileAdd }: DragDropModuleProps) => {
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files;
+    if (
+      selectedFiles?.length &&
+      maxFileCount &&
+      selectedFiles.length > maxFileCount
+    ) {
+      console.error(`최대 ${maxFileCount}개까지 업로드 가능합니다.`);
+      return;
+    }
+
     if (selectedFiles) {
       onFileAdd(Array.from(selectedFiles));
     }
@@ -70,13 +90,17 @@ const DragDropModule = ({ onFileAdd }: DragDropModuleProps) => {
           className="hidden"
           ref={fileInputRef}
           onChange={handleFileSelect}
-          multiple
+          multiple={maxFileCount ? maxFileCount > 1 : true}
         />
 
         <AddFIleButtonAtom onClick={handleButtonClick} />
         <AddFIleCommentAtom
           comment={DragDropContent.COMMENT}
-          subComment={DragDropContent.SUBCOMMENT}
+          subComment={
+            fileDomainType
+              ? DragDropContent.SUB_COMMENT[fileDomainType]
+              : DragDropContent.SUB_COMMENT.ANNOUNCEMENT
+          }
         />
       </label>
     </div>
