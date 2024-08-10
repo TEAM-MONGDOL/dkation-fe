@@ -1,25 +1,15 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import AddFileCommentAtom from '@/_components/common/atoms/AddfileCommentAtom';
-import AddFileButtonAtom from '@/_components/common/atoms/AddfileButtonAtom';
+import AddFIleCommentAtom from '@/_components/common/atoms/AddfileCommentAtom';
+import AddFIleButtonAtom from '@/_components/common/atoms/AddfileButtonAtom';
 import { DragDropContent } from '@/_constants/common';
 
 interface DragDropModuleProps {
   onFileAdd: (files: File[]) => void;
-  user?: boolean;
 }
 
-const DragDropModule = ({ onFileAdd, user = false }: DragDropModuleProps) => {
-  maxFileCount?: number;
-  fileDomainType?: 'ANNOUNCEMENT' | 'POINT_APPLY';
-}
-
-const DragDropModule = ({
-  onFileAdd,
-  maxFileCount,
-  fileDomainType,
-}: DragDropModuleProps) => {
+const DragDropModule = ({ onFileAdd }: DragDropModuleProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const dragRef = useRef<HTMLLabelElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -42,11 +32,6 @@ const DragDropModule = ({
     setIsDragging(false);
 
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      if (maxFileCount && e.dataTransfer.files.length > maxFileCount) {
-        console.error(`최대 ${maxFileCount}개까지 업로드 가능합니다.`);
-        return;
-      }
-
       onFileAdd(Array.from(e.dataTransfer.files));
       e.dataTransfer.clearData();
     }
@@ -60,15 +45,6 @@ const DragDropModule = ({
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files;
-    if (
-      selectedFiles?.length &&
-      maxFileCount &&
-      selectedFiles.length > maxFileCount
-    ) {
-      console.error(`최대 ${maxFileCount}개까지 업로드 가능합니다.`);
-      return;
-    }
-
     if (selectedFiles) {
       onFileAdd(Array.from(selectedFiles));
     }
@@ -76,13 +52,10 @@ const DragDropModule = ({
 
   return (
     <div className="flex w-full flex-col gap-2.5">
+      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label
-        className={`flex w-full cursor-pointer flex-col items-center justify-center gap-2.5 rounded-regular border border-dashed border-stroke-100 p-5 ${
-          isDragging
-            ? 'border-primary bg-primary/20'
-            : user
-              ? 'bg-sub-100/20'
-              : 'bg-white'
+        className={`flex w-full cursor-pointer flex-col items-center justify-center gap-2.5 rounded-regular border border-dashed p-5 ${
+          isDragging ? 'border-primary bg-primary/20' : 'border-stroke-100'
         }`}
         htmlFor="fileUpload"
         ref={dragRef}
@@ -97,30 +70,17 @@ const DragDropModule = ({
           className="hidden"
           ref={fileInputRef}
           onChange={handleFileSelect}
-          multiple={maxFileCount ? maxFileCount > 1 : true}
+          multiple
         />
-        
-        {user ? (
-          <div className="flex items-center gap-2">
-            <AddFileButtonAtom icon="camera" onClick={handleButtonClick} />
-            <AddFileCommentAtom user comment="사진 첨부하기" subComment="" />
-          </div>
-        ) : (
-          <AddFIleButtonAtom onClick={handleButtonClick} />
+
+        <AddFIleButtonAtom onClick={handleButtonClick} />
         <AddFIleCommentAtom
           comment={DragDropContent.COMMENT}
-          subComment={
-            fileDomainType
-              ? DragDropContent.SUB_COMMENT[fileDomainType]
-              : DragDropContent.SUB_COMMENT.ANNOUNCEMENT
-          }
+          subComment={DragDropContent.SUB_COMMENT}
         />
-        )}
       </label>
     </div>
   );
 };
 
 export default DragDropModule;
-
-  

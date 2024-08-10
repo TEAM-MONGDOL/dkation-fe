@@ -7,7 +7,7 @@ import { LocationIcon } from '@/_assets/icons';
 import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
 import { useGetUserPercentQuery } from '@/_hooks/user/useGetUserPercentQuery';
 import { useState } from 'react';
-import { useGetMemberDetailQuery } from '@/_hooks/admin/useGetMemberDetailQuery';
+import { useGetMemberDetailQuery } from '@/_hooks/common/useGetMemberDetailQuery';
 import { useSession } from 'next-auth/react';
 
 interface Props {

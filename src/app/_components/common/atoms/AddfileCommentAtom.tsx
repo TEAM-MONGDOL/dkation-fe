@@ -1,22 +1,18 @@
-interface AddFileCommentAtomProps {
+interface AddFIleCommentAtomProps {
   comment: string;
   subComment: string;
-  user?: boolean;
 }
 
-const AddFileCommentAtom = ({
+const AddFIleCommentAtom = ({
   comment,
   subComment,
-  user = false,
-}: AddFileCommentAtomProps) => {
+}: AddFIleCommentAtomProps) => {
   return (
-    <div
-      className={`text-center text-4 ${user ? 'text-black' : 'text-sub-200'}`}
-    >
+    <div className="text-center text-4 text-sub-200">
       <p>{comment}</p>
       <p>{subComment}</p>
     </div>
   );
 };
 
-export default AddFileCommentAtom;
+export default AddFIleCommentAtom;
