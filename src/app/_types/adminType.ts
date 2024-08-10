@@ -36,6 +36,10 @@ export const wkDetailInfoSchema = z.object({
   wktPlaceId: z.number(),
 });
 
+export const wkApplyPercentageInfoSchema = z.object({
+  percentage: z.number(),
+  error: z.number(),
+})
 export const wktResultInfoSchema = z.object({
   name: z.string(),
   accountId: z.string(),

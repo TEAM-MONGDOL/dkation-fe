@@ -2,7 +2,7 @@
 
 import UserHeaderContainers from '@/_components/user/common/containers/UserHeaderContainers';
 import UserTabBarModule from '@/_components/user/common/modules/UserTabBarModule';
-import { useEffect, useState, useMemo, useCallback } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import Image from 'next/image';
 import UserTextLabelAtom from '@/_components/user/common/atoms/UserTextLabelAtom';
 import UserStateFilteringContainer from '@/_components/user/common/containers/UserStateFilteringContainer';
@@ -164,6 +164,16 @@ const Workation = () => {
     }
     return { label: '모집 중', color: 'bg-primary' };
   };
+
+  if (isLoading || placeIsLoading) {
+    return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
+  }
+  if (isError || placeIsError) {
+    return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정
+  }
+  if (!data || !placeData) {
+    return <div>No data</div>;
+  }
 
   return (
     <div className="">
