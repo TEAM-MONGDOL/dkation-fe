@@ -419,6 +419,24 @@ export const reviewsInfosForMeListSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
+export const reviewDetailSchema = z.object({
+  id: z.number(),
+  reviewer: z.string(),
+  department: z.string(),
+  wktTitle: z.string(),
+  wktPlace: z.string(),
+  rating: z.number(),
+  lastModifiedAt: z.string(),
+  contents: z.string(),
+  imgUrls: z.array(z.string().nullable()).optional(),
+});
+
+export const reviewsDetailInfoSchema = z.object({
+  reviewDetailInfo: reviewDetailSchema,
+  blindedType: z.string().nullable().optional(),
+  openedType: z.string().nullable().optional(),
+});
+
 // Type
 export type PageableType = {
   page?: number;
