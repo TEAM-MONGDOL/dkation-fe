@@ -17,7 +17,7 @@ const UserTextLabelAtom = ({
 
   return (
     <p
-      className={`inline-block rounded-full ${sizeClasses[size]} ${className}`}
+      className={`flex items-center justify-center rounded-full ${sizeClasses[size]} ${className}`}
     >
       {text}
     </p>

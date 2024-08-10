@@ -1,5 +1,16 @@
-const Points = () => {
-  return <div>points page</div>;
+'use client';
+
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+
+const PointsPage = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace('/points/history');
+  }, [router]);
+
+  return null;
 };
 
-export default Points;
+export default PointsPage;

@@ -2,8 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import { ReviewListInfoSchema } from '@/_types/adminType';
 import api from '../Axios';
 
-export const useGetWkReviewListQueryKey = 'useGetWkReviewListQuery';
-export const useGetWkReviewListQuery = ({
+export const useGetAdminWkReviewListQueryKey = 'useGetWkReviewListQuery';
+export const useGetAdminWkReviewListQuery = ({
   wktPlaceFilter,
   minRating,
   maxRating,
@@ -20,14 +20,14 @@ export const useGetWkReviewListQuery = ({
 }) => {
   return useQuery({
     queryKey: [
-      useGetWkReviewListQueryKey,
+      useGetAdminWkReviewListQueryKey,
       wktPlaceFilter,
       minRating,
       maxRating,
       pageParam,
     ],
     queryFn: async () => {
-      const res = await api.get(`/api/review`, {
+      const res = await api.get(`/api/review/admin`, {
         params: {
           wktPlaceFilter,
           minRating,

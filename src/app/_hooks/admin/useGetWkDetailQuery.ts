@@ -8,7 +8,7 @@ export const useGetWkDetailQuery = ({ wktId }: { wktId: number }) => {
   return useQuery({
     queryKey: [useGetWkDetailQueryKey, wktId],
     queryFn: async () => {
-      const res = await api.get(`/api/wkt/${wktId}`, {
+      const res = await api.get(`/api/wkt/${wktId}/admin`, {
         params: {
           wktId,
         },

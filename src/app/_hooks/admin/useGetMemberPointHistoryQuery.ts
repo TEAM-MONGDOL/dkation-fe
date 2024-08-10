@@ -9,12 +9,14 @@ export const useGetMemberPointHistoryQuery = ({
   startDate,
   endDate,
   isPositive,
+  enable = true,
   pageParam,
 }: {
   accountId?: string;
   startDate?: string;
   endDate?: string;
   isPositive?: boolean;
+  enable?: boolean;
   pageParam: {
     page: number;
     size: number;
@@ -42,5 +44,6 @@ export const useGetMemberPointHistoryQuery = ({
       });
       return pointInfoListSchema.parse(res.data.data);
     },
+    enabled: enable,
   });
 };
