@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { PointEditIcon } from '@/_assets/icons';
@@ -7,10 +9,12 @@ import UserModalAtom from '@/_components/user/common/atoms/UserModalAtom';
 import UserModalTextAtom from '@/_components/user/common/atoms/UserModalTextAtom';
 import { StatusConfig } from '@/_constants/common';
 import { StatusType } from '@/_types/adminType';
+import { useGetWinningPercentageQuery } from '@/_hooks/user/useGetWinningPercentageQuery';
 
 interface WorkationCardProps {
   thumbnailUrl: string;
   wktName: string;
+  wktId: number;
   place: string;
   totalRecruit: number;
   applyStartDate: string;
@@ -23,7 +27,7 @@ interface WorkationCardProps {
   onClick?: (applyStatusType: WorkationCardProps['applyStatusType']) => void;
 }
 
-const WorkationCard: React.FC<WorkationCardProps> = ({
+const WorkationCard = ({
   thumbnailUrl,
   place,
   wktName,
@@ -34,9 +38,10 @@ const WorkationCard: React.FC<WorkationCardProps> = ({
   endDate,
   bettingPoint: initialBettingPoint,
   applyStatusType,
+  wktId,
   waitingNumber = -1,
   onClick,
-}) => {
+}: WorkationCardProps) => {
   const { textLabel, buttonText, textLabelClass, buttonStyle, buttonDisabled } =
     StatusConfig[applyStatusType];
 
@@ -44,13 +49,20 @@ const WorkationCard: React.FC<WorkationCardProps> = ({
   const [currentBettingPoint, setCurrentBettingPoint] =
     useState(initialBettingPoint);
   const [newBettingPoint, setNewBettingPoint] = useState('');
-  const [showProbability, setShowProbability] = useState(false);
-  const [probability, setProbability] = useState<number | null>(null);
+  const [probabilityData, setProbabilityData] = useState<{
+    percentage: number | null;
+    error: number | null;
+  }>({ percentage: null, error: null });
+
+  const { data, isLoading, isError } = useGetWinningPercentageQuery({
+    wktId,
+    point: Number(newBettingPoint),
+  });
 
   const handleModalClose = () => {
     setIsModalOpen(false);
-    setShowProbability(false);
     setNewBettingPoint('');
+    setProbabilityData({ percentage: null, error: null });
   };
 
   const handleBettingPointChange = (
@@ -59,26 +71,22 @@ const WorkationCard: React.FC<WorkationCardProps> = ({
     setNewBettingPoint(event.target.value);
   };
 
-  const calculateProbability = (point: number): number => {
-    // 확률 계산 post 요청
-    return point;
-  };
-
   const handleShowProbability = () => {
-    /* const point = Number(newBettingPoint);
+    const point = Number(newBettingPoint);
     if (!Number.isNaN(point) && point >= 0) {
-      setProbability(point);
-      setShowProbability(true);
+      if (data) {
+        setProbabilityData({
+          percentage: data.percentage,
+          error: data.error,
+        });
+      }
     } else {
-      setProbability(null);
-      setShowProbability(false);
+      setProbabilityData({ percentage: null, error: null });
     }
-     */
   };
 
   const handleSaveBettingPoint = () => {
     const point = Number(newBettingPoint);
-    // 베팅 포인트 수정 로직 추가 예정
     setCurrentBettingPoint(point);
     console.log('new betting point:', point);
     handleModalClose();
@@ -149,20 +157,22 @@ const WorkationCard: React.FC<WorkationCardProps> = ({
             나의 당첨 확률 확인하기
           </UserModalTextAtom>
           <div className="mb-4">
-            {showProbability && probability !== null && (
+            {probabilityData.percentage !== null && (
               <div>
-                <div className="flex items-end justify-between px-20">
+                <div className="flex items-end justify-center gap-x-3 px-10">
                   <p className="text-[78px] font-bold">
-                    {probability.toFixed(2)}%
+                    {probabilityData.percentage}%
                   </p>
-                  <p className="mb-4 text-sub-200">± N%</p>
+                  <p className="mb-4 text-sub-200">
+                    ± {probabilityData.error}%
+                  </p>
                 </div>
                 <div className="w-full border-b border-stroke-100" />
               </div>
             )}
             <div className="flex flex-col justify-center gap-y-2 pt-6">
               <div className="flex items-center justify-center gap-x-4">
-                <p className="w-[100px] text-end text-2">내 포인트</p>
+                <p className="w-[120px] text-end text-2">내 포인트</p>
                 <input
                   type="number"
                   value={currentBettingPoint}
@@ -174,7 +184,7 @@ const WorkationCard: React.FC<WorkationCardProps> = ({
                 />
               </div>
               <div className="flex items-center justify-center gap-x-4">
-                <p className="w-[100px] text-end text-2">베팅할 포인트</p>
+                <p className="w-[120px] text-end text-2">베팅할 포인트</p>
                 <div className="relative flex items-center">
                   <input
                     type="number"
