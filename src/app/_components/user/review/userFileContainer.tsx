@@ -1,32 +1,39 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DragDropModule from '@/_components/common/modules/DragDropModule';
 import { usePostFileMutation } from '@/_hooks/common/usePostFileMutation';
 import { CloseIcon, PlusIcon } from '@/_assets/icons';
 import Image from 'next/image';
 
 interface FileContainerProps {
+  fileUrls: string[];
   onFileChange?: (fileUrls: string[]) => void;
   fileDomainType: string;
   onDeleteFile?: (index: number) => void;
 }
 
 const UserFileContainer = ({
+  fileUrls: initialFileUrls,
   onFileChange,
   fileDomainType,
   onDeleteFile,
 }: FileContainerProps) => {
-  const [fileUrls, setFileUrls] = useState<string[]>([]);
+  const [fileUrls, setFileUrls] = useState<string[]>(initialFileUrls);
 
   const { mutate: postFile } = usePostFileMutation({
     successCallback: (fileInfos: { url: string }[]) => {
       const newFileUrls = fileInfos.map((file) => file.url);
-      onFileChange?.(newFileUrls);
-      setFileUrls((prev) => [...prev, ...newFileUrls]);
+      const updatedFileUrls = [...fileUrls, ...newFileUrls];
+      setFileUrls(updatedFileUrls);
+      onFileChange?.(updatedFileUrls);
     },
     errorCallback: (error: Error) => {
       console.error('파일 업로드 중 오류 발생:', error);
     },
   });
+
+  useEffect(() => {
+    setFileUrls(initialFileUrls);
+  }, [initialFileUrls]);
 
   const handleFileAdd = (newFiles: File[]) => {
     newFiles.forEach((file) => {
@@ -47,8 +54,10 @@ const UserFileContainer = ({
   };
 
   const handleDelete = (index: number) => {
-    setFileUrls((prev) => prev.filter((_, idx) => idx !== index));
+    const updatedFileUrls = fileUrls.filter((_, idx) => idx !== index);
+    setFileUrls(updatedFileUrls);
     onDeleteFile?.(index); // 상위 컴포넌트에 삭제 알림
+    onFileChange?.(updatedFileUrls); // 상위 컴포넌트에 변경 사항 알림
   };
 
   return (
