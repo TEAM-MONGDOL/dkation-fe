@@ -17,11 +17,20 @@ import DropdownModule from '@/_components/common/modules/DropdownModule';
 import WkResultSide from '@/(route)/admin/(with-layout)/workation/[id]/result/wkResultSide';
 import { useGetWkPenaltyQuery } from '@/_hooks/admin/useGetWkPenaltyQuery';
 import { usePostPenaltyMutation } from '@/_hooks/admin/usePostPenaltyMutation';
+import dayjs from 'dayjs';
 
 interface WkResultProps {
   params: { id: number };
 }
 
+const penaltyDisplayTextMapping: {
+  [key: string]: string;
+} = {
+  NOSHOW: '노쇼',
+  REPORT: '협력체 신고',
+  NEGLIGENCE: '근무 태만',
+  ABUSE: '포인트 제도 악용',
+};
 const penaltyTypeMapping: {
   [key: string]: 'NOSHOW' | 'REPORT' | 'NEGLIGENCE' | 'ABUSE';
 } = {
@@ -46,11 +55,14 @@ const AdminWorkationListPenaltyPage = ({ params }: WkResultProps) => {
       alert('페널티 등록 완료');
       setIsConfirmModelOpen(false);
       setSelectedAccountId(null);
-      router.back();
+      // eslint-disable-next-line no-restricted-globals
+      location.reload();
     },
     errorCallback: (error) => {
-      alert(`${error.message}`);
+      alert('이미 페널티가 지급되었습니다.');
       setIsConfirmModelOpen(false);
+      // eslint-disable-next-line no-restricted-globals
+      location.reload();
     },
   });
 
@@ -136,13 +148,17 @@ const AdminWorkationListPenaltyPage = ({ params }: WkResultProps) => {
                     <TableBodyModule key={item.accountId}>
                       <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
                       <TableBodyAtom>
-                        {item.penaltyType ? item.penaltyType : '-'}
+                        {item.penaltyType
+                          ? penaltyDisplayTextMapping[item.penaltyType]
+                          : '-'}
                       </TableBodyAtom>
                       <TableBodyAtom>{item.name}</TableBodyAtom>
                       <TableBodyAtom>{item.accountId}</TableBodyAtom>
                       <TableBodyAtom>{item.department}</TableBodyAtom>
                       <TableBodyAtom>
-                        {item.penaltyAssignDate ? item.penaltyAssignDate : '-'}
+                        {item.penaltyAssignDate
+                          ? dayjs(item.penaltyAssignDate).format('YYYY.MM.DD')
+                          : '-'}
                       </TableBodyAtom>
                       <TableBodyAtom isLast>
                         <button
