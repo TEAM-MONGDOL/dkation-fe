@@ -1,10 +1,40 @@
+'use client';
+
 import place from '@/_assets/images/place_impy.png';
 import WkBannerPeriodModule from '@/_components/user/common/modules/WkBannerPeriodModule';
 import Image from 'next/image';
 import { LocationIcon } from '@/_assets/icons';
 import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
+import { useGetUserPercentQuery } from '@/_hooks/user/useGetUserPercentQuery';
+import { useState } from 'react';
 
-const UserWkApplyPage = () => {
+interface Props {
+  params: { id: number };
+}
+const UserWkApplyPage = ({ params }: Props) => {
+  const [point, setPoint] = useState<number>(0);
+  const { id } = params;
+
+  const {
+    data: pointData,
+    isLoading: pointIsLoading,
+    isError: pointIsError,
+    refetch,
+  } = useGetUserPercentQuery({ wktId: id, point });
+
+  const handlePointChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setPoint(Number(value) || 0);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      await refetch();
+    } catch (error) {
+      console.error('Error refetching data:', error);
+    }
+  };
+
   return (
     <section>
       <div className="">
@@ -32,24 +62,36 @@ const UserWkApplyPage = () => {
         <div>
           <p className="mb-10 text-h2 font-semibold">나의 당첨 확률</p>
           <div className="flex w-[348px] items-end justify-center gap-10 rounded-[17px] border border-[#E5CD07] bg-gradient-to-r from-primary/5 to-primary/60 pb-2.5">
-            <p className="text-[78px] font-bold">2.1%</p>
-            <p className="mb-5 text-h3 text-[#E5CD07]">±N%</p>
+            <p className="text-[78px] font-bold">{pointData?.percentage}%</p>
+            <p className="mb-5 text-h3 text-[#E5CD07]">±{pointData?.error}%</p>
           </div>
         </div>
         <div className="mt-16 flex flex-col gap-2">
           <div className="flex items-center gap-12">
             <p className="text-1">내 포인트</p>
-            <input className="h-12 rounded-[4px] border pl-4" placeholder="0" />
+            <input
+              // value={point}
+              // onChange={handlePointChange}
+              className="h-12 rounded-[4px] border pl-4"
+              placeholder="0"
+              type="number"
+            />
           </div>
           <div className="flex items-center gap-7">
             <p className="text-1">배팅 포인트</p>
-            <input className="h-12 rounded-[4px] border pl-4" placeholder="0" />
+            <input
+              className="h-12 rounded-[4px] border pl-4"
+              placeholder="0"
+              value={point > 0 ? point : ''}
+              onChange={handlePointChange}
+            />
             <UserButtonAtom
               className="rounded-[8px]"
               text="신청하기"
               size="md"
               buttonStyle="black"
-              type="submit"
+              onClick={handleSubmit}
+              type="button"
             />
           </div>
         </div>
