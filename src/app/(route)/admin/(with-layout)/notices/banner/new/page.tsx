@@ -7,12 +7,17 @@ import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import ColorChartModule from '@/_components/admin/notices/StyleChartModule';
 import DropdownModule from '@/_components/common/modules/DropdownModule';
 import { useGetNoticeListQuery } from '@/_hooks/admin/useGetNoticeListQuery';
+import { usePostBannerMutation } from '@/_hooks/admin/usePostBannerMutation';
+import { useRouter } from 'next/navigation';
 
 const AddBannerPage = () => {
+  const router = useRouter();
   const [values, setValues] = useState({
     title: '',
     linkUrl: '',
     backgroundColor: '',
+    announcementTitle: '',
+    announcementType: '',
   });
 
   const { data } = useGetNoticeListQuery({
@@ -22,12 +27,13 @@ const AddBannerPage = () => {
   const noticeInfos = data?.announcementInfos || [];
   const noticeOptions = noticeInfos.map((notice) => ({
     id: notice.id,
+    announcementType: notice.announcementType,
     title: notice.title,
   }));
 
-  const findIdByTitle = (title: string) => {
+  const findNoticeByTitle = (title: string) => {
     const notice = noticeOptions.find((option) => option.title === title);
-    return notice ? notice.id.toString() : '';
+    return notice || null;
   };
 
   const handleChange = (
@@ -44,20 +50,31 @@ const AddBannerPage = () => {
   };
 
   const handleNoticeSelect = (selectedTitle: string) => {
-    const id = findIdByTitle(selectedTitle);
-    setValues({
-      ...values,
-      linkUrl: id,
-    });
+    const notice = findNoticeByTitle(selectedTitle);
+    if (notice) {
+      setValues({
+        ...values,
+        linkUrl: notice.id.toString(),
+        announcementTitle: selectedTitle,
+        announcementType: notice.announcementType,
+      });
+    }
   };
+
+  const { mutate: PostBanner } = usePostBannerMutation({
+    successCallback: () => {
+      router.replace('/admin/notices/banner');
+    },
+    errorCallback: (error: Error) => {
+      console.error('failed create banner : ', error);
+    },
+  });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log('제목:', values.title);
-    console.log('링크:', values.linkUrl);
-    console.log('배경색:', values.backgroundColor);
     const payload = { ...values };
+    PostBanner(payload);
   };
 
   return (
