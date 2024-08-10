@@ -6,7 +6,7 @@ interface PositiveLabelProps {
 
 const PositiveLabel = ({ text }: PositiveLabelProps) => {
   return (
-    <div className="flex w-full items-center justify-center">
+    <div className="flex items-center justify-center">
       <UserTextLabelAtom
         size="sm"
         className="bg-positive/10 text-positive"
