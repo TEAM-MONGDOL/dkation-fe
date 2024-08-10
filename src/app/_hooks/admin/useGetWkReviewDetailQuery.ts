@@ -1,10 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
-import { wktReviewDetailShema } from '@/_types/adminType';
+import { wktReviewDetailSchema } from '@/_types/adminType';
 import api from '../Axios';
 
 export const useGetReviewDetailQueryKey = 'useGetReviewDetailQueryKey';
 
-export const useGetWkReviewListQuery = ({ reviewId }: { reviewId: number }) => {
+export const useGetWkReviewDetailQuery = ({
+  reviewId,
+}: {
+  reviewId: number;
+}) => {
   return useQuery({
     queryKey: [useGetReviewDetailQueryKey, reviewId],
     queryFn: async () => {
@@ -13,7 +17,7 @@ export const useGetWkReviewListQuery = ({ reviewId }: { reviewId: number }) => {
           reviewId,
         },
       });
-      return wktReviewDetailShema.parse(res.data.data);
+      return wktReviewDetailSchema.parse(res.data.data);
     },
   });
 };
