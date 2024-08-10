@@ -2,21 +2,21 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
 import RatingStar from '@/_components/user/review/userRatingStarContainer';
 import { useGetReviewDetailQuery } from '@/_hooks/user/useGetReviewDetailQuery';
 
-interface UserReviewDeatilPageProps {
+interface UserReviewDetailPageProps {
   params: {
     id: number;
   };
 }
 
-const UserReviewDetailPage = ({ params }: UserReviewDeatilPageProps) => {
+const UserReviewDetailPage = ({ params }: UserReviewDetailPageProps) => {
   const { id } = params;
   const router = useRouter();
-  const [rating, setRating] = useState<number>(0);
   const [values, setValues] = useState({
     fileUrls: [] as string[],
     contents: '',
@@ -26,10 +26,6 @@ const UserReviewDetailPage = ({ params }: UserReviewDeatilPageProps) => {
   const { data, isLoading, isError } = useGetReviewDetailQuery({
     reviewId: id,
   });
-
-  const handleRatingChange = (newRating: number) => {
-    setRating(data.reviewDetailInfo.rating);
-  };
 
   return (
     <section className="px-40 pt-18">
@@ -49,21 +45,36 @@ const UserReviewDetailPage = ({ params }: UserReviewDeatilPageProps) => {
                 <p className="mb-4 text-h2 font-semibold">
                   이번 워케이션 장소 어때요?
                 </p>
-                <RatingStar
-                  readonly
-                  rating={data.reviewDetailInfo.rating}
-                  onRatingChange={handleRatingChange}
-                />
+                <RatingStar readonly rating={data.reviewDetailInfo.rating} />
               </div>
+
               <div className="flex flex-col">
                 <p className="mb-2 text-h2 font-semibold">
                   어떤 점이 좋았나요?
                 </p>
-                <div className="flex flex-col gap-y-4 py-7">
+                {data.reviewDetailInfo.imageUrls &&
+                  data.reviewDetailInfo.imageUrls.length > 0 && (
+                    <div className="flex gap-x-3">
+                      {data.reviewDetailInfo.imageUrls.map((url) =>
+                        url ? (
+                          <div key={url} className="py-3">
+                            <Image
+                              src={url}
+                              alt="Review Image"
+                              width={112}
+                              height={112}
+                              className="h-44 w-44 rounded-lg object-cover"
+                            />
+                          </div>
+                        ) : null,
+                      )}
+                    </div>
+                  )}
+                <div className="flex flex-col gap-y-4 py-4">
                   <TextAreaModule
                     readonly
                     name="contents"
-                    placeholder="내용을 입력하세요."
+                    placeholder="내용이 존재하지 않습니다."
                     size="LARGE"
                     maxLength={500}
                     value={data.reviewDetailInfo.contents}
@@ -80,14 +91,15 @@ const UserReviewDetailPage = ({ params }: UserReviewDeatilPageProps) => {
                   text="취소"
                   type="button"
                   className="rounded-lg"
-                  onClick={() => router.push('/admin/notices')}
+                  onClick={() => router.back()}
                 />
                 <UserButtonAtom
                   size="xl"
                   buttonStyle="black"
-                  text="등록"
+                  text="수정"
                   type="submit"
                   className="rounded-lg"
+                  onClick={() => router.push(`/mypage/review/${id}/edit`)}
                 />
               </div>
             </>
