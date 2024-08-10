@@ -4,10 +4,11 @@ import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
 import UserTableBodyAtom from '@/_components/user/common/atoms/UserTableBodyAtom';
 import UserTableHeaderAtom from '@/_components/user/common/atoms/UserTableHeaderAtom';
-import UserTextLabelAtom from '@/_components/user/common/atoms/UserTextLabelAtom';
 import UserTableContainer from '@/_components/user/common/containers/UserTableContainer';
 import UserTableBodyModule from '@/_components/user/common/modules/UserTableBodyModule';
 import UserTableHeaderModule from '@/_components/user/common/modules/UserTableHeaderModule';
+import NegativeLabel from '@/_components/user/points/NegativeLabel';
+import PositiveLabel from '@/_components/user/points/PositiveLabel';
 import { useGetMemberPointHistoryQuery } from '@/_hooks/admin/useGetMemberPointHistoryQuery';
 import { dateConverter } from '@/_types/converter';
 import { useSession } from 'next-auth/react';
@@ -40,14 +41,14 @@ const PointsHistoryPage = () => {
           <tbody>
             {!data ? (
               isLoading ? (
-                <EmptyContainer colSpan={4} text="로딩 중..." />
+                <EmptyContainer colSpan={5} text="로딩 중..." />
               ) : isError ? (
-                <EmptyContainer colSpan={4} text="에러 발생" />
+                <EmptyContainer colSpan={5} text="에러 발생" />
               ) : (
-                <EmptyContainer colSpan={4} text="데이터 없음" />
+                <EmptyContainer colSpan={5} text="데이터 없음" />
               )
             ) : data.pointInfos.length < 1 ? (
-              <EmptyContainer colSpan={4} />
+              <EmptyContainer colSpan={5} />
             ) : (
               data.pointInfos.map((item, idx) => (
                 <UserTableBodyModule key={item.getTime}>
@@ -59,16 +60,18 @@ const PointsHistoryPage = () => {
                     {dateConverter(item.getTime)}
                   </UserTableBodyAtom>
                   <UserTableBodyAtom>
-                    <div className="flex w-full items-center justify-center">
-                      <UserTextLabelAtom
-                        size="sm"
-                        text={`${item.usedPoint > 0 ? '+' : ''}${item.usedPoint.toLocaleString()}`}
-                        className={`${item.usedPoint > 0 ? 'bg-positive/10 text-positive' : 'bg-negative/10 text-negative'}`}
+                    {item.usedPoint > 0 ? (
+                      <PositiveLabel
+                        text={`+${item.usedPoint.toLocaleString()}`}
                       />
-                    </div>
+                    ) : (
+                      <NegativeLabel
+                        text={`${item.usedPoint.toLocaleString()}`}
+                      />
+                    )}
                   </UserTableBodyAtom>
                   <UserTableBodyAtom isLast>
-                    {item.totalPoint}
+                    {item.totalPoint.toLocaleString()}
                   </UserTableBodyAtom>
                 </UserTableBodyModule>
               ))
