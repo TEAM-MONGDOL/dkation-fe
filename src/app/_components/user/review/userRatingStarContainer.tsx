@@ -6,41 +6,47 @@ import { ReviewInfo } from '@/_constants/common';
 interface RatingStarProps {
   rating: number;
   onRatingChange: (rating: number) => void;
+  readonly?: boolean;
 }
 
 const RatingStar = ({
   rating: initialRating,
   onRatingChange,
+  readonly = false,
 }: RatingStarProps) => {
   const [hoveredRating, setHoveredRating] = useState<number>(0);
   const [currentRating, setCurrentRating] = useState<number>(initialRating);
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
   const handleMouseEnter = (value: number) => {
-    if (!isDragging) {
+    if (!readonly && !isDragging) {
       setHoveredRating(value);
     }
   };
 
   const handleMouseLeave = () => {
-    if (!isDragging) {
+    if (!readonly && !isDragging) {
       setHoveredRating(0);
     }
   };
 
   const handleClick = (value: number) => {
-    setCurrentRating(value);
-    onRatingChange(value);
+    if (!readonly) {
+      setCurrentRating(value);
+      onRatingChange(value);
+    }
   };
 
   const handleMouseDown = (value: number) => {
-    setIsDragging(true);
-    setCurrentRating(value);
-    onRatingChange(value);
+    if (!readonly) {
+      setIsDragging(true);
+      setCurrentRating(value);
+      onRatingChange(value);
+    }
   };
 
   const handleMouseUp = () => {
-    if (isDragging) {
+    if (!readonly && isDragging) {
       setIsDragging(false);
       setHoveredRating(0);
     }
@@ -49,7 +55,7 @@ const RatingStar = ({
   const handleMouseMove = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
-    if (isDragging) {
+    if (!readonly && isDragging) {
       const element = event.currentTarget;
       const { left, width } = element.getBoundingClientRect();
       const clickPosition = event.clientX - left;
@@ -68,7 +74,7 @@ const RatingStar = ({
     <div className="flex flex-col items-center">
       <div
         role="presentation"
-        className="flex"
+        className={`flex ${readonly ? '' : 'cursor-pointer'}`}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
       >
@@ -81,16 +87,15 @@ const RatingStar = ({
             <div
               role="presentation"
               key={value}
-              className="cursor-pointer"
               onMouseEnter={() => handleMouseEnter(value)}
               onMouseLeave={handleMouseLeave}
               onMouseDown={() => handleMouseDown(value)}
               onClick={() => handleClick(value)}
             >
               {isHovered || isClicked ? (
-                <Image src={ClickedStarIcon} alt="" />
+                <Image src={ClickedStarIcon} alt={`Star ${value}`} />
               ) : (
-                <Image src={UnclickedStarIcon} alt="" />
+                <Image src={UnclickedStarIcon} alt={`Star ${value}`} />
               )}
             </div>
           );
