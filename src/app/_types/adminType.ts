@@ -256,6 +256,7 @@ export const applyListSchema = z.object({
 
 export const userApplyInfoSchema = z.object({
   thumbnailUrl: z.string(),
+  wktId: z.number(),
   wktName: z.string(),
   place: z.string(),
   totalRecruit: z.number(),
@@ -265,6 +266,11 @@ export const userApplyInfoSchema = z.object({
   endDate: z.string(),
   applyStatusType: applyStatusSchema,
   bettingPoint: z.number(),
+});
+
+export const winningPercentageInfoSchema = z.object({
+  percentage: z.number(),
+  error: z.number(),
 });
 
 export const userApplyListSchema = z.object({
