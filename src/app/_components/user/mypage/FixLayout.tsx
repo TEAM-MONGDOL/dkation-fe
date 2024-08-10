@@ -26,6 +26,7 @@ const UserMyPageFix = () => {
     },
   ];
 
+
   if (pathname === '/mypage/review/new') {
     return null;
   }
