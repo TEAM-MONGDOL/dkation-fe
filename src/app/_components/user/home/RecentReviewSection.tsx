@@ -1,16 +1,16 @@
 'use client';
 
 import { LeftKeyIcon, RightKeyIcon } from '@/_assets/icons';
-import { useGetWkReviewListQuery } from '@/_hooks/admin/useGetWkReviewListQuery';
 import Image from 'next/image';
 import { useRef, useState } from 'react';
 import RecentReviewItem from './RecentReviewItem';
+import { useGetWkReviewListQuery } from '@/_hooks/user/useGetWkReviewListQuery';
 
 const RecentReviewSection = () => {
   const scrollContainerRef = useRef(null);
   const [currentStartItem, setCurrentStartItem] = useState(0);
   const { data, isLoading, isError } = useGetWkReviewListQuery({
-    pageParam: {
+    pageable: {
       page: 1,
       size: 10,
     },
@@ -18,13 +18,17 @@ const RecentReviewSection = () => {
 
   const scrollTo = (scrollContainer: HTMLDivElement, idx: number) => {
     scrollContainer.scrollTo({
-      left: idx * 545,
+      left: idx * 363,
       behavior: 'smooth',
     });
   };
 
   const handleClickLeft = () => {
-    if (!scrollContainerRef.current || !data || data.reviewList.length < 1)
+    if (
+      !scrollContainerRef.current ||
+      !data ||
+      data.reviewInfosForMember.length < 1
+    )
       return;
     const nowCurrentIdx = Math.max(0, currentStartItem - 3);
     console.log('left : ', nowCurrentIdx);
@@ -33,10 +37,14 @@ const RecentReviewSection = () => {
   };
 
   const handleClickRight = () => {
-    if (!scrollContainerRef.current || !data || data.reviewList.length < 1)
+    if (
+      !scrollContainerRef.current ||
+      !data ||
+      data.reviewInfosForMember.length < 1
+    )
       return;
     const nowCurrentIdx = Math.min(
-      data.reviewList.length * 3 - 3,
+      data.reviewInfosForMember.length * 3 - 3,
       currentStartItem + 3,
     );
     console.log('right : ', nowCurrentIdx);
@@ -82,11 +90,11 @@ const RecentReviewSection = () => {
               <div>no data ...</div>
             )
           ) : (
-            data.reviewList.map((review) => (
+            data.reviewInfosForMember.map((review) => (
               <>
-                <RecentReviewItem key={review.id} review={review} />
-                <RecentReviewItem key={review.id} review={review} />
-                <RecentReviewItem key={review.id} review={review} />
+                <RecentReviewItem key={review.reviewId} review={review} />
+                <RecentReviewItem key={review.reviewId} review={review} />
+                <RecentReviewItem key={review.reviewId} review={review} />
               </>
             ))
           )}

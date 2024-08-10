@@ -65,7 +65,7 @@ export const wktPlaceDetailShema = z.object({
   }),
 });
 
-export const wktReviewDetailShema = z.object({
+export const wktReviewDetailSchema = z.object({
   reviewDetailInfo: z.object({
     id: z.number(),
     reviewer: z.string(),
@@ -337,8 +337,6 @@ export type PointApplyType = z.infer<typeof pointApplyTypeSchema>;
 export type WktInfoType = z.infer<typeof wktInfoSchema>;
 
 export type BannerType = z.infer<typeof bannerInfoSchema>;
-
-export type ReviewType = z.infer<typeof reviewListInfoSchema>;
 
 export const pointApplyTypeList: PointApplyType[] = [
   'PENDING',
