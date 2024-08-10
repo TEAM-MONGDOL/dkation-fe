@@ -4,7 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import UserTabBarAtom from '../atoms/UserTabBarAtom';
 
 interface UserTabBarModuleProps {
-  tabs: { text: string; path: string }[];
+  tabs: { text: string; path: string; parent?: string }[];
 }
 
 const UserTabBarModule = ({ tabs }: UserTabBarModuleProps) => {
@@ -19,6 +19,7 @@ const UserTabBarModule = ({ tabs }: UserTabBarModuleProps) => {
           text={tab.text}
           isActive={
             currentPath === tab.path ||
+            (tab.parent && currentPath.startsWith(tab.parent)) ||
             (currentPath === tab.path && tab.path !== '/')
           }
           onClick={() => router.push(tab.path)}
