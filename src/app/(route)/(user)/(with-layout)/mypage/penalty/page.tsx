@@ -31,16 +31,10 @@ const UserPenaltyPage = () => {
     accountId,
   });
 
-  console.log('Penalty Infos:', data?.penaltyInfos);
-  console.log('Is Loading:', isLoading);
-  console.log('Is Error:', isError);
-
   const penaltyInfos = data?.penaltyInfos || [];
   const sortedPenaltyInfos = [...penaltyInfos].sort(
     (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
   );
-
-  console.log('Sorted Penalty Infos:', sortedPenaltyInfos);
 
   return (
     <section className="px-40 pt-18">
@@ -58,8 +52,14 @@ const UserPenaltyPage = () => {
           </UserTableHeaderModule>
 
           <tbody>
-            {sortedPenaltyInfos.length === 0 ? (
-              <EmptyContainer colSpan={6} text="데이터가 없습니다" />
+            {!data ? (
+              isLoading ? (
+                <EmptyContainer colSpan={6} text="로딩 중입니다..." />
+              ) : (
+                <EmptyContainer colSpan={6} text="error" />
+              )
+            ) : data.penaltyAmount <= 0 ? (
+              <EmptyContainer colSpan={6} />
             ) : (
               [...sortedPenaltyInfos].reverse().map((item, index) => {
                 const expiryDate = calculateExpiryDate(
