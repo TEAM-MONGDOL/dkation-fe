@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import dayjs from 'dayjs';
+import { usePatchWktStatusMutation } from '@/_hooks/user/usePatchWktStatusMutation';
 import UserFilteringSectionContainer from '@/_components/user/common/containers/UserFilteringSectionContainer';
 import UserStateFilteringContainer from '@/_components/user/common/containers/UserStateFilteringContainer';
 import UserPlaceFilteringContainer from '@/_components/user/common/containers/UserPlaceFilteringContainer';
@@ -39,6 +40,9 @@ const UserWkHistoryPage = () => {
   const [selectedState, setSelectedState] = useState<string>('ALL');
   const [selectedOrder, setSelectedOrder] = useState<string>('createdAt,DESC');
   const [selectedSpace, setSelectedSpace] = useState<string[]>(['양양 쏠비치']);
+  const [selectedWorkationId, setSelectedWorkationId] = useState<number | null>(
+    null,
+  );
 
   const [isCancelModalOpen, setIsCancelModalOpen] = useState<boolean>(false);
   const [confirmModalType, setConfirmModalType] = useState<
@@ -62,13 +66,32 @@ const UserWkHistoryPage = () => {
     },
   });
 
-  const handleCardClick = (applyStatusType: string) => {
+  const { mutate: patchWktStatus } = usePatchWktStatusMutation({
+    wktId: selectedWorkationId || 0,
+    successCallback: () => {
+      setConfirmModalType('acceptConfirmation');
+    },
+    errorCallback: (error) => {
+      alert(`에러가 발생했습니다 : ${error.message}`);
+    },
+  });
+
+  const handleCardClick = (applyStatusType: string, wktId: number) => {
     if (applyStatusType === 'APPLIED') {
       setIsCancelModalOpen(true);
     } else if (applyStatusType === 'CONFIRM_WAIT') {
       setConfirmModalType('confirm');
+      setSelectedWorkationId(wktId);
     } else if (applyStatusType === 'VISITED') {
       router.push('/mypage/review/new');
+    }
+  };
+
+  const handleConfirm = () => {
+    if (confirmModalType === 'confirm' && selectedWorkationId !== null) {
+      patchWktStatus({ status: 'CONFIRM' });
+    } else if (confirmModalType === 'cancel') {
+      setConfirmModalType('cancellationConfirmation');
     }
   };
 
@@ -78,14 +101,6 @@ const UserWkHistoryPage = () => {
     } else {
       alert('워케이션 신청이 취소되었습니다.');
       setIsCancelModalOpen(false);
-    }
-  };
-
-  const handleConfirm = () => {
-    if (confirmModalType === 'confirm') {
-      setConfirmModalType('acceptConfirmation');
-    } else if (confirmModalType === 'cancel') {
-      setConfirmModalType('cancellationConfirmation');
     }
   };
 
@@ -150,7 +165,8 @@ const UserWkHistoryPage = () => {
         ) : (
           data?.applyInfoList.map((wkt) => (
             <WorkationCard
-              key={wkt.wktName}
+              key={wkt.wktId}
+              wktId={wkt.wktId}
               thumbnailUrl={wkt.thumbnailUrl}
               wktName={wkt.wktName}
               place={wkt.place}
@@ -162,7 +178,7 @@ const UserWkHistoryPage = () => {
               bettingPoint={wkt.bettingPoint}
               applyStatusType={wkt.applyStatusType}
               waitingNumber={4} // 수정 필요
-              onClick={() => handleCardClick(wkt.applyStatusType)}
+              onClick={() => handleCardClick(wkt.applyStatusType, wkt.wktId)}
             />
           ))
         )}
