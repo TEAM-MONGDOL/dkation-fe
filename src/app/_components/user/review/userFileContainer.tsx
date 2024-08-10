@@ -19,26 +19,31 @@ const UserFileContainer = ({
 }: FileContainerProps) => {
   const [fileUrls, setFileUrls] = useState<string[]>(initialFileUrls);
 
-  const { mutate: postFile } = usePostFileMutation({
-    successCallback: (fileInfos: { url: string }[]) => {
-      const newFileUrls = fileInfos.map((file) => file.url);
-      const updatedFileUrls = [...fileUrls, ...newFileUrls];
-      setFileUrls(updatedFileUrls);
-      onFileChange?.(updatedFileUrls);
-    },
-    errorCallback: (error: Error) => {
-      console.error('파일 업로드 중 오류 발생:', error);
-    },
-  });
-
   useEffect(() => {
     setFileUrls(initialFileUrls);
   }, [initialFileUrls]);
 
+  const { mutate: postFile } = usePostFileMutation({
+    successCallback: (fileInfos: { url: string }[]) => {
+      console.log('File upload successful:', fileInfos);
+      const newFileUrls = fileInfos.map((file) => file.url);
+      setFileUrls((prevFileUrls) => {
+        const updatedFileUrls = [...prevFileUrls, ...newFileUrls];
+        console.log('File URLs after upload:', updatedFileUrls);
+        onFileChange?.(updatedFileUrls);
+        return updatedFileUrls;
+      });
+    },
+    errorCallback: (error: Error) => {
+      console.error('File upload error:', error);
+    },
+  });
+
   const handleFileAdd = (newFiles: File[]) => {
+    console.log('Adding new files:', newFiles);
     newFiles.forEach((file) => {
       const fileExtension = file.name.split('.').pop()?.toLowerCase();
-      const validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
+      const validExtensions = ['jpg', 'jpeg', 'png'];
 
       if (!fileExtension || !validExtensions.includes(fileExtension)) {
         alert('이미지 형식의 파일만 업로드할 수 있습니다.');
@@ -54,10 +59,8 @@ const UserFileContainer = ({
   };
 
   const handleDelete = (index: number) => {
-    const updatedFileUrls = fileUrls.filter((_, idx) => idx !== index);
-    setFileUrls(updatedFileUrls);
-    onDeleteFile?.(index); // 상위 컴포넌트에 삭제 알림
-    onFileChange?.(updatedFileUrls); // 상위 컴포넌트에 변경 사항 알림
+    console.log('Requesting delete for index:', index);
+    onDeleteFile?.(index);
   };
 
   return (
@@ -74,8 +77,9 @@ const UserFileContainer = ({
                 className="h-28 w-28 rounded-lg object-cover"
               />
               <button
+                type="button"
                 className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-white"
-                onClick={() => handleDelete(index)} // 인덱스를 사용하여 삭제
+                onClick={() => handleDelete(index)}
               >
                 <Image src={CloseIcon} alt="X" className="h-3 w-3" />
               </button>
@@ -99,6 +103,7 @@ const UserFileContainer = ({
         className="hidden"
         onChange={(e) => {
           const files = Array.from(e.target.files || []);
+          console.log('Files selected:', files);
           handleFileAdd(files);
         }}
       />
