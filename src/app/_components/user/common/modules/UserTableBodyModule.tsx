@@ -5,7 +5,7 @@ interface UserTableBodyModuleProps {
 }
 
 const UserTableBodyModule = ({ children }: UserTableBodyModuleProps) => {
-  return <tr className="h-10 bg-white">{children}</tr>;
+  return <tr className="h-[63px] bg-white text-sub-400">{children}</tr>;
 };
 
 export default UserTableBodyModule;

@@ -14,6 +14,7 @@ const config: Config = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
         'login-bg': 'url("./_assets/icons/logoIllust.svg")',
         'home-bg': 'url("./_assets/images/home_bg.png")',
+        'header-bg': 'url("./_assets/images/header_bg.png")',
       },
       colors: {
         transparent: 'transparent',

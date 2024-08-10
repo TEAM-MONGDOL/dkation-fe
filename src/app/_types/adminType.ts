@@ -65,7 +65,7 @@ export const wktPlaceDetailShema = z.object({
   }),
 });
 
-export const wktReviewDetailShema = z.object({
+export const wktReviewDetailSchema = z.object({
   reviewDetailInfo: z.object({
     id: z.number(),
     reviewer: z.string(),
@@ -120,12 +120,7 @@ export const pointSupplyDetailSchema = z.object({
 });
 
 export const pointInfoSchema = z.object({
-  pointType: z.union([
-    z.literal('MONTHLY'),
-    z.literal('WELCOME'),
-    z.literal('SPECIAL'),
-    z.literal('WORKATION'),
-  ]),
+  pointTitle: z.string(),
   getTime: z.string(),
   usedPoint: z.number(),
   totalPoint: z.number(),

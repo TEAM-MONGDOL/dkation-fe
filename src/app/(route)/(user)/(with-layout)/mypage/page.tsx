@@ -8,7 +8,12 @@ import UserModalAtom from '@/_components/user/common/atoms/UserModalAtom';
 import UserModalTitleAtom from '@/_components/user/common/atoms/UserModalTextAtom';
 import UserPasswordInput from '@/_components/user/mypage/UserPasswordInput';
 import { useSession } from 'next-auth/react';
-import { useGetMemberDetailQuery } from '@/_hooks/common/useGetMemberDetailQuery';
+import { useGetMemberDetailQuery } from '@/_hooks/admin/useGetMemberDetailQuery';
+import { usePostVerifyPasswordMutation } from '@/_hooks/user/usePostVerifyPasswordMutation';
+import { usePasswordChangeMutation } from '@/_hooks/user/usePasswordChangeMutation';
+
+const passwordValidationRegex =
+  /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
 
 const UserMyPage = () => {
   const session = useSession();
@@ -27,6 +32,27 @@ const UserMyPage = () => {
     passwordError: null as string | null,
     newPasswordError: null as string | null,
     confirmPasswordError: null as string | null,
+  });
+
+  const { mutate: verifyPassword } = usePostVerifyPasswordMutation({
+    successCallback: () => {
+      setCurrentModal('newPassword');
+    },
+    errorCallback: () => {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        passwordError: '비밀번호가 일치하지 않습니다.',
+      }));
+    },
+  });
+
+  const { mutate: changePassword } = usePasswordChangeMutation({
+    successCallback: () => {
+      setCurrentModal('completed');
+    },
+    errorCallback: (error) => {
+      console.error(error);
+    },
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,6 +81,10 @@ const UserMyPage = () => {
     if (form.newPassword.trim() === '') {
       newErrors.newPasswordError = '새 비밀번호를 입력해 주세요.';
       hasError = true;
+    } else if (!passwordValidationRegex.test(form.newPassword)) {
+      newErrors.newPasswordError =
+        '비밀번호는 8~16자의 영문 대소문자, 숫자, 특수문자를 포함해야 합니다.';
+      hasError = true;
     } else {
       newErrors.newPasswordError = null;
     }
@@ -77,11 +107,11 @@ const UserMyPage = () => {
     e.preventDefault();
     if (currentModal === 'password') {
       if (validatePassword()) {
-        setCurrentModal('newPassword');
+        verifyPassword({ password: form.password });
       }
     } else if (currentModal === 'newPassword') {
       if (validateNewPasswords()) {
-        setCurrentModal('completed');
+        changePassword({ accountId, password: form.newPassword });
       }
     }
   };
