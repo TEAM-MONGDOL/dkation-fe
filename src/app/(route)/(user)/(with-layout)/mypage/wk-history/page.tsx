@@ -11,6 +11,7 @@ import WorkationCard from '@/_components/user/mypage/UserWktCard';
 import { useGetMyWktHistoryQuery } from '@/_hooks/user/useGetMyWktHistoryQuery';
 import UserWktCancelModal from '@/_components/user/mypage/UserWktCancelModal';
 import UserWktConfirmModal from '@/_components/user/mypage/UserWktConfirmModal';
+import { useDeleteWktApplyMutation } from '@/_hooks/user/useDeleteWktApplyMutation';
 
 const UserWkHistoryPage = () => {
   const router = useRouter();
@@ -74,8 +75,19 @@ const UserWkHistoryPage = () => {
     },
   });
 
+  const { mutate: deleteWktApply } = useDeleteWktApplyMutation({
+    successCallback: () => {
+      alert('신청이 취소되었습니다.');
+      setIsCancelModalOpen(false);
+    },
+    errorCallback: (error) => {
+      alert(`에러가 발생했습니다 : ${error.message}`);
+    },
+  });
+
   const handleCardClick = (applyStatusType: string, wktId: number) => {
     if (applyStatusType === 'APPLIED') {
+      setSelectedWorkationId(wktId);
       setIsCancelModalOpen(true);
     } else if (applyStatusType === 'CONFIRM_WAIT') {
       setConfirmModalType('confirm');
@@ -104,10 +116,12 @@ const UserWkHistoryPage = () => {
   };
 
   const handleCancelConfirm = () => {
+    if (selectedWorkationId !== null) {
+      deleteWktApply(selectedWorkationId); // 수정된 부분: selectedWorkationId가 number 타입으로 전달됨
+    }
     if (confirmModalType === 'cancel') {
       setConfirmModalType('cancellationConfirmation');
     } else {
-      alert('워케이션 신청이 취소되었습니다.');
       setIsCancelModalOpen(false);
     }
   };
