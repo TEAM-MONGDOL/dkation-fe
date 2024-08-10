@@ -5,7 +5,7 @@ import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import { useRouter } from 'next/navigation';
 import { StarRateEmptyIcon, StarRateIcon } from '@/_assets/icons';
 import Image from 'next/image';
-import { useGetWkReviewListQuery } from '@/_hooks/admin/useGetWkReviewDetailQuery';
+import { useGetWkReviewDetailQuery } from '@/_hooks/admin/useGetWkReviewDetailQuery';
 import React from 'react';
 import dayjs from 'dayjs';
 import { usePatchWkReviewMutation } from '@/_hooks/admin/usePatchWkReviewMutation';
@@ -17,7 +17,7 @@ interface WkDetailProps {
 const AdminWorkationReviewDetailPage = ({ params }: WkDetailProps) => {
   const router = useRouter();
   const { id } = params;
-  const { data, isLoading, isError } = useGetWkReviewListQuery({
+  const { data, isLoading, isError } = useGetWkReviewDetailQuery({
     reviewId: id,
   });
   const successCallback = () => {
