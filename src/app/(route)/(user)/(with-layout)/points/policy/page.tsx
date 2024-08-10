@@ -7,7 +7,6 @@ import Image from 'next/image';
 import { DownArrowIcon } from '@/_assets/icons';
 import { dateConverter } from '@/_types/converter';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
-import { useGetPointPolicyDetailQuery } from '@/_hooks/admin/useGetPointPolicyDetailQuery';
 import { useGetPointPolicyDetailListQuery } from '@/_hooks/user/useGetPointsPolicyDetailListQuery';
 
 const PointsPolicyPage = () => {
