@@ -1,15 +1,16 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import AddFIleCommentAtom from '@/_components/common/atoms/AddfileCommentAtom';
-import AddFIleButtonAtom from '@/_components/common/atoms/AddfileButtonAtom';
+import AddFileCommentAtom from '@/_components/common/atoms/AddfileCommentAtom';
+import AddFileButtonAtom from '@/_components/common/atoms/AddfileButtonAtom';
 import { DragDropContent } from '@/_constants/common';
 
 interface DragDropModuleProps {
   onFileAdd: (files: File[]) => void;
+  user?: boolean;
 }
 
-const DragDropModule = ({ onFileAdd }: DragDropModuleProps) => {
+const DragDropModule = ({ onFileAdd, user = false }: DragDropModuleProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const dragRef = useRef<HTMLLabelElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -52,10 +53,13 @@ const DragDropModule = ({ onFileAdd }: DragDropModuleProps) => {
 
   return (
     <div className="flex w-full flex-col gap-2.5">
-      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label
-        className={`flex w-full cursor-pointer flex-col items-center justify-center gap-2.5 rounded-regular border border-dashed p-5 ${
-          isDragging ? 'border-primary bg-primary/20' : 'border-stroke-100'
+        className={`flex w-full cursor-pointer flex-col items-center justify-center gap-2.5 rounded-regular border border-dashed border-stroke-100 p-5 ${
+          isDragging
+            ? 'border-primary bg-primary/20'
+            : user
+              ? 'bg-sub-100/20'
+              : 'bg-white'
         }`}
         htmlFor="fileUpload"
         ref={dragRef}
@@ -72,12 +76,20 @@ const DragDropModule = ({ onFileAdd }: DragDropModuleProps) => {
           onChange={handleFileSelect}
           multiple
         />
-
-        <AddFIleButtonAtom onClick={handleButtonClick} />
-        <AddFIleCommentAtom
-          comment={DragDropContent.COMMENT}
-          subComment={DragDropContent.SUBCOMMENT}
-        />
+        {user ? (
+          <div className="flex items-center gap-2">
+            <AddFileButtonAtom icon="camera" onClick={handleButtonClick} />
+            <AddFileCommentAtom user comment="사진 첨부하기" subComment="" />
+          </div>
+        ) : (
+          <>
+            <AddFileButtonAtom icon="upload" onClick={handleButtonClick} />
+            <AddFileCommentAtom
+              comment={DragDropContent.COMMENT}
+              subComment={DragDropContent.SUBCOMMENT}
+            />
+          </>
+        )}
       </label>
     </div>
   );
