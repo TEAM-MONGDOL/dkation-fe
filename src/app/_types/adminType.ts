@@ -100,10 +100,7 @@ export const ReviewListInfoSchema = z.object({
   reviewList: reviewListInfoSchema.array(),
   pageInfo: pageInfoSchema,
 });
-export const fileInfoSchema = z.object({
-  url: z.string(),
-  fileName: z.string(),
-});
+
 export const wktPlaceDetailShema = z.object({
   wktPlaceDetailInfo: z.object({
     id: z.number(),
@@ -220,6 +217,11 @@ export const pointApplyInfoSchema = z.object({
 export const pointApplyInfoListSchema = z.object({
   pointApplyInfos: z.array(pointApplyInfoSchema),
   pageInfo: pageInfoSchema,
+});
+
+export const fileInfoSchema = z.object({
+  url: z.string(),
+  fileName: z.string(),
 });
 
 export const pointApplyDetailInfoSchema = z.object({
@@ -356,6 +358,36 @@ export const workationPlaceListSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
+export const wkUserDetailInfoSchema = z.object({
+  title: z.string(),
+  totalRecruit: z.number(),
+  startDate: z.string(),
+  endDate: z.string(),
+  applyStartDate: z.string(),
+  applyEndDate: z.string(),
+  description: z.string(),
+  place: z.string(),
+  address: z.string(),
+  isApplied: z.boolean(),
+  wktPlaceId: z.number(),
+  files: fileInfoSchema.array().nullable().optional(),
+});
+export const wkUserPlaceReviewInfoSchema = z.object({
+  id: z.number(),
+  reviewer: z.string(),
+  department: z.string(),
+  wktTitle: z.string(),
+  rating: z.number(),
+  contents: z.string(),
+  lastModifiedAt: z.string(),
+  fileInfos: fileInfoSchema.array().nullable().optional(),
+});
+
+export const workationUserPlaceReviewSchema = z.object({
+  reviewInfosForWkt: wkUserPlaceReviewInfoSchema.array(),
+  pageInfo: pageInfoSchema,
+});
+  
 export const bannerInfoSchema = z.object({
   id: z.number(),
   title: z.string(),
@@ -547,6 +579,18 @@ export const resultOrderList: { [key in ResultType]: string } = {
   DESC: '가나다 순',
   PERCENTAGEASC: '확률 높은 순',
   PERCENTAGEDESC: '확률 은 순',
+};
+
+  export const noticeList: { [key in NoticeType]: string } = {
+  ANNOUNCEMENT: '공지',
+  RESULT: '결과 발표',
+  EVENT: '이벤트 안내',
+};
+
+export const resultList: { [key in ResultType]: string } = {
+  NAME: '가나다순',
+  LOWEST: '확률 낮은 순',
+  HIGHEST: '확률 높은 순',
 };
 
 export const penaltyList: { [key in PenaltyType]: string } = {

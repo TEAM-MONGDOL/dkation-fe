@@ -14,9 +14,10 @@ import { useGetWkListQuery } from '@/_hooks/admin/useGetWktListQuery';
 import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 import { useGetWkPlaceListQuery } from '@/_hooks/admin/useGetWkPlaceListQuery';
 import UserDatePickerContainer from '@/_components/user/common/containers/UserDatePickerContainer';
-import path from 'path';
+import { useRouter } from 'next/navigation';
 
 const Workation = () => {
+  const router = useRouter();
   const tabs = [
     {
       text: '워케이션 목록',
@@ -226,15 +227,20 @@ const Workation = () => {
       <div className="mt-10 px-40">
         {!data ? (
           isLoading ? (
-            <EmptyContainer text="loading" />
+            <EmptyContainer text="loading" notTable />
           ) : (
-            <EmptyContainer text="no data" />
+            <EmptyContainer text="no data" notTable />
           )
         ) : data.pageInfo.totalElements <= 0 ? (
-          <EmptyContainer />
+          <EmptyContainer notTable />
         ) : (
           data.wktInfos.map((wkt) => (
-            <div key={wkt.wktId} className="mb-24 flex w-full">
+            <div
+              role="presentation"
+              key={wkt.wktId}
+              className="mb-24 flex w-full"
+              onClick={() => router.push(`/workation/${wkt.wktId}`)}
+            >
               <Image
                 width={402}
                 height={304}
