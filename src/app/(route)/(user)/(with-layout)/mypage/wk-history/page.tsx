@@ -54,7 +54,7 @@ const UserWkHistoryPage = () => {
   >(null);
 
   const { data, isLoading, isError } = useGetMyWktHistoryQuery({
-    statuses: param.type.join(','),
+    // statuses: param.type.join(','),
     startDate: startDate
       ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
       : undefined,
@@ -68,9 +68,7 @@ const UserWkHistoryPage = () => {
 
   const { mutate: patchWktStatus } = usePatchWktStatusMutation({
     wktId: selectedWorkationId || 0,
-    successCallback: () => {
-      setConfirmModalType('acceptConfirmation');
-    },
+    successCallback: () => {},
     errorCallback: (error) => {
       alert(`에러가 발생했습니다 : ${error.message}`);
     },
@@ -89,9 +87,19 @@ const UserWkHistoryPage = () => {
 
   const handleConfirm = () => {
     if (confirmModalType === 'confirm' && selectedWorkationId !== null) {
-      patchWktStatus({ status: 'CONFIRM' });
+      patchWktStatus(
+        { status: 'CONFIRM' },
+        {
+          onSuccess: () => setConfirmModalType('acceptConfirmation'),
+        },
+      );
     } else if (confirmModalType === 'cancel') {
-      setConfirmModalType('cancellationConfirmation');
+      patchWktStatus(
+        { status: 'CANCEL' },
+        {
+          onSuccess: () => setConfirmModalType('cancellationConfirmation'),
+        },
+      );
     }
   };
 
