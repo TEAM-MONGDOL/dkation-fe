@@ -7,6 +7,7 @@ import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
 import UserFileContainer from '@/_components/user/review/userFileContainer';
 import RatingStar from '@/_components/user/review/userRatingStarContainer';
 import { useGetReviewDetailQuery } from '@/_hooks/user/useGetReviewDetailQuery';
+import { usePatchReviewMutation } from '@/_hooks/user/usePatchReviewMutation';
 
 interface UserReviewEditPageProps {
   params: {
@@ -31,6 +32,17 @@ const WriteNoticesPage = ({ params }: UserReviewEditPageProps) => {
     ),
     contents: data?.reviewDetailInfo.contents || '',
     starRating: data?.reviewDetailInfo.rating || 0,
+  });
+
+  const { mutate: patchPointPolicy } = usePatchReviewMutation({
+    successCallback: () => {
+      alert('후기가 수정되었습니다.');
+      router.push('/mypage/review'); // 성공 페이지로 리다이렉트하거나 다른 동작 수행
+    },
+    errorCallback: (error: Error) => {
+      console.error('후기 수정 실패 :', error);
+      alert('후기 수정에 실패했습니다.');
+    },
   });
 
   const handleRatingChange = (newRating: number) => {
@@ -62,7 +74,14 @@ const WriteNoticesPage = ({ params }: UserReviewEditPageProps) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(values);
+
+    patchPointPolicy({
+      reviewId: id,
+      contents: values.contents,
+      starRating: values.starRating,
+      fileUrls: values.fileUrls,
+      openedType: 'TRUE', // 여기에 필요한 값을 설정하세요
+    });
   };
 
   return (
@@ -114,7 +133,7 @@ const WriteNoticesPage = ({ params }: UserReviewEditPageProps) => {
               size="xl"
               buttonStyle="black"
               text="수정"
-              type="button"
+              type="submit"
               className="rounded-lg"
             />
           </div>
