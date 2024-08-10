@@ -321,6 +321,17 @@ export const bannerInfoListSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
+export const reviewsInfoForMeSchema = z.object({
+  id: z.number(),
+  wktTitle: z.string(),
+  lastModifiedAt: z.string(),
+});
+
+export const reviewsInfosForMeListSchema = z.object({
+  reviewInfosForMe: reviewsInfoForMeSchema.array(),
+  pageInfo: pageInfoSchema,
+});
+
 // Type
 export type PageableType = {
   page?: number;
