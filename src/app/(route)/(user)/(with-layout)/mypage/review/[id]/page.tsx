@@ -30,7 +30,7 @@ const UserReviewDetailPage = ({ params }: UserReviewDetailPageProps) => {
     successCallback: () => {
       alert('삭제가 완료되었습니다.');
       setIsDeleteModalOpen(false);
-      router.replace('/admin/notices');
+      router.replace('/mypage/review');
     },
   });
 
