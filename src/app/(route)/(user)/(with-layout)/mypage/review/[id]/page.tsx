@@ -79,8 +79,8 @@ const UserReviewDetailPage = ({ params }: UserReviewDetailPageProps) => {
               <div className="flex justify-end gap-x-2 pt-6">
                 <UserButtonAtom
                   size="xl"
-                  buttonStyle="white"
-                  text="취소"
+                  buttonStyle="red"
+                  text="삭제"
                   type="button"
                   className="rounded-lg"
                   onClick={() => router.back()}
