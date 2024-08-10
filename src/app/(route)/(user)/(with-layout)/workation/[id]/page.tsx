@@ -29,7 +29,7 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
     isLoading: reviewIsLoading,
     isError: reviewIsError,
   } = useGetUserWkPlaceReviewQuery({
-    wktPlaceId: Number(id), // 워케이션 장소 id 목록에서 넘겨주면 param으로 받기
+    wktPlaceId: data?.wktPlaceId,
   });
   const handleScroll = () => {
     if (detailRef.current && resultRef.current && reviewRef.current) {
@@ -99,7 +99,7 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
             <p>주소 : {data.address}</p>
           </div>
           <UserButtonAtom
-            onClick={() => router.push('/workation/submit')}
+            onClick={() => router.push(`/workation/${id}/apply`)}
             className="ml-auto mt-auto rounded-[8px]"
             buttonStyle="black"
             text="응모하기"

@@ -5,7 +5,7 @@ import api from '../Axios';
 export const useGetUserWkPlaceReviewQuery = ({
   wktPlaceId,
 }: {
-  wktPlaceId: number;
+  wktPlaceId: number | undefined;
 }) => {
   return useQuery({
     queryKey: [wktPlaceId],

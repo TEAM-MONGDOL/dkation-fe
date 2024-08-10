@@ -65,7 +65,7 @@ const WkReviewInfo = ({
                 <Image src={StarRateIcon} alt="StarRateIcon" />
               </div>
               <p>
-                {rating}점({ReviewInfo['5']})
+                {rating}점({ReviewInfo[rating.toString()]})
               </p>
             </div>
           </div>

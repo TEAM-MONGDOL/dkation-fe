@@ -301,6 +301,7 @@ export const wkUserDetailInfoSchema = z.object({
   place: z.string(),
   address: z.string(),
   isApplied: z.boolean(),
+  wktPlaceId: z.number(),
   files: fileInfoSchema.array().nullable().optional(),
 });
 export const wkUserPlaceReviewInfoSchema = z.object({
