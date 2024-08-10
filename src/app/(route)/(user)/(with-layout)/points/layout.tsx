@@ -1,3 +1,4 @@
+import { HeaderPointIcon } from '@/_assets/icons';
 import UserHeaderContainers from '@/_components/user/common/containers/UserHeaderContainers';
 import UserTabBarModule from '@/_components/user/common/modules/UserTabBarModule';
 import path from 'path';
@@ -28,6 +29,8 @@ const PointsLayout = ({ children }: PointsLayoutProps) => {
       <UserHeaderContainers
         title="포인트"
         content="포인트 정책을 확인하여 포인트를 적립하고 사용해보세요."
+        img="bg-header-bg"
+        headerIcon={HeaderPointIcon}
       />
       <UserTabBarModule tabs={tabs} />
       {children}
