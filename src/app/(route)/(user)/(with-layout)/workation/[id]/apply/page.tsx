@@ -7,13 +7,25 @@ import { LocationIcon } from '@/_assets/icons';
 import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
 import { useGetUserPercentQuery } from '@/_hooks/user/useGetUserPercentQuery';
 import { useState } from 'react';
+import { useGetMemberDetailQuery } from '@/_hooks/admin/useGetMemberDetailQuery';
+import { useSession } from 'next-auth/react';
 
 interface Props {
   params: { id: number };
 }
+
 const UserWkApplyPage = ({ params }: Props) => {
   const [point, setPoint] = useState<number>(0);
   const { id } = params;
+  const session = useSession();
+  const accountId = String(session.data?.accountId || '');
+  const {
+    data: myPointData,
+    isLoading: myPointIsLoading,
+    isError: myPointIsError,
+  } = useGetMemberDetailQuery({
+    accountId,
+  });
 
   const {
     data: pointData,
@@ -24,7 +36,13 @@ const UserWkApplyPage = ({ params }: Props) => {
 
   const handlePointChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    setPoint(Number(value) || 0);
+    const numericValue = Number(value);
+
+    if (numericValue <= (myPointData?.pointQuantity || 0)) {
+      setPoint(numericValue);
+    } else {
+      alert(`${myPointData?.pointQuantity}포인트 이하로 입력하세요.`);
+    }
   };
 
   const handleSubmit = async () => {
@@ -70,20 +88,20 @@ const UserWkApplyPage = ({ params }: Props) => {
           <div className="flex items-center gap-12">
             <p className="text-1">내 포인트</p>
             <input
-              // value={point}
-              // onChange={handlePointChange}
-              className="h-12 rounded-[4px] border pl-4"
-              placeholder="0"
+              value={Number(myPointData?.pointQuantity)}
+              className="h-12 cursor-not-allowed rounded-[4px] border pl-4"
               type="number"
+              readOnly
             />
           </div>
           <div className="flex items-center gap-7">
             <p className="text-1">배팅 포인트</p>
             <input
-              className="h-12 rounded-[4px] border pl-4"
+              className="h-12 rounded-[4px] border pl-4 outline-0"
               placeholder="0"
               value={point > 0 ? point : ''}
               onChange={handlePointChange}
+              type="number"
             />
             <UserButtonAtom
               className="rounded-[8px]"
