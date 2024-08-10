@@ -8,15 +8,13 @@ import { DragDropContent } from '@/_constants/common';
 interface DragDropModuleProps {
   onFileAdd: (files: File[]) => void;
   user?: boolean;
-}
-
-const DragDropModule = ({ onFileAdd, user = false }: DragDropModuleProps) => {
   maxFileCount?: number;
   fileDomainType?: 'ANNOUNCEMENT' | 'POINT_APPLY';
 }
 
 const DragDropModule = ({
   onFileAdd,
+  user = false,
   maxFileCount,
   fileDomainType,
 }: DragDropModuleProps) => {
@@ -24,6 +22,7 @@ const DragDropModule = ({
   const dragRef = useRef<HTMLLabelElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Drag 이벤트 핸들러
   const handleDragEnter = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -41,35 +40,29 @@ const DragDropModule = ({
     e.stopPropagation();
     setIsDragging(false);
 
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      if (maxFileCount && e.dataTransfer.files.length > maxFileCount) {
+    const { files } = e.dataTransfer;
+    if (files.length > 0) {
+      if (maxFileCount && files.length > maxFileCount) {
         console.error(`최대 ${maxFileCount}개까지 업로드 가능합니다.`);
         return;
       }
-
-      onFileAdd(Array.from(e.dataTransfer.files));
+      onFileAdd(Array.from(files));
       e.dataTransfer.clearData();
     }
   };
 
+  // 파일 선택 핸들러
   const handleButtonClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
+    fileInputRef.current?.click();
   };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files;
-    if (
-      selectedFiles?.length &&
-      maxFileCount &&
-      selectedFiles.length > maxFileCount
-    ) {
-      console.error(`최대 ${maxFileCount}개까지 업로드 가능합니다.`);
-      return;
-    }
-
     if (selectedFiles) {
+      if (maxFileCount && selectedFiles.length > maxFileCount) {
+        console.error(`최대 ${maxFileCount}개까지 업로드 가능합니다.`);
+        return;
+      }
       onFileAdd(Array.from(selectedFiles));
     }
   };
@@ -99,22 +92,24 @@ const DragDropModule = ({
           onChange={handleFileSelect}
           multiple={maxFileCount ? maxFileCount > 1 : true}
         />
-        
+
         {user ? (
           <div className="flex items-center gap-2">
             <AddFileButtonAtom icon="camera" onClick={handleButtonClick} />
             <AddFileCommentAtom user comment="사진 첨부하기" subComment="" />
           </div>
         ) : (
-          <AddFIleButtonAtom onClick={handleButtonClick} />
-        <AddFIleCommentAtom
-          comment={DragDropContent.COMMENT}
-          subComment={
-            fileDomainType
-              ? DragDropContent.SUB_COMMENT[fileDomainType]
-              : DragDropContent.SUB_COMMENT.ANNOUNCEMENT
-          }
-        />
+          <>
+            <AddFileButtonAtom onClick={handleButtonClick} />
+            <AddFileCommentAtom
+              comment={DragDropContent.COMMENT}
+              subComment={
+                fileDomainType
+                  ? DragDropContent.SUB_COMMENT[fileDomainType]
+                  : DragDropContent.SUB_COMMENT.ANNOUNCEMENT
+              }
+            />
+          </>
         )}
       </label>
     </div>
@@ -122,5 +117,3 @@ const DragDropModule = ({
 };
 
 export default DragDropModule;
-
-  

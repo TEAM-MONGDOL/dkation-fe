@@ -7,6 +7,11 @@ export const pageInfoSchema = z.object({
   totalPages: z.number(),
 });
 
+export const fileInfoSchema = z.object({
+  url: z.string(),
+  fileName: z.string(),
+});
+
 export const wktInfoSchema = z.object({
   wktId: z.number(),
   title: z.string(),
@@ -39,7 +44,7 @@ export const wkDetailInfoSchema = z.object({
 export const wkApplyPercentageInfoSchema = z.object({
   percentage: z.number(),
   error: z.number(),
-})
+});
 export const wktResultInfoSchema = z.object({
   name: z.string(),
   accountId: z.string(),
@@ -223,11 +228,6 @@ export const pointApplyInfoListSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
-export const fileInfoSchema = z.object({
-  url: z.string(),
-  fileName: z.string(),
-});
-
 export const pointApplyDetailInfoSchema = z.object({
   pointApplyId: z.number(),
   name: z.string(),
@@ -391,7 +391,7 @@ export const workationUserPlaceReviewSchema = z.object({
   reviewInfosForWkt: wkUserPlaceReviewInfoSchema.array(),
   pageInfo: pageInfoSchema,
 });
-  
+
 export const bannerInfoSchema = z.object({
   id: z.number(),
   title: z.string(),
@@ -585,7 +585,7 @@ export const resultOrderList: { [key in ResultType]: string } = {
   PERCENTAGEDESC: '확률 은 순',
 };
 
-  export const noticeList: { [key in NoticeType]: string } = {
+export const noticeList: { [key in NoticeType]: string } = {
   ANNOUNCEMENT: '공지',
   RESULT: '결과 발표',
   EVENT: '이벤트 안내',
