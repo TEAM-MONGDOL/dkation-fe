@@ -52,4 +52,8 @@ export { default as RightKeyIcon } from './rightKey.svg';
 export { default as TrashIcon } from './trash.svg';
 export { default as BalanceIcon } from './balance.svg';
 export { default as ImproveIcon } from './improve.svg';
+export { default as PlusIcon } from './plus.svg';
+export { default as UnclickedStarIcon } from './star.svg';
+export { default as ClickedStarIcon } from './clickedStar.svg';
+export { default as CameraIcon } from './camera.svg';
 export { default as HeaderPointIcon } from './headerPoints.svg';
