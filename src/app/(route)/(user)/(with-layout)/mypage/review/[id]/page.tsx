@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
@@ -17,11 +17,6 @@ interface UserReviewDetailPageProps {
 const UserReviewDetailPage = ({ params }: UserReviewDetailPageProps) => {
   const { id } = params;
   const router = useRouter();
-  const [values, setValues] = useState({
-    fileUrls: [] as string[],
-    contents: '',
-    starRating: 0,
-  });
 
   const { data, isLoading, isError } = useGetReviewDetailQuery({
     reviewId: id,
@@ -78,9 +73,6 @@ const UserReviewDetailPage = ({ params }: UserReviewDetailPageProps) => {
                     size="LARGE"
                     maxLength={500}
                     value={data.reviewDetailInfo.contents}
-                    onChange={(e) =>
-                      setValues({ ...values, contents: e.target.value })
-                    }
                   />
                 </div>
               </div>
@@ -97,7 +89,7 @@ const UserReviewDetailPage = ({ params }: UserReviewDetailPageProps) => {
                   size="xl"
                   buttonStyle="black"
                   text="수정"
-                  type="submit"
+                  type="button"
                   className="rounded-lg"
                   onClick={() => router.push(`/mypage/review/${id}/edit`)}
                 />
