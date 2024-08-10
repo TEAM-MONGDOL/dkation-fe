@@ -428,7 +428,7 @@ export const reviewDetailSchema = z.object({
   rating: z.number(),
   lastModifiedAt: z.string(),
   contents: z.string(),
-  imgUrls: z.array(z.string().nullable()).optional(),
+  imageUrls: z.array(z.string().nullable()).optional(),
 });
 
 export const reviewsDetailInfoSchema = z.object({
