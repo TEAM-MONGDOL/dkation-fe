@@ -12,6 +12,7 @@ const tabs = [
   {
     text: '포인트 신청 내역',
     path: '/points/apply',
+    parent: '/points/apply',
   },
   {
     text: '포인트 정책',

@@ -18,9 +18,11 @@ import PendingLabel from '@/_components/user/points/PendingLabel';
 import Image from 'next/image';
 import { UserShowDetailButtonIcon } from '@/_assets/icons';
 import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
+import { useRouter } from 'next/navigation';
 
 const PointsApplyPage = () => {
   const session = useSession();
+  const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, isError } = useGetPointApply({
     params: {
@@ -34,7 +36,7 @@ const PointsApplyPage = () => {
     enable: !!session.data?.accountId,
   });
   return (
-    <div className="flex w-full flex-col gap-y-14 px-40 pb-20 pt-18">
+    <section className="flex w-full flex-col gap-y-14 px-40 pb-20 pt-18">
       <h2 className="text-h2 font-semibold text-sub-400">포인트 신청 내역</h2>
       <div className="flex w-full flex-col">
         <UserTableContainer>
@@ -76,7 +78,14 @@ const PointsApplyPage = () => {
                     )}
                   </UserTableBodyAtom>
                   <UserTableBodyAtom isLast>
-                    <Image src={UserShowDetailButtonIcon} alt="상세보기" />
+                    <Image
+                      className="cursor-pointer"
+                      src={UserShowDetailButtonIcon}
+                      alt="상세보기"
+                      onClick={() => {
+                        router.push(`/points/apply/${item.pointApplyId}`);
+                      }}
+                    />
                   </UserTableBodyAtom>
                 </UserTableBodyModule>
               ))
@@ -103,7 +112,7 @@ const PointsApplyPage = () => {
           </div>
         )}
       </div>
-    </div>
+    </section>
   );
 };
 
