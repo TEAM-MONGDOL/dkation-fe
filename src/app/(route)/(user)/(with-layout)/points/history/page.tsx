@@ -27,7 +27,7 @@ const PointsHistoryPage = () => {
     },
   });
   return (
-    <div className="flex w-full flex-col gap-y-14 px-40 pb-20 pt-18">
+    <section className="flex w-full flex-col gap-y-14 px-40 pb-20 pt-18">
       <h2 className="text-h2 font-semibold text-sub-400">포인트 사용 내역</h2>
       <div className="flex w-full flex-col gap-y-[200px]">
         <UserTableContainer>
@@ -89,7 +89,7 @@ const PointsHistoryPage = () => {
           </div>
         )}
       </div>
-    </div>
+    </section>
   );
 };
 
