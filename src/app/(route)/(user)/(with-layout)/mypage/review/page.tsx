@@ -11,44 +11,22 @@ import PaginationModule from '@/_components/common/modules/PaginationModule';
 import dayjs from 'dayjs';
 import UserShowDetailButtonAtom from '@/_components/user/common/atoms/UserShowDetailButtonAtom';
 import { useRouter } from 'next/navigation';
-
-const data = {
-  reviewInfosForMe: [
-    {
-      id: 1,
-      wktTitle: '후기 1',
-      lastModifiedAt: '2024-01-07T21:40:38.658Z',
-    },
-    {
-      id: 2,
-      wktTitle: '후기 2',
-      lastModifiedAt: '2024-02-20T15:30:00.000Z',
-    },
-    {
-      id: 3,
-      wktTitle: '후기 3',
-      lastModifiedAt: '2024-03-15T09:25:12.000Z',
-    },
-    {
-      id: 4,
-      wktTitle: '후기 4',
-      lastModifiedAt: '2024-04-10T11:50:30.000Z',
-    },
-  ],
-  pageInfo: {
-    pageNum: 0,
-    pageSize: 10,
-    totalElements: 4,
-    totalPages: 1,
-  },
-};
+import { useGetMyReviewQuery } from '@/_hooks/user/useGetMyReviewQuery';
 
 const UserMyReviewPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const reviewInfos = data?.reviewInfosForMe || [];
   const router = useRouter();
 
-  let isLoading; // 추후 api 연결시 삭제 예정
+  const { data, isLoading, isError } = useGetMyReviewQuery({
+    pageParam: {
+      page: currentPage,
+      size: 10,
+      sort: `lastModifiedAt,DESC`,
+    },
+  });
+
+  const reviewInfos = data?.reviewInfosForMe || [];
+
   return (
     <section className="px-40 pt-18">
       <div className="flex flex-col gap-y-14">
