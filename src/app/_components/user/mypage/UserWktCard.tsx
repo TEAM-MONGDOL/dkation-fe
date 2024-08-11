@@ -73,10 +73,12 @@ const WorkationCard = ({
     setProbabilityData({ percentage: null, error: null });
   };
 
-  const handleBettingPointChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setNewBettingPoint(event.target.value);
+  const handleBettingPointChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (Number(e.target.value) <= (memberData?.pointQuantity || 0)) {
+      setNewBettingPoint(e.target.value);
+    } else {
+      alert(`${memberData?.pointQuantity}포인트 이하로 입력하세요.`);
+    }
   };
 
   const handleShowProbability = () => {
