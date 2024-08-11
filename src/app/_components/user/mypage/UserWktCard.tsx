@@ -10,7 +10,7 @@ import UserModalTextAtom from '@/_components/user/common/atoms/UserModalTextAtom
 import { StatusConfig } from '@/_constants/common';
 import { StatusType } from '@/_types/adminType';
 import { useGetWinningPercentageQuery } from '@/_hooks/user/useGetWinningPercentageQuery';
-import { useGetMemberDetailQuery } from '@/_hooks/admin/useGetMemberDetailQuery';
+import { useGetMemberDetailQuery } from '@/_hooks/common/useGetMemberDetailQuery';
 
 interface WorkationCardProps {
   thumbnailUrl: string;
