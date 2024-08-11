@@ -429,12 +429,12 @@ export const reviewDetailSchema = z.object({
   lastModifiedAt: z.string(),
   contents: z.string(),
   imageUrls: z.array(z.string()).nullable().optional(),
+  blindedType: z.union([z.literal('TRUE'), z.literal('FALSE')]),
+  openedType: z.union([z.literal('TRUE'), z.literal('FALSE')]),
 });
 
 export const reviewsDetailInfoSchema = z.object({
   reviewDetailInfo: reviewDetailSchema,
-  blindedType: z.string().nullable().optional(),
-  openedType: z.string().nullable().optional(),
 });
 
 // Type
