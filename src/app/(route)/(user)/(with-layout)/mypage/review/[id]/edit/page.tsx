@@ -40,18 +40,17 @@ const ReviewEditPage = ({ params }: UserReviewEditPageProps) => {
   }, [data]);
 
   const { mutate: PatchReview } = usePatchReviewMutation({
+    reviewId: id,
     successCallback: () => {
       alert('후기가 수정되었습니다.');
       router.push('/mypage/review');
     },
     errorCallback: (error: Error) => {
       console.error('후기 수정 실패 :', error);
-      alert('후기 수정에 실패했습니다.');
     },
   });
 
   const handleFilesChange = (fileUrls: string[]) => {
-    console.log('Files added:', fileUrls);
     setValues((prevValues) => ({
       ...prevValues,
       fileUrls,
@@ -59,12 +58,10 @@ const ReviewEditPage = ({ params }: UserReviewEditPageProps) => {
   };
 
   const handleDeleteFile = (index: number) => {
-    console.log('Deleting file at index:', index);
     setValues((prevValues) => {
       const updatedFileUrls = prevValues.fileUrls.filter(
         (_, idx) => idx !== index,
       );
-      console.log('File URLs after delete:', updatedFileUrls);
       return {
         ...prevValues,
         fileUrls: updatedFileUrls,
@@ -74,10 +71,8 @@ const ReviewEditPage = ({ params }: UserReviewEditPageProps) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Submitting values:', values);
 
     PatchReview({
-      reviewId: id,
       contents: values.contents,
       starRating: values.starRating,
       fileUrls: values.fileUrls,
@@ -87,7 +82,7 @@ const ReviewEditPage = ({ params }: UserReviewEditPageProps) => {
 
   return (
     <section className="px-40 pt-18">
-      워케이션 정보 수정
+      <h1>후기 정보 수정</h1>
       <hr />
       <form onSubmit={handleSubmit}>
         <div className="pt-10">
@@ -112,7 +107,7 @@ const ReviewEditPage = ({ params }: UserReviewEditPageProps) => {
                 fileUrls={values.fileUrls}
                 onFileChange={handleFilesChange}
                 fileDomainType="REVIEW"
-                onDeleteFile={handleDeleteFile} // 파일 삭제를 부모 컴포넌트에서 처리
+                onDeleteFile={handleDeleteFile}
               />
               <TextAreaModule
                 name="contents"
