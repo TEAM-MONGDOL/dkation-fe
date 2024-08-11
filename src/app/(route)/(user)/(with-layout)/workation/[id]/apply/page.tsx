@@ -11,12 +11,15 @@ import { useGetMemberDetailQuery } from '@/_hooks/common/useGetMemberDetailQuery
 import { useSession } from 'next-auth/react';
 import { useGetUserWkDetailQuery } from '@/_hooks/user/useGetUserWkDetailQuery';
 import dayjs from 'dayjs';
+import { usePostUserWkApplyMutation } from '@/_hooks/user/usePostUserWkApplyMutation';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   params: { id: number };
 }
 
 const UserWkApplyPage = ({ params }: Props) => {
+  const router = useRouter();
   const [point, setPoint] = useState<number>(0);
   const { id } = params;
   const session = useSession();
@@ -33,12 +36,28 @@ const UserWkApplyPage = ({ params }: Props) => {
     data: pointData,
     isLoading: pointIsLoading,
     isError: pointIsError,
-    refetch,
   } = useGetUserPercentQuery({ wktId: id, point });
 
   const { data, isLoading, isError } = useGetUserWkDetailQuery({
     wktId: id,
   });
+
+  const { mutate: postWkApply } = usePostUserWkApplyMutation({
+    successCallback: () => {
+      router.push('/workation/success');
+    },
+  });
+
+  const handlePostApplyWk = () => {
+    if (point === 0) {
+      alert('포인트를 입력해주세요.');
+      return;
+    }
+    postWkApply({
+      wktId: id,
+      usedPoint: point,
+    });
+  };
 
   const handlePointChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -51,19 +70,17 @@ const UserWkApplyPage = ({ params }: Props) => {
     }
   };
 
-  const handleSubmit = async () => {
-    try {
-      await refetch();
-    } catch (error) {
-      console.error('Error refetching data:', error);
-    }
-  };
-
   return (
     <section>
       <div className="">
         <div className="flex h-[450px] justify-center bg-primary/5 px-36 py-12">
-          <Image src={place} alt="place" width={630} />
+          <Image
+            src={data?.files[0].url}
+            alt="place"
+            width={630}
+            height={1}
+            className="rounded-lg"
+          />
           <div className="ml-auto pr-16 pt-52">
             <p className="text-2">{data?.title}</p>
             <p className="mb-4 text-h1 font-semibold">{data?.place}</p>
@@ -93,7 +110,7 @@ const UserWkApplyPage = ({ params }: Props) => {
             <p className="text-1">내 포인트</p>
             <input
               value={Number(myPointData?.pointQuantity)}
-              className="h-12 cursor-not-allowed rounded-[4px] border pl-4"
+              className="h-12 w-[225px] cursor-not-allowed rounded-[4px] border pl-4"
               type="number"
               readOnly
             />
@@ -101,7 +118,7 @@ const UserWkApplyPage = ({ params }: Props) => {
           <div className="flex items-center gap-7">
             <p className="text-1">배팅 포인트</p>
             <input
-              className="h-12 rounded-[4px] border pl-4 outline-0"
+              className="h-12 w-[225px] rounded-[4px] border pl-4 outline-0"
               placeholder="0"
               value={point > 0 ? point : ''}
               onChange={handlePointChange}
@@ -112,8 +129,8 @@ const UserWkApplyPage = ({ params }: Props) => {
               text="신청하기"
               size="md"
               buttonStyle="black"
-              onClick={handleSubmit}
-              type="button"
+              onClick={handlePostApplyWk}
+              type="submit"
             />
           </div>
         </div>
