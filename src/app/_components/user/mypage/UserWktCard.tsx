@@ -10,6 +10,7 @@ import UserModalTextAtom from '@/_components/user/common/atoms/UserModalTextAtom
 import { StatusConfig } from '@/_constants/common';
 import { StatusType } from '@/_types/adminType';
 import { useGetWinningPercentageQuery } from '@/_hooks/user/useGetWinningPercentageQuery';
+import { useGetMemberDetailQuery } from '@/_hooks/admin/useGetMemberDetailQuery';
 
 interface WorkationCardProps {
   thumbnailUrl: string;
@@ -24,6 +25,7 @@ interface WorkationCardProps {
   bettingPoint: number;
   applyStatusType: StatusType;
   waitingNumber?: number;
+  accountId?: string;
   onClick?: (applyStatusType: WorkationCardProps['applyStatusType']) => void;
 }
 
@@ -39,6 +41,7 @@ const WorkationCard = ({
   bettingPoint: initialBettingPoint,
   applyStatusType,
   wktId,
+  accountId = '',
   waitingNumber = -1,
   onClick,
 }: WorkationCardProps) => {
@@ -53,6 +56,11 @@ const WorkationCard = ({
     percentage: number | null;
     error: number | null;
   }>({ percentage: null, error: null });
+
+  const { data: memberData, isLoading: isMemberLoading } =
+    useGetMemberDetailQuery({
+      accountId,
+    });
 
   const { data, isLoading, isError } = useGetWinningPercentageQuery({
     wktId,
@@ -175,7 +183,7 @@ const WorkationCard = ({
                 <p className="w-[120px] text-end text-2">내 포인트</p>
                 <input
                   type="number"
-                  value={currentBettingPoint}
+                  value={memberData?.pointQuantity}
                   readOnly
                   onChange={handleBettingPointChange}
                   className="h-12 w-52 rounded border border-sub-100/50 px-3 text-end focus:outline-none"

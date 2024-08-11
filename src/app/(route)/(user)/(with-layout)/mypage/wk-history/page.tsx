@@ -12,9 +12,12 @@ import { useGetMyWktHistoryQuery } from '@/_hooks/user/useGetMyWktHistoryQuery';
 import UserWktCancelModal from '@/_components/user/mypage/UserWktCancelModal';
 import UserWktConfirmModal from '@/_components/user/mypage/UserWktConfirmModal';
 import { useDeleteWktApplyMutation } from '@/_hooks/user/useDeleteWktApplyMutation';
+import { useSession } from 'next-auth/react';
 
 const UserWkHistoryPage = () => {
   const router = useRouter();
+  const session = useSession();
+  const accountId = String(session.data?.accountId || '');
   const [currentPage, setCurrentPage] = useState(1);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -117,7 +120,7 @@ const UserWkHistoryPage = () => {
 
   const handleCancelConfirm = () => {
     if (selectedWorkationId !== null) {
-      deleteWktApply(selectedWorkationId); // 수정된 부분: selectedWorkationId가 number 타입으로 전달됨
+      deleteWktApply(selectedWorkationId);
     }
     if (confirmModalType === 'cancel') {
       setConfirmModalType('cancellationConfirmation');
@@ -182,11 +185,18 @@ const UserWkHistoryPage = () => {
             }}
           />
         </div>
-        {data?.applyInfoList.length === 0 ? (
-          <p>등록된 워케이션이 없습니다.</p>
+        {!data ? (
+          isLoading ? (
+            <p>loading ..</p>
+          ) : (
+            <p>error</p>
+          )
+        ) : data.pageInfo.totalElements <= 0 ? (
+          <p>no data</p>
         ) : (
           data?.applyInfoList.map((wkt) => (
             <WorkationCard
+              accountId={accountId}
               key={wkt.wktId}
               wktId={wkt.wktId}
               thumbnailUrl={wkt.thumbnailUrl}
