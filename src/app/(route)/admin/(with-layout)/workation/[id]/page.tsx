@@ -56,8 +56,8 @@ const WorkationDetail = ({ params }: WkDetailProps) => {
         <div className="flex h-52 gap-x-8">
           {placeInfo ? (
             <Image
-              width={500} // 이미지뜨면 수정예정
-              height={300} // 이미지뜨면 수정예정
+              width={400}
+              height={300}
               src={placeInfo.thumbnailUrl}
               alt={placeInfo.place}
             />

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import InfoSectionContainer from '@/_components/common/containers/InfoSectionContainer';
-import { useGetMemberDetailQuery } from '@/_hooks/admin/useGetMemberDetailQuery';
+import { useGetMemberDetailQuery } from '@/_hooks/common/useGetMemberDetailQuery';
 
 interface UserInfoContainerProps {
   accountId: string;

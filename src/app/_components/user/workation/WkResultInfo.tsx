@@ -1,20 +1,11 @@
 import UserSubtitleAtom from '@/_components/user/common/atoms/UserSubtitleAtom';
-import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
 import React from 'react';
+import WkSlider from '@/_components/user/workation/WkSlider';
 
 const WkResultInfo = () => {
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <UserSubtitleAtom subtitle="결과 시뮬레이션" />
-        <UserButtonAtom
-          className="rounded-[8px]"
-          text="다시 보기"
-          size="md"
-          buttonStyle="white"
-          type="button"
-        />
-      </div>
+      <WkSlider />
       <div className="flex flex-col">
         <UserSubtitleAtom subtitle="추첨 결과" />
         <div className="flex justify-between">

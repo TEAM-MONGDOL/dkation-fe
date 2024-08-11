@@ -30,7 +30,7 @@ const PointsApplyPage = () => {
     },
     pageable: {
       page: currentPage,
-      size: 6,
+      size: 10,
       sort: 'lastModifiedAt,DESC',
     },
     enable: !!session.data?.accountId,
@@ -62,7 +62,7 @@ const PointsApplyPage = () => {
               data.pointApplyInfos.map((item, idx) => (
                 <UserTableBodyModule key={item.pointApplyId}>
                   <UserTableBodyAtom isFirst>
-                    {(currentPage - 1) * 6 + idx + 1}
+                    {(currentPage - 1) * 10 + idx + 1}
                   </UserTableBodyAtom>
                   <UserTableBodyAtom>{item.pointTitle}</UserTableBodyAtom>
                   <UserTableBodyAtom>

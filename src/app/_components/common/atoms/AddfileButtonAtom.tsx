@@ -1,16 +1,23 @@
 import Image from 'next/image';
-import { AddFileIcon } from '@/_assets/icons';
+import { AddFileIcon, CameraIcon } from '@/_assets/icons';
 
-interface AddFIleButtonAtomProps {
+interface AddFileButtonAtomProps {
   onClick: () => void;
+  icon?: 'camera' | 'upload';
 }
 
-const AddFIleButtonAtom = ({ onClick }: AddFIleButtonAtomProps) => {
+const AddFileButtonAtom = ({
+  onClick,
+  icon = 'upload',
+}: AddFileButtonAtomProps) => {
   return (
     <button onClick={onClick} type="button">
-      <Image src={AddFileIcon} alt="파일추가" />
+      <Image
+        src={icon === 'camera' ? CameraIcon : AddFileIcon}
+        alt="파일추가"
+      />
     </button>
   );
 };
 
-export default AddFIleButtonAtom;
+export default AddFileButtonAtom;
