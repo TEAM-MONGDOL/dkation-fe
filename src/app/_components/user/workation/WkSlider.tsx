@@ -22,14 +22,34 @@ const Slider = ({ id }: { id: number }) => {
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error loading data.</div>;
+  if (!data) return <div>No data</div>;
 
   const totalMembers = data?.raffleMemberIndexInfos?.length || 1;
-  const sliderWidth = 100 / totalMembers;
+  const totalRange = data?.raffleMemberIndexInfos.reduce((max, member) => {
+    return Math.max(max, member.raffleIndex);
+  }, 0);
+
+  const getSliderWidth = (index: number) => {
+    if (index === 0) {
+      return (data.raffleMemberIndexInfos[0].raffleIndex / totalRange) * 100;
+    }
+    const prevIndex = data.raffleMemberIndexInfos[index - 1].raffleIndex;
+    const currIndex = data.raffleMemberIndexInfos[index].raffleIndex;
+    return ((currIndex - prevIndex) / totalRange) * 100;
+  };
+
+  const calculateLeftPosition = (index: number) => {
+    let left = 0;
+    for (let i = 0; i < index; i++) {
+      left += getSliderWidth(i);
+    }
+    return left;
+  };
 
   const handleMouseEnter = (accountId: string, index: number) => {
     setHoveredAccount(accountId);
     setTooltipPosition({
-      left: `${index * sliderWidth + (1 / 3) * sliderWidth}%`,
+      left: `${calculateLeftPosition(index) + getSliderWidth(index) / 3}%`,
     });
     setHoveredIndex(index);
   };
@@ -70,8 +90,8 @@ const Slider = ({ id }: { id: number }) => {
             key={member.accountId}
             className="absolute top-0 h-full cursor-pointer rounded-full"
             style={{
-              left: `${index * sliderWidth}%`,
-              width: `${sliderWidth}%`,
+              left: `${calculateLeftPosition(index)}%`,
+              width: `${getSliderWidth(index)}%`,
               zIndex: 10,
               backgroundColor: 'transparent',
             }}
