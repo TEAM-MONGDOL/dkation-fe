@@ -2,26 +2,40 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useGetNoticeListQuery } from '@/_hooks/admin/useGetNoticeListQuery';
 import dayjs from 'dayjs';
+import { usePatchWktStatusMutation } from '@/_hooks/user/usePatchWktStatusMutation';
 import UserFilteringSectionContainer from '@/_components/user/common/containers/UserFilteringSectionContainer';
 import UserStateFilteringContainer from '@/_components/user/common/containers/UserStateFilteringContainer';
 import UserPlaceFilteringContainer from '@/_components/user/common/containers/UserPlaceFilteringContainer';
 import WorkationCard from '@/_components/user/mypage/UserWktCard';
-import place from '@/_assets/images/place_impy.png';
+import { useGetMyWktHistoryQuery } from '@/_hooks/user/useGetMyWktHistoryQuery';
+import UserWktCancelModal from '@/_components/user/mypage/UserWktCancelModal';
 import UserWktConfirmModal from '@/_components/user/mypage/UserWktConfirmModal';
+import { useDeleteWktApplyMutation } from '@/_hooks/user/useDeleteWktApplyMutation';
+import { useSession } from 'next-auth/react';
 
 const UserWkHistoryPage = () => {
   const router = useRouter();
+  const session = useSession();
+  const accountId = String(session.data?.accountId || '');
   const [currentPage, setCurrentPage] = useState(1);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [param, setParam] = useState<{
     order: string;
-    noticeType: string[];
+    type: string[];
   }>({
     order: 'DESC',
-    noticeType: ['ANNOUNCEMENT', 'RESULT', 'EVENT'],
+    type: [
+      'APPLIED',
+      'RAFFLE_WAIT',
+      'NO_WINNING',
+      'CONFIRM_WAIT',
+      'CANCEL',
+      'CONFIRM',
+      'WAIT',
+      'VISITED',
+    ],
   });
 
   const [isFilteringSectionOpen, setIsFilteringSectionOpen] = useState<
@@ -30,12 +44,21 @@ const UserWkHistoryPage = () => {
   const [selectedState, setSelectedState] = useState<string>('ALL');
   const [selectedOrder, setSelectedOrder] = useState<string>('createdAt,DESC');
   const [selectedSpace, setSelectedSpace] = useState<string[]>(['양양 쏠비치']);
-  const [openModal, setOpenModal] = useState<
-    'CANCEL' | 'CONFIRM' | 'CANCELLATION_CONFIRMATION' | 'APPLIED_CANCEL' | null
+  const [selectedWorkationId, setSelectedWorkationId] = useState<number | null>(
+    null,
+  );
+
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState<boolean>(false);
+  const [confirmModalType, setConfirmModalType] = useState<
+    | 'confirm'
+    | 'cancel'
+    | 'cancellationConfirmation'
+    | 'acceptConfirmation'
+    | null
   >(null);
 
-  const { data, isLoading, isError } = useGetNoticeListQuery({
-    types: param.noticeType.join(','),
+  const { data, isLoading, isError } = useGetMyWktHistoryQuery({
+    // statuses: param.type.join(','),
     startDate: startDate
       ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
       : undefined,
@@ -47,27 +70,72 @@ const UserWkHistoryPage = () => {
     },
   });
 
-  const handleCardClick = (applyStatusType: string) => {
-    switch (applyStatusType) {
-      case 'APPLIED':
-        setOpenModal('APPLIED_CANCEL'); // APPLIED 상태에서는 CancelModal을 표시하도록 설정
-        break;
-      case 'CONFIRM_WAIT':
-        setOpenModal('CONFIRM');
-        break;
-      case 'VISITED':
-        router.push('/mypage/review/new');
-        break;
-      default:
+  const { mutate: patchWktStatus } = usePatchWktStatusMutation({
+    wktId: selectedWorkationId || 0,
+    successCallback: () => {},
+    errorCallback: (error) => {
+      alert(`에러가 발생했습니다 : ${error.message}`);
+    },
+  });
+
+  const { mutate: deleteWktApply } = useDeleteWktApplyMutation({
+    successCallback: () => {
+      alert('신청이 취소되었습니다.');
+      setIsCancelModalOpen(false);
+    },
+    errorCallback: (error) => {
+      alert(`에러가 발생했습니다 : ${error.message}`);
+    },
+  });
+
+  const handleCardClick = (applyStatusType: string, wktId: number) => {
+    if (applyStatusType === 'APPLIED') {
+      setSelectedWorkationId(wktId);
+      setIsCancelModalOpen(true);
+    } else if (applyStatusType === 'CONFIRM_WAIT') {
+      setConfirmModalType('confirm');
+      setSelectedWorkationId(wktId);
+    } else if (applyStatusType === 'VISITED') {
+      router.push('/mypage/review/new');
+    }
+  };
+
+  const handleConfirm = () => {
+    if (confirmModalType === 'confirm' && selectedWorkationId !== null) {
+      patchWktStatus(
+        { status: 'CONFIRM' },
+        {
+          onSuccess: () => setConfirmModalType('acceptConfirmation'),
+        },
+      );
+    } else if (confirmModalType === 'cancel') {
+      patchWktStatus(
+        { status: 'CANCEL' },
+        {
+          onSuccess: () => setConfirmModalType('cancellationConfirmation'),
+        },
+      );
     }
   };
 
   const handleCancelConfirm = () => {
-    setOpenModal('CANCELLATION_CONFIRMATION');
+    if (selectedWorkationId !== null) {
+      deleteWktApply(selectedWorkationId);
+    }
+    if (confirmModalType === 'cancel') {
+      setConfirmModalType('cancellationConfirmation');
+    } else {
+      setIsCancelModalOpen(false);
+    }
   };
 
-  const handleConfirmConfirm = () => {
-    // 수락 로직 처리
+  const handleCancelClick = () => {
+    setConfirmModalType('cancel');
+  };
+
+  const handleCloseModal = () => {
+    setIsCancelModalOpen(false);
+    setConfirmModalType(null);
   };
 
   return (
@@ -117,80 +185,50 @@ const UserWkHistoryPage = () => {
             }}
           />
         </div>
-        <WorkationCard
-          thumbnailUrl={place.src}
-          wktName="2024년 7월 3주차 워케이션"
-          place="양양"
-          totalRecruit={2}
-          applyStartDate="2024.07.01"
-          applyEndDate="2024.07.15"
-          startDate="2024.07.10"
-          endDate="2024.07.12"
-          bettingPoint={400}
-          applyStatusType="CONFIRM_WAIT"
-          waitingNumber={4}
-          onClick={handleCardClick}
-        />
-        <WorkationCard
-          thumbnailUrl={place.src}
-          wktName="2024년 7월 3주차 워케이션"
-          place="양양"
-          totalRecruit={2}
-          applyStartDate="2024.07.01"
-          applyEndDate="2024.07.15"
-          startDate="2024.07.10"
-          endDate="2024.07.12"
-          bettingPoint={400}
-          applyStatusType="APPLIED"
-          waitingNumber={4}
-          onClick={handleCardClick}
-        />
-        <WorkationCard
-          thumbnailUrl={place.src}
-          wktName="2024년 7월 3주차 워케이션"
-          place="양양"
-          totalRecruit={2}
-          applyStartDate="2024.07.01"
-          applyEndDate="2024.07.15"
-          startDate="2024.07.10"
-          endDate="2024.07.12"
-          bettingPoint={400}
-          applyStatusType="VISITED"
-          waitingNumber={4}
-          onClick={handleCardClick}
-        />
-        <WorkationCard
-          thumbnailUrl={place.src}
-          wktName="2024년 7월 3주차 워케이션"
-          place="양양"
-          totalRecruit={2}
-          applyStartDate="2024.07.01"
-          applyEndDate="2024.07.15"
-          startDate="2024.07.10"
-          endDate="2024.07.12"
-          bettingPoint={400}
-          applyStatusType="NO_WINNING"
-          waitingNumber={4}
-          onClick={handleCardClick}
-        />
+        {!data ? (
+          isLoading ? (
+            <p>loading ..</p>
+          ) : (
+            <p>error</p>
+          )
+        ) : data.pageInfo.totalElements <= 0 ? (
+          <p>no data</p>
+        ) : (
+          data?.applyInfoList.map((wkt) => (
+            <WorkationCard
+              accountId={accountId}
+              key={wkt.wktId}
+              wktId={wkt.wktId}
+              thumbnailUrl={wkt.thumbnailUrl}
+              wktName={wkt.wktName}
+              place={wkt.place}
+              totalRecruit={wkt.totalRecruit}
+              applyStartDate={wkt.applyStartDate}
+              applyEndDate={wkt.applyEndDate}
+              startDate={wkt.startDate}
+              endDate={wkt.endDate}
+              bettingPoint={wkt.bettingPoint}
+              applyStatusType={wkt.applyStatusType}
+              waitingNumber={4} // 수정 필요
+              onClick={() => handleCardClick(wkt.applyStatusType, wkt.wktId)}
+            />
+          ))
+        )}
       </div>
 
-      {openModal && (
+      {isCancelModalOpen && (
+        <UserWktCancelModal
+          onClose={handleCloseModal}
+          onConfirm={handleCancelConfirm}
+        />
+      )}
+
+      {confirmModalType && (
         <UserWktConfirmModal
-          onClose={() => setOpenModal(null)}
-          onConfirm={handleConfirmConfirm}
-          onCancel={handleCancelConfirm}
-          modalType={
-            openModal === 'CANCEL'
-              ? 'cancel'
-              : openModal === 'CONFIRM'
-                ? 'confirm'
-                : openModal === 'CANCELLATION_CONFIRMATION'
-                  ? 'cancellationConfirmation'
-                  : openModal === 'APPLIED_CANCEL'
-                    ? 'cancel'
-                    : 'acceptConfirmation' // 여기서 추가할 경우, 모든 경우를 포괄합니다.
-          }
+          modalType={confirmModalType}
+          onClose={handleCloseModal}
+          onConfirm={handleConfirm}
+          onCancel={handleCancelClick}
         />
       )}
     </section>

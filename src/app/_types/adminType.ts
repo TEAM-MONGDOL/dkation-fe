@@ -294,6 +294,30 @@ export const applyListSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
+export const userApplyInfoSchema = z.object({
+  thumbnailUrl: z.string(),
+  wktId: z.number(),
+  wktName: z.string(),
+  place: z.string(),
+  totalRecruit: z.number(),
+  applyStartDate: z.string(),
+  applyEndDate: z.string(),
+  startDate: z.string(),
+  endDate: z.string(),
+  applyStatusType: applyStatusSchema,
+  bettingPoint: z.number(),
+});
+
+export const winningPercentageInfoSchema = z.object({
+  percentage: z.number(),
+  error: z.number(),
+});
+
+export const userApplyListSchema = z.object({
+  applyInfoList: userApplyInfoSchema.array(),
+  pageInfo: pageInfoSchema,
+});
+
 export const memberInfoSchema = z.object({
   name: z.string(),
   accountId: z.string(),
