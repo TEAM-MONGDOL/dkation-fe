@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
 import { useRouter } from 'next/navigation';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import WkDetailInfo from '@/_components/user/workation/WkDetailInfo';
 import WkResultInfo from '@/_components/user/workation/WkResultInfo';
 import WkReviewInfo from '@/_components/user/workation/WkReviewInfo';
@@ -25,13 +25,24 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
   const { data, isLoading, isError } = useGetUserWkDetailQuery({
     wktId: id,
   });
+  const [param, setParam] = useState<{
+    order: string;
+  }>({
+    order: 'DESC',
+  });
   const {
     data: reviewData,
     isLoading: reviewIsLoading,
     isError: reviewIsError,
   } = useGetUserWkPlaceReviewQuery({
     wktPlaceId: data?.wktPlaceId,
+    pageParam: {
+      page: 1,
+      size: 100,
+      sort: `createdAt,${param.order}`,
+    },
   });
+
   const handleScroll = () => {
     if (detailRef.current && resultRef.current && reviewRef.current) {
       const detailPos = detailRef.current.getBoundingClientRect().top;
@@ -51,6 +62,16 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
     'FILTER' | 'ORDER' | null
   >(null);
   const [selectedOrder, setSelectedOrder] = useState<string>('createdAt,DESC');
+  const updateParam = useCallback(() => {
+    setParam((prev) => ({
+      ...prev,
+      order: selectedOrder,
+    }));
+  }, [selectedOrder]);
+
+  useEffect(() => {
+    updateParam();
+  }, [selectedOrder, updateParam]);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
