@@ -56,9 +56,9 @@ const AdminPointsRewardNewPage = () => {
                 번호
               </TableHeaderAtom>
               <TableHeaderAtom>배너 문구</TableHeaderAtom>
-              <TableHeaderAtom>구분</TableHeaderAtom>
+              <TableHeaderAtom width="170px">구분</TableHeaderAtom>
               <TableHeaderAtom>공지사항 제목</TableHeaderAtom>
-              <TableHeaderAtom>링크</TableHeaderAtom>
+              <TableHeaderAtom width="170px">공지사항 ID</TableHeaderAtom>
               <TableHeaderAtom width="170px">스타일</TableHeaderAtom>
               <TableHeaderAtom isLast width="130px" />
             </TableHeaderModule>
