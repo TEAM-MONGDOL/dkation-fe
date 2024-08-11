@@ -4,29 +4,28 @@ import { useGetMyReviewQueryKey } from '@/_hooks/user/useGetMyReviewQuery';
 import api from '../Axios';
 
 export const usePatchReviewMutation = ({
+  reviewId,
   successCallback,
   errorCallback,
 }: {
+  reviewId: number;
   successCallback?: () => void;
   errorCallback?: (error: Error) => void;
 }) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({
-      reviewId,
       contents,
       starRating,
       fileUrls,
       openedType,
     }: {
-      reviewId: number;
       contents: string;
       starRating: number;
       fileUrls: string[];
       openedType: string;
     }) => {
-      const res = await api.patch('api/review', {
-        reviewId,
+      const res = await api.patch(`api/review/${reviewId}`, {
         contents,
         starRating,
         fileUrls,
@@ -36,10 +35,18 @@ export const usePatchReviewMutation = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [useGetReviewDetailQueryKey, useGetMyReviewQueryKey],
+        queryKey: [
+          useGetReviewDetailQueryKey,
+          useGetMyReviewQueryKey,
+          reviewId,
+        ],
       });
       queryClient.refetchQueries({
-        queryKey: [useGetReviewDetailQueryKey],
+        queryKey: [
+          useGetReviewDetailQueryKey,
+          useGetMyReviewQueryKey,
+          reviewId,
+        ],
       });
       successCallback && successCallback();
     },
