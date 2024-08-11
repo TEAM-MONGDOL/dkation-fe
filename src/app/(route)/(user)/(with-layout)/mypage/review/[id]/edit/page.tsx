@@ -8,6 +8,7 @@ import UserFileContainer from '@/_components/user/review/userFileContainer';
 import RatingStar from '@/_components/user/review/userRatingStarContainer';
 import { useGetReviewDetailQuery } from '@/_hooks/user/useGetReviewDetailQuery';
 import { usePatchReviewMutation } from '@/_hooks/user/usePatchReviewMutation';
+import CheckboxAtom from '@/_components/common/atoms/CheckboxAtom'; // Import CheckboxAtom
 
 interface UserReviewEditPageProps {
   params: {
@@ -27,15 +28,21 @@ const ReviewEditPage = ({ params }: UserReviewEditPageProps) => {
     fileUrls: data?.reviewDetailInfo.imageUrls || [],
     contents: data?.reviewDetailInfo.contents || '',
     starRating: data?.reviewDetailInfo.rating || 0,
+    openedType: data?.reviewDetailInfo.openedType || '',
   });
+
+  const [isChecked, setIsChecked] = useState(values.openedType === 'FALSE');
 
   useEffect(() => {
     if (data) {
+      console.log(data.reviewDetailInfo.openedType);
       setValues({
         fileUrls: data.reviewDetailInfo.imageUrls || [],
         contents: data.reviewDetailInfo.contents,
         starRating: data.reviewDetailInfo.rating,
+        openedType: data.reviewDetailInfo.openedType || '',
       });
+      setIsChecked(data.reviewDetailInfo.openedType === 'FALSE');
     }
   }, [data]);
 
@@ -47,6 +54,7 @@ const ReviewEditPage = ({ params }: UserReviewEditPageProps) => {
     },
     errorCallback: (error: Error) => {
       console.error('후기 수정 실패 :', error);
+      alert('후기 수정에 실패했습니다.');
     },
   });
 
@@ -69,14 +77,23 @@ const ReviewEditPage = ({ params }: UserReviewEditPageProps) => {
     });
   };
 
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+    setValues((prevValues) => ({
+      ...prevValues,
+      openedType: !isChecked ? 'FALSE' : 'TRUE',
+    }));
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(values);
 
     PatchReview({
       contents: values.contents,
       starRating: values.starRating,
       fileUrls: values.fileUrls,
-      openedType: 'TRUE',
+      openedType: values.openedType,
     });
   };
 
@@ -124,22 +141,32 @@ const ReviewEditPage = ({ params }: UserReviewEditPageProps) => {
               />
             </div>
           </div>
-          <div className="flex justify-end gap-x-2 pt-6">
-            <UserButtonAtom
-              size="xl"
-              buttonStyle="white"
-              text="취소"
-              type="button"
-              className="rounded-lg"
-              onClick={() => router.back()}
-            />
-            <UserButtonAtom
-              size="xl"
-              buttonStyle="black"
-              text="수정"
-              type="submit"
-              className="rounded-lg"
-            />
+          <div className="flex justify-between">
+            <div className="flex items-center gap-x-2">
+              <CheckboxAtom
+                isChecked={isChecked}
+                onClick={handleCheckboxChange}
+                size={24}
+              />
+              <span>익명으로 작성하기</span>
+            </div>
+            <div className="flex gap-x-2">
+              <UserButtonAtom
+                size="xl"
+                buttonStyle="white"
+                text="취소"
+                type="button"
+                className="rounded-lg"
+                onClick={() => router.back()}
+              />
+              <UserButtonAtom
+                size="xl"
+                buttonStyle="black"
+                text="수정"
+                type="submit"
+                className="rounded-lg"
+              />
+            </div>
           </div>
         </div>
       </form>
