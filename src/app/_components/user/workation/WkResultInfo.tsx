@@ -2,11 +2,12 @@ import UserSubtitleAtom from '@/_components/user/common/atoms/UserSubtitleAtom';
 import React from 'react';
 import WkSlider from '@/_components/user/workation/WkSlider';
 
-const WkResultInfo = () => {
+const WkResultInfo = ({ id }: { id: number }) => {
   return (
     <div>
-      <WkSlider />
-      <div className="flex flex-col">
+      <WkSlider id={id} />
+      <hr className="mt-24" />
+      <div className="mt-8 flex flex-col">
         <UserSubtitleAtom subtitle="추첨 결과" />
         <div className="flex justify-between">
           <div className="flex h-16 w-48 items-center rounded-full bg-primary">

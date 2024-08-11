@@ -10,6 +10,7 @@ import WkReviewInfo from '@/_components/user/workation/WkReviewInfo';
 import { useGetUserWkDetailQuery } from '@/_hooks/user/useGetUserWkDetailQuery';
 import dayjs from 'dayjs';
 import { useGetUserWkPlaceReviewQuery } from '@/_hooks/user/useGetUserWkPlaceReviewQuery';
+import { useGetWkSimulationQuery } from '@/_hooks/user/useGetWkSimulationQuery';
 
 interface UserWkDetailProps {
   params: { id: number };
@@ -99,10 +100,12 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
             <p>주소 : {data.address}</p>
           </div>
           <UserButtonAtom
-            onClick={() => router.push(`/workation/${id}/apply`)}
-            className="ml-auto mt-auto rounded-[8px]"
-            buttonStyle="black"
-            text="응모하기"
+            onClick={() =>
+              data.isApplied || router.push(`/workation/${id}/apply`)
+            }
+            className={`ml-auto mt-auto rounded-[8px] ${data.isApplied && 'cursor-default'}`}
+            buttonStyle={`${data.isApplied ? 'red' : 'black'}`}
+            text={`${data.isApplied ? '응모마감' : '응모하기'}`}
             type="button"
             size="md"
           />
@@ -131,7 +134,7 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
           <WkDetailInfo url={urls} description={data.description} />
         </div>
         <div className="mt-16 flex flex-col" ref={resultRef}>
-          <WkResultInfo />
+          <WkResultInfo id={id} />
         </div>
         <div className="flex flex-col gap-10 pt-16" ref={reviewRef}>
           {reviewData.reviewInfosForWkt.map((review) => (

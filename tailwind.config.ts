@@ -85,7 +85,7 @@ const config: Config = {
       keyframes: {
         slideHandle: {
           '0%': { left: '0%' },
-          '100%': { left: 'calc(100% - 2.65rem)' },
+          '100%': { left: 'calc(100% - 0.9rem)' },
         },
         fillTrack: {
           '0%': { width: '0%' },
@@ -93,8 +93,8 @@ const config: Config = {
         },
       },
       animation: {
-        slideHandle: 'slideHandle 8s ease-in-out forwards',
-        fillTrack: 'fillTrack 8s ease-in-out forwards',
+        slideHandle: 'slideHandle 9s ease-in-out forwards',
+        fillTrack: 'fillTrack 9s ease-in-out forwards',
       },
     },
   },
