@@ -21,6 +21,12 @@ const AddBannerPage = () => {
     announcementType: '',
   });
 
+  const [errors, setErrors] = useState({
+    title: '',
+    linkUrl: '',
+    backgroundColor: '',
+  });
+
   const { data } = useGetNoticeListQuery({
     pageParam: { page: 1, size: 100 },
   });
@@ -62,6 +68,34 @@ const AddBannerPage = () => {
     }
   };
 
+  const validateForm = () => {
+    const newErrors = {
+      title: '',
+      linkUrl: '',
+      backgroundColor: '',
+    };
+
+    let isValid = true;
+
+    if (!values.title) {
+      newErrors.title = '배너 제목을 입력해 주세요.';
+      isValid = false;
+    }
+
+    if (!values.linkUrl) {
+      newErrors.linkUrl = '공지사항을 선택해 주세요.';
+      isValid = false;
+    }
+
+    if (!values.backgroundColor) {
+      newErrors.backgroundColor = '배경색을 선택해 주세요.';
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
   const { mutate: PostBanner } = usePostBannerMutation({
     successCallback: () => {
       alert('배너가 추가되었습니다.');
@@ -74,8 +108,11 @@ const AddBannerPage = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const payload = { ...values };
-    PostBanner(payload);
+
+    if (validateForm()) {
+      const payload = { ...values };
+      PostBanner(payload);
+    }
   };
 
   return (
@@ -89,7 +126,7 @@ const AddBannerPage = () => {
               해당 필드의 입력값이 사용자 메인 페이지에 노출됩니다.
             </p>
           </div>
-          <div className="flex w-full">
+          <div className="flex w-full flex-col">
             <InputModule
               name="title"
               placeholder="제목을 입력하세요"
@@ -97,17 +134,20 @@ const AddBannerPage = () => {
               value={values.title}
               onChange={handleChange}
             />
+            {errors.title && (
+              <p className="text-4 text-negative">{errors.title}</p>
+            )}
           </div>
 
           <div className="mb-3 mt-10 flex items-center gap-x-3">
             <p className="text-3 font-bold">링크</p>
-            <p className="text-4 text-sub-200/70">
+            <p className="pt-2 text-4 text-sub-200/70">
               선택한 공지사항의 링크가 배너 클릭 시 이동할 URL로 설정됩니다.
             </p>
           </div>
           <div>
             <DropdownModule
-              options={noticeOptions.map((option) => option.title)} // 제목을 표시합니다.
+              options={noticeOptions.map((option) => option.title)}
               onSelect={handleNoticeSelect}
               placeholder="공지사항을 선택하세요"
               selectedOption={
@@ -116,6 +156,9 @@ const AddBannerPage = () => {
                 )?.title || ''
               }
             />
+            {errors.linkUrl && (
+              <p className="pt-2 text-4 text-negative">{errors.linkUrl}</p>
+            )}
           </div>
 
           <div className="mt-10">
@@ -125,6 +168,11 @@ const AddBannerPage = () => {
               onSelectColor={handleColorSelect}
               colorOptions={bannerStyleTypeList}
             />
+            {errors.backgroundColor && (
+              <p className="pt-2 text-4 text-negative">
+                {errors.backgroundColor}
+              </p>
+            )}
           </div>
         </div>
         <div className="flex justify-end pt-16">
