@@ -7,13 +7,16 @@ import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
 import UserFileContainer from '@/_components/user/review/userFileContainer';
 import RatingStar from '@/_components/user/review/userRatingStarContainer';
 import { useGetUserWkDetailQuery } from '@/_hooks/user/useGetUserWkDetailQuery';
+import CheckboxAtom from '@/_components/common/atoms/CheckboxAtom';
 import dayjs from 'dayjs';
 import Image from 'next/image';
+import { usePostReviewMutation } from '@/_hooks/user/usePostReviewMutation';
 
 const WriteNoticesPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get('wktId');
+  const [isChecked, setIsChecked] = useState(false);
   const [rating, setRating] = useState<number>(0);
   const [values, setValues] = useState({
     fileUrls: [] as string[],
@@ -21,8 +24,18 @@ const WriteNoticesPage = () => {
     starRating: 0,
   });
 
-  const { data, isLoading, isError } = useGetUserWkDetailQuery({
+  const { data } = useGetUserWkDetailQuery({
     wktId: Number(id),
+  });
+
+  const { mutate: postReview } = usePostReviewMutation({
+    successCallback: () => {
+      alert('후기가 작성되었습니다.');
+      router.push('/mypage/wk-history');
+    },
+    errorCallback: (error) => {
+      console.log(`Error posting review: ${error.message}`);
+    },
   });
 
   const handleRatingChange = (newRating: number) => {
@@ -40,6 +53,10 @@ const WriteNoticesPage = () => {
     }));
   };
 
+  const handleCheckboxChange = () => {
+    setIsChecked((prev) => !prev);
+  };
+
   const handleDeleteFile = (index: number) => {
     setValues((prevValues) => {
       const updatedFileUrls = prevValues.fileUrls.filter(
@@ -54,7 +71,15 @@ const WriteNoticesPage = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(values);
+
+    const wktId = Number(id);
+    postReview({
+      wktId,
+      contents: values.contents,
+      starRating: values.starRating,
+      fileUrls: values.fileUrls,
+      openedType: isChecked ? 'FALSE' : 'TRUE',
+    });
   };
 
   return (
@@ -80,14 +105,14 @@ const WriteNoticesPage = () => {
           </div>
           <div className="mt-auto">
             <p className="mb-0.5">
-              모집 기간 : {dayjs(data?.applyStartDate).format('YYYY.MM.DD')} -{' '}
+              모집 기간 : {dayjs(data?.applyStartDate).format('YYYY.MM.DD')} -
               {dayjs(data?.applyEndDate).format('YYYY.MM.DD')}
             </p>
             <p className="mb-0.5">
-              워케이션 기간 : {dayjs(data?.startDate).format('YYYY.MM.DD')} -{' '}
+              워케이션 기간 : {dayjs(data?.startDate).format('YYYY.MM.DD')} -
               {dayjs(data?.endDate).format('YYYY.MM.DD')}
             </p>
-            <p>모집인원 : {data?.totalRecruit}명</p>
+            <p>모집 인원 : {data?.totalRecruit}명</p>
           </div>
         </div>
       </div>
@@ -121,22 +146,32 @@ const WriteNoticesPage = () => {
               />
             </div>
           </div>
-          <div className="flex justify-end gap-x-2 pt-6">
-            <UserButtonAtom
-              size="xl"
-              buttonStyle="white"
-              text="취소"
-              type="button"
-              className="rounded-lg"
-              onClick={() => router.push('/admin/notices')}
-            />
-            <UserButtonAtom
-              size="xl"
-              buttonStyle="black"
-              text="등록"
-              type="submit"
-              className="rounded-lg"
-            />
+          <div className="flex justify-between pt-4">
+            <div className="flex items-center gap-x-2">
+              <CheckboxAtom
+                isChecked={isChecked}
+                onClick={handleCheckboxChange}
+                size={24}
+              />
+              <span>익명으로 작성하기</span>
+            </div>
+            <div className="flex gap-x-2">
+              <UserButtonAtom
+                size="xl"
+                buttonStyle="white"
+                text="취소"
+                type="button"
+                className="rounded-lg"
+                onClick={() => router.push('/admin/notices')}
+              />
+              <UserButtonAtom
+                size="xl"
+                buttonStyle="black"
+                text="등록"
+                type="submit"
+                className="rounded-lg"
+              />
+            </div>
           </div>
         </div>
       </form>
