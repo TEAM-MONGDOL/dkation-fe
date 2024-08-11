@@ -4,11 +4,12 @@ import React, { useState } from 'react';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import InputModule from '@/_components/common/modules/InputModule';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
-import ColorChartModule from '@/_components/admin/notices/StyleChartModule';
 import DropdownModule from '@/_components/common/modules/DropdownModule';
 import { useGetNoticeListQuery } from '@/_hooks/admin/useGetNoticeListQuery';
 import { usePostBannerMutation } from '@/_hooks/admin/usePostBannerMutation';
 import { useRouter } from 'next/navigation';
+import ColorChartModule from '@/_components/admin/notices/StyleChartModule';
+import { BannerStyleType, bannerStyleTypeList } from '@/_types/adminType';
 
 const AddBannerPage = () => {
   const router = useRouter();
@@ -45,7 +46,7 @@ const AddBannerPage = () => {
     });
   };
 
-  const handleColorSelect = (color: string) => {
+  const handleColorSelect = (color: BannerStyleType) => {
     setValues({ ...values, backgroundColor: color });
   };
 
@@ -63,6 +64,7 @@ const AddBannerPage = () => {
 
   const { mutate: PostBanner } = usePostBannerMutation({
     successCallback: () => {
+      alert('배너가 추가되었습니다.');
       router.replace('/admin/notices/banner');
     },
     errorCallback: (error: Error) => {
@@ -72,7 +74,6 @@ const AddBannerPage = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const payload = { ...values };
     PostBanner(payload);
   };
@@ -120,8 +121,9 @@ const AddBannerPage = () => {
           <div className="mt-10">
             <p className="mb-3 text-3 font-bold">스타일</p>
             <ColorChartModule
-              selectedColor={values.backgroundColor}
+              selectedColor={values.backgroundColor as BannerStyleType}
               onSelectColor={handleColorSelect}
+              colorOptions={bannerStyleTypeList}
             />
           </div>
         </div>

@@ -1,21 +1,21 @@
+import React from 'react';
+import { BannerStyleType, colorClassConverter } from '@/_types/adminType';
+
 interface ColorChartModuleProps {
-  selectedColor: string;
-  onSelectColor: (color: string) => void;
+  selectedColor: BannerStyleType;
+  onSelectColor: (color: BannerStyleType) => void;
+  colorOptions: BannerStyleType[];
 }
 
 const ColorChartModule = ({
   selectedColor,
   onSelectColor,
+  colorOptions,
 }: ColorChartModuleProps) => {
   return (
     <div className="flex gap-4">
-      {['Dark', 'Lightgray', 'Yellow'].map((option) => {
-        const backgroundClass =
-          option === 'Dark'
-            ? 'bg-sub-300'
-            : option === 'Lightgray'
-              ? 'bg-sub-100'
-              : 'bg-primary';
+      {colorOptions.map((option) => {
+        const backgroundClass = colorClassConverter[option];
 
         return (
           <button
