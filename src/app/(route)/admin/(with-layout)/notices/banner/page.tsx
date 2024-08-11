@@ -13,9 +13,14 @@ import { useRouter } from 'next/navigation';
 import { TrashIcon } from '@/_assets/icons';
 import Image from 'next/image';
 import { NoticeType, noticeTypeConverter } from '@/_types/adminType';
+import ModalModule from '@/_components/common/modules/ModalModule';
+import { useState } from 'react';
+import { useDeleteBannerMutation } from '@/_hooks/admin/useDeleteBannerMutation';
 
-const AdminPointsRewardNewPage = () => {
+const AdminBannerListPage = () => {
   const router = useRouter();
+  const [selectedBannerId, setSelectedBannerId] = useState<number | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const {
     data: bannerList,
@@ -25,6 +30,28 @@ const AdminPointsRewardNewPage = () => {
   } = useGetBannerListInfiniteQuery({
     pageable: { page: 1, size: 10 },
   });
+
+  const { mutate: deleteBanner } = useDeleteBannerMutation({
+    successCallback: () => {
+      setIsDeleteModalOpen(false);
+      alert('삭제가 완료되었습니다.');
+      setSelectedBannerId(null);
+    },
+    errorCallback: (error: Error) => {
+      console.error('Failed to delete banner:', error);
+    },
+  });
+
+  const handleDeleteClick = (bannerId: number) => {
+    setSelectedBannerId(bannerId);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (selectedBannerId !== null) {
+      deleteBanner(selectedBannerId);
+    }
+  };
 
   return (
     <section className="flex h-full w-full flex-col gap-y-10 overflow-y-auto">
@@ -65,17 +92,19 @@ const AdminPointsRewardNewPage = () => {
             <tbody>
               {!bannerList ? (
                 bannerListIsLoading ? (
-                  <EmptyContainer colSpan={4} text="loading..." />
+                  <EmptyContainer colSpan={7} text="loading..." />
                 ) : (
-                  <EmptyContainer colSpan={4} text="error" />
+                  <EmptyContainer colSpan={7} text="error" />
                 )
               ) : bannerList.pages[0].pageInfo.totalElements === 0 ? (
-                <EmptyContainer colSpan={4} />
+                <EmptyContainer colSpan={7} />
               ) : (
-                bannerList.pages.map((page) =>
-                  page.bannerInfoList.map((banner) => (
+                bannerList.pages.flatMap((page, pageIndex) =>
+                  page.bannerInfoList.map((banner, index) => (
                     <TableBodyModule key={banner.id}>
-                      <TableBodyAtom isFirst>{banner.id}</TableBodyAtom>
+                      <TableBodyAtom isFirst>
+                        {pageIndex * 10 + index + 1}
+                      </TableBodyAtom>
                       <TableBodyAtom>{banner.title}</TableBodyAtom>
                       <TableBodyAtom>
                         {
@@ -103,7 +132,7 @@ const AdminPointsRewardNewPage = () => {
                         </div>
                       </TableBodyAtom>
                       <TableBodyAtom isLast>
-                        <button>
+                        <button onClick={() => handleDeleteClick(banner.id)}>
                           <Image src={TrashIcon} alt="trash" />
                         </button>
                       </TableBodyAtom>
@@ -124,8 +153,21 @@ const AdminPointsRewardNewPage = () => {
           />
         </div>
       </section>
+      {isDeleteModalOpen && (
+        <ModalModule
+          title="해당 배너를 삭제하시겠습니까?"
+          cancelText="취소"
+          confirmText="삭제"
+          confirmButtonStyle="red"
+          onCancel={() => {
+            setIsDeleteModalOpen(false);
+            setSelectedBannerId(null);
+          }}
+          onConfirm={handleConfirmDelete}
+        />
+      )}
     </section>
   );
 };
 
-export default AdminPointsRewardNewPage;
+export default AdminBannerListPage;
