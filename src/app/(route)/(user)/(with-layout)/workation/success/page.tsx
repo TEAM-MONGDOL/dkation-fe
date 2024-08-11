@@ -12,7 +12,7 @@ const UserWkApplySuccessPage = () => {
           워케이션 신청이 완료되었습니다.
         </p>
         <UserButtonAtom
-          onClick={() => router.push('/mypage')}
+          onClick={() => router.push('/mypage/wk-history')}
           className="rounded-[10px]"
           text="신청내역 확인하기"
           size="xl"

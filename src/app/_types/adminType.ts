@@ -110,18 +110,6 @@ export const ReviewListInfoSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
-export const wktPlaceDetailShema = z.object({
-  wktPlaceDetailInfo: z.object({
-    id: z.number(),
-    place: z.string(),
-    address: z.string(),
-    maxPeople: z.number(),
-    createdAt: z.string(),
-    description: z.string(),
-    fileInfos: fileInfoSchema.array().nullable().optional(),
-  }),
-});
-
 export const wktReviewDetailSchema = z.object({
   reviewDetailInfo: z.object({
     id: z.number(),
@@ -387,6 +375,18 @@ export const wkUserPlaceReviewInfoSchema = z.object({
   fileInfos: fileInfoSchema.array().nullable().optional(),
 });
 
+export const wktPlaceDetailShema = z.object({
+  wktPlaceDetailInfo: z.object({
+    id: z.number(),
+    place: z.string(),
+    address: z.string(),
+    maxPeople: z.number(),
+    createdAt: z.string(),
+    description: z.string(),
+    fileInfos: fileInfoSchema.array().nullable().optional(),
+  }),
+});
+
 export const workationUserPlaceReviewSchema = z.object({
   reviewInfosForWkt: wkUserPlaceReviewInfoSchema.array(),
   pageInfo: pageInfoSchema,
@@ -592,9 +592,9 @@ export const noticeList: { [key in NoticeType]: string } = {
 };
 
 export const resultList: { [key in ResultType]: string } = {
-  NAME: '가나다순',
-  LOWEST: '확률 낮은 순',
-  HIGHEST: '확률 높은 순',
+  DESC: '가나다순',
+  PERCENTAGEDESC: '확률 낮은 순',
+  PERCENTAGEASC: '확률 높은 순',
 };
 
 export const penaltyList: { [key in PenaltyType]: string } = {
