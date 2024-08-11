@@ -82,6 +82,20 @@ const config: Config = {
         '5xl': '50px',
         '6xl': '60px',
       },
+      keyframes: {
+        slideHandle: {
+          '0%': { left: '0%' },
+          '100%': { left: 'calc(100% - 2.65rem)' },
+        },
+        fillTrack: {
+          '0%': { width: '0%' },
+          '100%': { width: '100%' },
+        },
+      },
+      animation: {
+        slideHandle: 'slideHandle 8s ease-in-out forwards',
+        fillTrack: 'fillTrack 8s ease-in-out forwards',
+      },
     },
   },
   plugins: [
