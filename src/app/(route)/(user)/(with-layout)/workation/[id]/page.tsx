@@ -10,6 +10,7 @@ import WkReviewInfo from '@/_components/user/workation/WkReviewInfo';
 import { useGetUserWkDetailQuery } from '@/_hooks/user/useGetUserWkDetailQuery';
 import dayjs from 'dayjs';
 import { useGetUserWkPlaceReviewQuery } from '@/_hooks/user/useGetUserWkPlaceReviewQuery';
+import UserFilteringSectionContainer from '@/_components/user/common/containers/UserFilteringSectionContainer';
 
 interface UserWkDetailProps {
   params: { id: number };
@@ -46,6 +47,10 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
       }
     }
   };
+  const [isFilteringSectionOpen, setIsFilteringSectionOpen] = useState<
+    'FILTER' | 'ORDER' | null
+  >(null);
+  const [selectedOrder, setSelectedOrder] = useState<string>('createdAt,DESC');
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
@@ -73,6 +78,7 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
     }
     setActiveTab(section);
   };
+
   const urls = data.files?.map((file) => file.url) || [''];
   return (
     <section>
@@ -134,6 +140,24 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
           <WkResultInfo />
         </div>
         <div className="flex flex-col gap-10 pt-16" ref={reviewRef}>
+          <UserFilteringSectionContainer
+            orderOption={{
+              onClickOrder: () => {
+                setIsFilteringSectionOpen(
+                  isFilteringSectionOpen === 'ORDER' ? null : 'ORDER',
+                );
+              },
+              isOrderOpen: isFilteringSectionOpen === 'ORDER',
+              orderProps: {
+                orders: [
+                  { key: 'createdAt,DESC', value: '최신순' },
+                  { key: 'createdAt,ASC', value: '오래된순' },
+                ],
+                selectedOrder,
+                setSelectedOrder,
+              },
+            }}
+          />
           {reviewData.reviewInfosForWkt.map((review) => (
             <WkReviewInfo
               key={review.wktTitle}

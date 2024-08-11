@@ -1,6 +1,7 @@
 import UserSubtitleAtom from '@/_components/user/common/atoms/UserSubtitleAtom';
 import React from 'react';
 import WkSlider from '@/_components/user/workation/WkSlider';
+import WkPointGraph from '@/_components/common/graph/WkPointGraph';
 
 const WkResultInfo = () => {
   return (
@@ -40,8 +41,8 @@ const WkResultInfo = () => {
             <p>개발팀 홍길동</p>
           </div>
         </div>
-        <div className="mt-9 w-full bg-cus-100 py-14 text-center text-h1">
-          그래프
+        <div className="mt-16">
+          <WkPointGraph />
         </div>
       </div>
     </div>
