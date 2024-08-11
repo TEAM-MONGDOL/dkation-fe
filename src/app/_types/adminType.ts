@@ -404,6 +404,20 @@ export type PointChangeType = 'INCREASE' | 'DECREASE';
 
 export type PenaltyType = 'NOSHOW' | 'REPORT' | 'NEGLIGENCE' | 'ABUSE';
 
+export type BannerStyleType = 'DARK' | 'LIGHTGRAY' | 'YELLOW';
+
+export const bannerStyleTypeList: BannerStyleType[] = [
+  'DARK',
+  'LIGHTGRAY',
+  'YELLOW',
+];
+
+export const colorClassConverter: { [key in BannerStyleType]: string } = {
+  DARK: 'bg-sub-300',
+  LIGHTGRAY: 'bg-sub-100',
+  YELLOW: 'bg-primary',
+};
+
 // Convert Type / List
 export const applyStatusList: StatusType[] = [
   'APPLIED',
