@@ -130,6 +130,7 @@ const WriteReviewPage = () => {
             <p className="mb-2 text-h2 font-semibold">어떤 점이 좋았나요?</p>
             <div className="flex flex-col gap-y-4 py-7">
               <UserFileContainer
+                fileUrls={values.fileUrls}
                 onFileChange={handleFilesChange}
                 fileDomainType="REVIEW"
                 onDeleteFile={handleDeleteFile}
