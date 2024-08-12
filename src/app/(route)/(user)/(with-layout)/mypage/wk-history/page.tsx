@@ -96,7 +96,7 @@ const UserWkHistoryPage = () => {
       setConfirmModalType('confirm');
       setSelectedWorkationId(wktId);
     } else if (applyStatusType === 'VISITED') {
-      router.push('/mypage/review/new');
+      router.push(`/mypage/review/new?wktId=${wktId}`);
     }
   };
 
