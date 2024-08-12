@@ -9,7 +9,7 @@ interface DragDropModuleProps {
   onFileAdd: (files: File[]) => void;
   user?: boolean;
   maxFileCount?: number;
-  fileDomainType?: 'ANNOUNCEMENT' | 'POINT_APPLY';
+  fileDomainType?: 'ANNOUNCEMENT' | 'POINT_APPLY' | 'WKT_PLACE';
 }
 
 const DragDropModule = ({

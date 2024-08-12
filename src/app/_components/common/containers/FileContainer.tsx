@@ -9,7 +9,7 @@ interface FileInfo {
 
 interface FileContainerProps {
   onFileChange?: (fileInfos: FileInfo[]) => void;
-  fileDomainType: 'ANNOUNCEMENT' | 'POINT_APPLY';
+  fileDomainType: 'ANNOUNCEMENT' | 'POINT_APPLY' | 'WKT_PLACE';
   maxFileCount?: number;
 }
 

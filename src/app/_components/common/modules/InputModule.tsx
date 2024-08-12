@@ -6,7 +6,7 @@ import InputAreaAtom from '@/_components/common/atoms/InputAreaAtom';
 
 interface InputProps {
   placeholder?: string;
-  status?: 'error' | 'correct' | 'readonly' | 'disabled';
+  status?: 'error' | 'correct' | 'readonly' | 'disabled' | 'cursor';
   value: string | number;
   subtitle?: string;
   message?: string;
@@ -14,6 +14,7 @@ interface InputProps {
   name?: string;
   type?: 'text' | 'password' | 'number';
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onClick?: (e: React.MouseEvent<HTMLInputElement>) => void;
 }
 
 const InputModule = ({
@@ -26,6 +27,7 @@ const InputModule = ({
   name,
   type,
   onChange = () => {},
+  onClick = () => {},
 }: InputProps) => {
   return (
     <div className={`flex w-full flex-col ${subtitle && 'gap-4'}`}>
@@ -42,6 +44,7 @@ const InputModule = ({
         name={name}
         type={type}
         onChange={onChange}
+        onClick={onClick}
       />
     </div>
   );

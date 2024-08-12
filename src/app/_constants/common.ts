@@ -7,6 +7,7 @@ export const DragDropContent = {
   SUB_COMMENT: {
     ANNOUNCEMENT: '파일은 jpeg, png 형식만 첨부할 수 있습니다.',
     POINT_APPLY: '파일은 pdf, jpg, png 형식만 첨부할 수 있습니다.',
+    WKT_PLACE: '파일은 jpeg, png 형식만 첨부할 수 있습니다.',
   },
 } as const;
 
