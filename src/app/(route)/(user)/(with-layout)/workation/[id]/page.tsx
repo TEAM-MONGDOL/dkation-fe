@@ -128,7 +128,12 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
           </button>
         </div>
         <div className="mt-16 flex flex-col" ref={detailRef}>
-          <WkDetailInfo url={urls} description={data.description} />
+          <WkDetailInfo
+            url={urls}
+            description={data.description}
+            longitude={data.longitude}
+            latitude={data.latitude}
+          />
         </div>
         <div className="mt-16 flex flex-col" ref={resultRef}>
           <WkResultInfo />
