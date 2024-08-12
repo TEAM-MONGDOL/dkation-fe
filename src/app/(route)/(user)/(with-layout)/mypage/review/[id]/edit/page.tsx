@@ -8,7 +8,8 @@ import UserFileContainer from '@/_components/user/review/userFileContainer';
 import RatingStar from '@/_components/user/review/userRatingStarContainer';
 import { useGetReviewDetailQuery } from '@/_hooks/user/useGetReviewDetailQuery';
 import { usePatchReviewMutation } from '@/_hooks/user/usePatchReviewMutation';
-import CheckboxAtom from '@/_components/common/atoms/CheckboxAtom'; // Import CheckboxAtom
+import CheckboxAtom from '@/_components/common/atoms/CheckboxAtom';
+import ReviewWktInfo from '@/_components/user/mypage/ReviewWktInfo'; // Import CheckboxAtom
 
 interface UserReviewEditPageProps {
   params: {
@@ -99,9 +100,9 @@ const ReviewEditPage = ({ params }: UserReviewEditPageProps) => {
 
   return (
     <section className="px-40 pt-18">
-      <h1>후기 정보 수정</h1>
+      <ReviewWktInfo wktId={Number(data?.reviewDetailInfo.wktId)} />
       <hr />
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="px-10">
         <div className="pt-10">
           <div className="flex flex-col gap-y-7 py-8">
             <p className="mb-4 text-h2 font-semibold">
