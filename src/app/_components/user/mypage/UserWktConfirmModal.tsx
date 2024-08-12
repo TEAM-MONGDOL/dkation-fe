@@ -5,12 +5,7 @@ import UserModalAtom from '@/_components/user/common/atoms/UserModalAtom';
 import UserModalTitleAtom from '@/_components/user/common/atoms/UserModalTextAtom';
 import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
 
-const UserWktConfirmModal = ({
-  onClose,
-  onConfirm,
-  onCancel,
-  modalType,
-}: {
+interface UserWktConfirmModalProps {
   onClose: () => void;
   onConfirm: () => void;
   onCancel?: () => void;
@@ -19,8 +14,15 @@ const UserWktConfirmModal = ({
     | 'cancel'
     | 'cancellationConfirmation'
     | 'acceptConfirmation';
-}) => (
-  <UserModalAtom>
+}
+
+const UserWktConfirmModal = ({
+  onClose,
+  onConfirm,
+  onCancel,
+  modalType,
+}: UserWktConfirmModalProps) => (
+  <UserModalAtom onClose={onClose}>
     {modalType === 'confirm' && (
       <>
         <UserModalTitleAtom className="text-2">
