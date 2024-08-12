@@ -295,6 +295,7 @@ export const applyListSchema = z.object({
 });
 
 export const userApplyInfoSchema = z.object({
+  applyId: z.number(),
   thumbnailUrl: z.string(),
   wktId: z.number(),
   wktName: z.string(),
@@ -328,6 +329,20 @@ export const memberInfoSchema = z.object({
 
 export const memberListSchema = z.object({
   memberInfos: memberInfoSchema.array(),
+  pageInfo: pageInfoSchema,
+});
+
+export const bannerInfoSchema = z.object({
+  id: z.number(),
+  title: z.string(),
+  linkUrl: z.string(),
+  announcementType: z.string(),
+  announcementTitle: z.string(),
+  backgroundColor: z.string(),
+});
+
+export const bannerInfoListSchema = z.object({
+  bannerInfoList: bannerInfoSchema.array(),
   pageInfo: pageInfoSchema,
 });
 
@@ -443,6 +458,24 @@ export const reviewsInfosForMeListSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
+export const reviewDetailSchema = z.object({
+  id: z.number(),
+  reviewer: z.string(),
+  department: z.string(),
+  wktTitle: z.string(),
+  wktPlace: z.string(),
+  rating: z.number(),
+  lastModifiedAt: z.string(),
+  contents: z.string(),
+  imageUrls: z.array(z.string()).nullable().optional(),
+  blindedType: z.union([z.literal('TRUE'), z.literal('FALSE')]),
+  openedType: z.union([z.literal('TRUE'), z.literal('FALSE')]),
+});
+
+export const reviewsDetailInfoSchema = z.object({
+  reviewDetailInfo: reviewDetailSchema,
+});
+
 // Type
 export type PageableType = {
   page?: number;
@@ -524,6 +557,20 @@ export type PointOrderType = 'POINT_HIGHEST' | 'POINT_LOWEST';
 export type PointChangeType = 'INCREASE' | 'DECREASE';
 
 export type PenaltyType = 'NOSHOW' | 'REPORT' | 'NEGLIGENCE' | 'ABUSE';
+
+export type BannerStyleType = 'DARK' | 'LIGHTGRAY' | 'YELLOW';
+
+export const bannerStyleTypeList: BannerStyleType[] = [
+  'DARK',
+  'LIGHTGRAY',
+  'YELLOW',
+];
+
+export const colorClassConverter: { [key in BannerStyleType]: string } = {
+  DARK: 'bg-sub-300',
+  LIGHTGRAY: 'bg-sub-100',
+  YELLOW: 'bg-primary',
+};
 
 // Convert Type / List
 export const applyStatusList: StatusType[] = [

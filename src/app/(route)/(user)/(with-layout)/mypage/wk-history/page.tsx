@@ -196,6 +196,7 @@ const UserWkHistoryPage = () => {
         ) : (
           data?.applyInfoList.map((wkt) => (
             <WorkationCard
+              applyId={wkt.applyId}
               accountId={accountId}
               key={wkt.wktId}
               wktId={wkt.wktId}
