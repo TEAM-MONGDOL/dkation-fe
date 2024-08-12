@@ -450,6 +450,7 @@ export const reviewsInfosForMeListSchema = z.object({
 
 export const reviewDetailSchema = z.object({
   id: z.number(),
+  wktId: z.number(),
   reviewer: z.string(),
   department: z.string(),
   wktTitle: z.string(),

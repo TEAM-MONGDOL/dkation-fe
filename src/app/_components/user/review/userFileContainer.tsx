@@ -86,6 +86,7 @@ const UserFileContainer = ({
             </div>
           ))}
           <button
+            type="button"
             className="flex h-28 w-28 items-center justify-center rounded-lg bg-gray-200 text-gray-600"
             onClick={handleAddMoreFiles}
           >

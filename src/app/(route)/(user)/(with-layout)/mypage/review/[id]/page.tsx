@@ -10,6 +10,7 @@ import { useGetReviewDetailQuery } from '@/_hooks/user/useGetReviewDetailQuery';
 import { useDeleteReviewMutation } from '@/_hooks/user/useDeleteReviewMutation';
 import UserModalTextAtom from '@/_components/user/common/atoms/UserModalTextAtom';
 import UserModalAtom from '@/_components/user/common/atoms/UserModalAtom';
+import ReviewWktInfo from '@/_components/user/mypage/ReviewWktInfo';
 
 interface UserReviewDetailPageProps {
   params: {
@@ -36,9 +37,9 @@ const UserReviewDetailPage = ({ params }: UserReviewDetailPageProps) => {
 
   return (
     <section className="px-40 pt-18">
-      워케이션 정보
+      <ReviewWktInfo wktId={Number(data?.reviewDetailInfo.wktId)} />
       <hr />
-      <form>
+      <form className="px-10">
         <div className="pt-10">
           {!data ? (
             isLoading ? (
