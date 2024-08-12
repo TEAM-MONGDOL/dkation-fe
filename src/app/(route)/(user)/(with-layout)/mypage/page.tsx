@@ -172,7 +172,7 @@ const UserMyPage = () => {
       </div>
 
       {currentModal === 'password' && (
-        <UserModalAtom>
+        <UserModalAtom onClose={closeModal}>
           <UserModalTitleAtom className="text-1 font-semibold">
             비밀번호 확인
           </UserModalTitleAtom>
@@ -207,7 +207,7 @@ const UserMyPage = () => {
       )}
 
       {currentModal === 'newPassword' && (
-        <UserModalAtom>
+        <UserModalAtom onClose={closeModal}>
           <UserModalTitleAtom className="text-1 font-semibold">
             비밀번호 변경
           </UserModalTitleAtom>
@@ -251,7 +251,7 @@ const UserMyPage = () => {
       )}
 
       {currentModal === 'completed' && (
-        <UserModalAtom>
+        <UserModalAtom onClose={closeModal}>
           <UserModalTitleAtom className="text-2">
             비밀번호 변경이 완료되었습니다.
           </UserModalTitleAtom>
