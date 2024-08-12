@@ -42,6 +42,9 @@ const UserLoginSection = ({ onFindPasswordClick }: UserLoginSectionProps) => {
       const response = await fetch('/api/auth/session');
       const session = await response.json();
 
+      const searchParam = new URLSearchParams(window.location.search);
+      const callbackUrl = searchParam.get('callbackUrl');
+
       if (session.user.isAdmin) {
         window.location.href = '/admin';
       } else {
