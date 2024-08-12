@@ -26,8 +26,7 @@ const UserMyPageFix = () => {
     },
   ];
 
-
-  if (pathname === '/mypage/review/new') {
+  if (pathname !== '/mypage/review' && pathname.startsWith('/mypage/review/')) {
     return null;
   }
 
