@@ -431,22 +431,6 @@ export const workationUserPlaceReviewSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
-export const bannerInfoSchema = z.object({
-  id: z.number(),
-  title: z.string(),
-  linkUrl: z.string(),
-  backgroundColor: z.union([
-    z.literal('DARK'),
-    z.literal('YELLOW'),
-    z.literal('LIGHTGRAY'),
-  ]),
-});
-
-export const bannerInfoListSchema = z.object({
-  bannerInfoList: bannerInfoSchema.array(),
-  pageInfo: pageInfoSchema,
-});
-
 export const reviewsInfoForMeSchema = z.object({
   id: z.number(),
   wktTitle: z.string(),
