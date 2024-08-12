@@ -12,7 +12,7 @@ import dayjs from 'dayjs';
 import Image from 'next/image';
 import { usePostReviewMutation } from '@/_hooks/user/usePostReviewMutation';
 
-const WriteNoticesPage = () => {
+const WriteReviewPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get('wktId');
@@ -162,7 +162,7 @@ const WriteNoticesPage = () => {
                 text="취소"
                 type="button"
                 className="rounded-lg"
-                onClick={() => router.push('/admin/notices')}
+                onClick={() => router.back()}
               />
               <UserButtonAtom
                 size="xl"
@@ -179,4 +179,4 @@ const WriteNoticesPage = () => {
   );
 };
 
-export default WriteNoticesPage;
+export default WriteReviewPage;
