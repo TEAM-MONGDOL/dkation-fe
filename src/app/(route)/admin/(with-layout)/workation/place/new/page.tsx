@@ -74,7 +74,6 @@ const AdminWorkationPlaceNewPage = () => {
   const [isConfirmModelOpen, setIsConfirmModelOpen] = useState(false);
 
   const handleAddressClick = () => {
-    console.log('address');
     open({
       onComplete: handleComplete,
     });
