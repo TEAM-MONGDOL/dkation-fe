@@ -37,7 +37,7 @@ const WktListSection = () => {
     if (!scrollContainerRef.current || !data || data.wktInfos.length < 1)
       return;
     const nowCurrentIdx = Math.min(
-      data.wktInfos.length * 3 - 3,
+      data.wktInfos.length - 1,
       currentStartItem + 3,
     );
     console.log('right : ', nowCurrentIdx);
@@ -81,11 +81,7 @@ const WktListSection = () => {
             )
           ) : (
             data.wktInfos.map((wktInfo) => (
-              <>
-                <WktListItem key={wktInfo.wktId} wktInfo={wktInfo} />
-                <WktListItem key={wktInfo.wktId} wktInfo={wktInfo} />
-                <WktListItem key={wktInfo.wktId} wktInfo={wktInfo} />
-              </>
+              <WktListItem key={wktInfo.wktId} wktInfo={wktInfo} />
             ))
           )}
         </div>
