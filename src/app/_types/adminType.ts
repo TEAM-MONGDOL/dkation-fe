@@ -295,6 +295,7 @@ export const applyListSchema = z.object({
 });
 
 export const userApplyInfoSchema = z.object({
+  applyId: z.number(),
   thumbnailUrl: z.string(),
   wktId: z.number(),
   wktName: z.string(),

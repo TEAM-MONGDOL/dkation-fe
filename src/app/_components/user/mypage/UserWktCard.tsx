@@ -10,7 +10,8 @@ import UserModalTextAtom from '@/_components/user/common/atoms/UserModalTextAtom
 import { StatusConfig } from '@/_constants/common';
 import { StatusType } from '@/_types/adminType';
 import { useGetWinningPercentageQuery } from '@/_hooks/user/useGetWinningPercentageQuery';
-import { useGetMemberDetailQuery } from '@/_hooks/admin/useGetMemberDetailQuery';
+import { useGetMemberDetailQuery } from '@/_hooks/common/useGetMemberDetailQuery';
+import { usePatchBettingPointMutation } from '@/_hooks/user/usePatchBettingPointMutation';
 
 interface WorkationCardProps {
   thumbnailUrl: string;
@@ -26,6 +27,7 @@ interface WorkationCardProps {
   applyStatusType: StatusType;
   waitingNumber?: number;
   accountId?: string;
+  applyId: number;
   onClick?: (applyStatusType: WorkationCardProps['applyStatusType']) => void;
 }
 
@@ -43,6 +45,7 @@ const WorkationCard = ({
   wktId,
   accountId = '',
   waitingNumber = -1,
+  applyId,
   onClick,
 }: WorkationCardProps) => {
   const { textLabel, buttonText, textLabelClass, buttonStyle, buttonDisabled } =
@@ -65,6 +68,17 @@ const WorkationCard = ({
   const { data, isLoading, isError } = useGetWinningPercentageQuery({
     wktId,
     point: Number(newBettingPoint),
+  });
+
+  const { mutate: patchBettingPoint } = usePatchBettingPointMutation({
+    applyId,
+    successCallback: () => {
+      setCurrentBettingPoint(Number(newBettingPoint));
+      alert('베팅 포인트가 수정되었습니다.');
+    },
+    errorCallback: (error) => {
+      alert(`베팅 포인트 수정 실패 : ${error.message}`);
+    },
   });
 
   const handleModalClose = () => {
@@ -97,7 +111,7 @@ const WorkationCard = ({
 
   const handleSaveBettingPoint = () => {
     const point = Number(newBettingPoint);
-    setCurrentBettingPoint(point);
+    patchBettingPoint({ usedPoint: point });
     console.log('new betting point:', point);
     handleModalClose();
   };
