@@ -16,7 +16,7 @@ import RadioButtonContainer from '@/_components/common/containers/RadioButtonCon
 import CheckboxContainer from '@/_components/common/containers/CheckboxContainer';
 import FilteringBarContainer from '@/_components/common/containers/FilteringBarContainer';
 import RangeContainer from '@/_components/common/containers/RangeContainer';
-import { useGetWkReviewListQuery } from '@/_hooks/admin/useGetWkReviewListQuery';
+import { useGetAdminWkReviewListQuery } from '@/_hooks/admin/useGetAdminWkReviewListQuery';
 import { StarRateEmptyIcon, StarRateIcon } from '@/_assets/icons';
 import Image from 'next/image';
 import { reviewOrderList } from '@/_types/adminType';
@@ -43,7 +43,7 @@ const AdminWorkationReviewsPage = () => {
     startPoint: number;
     endPoint: number;
   }>({
-    order: 'ASC',
+    order: 'DESC',
     type: Object.keys(placeOrderList),
     startPoint: 0,
     endPoint: 5,
@@ -62,7 +62,7 @@ const AdminWorkationReviewsPage = () => {
       type: Object.keys(placeOrderList),
     });
   };
-  const { data, isLoading, isError } = useGetWkReviewListQuery({
+  const { data, isLoading, isError } = useGetAdminWkReviewListQuery({
     wktPlaceFilter: param.type.join(','),
     minRating: param.startPoint,
     maxRating: param.endPoint,

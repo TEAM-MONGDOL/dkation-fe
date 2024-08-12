@@ -1,6 +1,6 @@
 import api from '@/_hooks/Axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useGetWkReviewListQueryKey } from '@/_hooks/admin/useGetWkReviewListQuery';
+import { useGetAdminWkReviewListQueryKey } from './useGetAdminWkReviewListQuery';
 
 interface PatchWkReviewProps {
   id: number;
@@ -19,7 +19,7 @@ export const usePatchWkReviewMutation = (successCallback?: () => void) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [useGetWkReviewListQueryKey],
+        queryKey: [useGetAdminWkReviewListQueryKey],
       });
       if (successCallback) successCallback();
     },

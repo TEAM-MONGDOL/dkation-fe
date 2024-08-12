@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useSession } from 'next-auth/react';
 import UserTableContainer from '@/_components/user/common/containers/UserTableContainer';
 import UserTableHeaderModule from '@/_components/user/common/modules/UserTableHeaderModule';
 import UserTableHeaderAtom from '@/_components/user/common/atoms/UserTableHeaderAtom';
@@ -9,22 +10,7 @@ import { penaltyList } from '@/_types/adminType';
 import dayjs from 'dayjs';
 import UserTableBodyModule from '@/_components/common/modules/TableBodyModule';
 import UserTableBodyAtom from '@/_components/user/common/atoms/UserTableBodyAtom';
-
-const data = {
-  penaltyAmount: 2,
-  penaltyInfos: [
-    {
-      wktName: '김가현',
-      penaltyType: 'ABUSE',
-      createdAt: '2024-01-07T05:38:39.034Z',
-    },
-    {
-      wktName: '김가현',
-      penaltyType: 'NOSHOW',
-      createdAt: '2024-08-07T05:38:39.034Z',
-    },
-  ],
-};
+import { useGetMemberPenaltyHistoryQuery } from '@/_hooks/admin/useGetMemberPenaltyHistoryQuery';
 
 const calculateExpiryDate = (penaltyDate: string, index: number) => {
   const penaltyDateObj = dayjs(penaltyDate);
@@ -38,8 +24,14 @@ const calculateExpiryDate = (penaltyDate: string, index: number) => {
 };
 
 const UserPenaltyPage = () => {
-  const penaltyInfos = data?.penaltyInfos || [];
+  const session = useSession();
+  const accountId = String(session.data?.accountId || '');
 
+  const { data, isLoading, isError } = useGetMemberPenaltyHistoryQuery({
+    accountId,
+  });
+
+  const penaltyInfos = data?.penaltyInfos || [];
   const sortedPenaltyInfos = [...penaltyInfos].sort(
     (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
   );
@@ -60,8 +52,14 @@ const UserPenaltyPage = () => {
           </UserTableHeaderModule>
 
           <tbody>
-            {sortedPenaltyInfos.length === 0 ? (
-              <EmptyContainer colSpan={6} text="데이터가 없습니다" />
+            {!data ? (
+              isLoading ? (
+                <EmptyContainer colSpan={6} text="로딩 중입니다..." />
+              ) : (
+                <EmptyContainer colSpan={6} text="error" />
+              )
+            ) : data.penaltyAmount <= 0 ? (
+              <EmptyContainer colSpan={6} />
             ) : (
               [...sortedPenaltyInfos].reverse().map((item, index) => {
                 const expiryDate = calculateExpiryDate(

@@ -78,7 +78,7 @@ const handler = NextAuth({
         session.accessToken = token.accessToken as string;
         session.accountId = token.accountId as number;
       }
-      console.log(session);
+      // console.log(session);
       return session;
     },
   },

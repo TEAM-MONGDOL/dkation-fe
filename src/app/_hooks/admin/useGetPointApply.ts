@@ -7,6 +7,7 @@ export const useGetPointApplyKey = 'useGetPointApply';
 export const useGetPointApply = ({
   params,
   pageable,
+  enable = true,
 }: {
   params: {
     name?: string;
@@ -21,6 +22,7 @@ export const useGetPointApply = ({
     size?: number;
     sort?: string;
   };
+  enable?: boolean;
 }) => {
   return useQuery({
     queryKey: [useGetPointApplyKey, params, pageable],
@@ -33,5 +35,6 @@ export const useGetPointApply = ({
       });
       return pointApplyInfoListSchema.parse(res.data.data);
     },
+    enabled: enable,
   });
 };
