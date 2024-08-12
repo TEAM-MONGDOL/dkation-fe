@@ -331,6 +331,20 @@ export const memberListSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
+export const bannerInfoSchema = z.object({
+  id: z.number(),
+  title: z.string(),
+  linkUrl: z.string(),
+  announcementType: z.string(),
+  announcementTitle: z.string(),
+  backgroundColor: z.string(),
+});
+
+export const bannerInfoListSchema = z.object({
+  bannerInfoList: bannerInfoSchema.array(),
+  pageInfo: pageInfoSchema,
+});
+
 export const memberDetailSchema = z.object({
   name: z.string(),
   accountId: z.string(),
@@ -524,6 +538,20 @@ export type PointOrderType = 'POINT_HIGHEST' | 'POINT_LOWEST';
 export type PointChangeType = 'INCREASE' | 'DECREASE';
 
 export type PenaltyType = 'NOSHOW' | 'REPORT' | 'NEGLIGENCE' | 'ABUSE';
+
+export type BannerStyleType = 'DARK' | 'LIGHTGRAY' | 'YELLOW';
+
+export const bannerStyleTypeList: BannerStyleType[] = [
+  'DARK',
+  'LIGHTGRAY',
+  'YELLOW',
+];
+
+export const colorClassConverter: { [key in BannerStyleType]: string } = {
+  DARK: 'bg-sub-300',
+  LIGHTGRAY: 'bg-sub-100',
+  YELLOW: 'bg-primary',
+};
 
 // Convert Type / List
 export const applyStatusList: StatusType[] = [
