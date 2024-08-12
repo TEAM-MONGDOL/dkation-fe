@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import UserSubtitleAtom from '@/_components/user/common/atoms/UserSubtitleAtom';
 import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
 import { useGetWkSimulationQuery } from '@/_hooks/user/useGetWkSimulationQuery';
+import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 
 const Slider = ({ id }: { id: number }) => {
   const [animate, setAnimate] = useState(false);
   const [hoveredAccount, setHoveredAccount] = useState<string | null>(null);
-  const [tooltipPosition, setTooltipPosition] = useState({ left: 0 });
+  const [tooltipPosition, setTooltipPosition] = useState({ left: '0%' });
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const restartAnimation = () => {
@@ -20,9 +21,9 @@ const Slider = ({ id }: { id: number }) => {
 
   const { data, isLoading, isError } = useGetWkSimulationQuery({ wktId: id });
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error loading data.</div>;
-  if (!data) return <div>No data</div>;
+  if (isLoading) return;
+  if (isError) return;
+  if (!data) return;
 
   const totalMembers = data?.raffleMemberIndexInfos?.length || 1;
   const totalRange = data?.raffleMemberIndexInfos.reduce((max, member) => {
@@ -61,60 +62,66 @@ const Slider = ({ id }: { id: number }) => {
 
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <UserSubtitleAtom subtitle="결과 시뮬레이션" />
-        <UserButtonAtom
-          className="rounded-[8px] outline-0"
-          text="다시 보기"
-          size="md"
-          buttonStyle="white"
-          type="button"
-          onClick={restartAnimation}
-        />
-      </div>
-      <div className="relative h-5 w-full overflow-visible rounded-full bg-gray-300">
-        <div
-          className={`absolute top-0 h-full rounded-full bg-primary ${animate ? 'animate-fillTrack' : ''}`}
-        />
+      {data.raffleWinnerInfos[0] && (
+        <div>
+          <div className="flex items-center justify-between">
+            <UserSubtitleAtom subtitle="결과 시뮬레이션" />
+            <UserButtonAtom
+              className="rounded-[8px] outline-0"
+              text="다시 보기"
+              size="md"
+              buttonStyle="white"
+              type="button"
+              onClick={restartAnimation}
+            />
+          </div>
+          <div className="relative h-5 w-full overflow-visible rounded-full bg-gray-300">
+            <div
+              className={`absolute top-0 h-full rounded-full bg-primary ${animate ? 'animate-fillTrack' : ''}`}
+            />
 
-        <div
-          className={`${animate ? 'animate-slideHandle' : ''} absolute z-50 h-6 w-6 rounded-full border-[2.5px] border-white bg-yellow-500/90`}
-          style={{
-            top: '50%',
-            transform: 'translate(-50%, -50%)',
-          }}
-        />
+            <div
+              className={`${animate ? 'animate-slideHandle' : ''} absolute z-50 h-6 w-6 rounded-full border-[2.5px] border-white bg-yellow-500/90`}
+              style={{
+                top: '50%',
+                transform: 'translate(-50%, -50%)',
+              }}
+            />
+            {data.rafflePickedIndexInfos.map((winner) => (
+              <div>{winner.pickedIndex}</div>
+            ))}
+            {data?.raffleMemberIndexInfos.map((member, index) => (
+              <div
+                key={member.accountId}
+                className="absolute top-0 h-full cursor-pointer rounded-full"
+                style={{
+                  left: `${calculateLeftPosition(index)}%`,
+                  width: `${getSliderWidth(index)}%`,
+                  zIndex: 10,
+                  backgroundColor: 'transparent',
+                }}
+                onMouseEnter={() => handleMouseEnter(member.accountId, index)}
+                onMouseLeave={handleMouseLeave}
+              >
+                {hoveredIndex === index && (
+                  <div className="absolute top-0 z-0 h-full w-full rounded-full bg-yellow-800/20" />
+                )}
+              </div>
+            ))}
 
-        {data?.raffleMemberIndexInfos.map((member, index) => (
-          <div
-            key={member.accountId}
-            className="absolute top-0 h-full cursor-pointer rounded-full"
-            style={{
-              left: `${calculateLeftPosition(index)}%`,
-              width: `${getSliderWidth(index)}%`,
-              zIndex: 10,
-              backgroundColor: 'transparent',
-            }}
-            onMouseEnter={() => handleMouseEnter(member.accountId, index)}
-            onMouseLeave={handleMouseLeave}
-          >
-            {hoveredIndex === index && (
-              <div className="absolute top-0 z-0 h-full w-full rounded-full bg-yellow-800/20" />
+            {hoveredAccount && (
+              <div
+                className="absolute mt-7 text-sm text-sub-200"
+                style={{
+                  left: tooltipPosition.left,
+                }}
+              >
+                {hoveredAccount}
+              </div>
             )}
           </div>
-        ))}
-
-        {hoveredAccount && (
-          <div
-            className="absolute mt-7 text-sm text-sub-200"
-            style={{
-              left: tooltipPosition.left,
-            }}
-          >
-            {hoveredAccount}
-          </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
