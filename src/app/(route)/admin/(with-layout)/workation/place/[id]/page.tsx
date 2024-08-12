@@ -13,6 +13,7 @@ import ModalModule from '@/_components/common/modules/ModalModule';
 import Image from 'next/image';
 import logo from '@/_assets/images/logo_imsy.png';
 import { useDeleteWkPlaceMutation } from '@/_hooks/admin/useDeleteWkPlaceQuery';
+import KakaoMapContainer from '@/_components/common/containers/KakaoMapContainer';
 
 interface WkPlaceDetailProps {
   params: { id: number };
@@ -73,6 +74,13 @@ const AdminWorkationPlaceDetailPage = ({ params }: WkPlaceDetailProps) => {
           value={dayjs(data.wktPlaceDetailInfo.createdAt).format('YYYY-MM-DD')}
         />
       </div>
+      {data.wktPlaceDetailInfo.longitude &&
+        data.wktPlaceDetailInfo.latitude && (
+          <KakaoMapContainer
+            latitude={data.wktPlaceDetailInfo.latitude}
+            longitude={data.wktPlaceDetailInfo.longitude}
+          />
+        )}
       <div className="py-4">
         {data.wktPlaceDetailInfo.fileInfos &&
         data.wktPlaceDetailInfo.fileInfos.length > 0 ? (
