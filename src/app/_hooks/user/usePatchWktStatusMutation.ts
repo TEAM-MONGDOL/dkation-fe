@@ -14,7 +14,7 @@ export const usePatchWktStatusMutation = ({
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ status }: { status: string }) => {
-      const res = await api.patch(`/api/apply/status/${wktId}`, {
+      const res = await api.patch(`/api/apply/wkt/${wktId}/status`, {
         status,
       });
       return res.data.data;
