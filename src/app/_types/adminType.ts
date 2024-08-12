@@ -458,6 +458,24 @@ export const reviewsInfosForMeListSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
+export const reviewDetailSchema = z.object({
+  id: z.number(),
+  reviewer: z.string(),
+  department: z.string(),
+  wktTitle: z.string(),
+  wktPlace: z.string(),
+  rating: z.number(),
+  lastModifiedAt: z.string(),
+  contents: z.string(),
+  imageUrls: z.array(z.string()).nullable().optional(),
+  blindedType: z.union([z.literal('TRUE'), z.literal('FALSE')]),
+  openedType: z.union([z.literal('TRUE'), z.literal('FALSE')]),
+});
+
+export const reviewsDetailInfoSchema = z.object({
+  reviewDetailInfo: reviewDetailSchema,
+});
+
 // Type
 export type PageableType = {
   page?: number;

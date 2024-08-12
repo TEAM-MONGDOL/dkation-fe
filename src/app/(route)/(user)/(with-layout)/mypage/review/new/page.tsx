@@ -87,7 +87,7 @@ const WriteNoticesPage = () => {
               text="취소"
               type="button"
               className="rounded-lg"
-              onClick={() => router.push('/admin/notices')}
+              onClick={() => router.back()}
             />
             <UserButtonAtom
               size="xl"
