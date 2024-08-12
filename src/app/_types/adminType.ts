@@ -39,6 +39,8 @@ export const wkDetailInfoSchema = z.object({
   applyEndDate: z.string(),
   description: z.string(),
   wktPlaceId: z.number(),
+  place: z.string(),
+  files: fileInfoSchema.array().nullable().optional(),
 });
 
 export const wkApplyPercentageInfoSchema = z.object({
@@ -118,6 +120,8 @@ export const wktPlaceDetailShema = z.object({
     maxPeople: z.number(),
     createdAt: z.string(),
     description: z.string(),
+    latitude: z.string(),
+    longitude: z.string(),
     fileInfos: fileInfoSchema.array().nullable().optional(),
   }),
 });
@@ -355,6 +359,8 @@ export const wktPlaceInfoSchema = z.object({
   createdAt: z.string(),
   maxPeople: z.number(),
   description: z.string(),
+  latitude: z.string(),
+  longitude: z.string(),
 });
 
 export const workationPlaceListSchema = z.object({
@@ -463,6 +469,8 @@ export type ReviewOrderType = 'ASC' | 'DESC' | 'STARASC' | 'STARDESC';
 export type PointRewardType = 'PERSONAL' | 'GROUP';
 
 export type NoticeType = 'ANNOUNCEMENT' | 'RESULT' | 'EVENT';
+
+export type PlaceListItemType = z.infer<typeof wktPlaceInfoSchema>;
 
 export const noticeTypeList: NoticeType[] = ['ANNOUNCEMENT', 'RESULT', 'EVENT'];
 
@@ -589,12 +597,6 @@ export const noticeList: { [key in NoticeType]: string } = {
   ANNOUNCEMENT: '공지',
   RESULT: '결과 발표',
   EVENT: '이벤트 안내',
-};
-
-export const resultList: { [key in ResultType]: string } = {
-  NAME: '가나다순',
-  LOWEST: '확률 낮은 순',
-  HIGHEST: '확률 높은 순',
 };
 
 export const penaltyList: { [key in PenaltyType]: string } = {
