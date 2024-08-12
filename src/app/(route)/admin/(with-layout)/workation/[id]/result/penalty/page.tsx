@@ -18,6 +18,7 @@ import WkResultSide from '@/(route)/admin/(with-layout)/workation/[id]/result/wk
 import { useGetWkPenaltyQuery } from '@/_hooks/admin/useGetWkPenaltyQuery';
 import { usePostPenaltyMutation } from '@/_hooks/admin/usePostPenaltyMutation';
 import dayjs from 'dayjs';
+import WkBattingGraph from '@/_components/common/graph/WkBattingGraph';
 
 interface WkResultProps {
   params: { id: number };
@@ -120,9 +121,7 @@ const AdminWorkationListPenaltyPage = ({ params }: WkResultProps) => {
           </div>
           <div className="flex w-full flex-col gap-4">
             <p className="text-3 font-bold">배팅 분포도</p>
-            <div className="w-full border py-14 text-center text-h1 font-bold">
-              그래프
-            </div>
+            <WkBattingGraph />
           </div>
           <div className="flex w-full flex-col">
             <p className="text-3 font-bold">페널티 관리</p>

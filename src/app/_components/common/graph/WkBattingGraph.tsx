@@ -1,12 +1,12 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import ReactApexChart from 'react-apexcharts';
 
-const WkPointGraph = () => {
+const WkBattingGraph = () => {
   const chartOptions = {
     series: [
       {
-        name: [''],
-        data: [150, 100, 320, 200],
+        name: '',
+        data: [150, 40, 320, 100, 400, 150, 40, 320, 100, 400, 500],
       },
     ],
     chart: {
@@ -45,10 +45,17 @@ const WkPointGraph = () => {
         },
       },
       categories: [
-        '당첨자 최소 포인트',
-        '당첨자 최대 포인트',
-        '당첨자 평균 포인트',
-        '총 지원자 수',
+        '0P 대',
+        '100P 대',
+        '200 - 300',
+        '300 - 400',
+        '400 - 500',
+        '500 - 600',
+        '600 - 700',
+        '700 - 800',
+        '800 - 900',
+        '900 - 1000',
+        '1000P 이상',
       ],
     },
     yaxis: {
@@ -64,7 +71,7 @@ const WkPointGraph = () => {
     grid: {
       show: true,
       borderColor: '#dddddd',
-      strokeDashArray: 2,
+      strokeDashArray: 5,
       xaxis: {
         lines: {
           show: false,
@@ -92,4 +99,4 @@ const WkPointGraph = () => {
   );
 };
 
-export default WkPointGraph;
+export default WkBattingGraph;
