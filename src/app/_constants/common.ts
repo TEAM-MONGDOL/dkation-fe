@@ -73,7 +73,7 @@ export const StatusConfig = {
   },
   WAIT: {
     textLabel: '미당첨',
-    buttonText: (waitingNumber: number) => `대기번호 (${waitingNumber})번`,
+    buttonText: (waitingNumber: number) => `대기 (${waitingNumber})`,
     textLabelClass: 'border border-negative bg-negative text-white',
     buttonStyle: 'red',
     buttonDisabled: true,
