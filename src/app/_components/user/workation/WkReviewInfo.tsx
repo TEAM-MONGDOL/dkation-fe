@@ -65,7 +65,7 @@ const WkReviewInfo = ({
                 <Image src={StarRateIcon} alt="StarRateIcon" />
               </div>
               <p>
-                {rating}점({ReviewInfo[rating.toString()]})
+                {rating}점({ReviewInfo[rating as keyof typeof ReviewInfo]})
               </p>
             </div>
           </div>
