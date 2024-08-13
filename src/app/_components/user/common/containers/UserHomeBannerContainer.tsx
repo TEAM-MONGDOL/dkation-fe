@@ -17,7 +17,7 @@ const UserHomeBannerContainer = ({ title, link, bgColor }: HomeBannerProps) => {
         textColor={bgColor === 'DARK' ? 'text-white' : 'text-black'}
       />
       <UserHomeBannerButtonAtom
-        link={link}
+        link={`/support/notices/${link}`}
         buttonBgColor={bgColor === 'DARK' ? 'bg-primary' : 'bg-sub-400'}
         buttonTextColor={bgColor === 'DARK' ? 'text-black' : 'text-white'}
       />
