@@ -57,3 +57,4 @@ export { default as UnclickedStarIcon } from './star.svg';
 export { default as ClickedStarIcon } from './clickedStar.svg';
 export { default as CameraIcon } from './camera.svg';
 export { default as HeaderPointIcon } from './headerPoints.svg';
+export { default as DkationAdminLogo } from './dkationAdmin.svg';
