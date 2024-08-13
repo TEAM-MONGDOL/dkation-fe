@@ -4,12 +4,14 @@ import React, { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import UserLoginInput from './UserLoginInput';
 import UserButtonAtom from '../common/atoms/UserButtonAtom';
+import { useRouter } from 'next/navigation';
 
 interface UserLoginSectionProps {
   onFindPasswordClick: () => void;
 }
 
 const UserLoginSection = ({ onFindPasswordClick }: UserLoginSectionProps) => {
+  const router = useRouter();
   const [form, setForm] = useState({
     accountId: '',
     password: '',
@@ -38,18 +40,7 @@ const UserLoginSection = ({ onFindPasswordClick }: UserLoginSectionProps) => {
       console.log('로그인 실패');
       console.log(result);
     } else {
-      // 추후 수정 예정
-      const response = await fetch('/api/auth/session');
-      const session = await response.json();
-
-      const searchParam = new URLSearchParams(window.location.search);
-      const callbackUrl = searchParam.get('callbackUrl');
-
-      if (session.user.isAdmin) {
-        window.location.href = '/admin';
-      } else {
-        window.location.href = '/';
-      }
+      router.refresh();
     }
   };
   return (
