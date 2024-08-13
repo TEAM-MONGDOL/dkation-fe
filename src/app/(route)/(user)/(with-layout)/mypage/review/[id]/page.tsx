@@ -35,6 +35,10 @@ const UserReviewDetailPage = ({ params }: UserReviewDetailPageProps) => {
     },
   });
 
+  const closeModal = () => {
+    setIsDeleteModalOpen(false);
+  };
+
   return (
     <section className="px-40 pt-18">
       <ReviewWktInfo wktId={Number(data?.reviewDetailInfo.wktId)} />
@@ -111,7 +115,7 @@ const UserReviewDetailPage = ({ params }: UserReviewDetailPageProps) => {
           )}
         </div>
         {isDeleteModalOpen && (
-          <UserModalAtom>
+          <UserModalAtom onClose={closeModal}>
             <UserModalTextAtom className="text-2">
               리뷰를 삭제하시겠습니까?
             </UserModalTextAtom>
@@ -120,7 +124,7 @@ const UserReviewDetailPage = ({ params }: UserReviewDetailPageProps) => {
                 text="취소"
                 buttonStyle="lightGray"
                 size="md"
-                onClick={() => setIsDeleteModalOpen(false)}
+                onClick={closeModal}
                 className="rounded-md"
                 type="button"
               />

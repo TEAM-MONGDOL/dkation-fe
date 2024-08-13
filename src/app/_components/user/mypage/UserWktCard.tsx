@@ -176,7 +176,7 @@ const WorkationCard = ({
       </div>
 
       {isModalOpen && (
-        <UserModalAtom>
+        <UserModalAtom onClose={handleModalClose}>
           <UserModalTextAtom className="text-h3 font-semibold">
             나의 당첨 확률 확인하기
           </UserModalTextAtom>
