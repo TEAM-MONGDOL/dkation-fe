@@ -252,6 +252,7 @@ const Workation = () => {
               onClick={() => router.push(`/workation/${wkt.wktId}`)}
             >
               <Image
+                className="h-[304px] w-[402px] object-cover"
                 width={402}
                 height={304}
                 src={wkt.thumbnailUrl}
