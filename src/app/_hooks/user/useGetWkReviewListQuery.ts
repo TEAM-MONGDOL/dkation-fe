@@ -1,6 +1,6 @@
+import { reviewInfosForMemberSchema } from '@/_types/userType';
 import { useQuery } from '@tanstack/react-query';
 import api from '../Axios';
-import { reviewInfosForMemberSchema } from '@/_types/userType';
 
 export const useGetWkReviewListQueryKey = 'useGetWkReviewListQuery';
 

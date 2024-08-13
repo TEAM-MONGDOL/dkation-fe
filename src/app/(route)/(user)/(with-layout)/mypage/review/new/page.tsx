@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
@@ -10,7 +10,7 @@ import CheckboxAtom from '@/_components/common/atoms/CheckboxAtom';
 import { usePostReviewMutation } from '@/_hooks/user/usePostReviewMutation';
 import ReviewWktInfo from '@/_components/user/mypage/ReviewWktInfo';
 
-const WriteReviewPage = () => {
+const WriteReview = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get('wktId');
@@ -140,6 +140,14 @@ const WriteReviewPage = () => {
         </div>
       </form>
     </section>
+  );
+};
+
+const WriteReviewPage = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <WriteReview />
+    </Suspense>
   );
 };
 

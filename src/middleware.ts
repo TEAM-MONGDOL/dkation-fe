@@ -25,7 +25,7 @@ const withAuth = async (request: NextRequest, session: any) => {
   return NextResponse.next();
 };
 
-const withAdmin = async (request: NextRequest, session: any) => {
+const withAdmin = (request: NextRequest, session: any) => {
   const url = request.nextUrl.clone();
   url.pathname = '/admin/error';
 
@@ -39,7 +39,7 @@ const withAdmin = async (request: NextRequest, session: any) => {
   return NextResponse.next();
 };
 
-const withoutAuth = async (request: NextRequest, session: any) => {
+const withoutAuth = (request: NextRequest, session: any) => {
   const url = request.nextUrl.clone();
   url.pathname = '/';
 
@@ -58,18 +58,18 @@ export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith('/login')) {
     console.log('call middleware - /login');
 
-    return await withoutAuth(request, session);
+    return withoutAuth(request, session);
   }
 
   if (request.nextUrl.pathname.startsWith('/admin')) {
     console.log('call middleware - /admin');
 
-    return await withAdmin(request, session);
+    return withAdmin(request, session);
   }
 
   console.log('call middleware - others');
 
-  return await withAuth(request, session);
+  return withAuth(request, session);
 }
 
 export const config = {

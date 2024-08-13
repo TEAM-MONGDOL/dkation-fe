@@ -35,38 +35,38 @@ const UserNavButtonAtom = () => {
         />
       </div>
     );
-  } else {
-    return (
-      <div className="ml-auto flex gap-3 text-4">
-        {session.data.isAdmin ? (
-          <UserButtonAtom
-            className="font-semibold"
-            buttonStyle="black"
-            text="관리자 페이지로 이동"
-            type="button"
-            size="header"
-            onClick={() => router.push('/admin')} // 라우팅 주소 변경 예정
-          />
-        ) : (
-          <UserButtonAtom
-            className="font-semibold"
-            buttonStyle="yellow"
-            text={`${memberDetail?.pointQuantity || 0} Point`}
-            type="button"
-            size="header"
-            onClick={() => router.push('/points/history')} // 라우팅 주소 변경 예정
-          />
-        )}
-        <UserButtonAtom
-          text="로그아웃"
-          size="header"
-          buttonStyle="white"
-          type="button"
-          onClick={handleLogout}
-        />
-      </div>
-    );
   }
+
+  return (
+    <div className="ml-auto flex gap-3 text-4">
+      {session.data.isAdmin ? (
+        <UserButtonAtom
+          className="font-semibold"
+          buttonStyle="black"
+          text="관리자 페이지로 이동"
+          type="button"
+          size="header"
+          onClick={() => router.push('/admin')} // 라우팅 주소 변경 예정
+        />
+      ) : (
+        <UserButtonAtom
+          className="font-semibold"
+          buttonStyle="yellow"
+          text={`${memberDetail?.pointQuantity || 0} Point`}
+          type="button"
+          size="header"
+          onClick={() => router.push('/points/history')} // 라우팅 주소 변경 예정
+        />
+      )}
+      <UserButtonAtom
+        text="로그아웃"
+        size="header"
+        buttonStyle="white"
+        type="button"
+        onClick={handleLogout}
+      />
+    </div>
+  );
 };
 
 export default UserNavButtonAtom;

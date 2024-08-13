@@ -30,7 +30,7 @@ const PointsPolicyPage = () => {
 
   const getPolicyDetail = (title: string) => {
     const detail = policyDetailList.find(
-      (detail) => detail.data?.policyTitle === title,
+      (content) => content.data?.policyTitle === title,
     );
     return detail && detail.data ? detail.data.detail : '';
   };
@@ -62,6 +62,7 @@ const PointsPolicyPage = () => {
               policyList.pointPolicyList.map((item, idx) => (
                 <div className="flex w-full flex-col" key={item.policyTitle}>
                   <div
+                    role="presentation"
                     key={item.id}
                     className="flex h-[63px] w-full cursor-pointer items-center justify-center gap-x-7 rounded border border-stroke-100 bg-white px-[68px] text-center font-medium text-sub-400"
                     onClick={() => {
