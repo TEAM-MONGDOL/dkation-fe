@@ -152,7 +152,7 @@ const WorkationCard = ({
         <div className="flex justify-between">
           <UserTextLabelAtom
             text={textLabel}
-            size="sm"
+            size="fix"
             className={textLabelClass}
           />
           <UserButtonAtom
@@ -161,10 +161,9 @@ const WorkationCard = ({
                 ? buttonText(waitingNumber)
                 : buttonText
             }
-            size="sm"
             buttonStyle={buttonStyle}
             type="button"
-            className="rounded-md"
+            className="w-32 rounded-md py-2.5"
             disabled={buttonDisabled}
             onClick={
               !buttonDisabled && onClick
