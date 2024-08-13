@@ -6,13 +6,15 @@ import Image from 'next/image';
 import { LocationIcon } from '@/_assets/icons';
 import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
 import { useGetUserPercentQuery } from '@/_hooks/user/useGetUserPercentQuery';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useGetMemberDetailQuery } from '@/_hooks/common/useGetMemberDetailQuery';
 import { useSession } from 'next-auth/react';
 import { useGetUserWkDetailQuery } from '@/_hooks/user/useGetUserWkDetailQuery';
 import dayjs from 'dayjs';
 import { usePostUserWkApplyMutation } from '@/_hooks/user/usePostUserWkApplyMutation';
 import { useRouter } from 'next/navigation';
+import UserLoading from '@/_components/user/userLoading';
+import NetworkError from '@/_components/common/networkError';
 
 interface Props {
   params: { id: number };
@@ -41,6 +43,16 @@ const UserWkApplyPage = ({ params }: Props) => {
   const { data, isLoading, isError } = useGetUserWkDetailQuery({
     wktId: id,
   });
+
+  if (isLoading || myPointIsLoading || pointIsLoading) {
+    return <UserLoading />;
+  }
+  if (isError || myPointIsError || pointIsError) {
+    return <NetworkError />;
+  }
+  if (!data || !myPointData || !pointData) {
+    return <NetworkError />;
+  }
 
   const { mutate: postWkApply } = usePostUserWkApplyMutation({
     successCallback: () => {

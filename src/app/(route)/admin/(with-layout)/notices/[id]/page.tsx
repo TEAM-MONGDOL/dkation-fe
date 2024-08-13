@@ -5,7 +5,7 @@ import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import InputModule from '@/_components/common/modules/InputModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import ModalModule from '@/_components/common/modules/ModalModule';
 import logo from '@/_assets/images/logo_imsy.png';
 import Image from 'next/image';
@@ -13,6 +13,7 @@ import { useGetNoticeDetailQuery } from '@/_hooks/admin/useGetNoticeDetailQuery'
 import FileModule from '@/_components/common/modules/FileModule';
 import { useDeleteNoticeMutation } from '@/_hooks/admin/useDeleteNoticeMutation';
 import AdminLoading from '@/_components/admin/adminLoading';
+import NetworkError from '@/_components/common/networkError';
 
 interface NoticeDetailPageProps {
   params: {
@@ -54,7 +55,7 @@ const NoticeDetailPage = ({ params }: NoticeDetailPageProps) => {
         isLoading ? (
           <AdminLoading />
         ) : isError ? (
-          <div>에러 발생</div>
+          <NetworkError />
         ) : null
       ) : (
         <div className="pt-10">

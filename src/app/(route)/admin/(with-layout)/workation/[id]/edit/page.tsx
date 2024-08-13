@@ -17,6 +17,7 @@ import { useGetWkDetailQuery } from '@/_hooks/admin/useGetWkDetailQuery';
 import { useGetWkPlaceListQuery } from '@/_hooks/admin/useGetWkPlaceListQuery';
 import { usePatchWkQuery } from '@/_hooks/admin/usePatchWkQuery';
 import AdminLoading from '@/_components/admin/adminLoading';
+import NetworkError from '@/_components/common/networkError';
 
 interface WkEditProps {
   params: { id: number };
@@ -79,10 +80,10 @@ const WorkationEdit = ({ params }: WkEditProps) => {
     return <AdminLoading />;
   }
   if (isError || isPlaceError) {
-    return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정
+    return <NetworkError />; // 에러컴포넌트 추가시 변경예정
   }
   if (!data || !placeData) {
-    return <div>No data</div>;
+    return <NetworkError />;
   }
   const handleConfirmEdit = () => {
     const selectedPlace = placeData.wktPlaceInfos.find(

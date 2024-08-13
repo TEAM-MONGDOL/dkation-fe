@@ -13,6 +13,8 @@ import UserWktCancelModal from '@/_components/user/mypage/UserWktCancelModal';
 import UserWktConfirmModal from '@/_components/user/mypage/UserWktConfirmModal';
 import { useDeleteWktApplyMutation } from '@/_hooks/user/useDeleteWktApplyMutation';
 import { useSession } from 'next-auth/react';
+import UserLoading from '@/_components/user/userLoading';
+import NetworkError from '@/_components/common/networkError';
 
 const UserWkHistoryPage = () => {
   const router = useRouter();
@@ -187,12 +189,12 @@ const UserWkHistoryPage = () => {
         </div>
         {!data ? (
           isLoading ? (
-            <p>loading ..</p>
+            <UserLoading />
           ) : (
-            <p>error</p>
+            <NetworkError />
           )
         ) : data.pageInfo.totalElements <= 0 ? (
-          <p>no data</p>
+          <NetworkError />
         ) : (
           data?.applyInfoList.map((wkt) => (
             <WorkationCard

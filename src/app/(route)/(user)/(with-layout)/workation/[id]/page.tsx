@@ -11,6 +11,7 @@ import { useGetUserWkDetailQuery } from '@/_hooks/user/useGetUserWkDetailQuery';
 import dayjs from 'dayjs';
 import { useGetUserWkPlaceReviewQuery } from '@/_hooks/user/useGetUserWkPlaceReviewQuery';
 import UserLoading from '@/_components/user/userLoading';
+import NetworkError from '@/_components/common/networkError';
 
 interface UserWkDetailProps {
   params: { id: number };
@@ -58,10 +59,10 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
     return <UserLoading />;
   }
   if (isError || reviewIsError) {
-    return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정
+    return <NetworkError />;
   }
   if (!data || !reviewData) {
-    return <div>No data</div>;
+    return <NetworkError />;
   }
 
   const scrollToSection = (section: string) => {

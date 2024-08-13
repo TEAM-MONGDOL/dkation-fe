@@ -108,7 +108,7 @@ const AdminWorkationPlaceEditPage = ({ params }: WkPlaceEditProps) => {
     return <NetworkError />;
   }
   if (!data) {
-    return <div>No data</div>;
+    return <NetworkError />;
   }
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,

@@ -103,10 +103,10 @@ const AdminWorkationListResultPage = ({ params }: WkResultProps) => {
     return <AdminLoading />;
   }
   if (isError) {
-    return <NetworkError />; // 에러컴포넌트 추가시 변경예정
+    return <NetworkError />;
   }
   if (!data) {
-    return <div>No data</div>;
+    return <NetworkError />;
   }
 
   return (

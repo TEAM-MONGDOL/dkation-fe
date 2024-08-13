@@ -61,7 +61,7 @@ const WorkationNew = () => {
     return <NetworkError />; // 에러컴포넌트 추가시 변경예정
   }
   if (!data) {
-    return <div>No data</div>;
+    return <NetworkError />;
   }
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
