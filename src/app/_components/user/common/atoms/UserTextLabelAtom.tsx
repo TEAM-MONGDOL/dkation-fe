@@ -1,7 +1,7 @@
 interface UserTextLabelAtomProps {
   text: string;
   className?: string;
-  size: 'sm' | 'md' | 'lg';
+  size: 'sm' | 'md' | 'lg' | 'fix';
 }
 
 const UserTextLabelAtom = ({
@@ -13,6 +13,7 @@ const UserTextLabelAtom = ({
     sm: 'px-3.5 py-1',
     md: 'px-5 py-2',
     lg: 'px-5 py-2.5',
+    fix: 'w-24 py-1',
   };
 
   return (
