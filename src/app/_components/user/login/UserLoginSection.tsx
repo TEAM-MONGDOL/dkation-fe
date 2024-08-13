@@ -33,14 +33,12 @@ const UserLoginSection = ({ onFindPasswordClick }: UserLoginSectionProps) => {
     const result = await signIn('credentials', {
       accountId: form.accountId,
       password: form.password,
-      redirect: false,
+      callbackUrl: '/',
     });
 
     if (result?.error) {
       console.log('로그인 실패');
       console.log(result);
-    } else {
-      router.refresh();
     }
   };
   return (
