@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { useGetUserWkDetailQuery } from '@/_hooks/user/useGetUserWkDetailQuery';
 import { dateConverter } from '@/_types/converter';
+import UserLoading from '@/_components/user/userLoading';
 
 interface ReviewWktInfoProps {
   wktId: number;
@@ -18,7 +19,7 @@ const ReviewWktInfo = ({ wktId }: ReviewWktInfoProps) => {
     <div className="mb-16 flex px-12">
       {!data ? (
         isLoading ? (
-          <div>로딩 중...</div>
+          <UserLoading />
         ) : isError ? (
           <div>에러 발생</div>
         ) : (

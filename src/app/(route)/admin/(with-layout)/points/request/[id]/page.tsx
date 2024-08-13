@@ -12,6 +12,7 @@ import { usePatchPointApplyMutation } from '@/_hooks/admin/usePatchPointApplyMut
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import AdminLoading from '@/_components/admin/adminLoading';
 
 interface AdminPointsRequestDetailPageProps {
   params: {
@@ -57,9 +58,7 @@ const AdminPointsRequestDetailPage = ({
         )}
         {!data ? (
           isLoading ? (
-            <p className="flex h-[100px] w-full items-center justify-center">
-              로딩 중...
-            </p>
+            <AdminLoading />
           ) : isError ? (
             <p className="flex h-[100px] w-full items-center justify-center">
               에러가 발생했습니다.

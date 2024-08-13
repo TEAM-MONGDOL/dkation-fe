@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 import UserNavigationButtonAtom from '@/_components/user/common/atoms/UserNavigationButtonAtom';
 import { useGetNoticeDetailQuery } from '@/_hooks/admin/useGetNoticeDetailQuery';
 import dayjs from 'dayjs';
+import AdminLoading from '@/_components/admin/adminLoading';
 
 interface NoticeDetailPageProps {
   params: {
@@ -32,7 +33,7 @@ const UserNoticeDetailPage = ({ params }: NoticeDetailPageProps) => {
       <div>
         {!data ? (
           isLoading ? (
-            <div>로딩 중...</div>
+            <AdminLoading />
           ) : isError ? (
             <div>에러 발생</div>
           ) : (

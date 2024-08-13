@@ -12,6 +12,7 @@ import { useGetPointApplyDetailQuery } from '@/_hooks/admin/useGetPointApplyDeta
 import { dateConverter } from '@/_types/converter';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import UserLoading from '@/_components/user/userLoading';
 
 interface PointsApplyDetailPageProps {
   params: {
@@ -43,7 +44,7 @@ const PointsApplyDetailPage = ({ params }: PointsApplyDetailPageProps) => {
       </div>
       {!data ? (
         isLoading ? (
-          <div>로딩 중...</div>
+          <UserLoading />
         ) : isError ? (
           <div>에러 발생</div>
         ) : (

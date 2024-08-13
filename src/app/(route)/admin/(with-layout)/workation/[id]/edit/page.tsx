@@ -16,6 +16,7 @@ import InfoSectionContainer from '@/_components/common/containers/InfoSectionCon
 import { useGetWkDetailQuery } from '@/_hooks/admin/useGetWkDetailQuery';
 import { useGetWkPlaceListQuery } from '@/_hooks/admin/useGetWkPlaceListQuery';
 import { usePatchWkQuery } from '@/_hooks/admin/usePatchWkQuery';
+import AdminLoading from '@/_components/admin/adminLoading';
 
 interface WkEditProps {
   params: { id: number };
@@ -75,7 +76,7 @@ const WorkationEdit = ({ params }: WkEditProps) => {
     }
   }, [data]);
   if (isLoading || isPlaceLoading) {
-    return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
+    return <AdminLoading />;
   }
   if (isError || isPlaceError) {
     return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정

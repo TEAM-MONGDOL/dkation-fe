@@ -12,6 +12,7 @@ import Image from 'next/image';
 import { useGetNoticeDetailQuery } from '@/_hooks/admin/useGetNoticeDetailQuery';
 import FileModule from '@/_components/common/modules/FileModule';
 import { useDeleteNoticeMutation } from '@/_hooks/admin/useDeleteNoticeMutation';
+import AdminLoading from '@/_components/admin/adminLoading';
 
 interface NoticeDetailPageProps {
   params: {
@@ -51,7 +52,7 @@ const NoticeDetailPage = ({ params }: NoticeDetailPageProps) => {
       <TitleBarModule title="공지 상세" type="LEFT" />
       {!data ? (
         isLoading ? (
-          <div>로딩 중...</div>
+          <AdminLoading />
         ) : isError ? (
           <div>에러 발생</div>
         ) : null

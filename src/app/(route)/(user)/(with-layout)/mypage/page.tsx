@@ -11,6 +11,7 @@ import { useSession } from 'next-auth/react';
 import { useGetMemberDetailQuery } from '@/_hooks/common/useGetMemberDetailQuery';
 import { usePostVerifyPasswordMutation } from '@/_hooks/user/usePostVerifyPasswordMutation';
 import { usePasswordChangeMutation } from '@/_hooks/user/usePasswordChangeMutation';
+import UserLoading from '@/_components/user/userLoading';
 
 const passwordValidationRegex =
   /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
@@ -126,7 +127,7 @@ const UserMyPage = () => {
     });
   };
 
-  if (isLoading) return <div>로딩 중...</div>;
+  if (isLoading) return <UserLoading />;
   if (isError) return <div>오류 발생</div>;
 
   return (

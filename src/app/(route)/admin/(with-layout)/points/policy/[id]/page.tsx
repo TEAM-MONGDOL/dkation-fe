@@ -12,6 +12,7 @@ import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { set, z } from 'zod';
+import AdminLoading from '@/_components/admin/adminLoading';
 
 interface AdminPointsPolicyDetailPageProps {
   params: {
@@ -41,7 +42,7 @@ const AdminPointsPolicyDetailPage = ({
       <section className="flex w-full flex-col gap-y-[60px]">
         {!data ? (
           isLoading ? (
-            <div>로딩 중...</div>
+            <AdminLoading />
           ) : isError ? (
             <div>에러 발생</div>
           ) : null

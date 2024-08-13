@@ -18,6 +18,7 @@ import WkResultSide from '@/(route)/admin/(with-layout)/workation/[id]/result/wk
 import { useGetWkPenaltyQuery } from '@/_hooks/admin/useGetWkPenaltyQuery';
 import { usePostPenaltyMutation } from '@/_hooks/admin/usePostPenaltyMutation';
 import dayjs from 'dayjs';
+import AdminLoading from '@/_components/admin/adminLoading';
 
 interface WkResultProps {
   params: { id: number };
@@ -67,7 +68,7 @@ const AdminWorkationListPenaltyPage = ({ params }: WkResultProps) => {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
+    return <AdminLoading />;
   }
   if (isError) {
     return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정

@@ -11,6 +11,7 @@ import { useDeleteReviewMutation } from '@/_hooks/user/useDeleteReviewMutation';
 import UserModalTextAtom from '@/_components/user/common/atoms/UserModalTextAtom';
 import UserModalAtom from '@/_components/user/common/atoms/UserModalAtom';
 import ReviewWktInfo from '@/_components/user/mypage/ReviewWktInfo';
+import UserLoading from '@/_components/user/userLoading';
 
 interface UserReviewDetailPageProps {
   params: {
@@ -47,7 +48,7 @@ const UserReviewDetailPage = ({ params }: UserReviewDetailPageProps) => {
         <div className="pt-10">
           {!data ? (
             isLoading ? (
-              <div>로딩 중...</div>
+              <UserLoading />
             ) : isError ? (
               <div>에러 발생</div>
             ) : null

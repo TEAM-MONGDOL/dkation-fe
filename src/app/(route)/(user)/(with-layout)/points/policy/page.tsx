@@ -8,6 +8,7 @@ import { DownArrowIcon } from '@/_assets/icons';
 import { dateConverter } from '@/_types/converter';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
 import { useGetPointPolicyDetailListQuery } from '@/_hooks/user/useGetPointsPolicyDetailListQuery';
+import UserLoading from '@/_components/user/userLoading';
 
 const PointsPolicyPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -50,7 +51,7 @@ const PointsPolicyPage = () => {
           <div className="flex w-full flex-col gap-y-2.5">
             {!policyList ? (
               policyListIsLoading ? (
-                <EmptyContainer text="로딩 중..." notTable />
+                <UserLoading />
               ) : policyListIsError ? (
                 <EmptyContainer text="에러 발생" notTable />
               ) : (

@@ -16,6 +16,7 @@ import InfoSectionContainer from '@/_components/common/containers/InfoSectionCon
 import { useWkNewMutation } from '@/_hooks/admin/useWkNewMutation';
 import { useGetWkPlaceListQuery } from '@/_hooks/admin/useGetWkPlaceListQuery';
 import { PlaceListItemType } from '@/_types/adminType';
+import AdminLoading from '@/_components/admin/adminLoading';
 
 const WorkationNew = () => {
   const router = useRouter();
@@ -53,7 +54,7 @@ const WorkationNew = () => {
   const { mutate: postWk } = useWkNewMutation(successCallback);
 
   if (isLoading) {
-    return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
+    return <AdminLoading />;
   }
   if (isError) {
     return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정

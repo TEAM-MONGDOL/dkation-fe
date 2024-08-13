@@ -5,6 +5,7 @@ import SidebarModule from '@/_components/common/modules/SidebarModule';
 import { useGetWkDetailQuery } from '@/_hooks/admin/useGetWkDetailQuery';
 import dayjs from 'dayjs';
 import { useGetWkPlaceListQuery } from '@/_hooks/admin/useGetWkPlaceListQuery';
+import AdminLoading from '@/_components/admin/adminLoading';
 
 const WkResultSide = ({ id }: { id: number }) => {
   const wktId = id;
@@ -22,7 +23,7 @@ const WkResultSide = ({ id }: { id: number }) => {
   });
 
   if (isLoading || isPlaceLoading) {
-    return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
+    return <AdminLoading />;
   }
   if (isError || isPlaceError) {
     return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정
