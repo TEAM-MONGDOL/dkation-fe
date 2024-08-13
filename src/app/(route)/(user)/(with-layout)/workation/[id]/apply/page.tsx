@@ -75,7 +75,7 @@ const UserWkApplyPage = ({ params }: Props) => {
       <div className="">
         <div className="flex h-[450px] justify-center bg-primary/5 px-36 py-12">
           <Image
-            src={data?.files[0].url}
+            src={data?.files[0].url || ''}
             alt="place"
             width={630}
             height={1}

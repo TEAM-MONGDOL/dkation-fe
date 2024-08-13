@@ -33,7 +33,7 @@ export const wkDetailForMemberSchema = z.object({
   latitude: z.string(),
   longitude: z.string(),
   isApplied: z.boolean(),
-  files: z.array(fileInfoSchema).nullable().optional(),
+  files: z.array(fileInfoSchema),
 });
 
 // Type
