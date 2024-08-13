@@ -18,11 +18,11 @@ const WkDetailInfo = ({
 }: WkDetailProps) => {
   return (
     <div>
-      <div className="mt-8">
+      <div className="mt-8 flex w-full flex-col items-center justify-center">
         {url &&
           url.length > 0 &&
           url.map((imageUrl, index) => (
-            <div key={imageUrl} className="mb-4">
+            <div key={imageUrl} className="mb-4 w-full max-w-2xl">
               <Image
                 src={imageUrl}
                 alt={`Image ${index}`}
