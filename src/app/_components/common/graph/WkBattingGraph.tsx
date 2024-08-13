@@ -1,14 +1,10 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import ReactApexChart from 'react-apexcharts';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { ApexOptions } from 'apexcharts';
 
-const WkBattingGraph = () => {
-  const chartOptions = {
-    series: [
-      {
-        name: '',
-        data: [150, 40, 320, 100, 400, 150, 40, 320, 100, 400, 500],
-      },
-    ],
+const WkBattingGraph = ({ battings }: { battings: number[] | undefined }) => {
+  const chartOptions: ApexOptions = {
     chart: {
       type: 'bar',
       height: 240,
@@ -16,18 +12,9 @@ const WkBattingGraph = () => {
         show: true,
       },
     },
-    title: {
-      show: '',
-    },
+    colors: ['#111111'],
     dataLabels: {
       enabled: false,
-    },
-    colors: ['#020617'],
-    plotOptions: {
-      bar: {
-        columnWidth: '40%',
-        borderRadius: 2,
-      },
     },
     xaxis: {
       axisTicks: {
@@ -39,32 +26,28 @@ const WkBattingGraph = () => {
       labels: {
         style: {
           colors: '#616161',
-          fontSize: '12px',
-          fontFamily: 'inherit',
-          fontWeight: 400,
+          fontSize: '11px',
         },
       },
       categories: [
-        '0P 대',
-        '100P 대',
-        '200 - 300',
-        '300 - 400',
-        '400 - 500',
-        '500 - 600',
-        '600 - 700',
-        '700 - 800',
-        '800 - 900',
-        '900 - 1000',
-        '1000P 이상',
+        '~100P',
+        '~200P',
+        '~300P',
+        '~400P',
+        '~500P',
+        '~600P',
+        '~700P',
+        '~800P',
+        '~900P',
+        '~1000P',
+        '1000P~',
       ],
     },
     yaxis: {
       labels: {
         style: {
           colors: '#616161',
-          fontSize: '12px',
-          fontFamily: 'inherit',
-          fontWeight: 400,
+          fontSize: '10px',
         },
       },
     },
@@ -77,7 +60,9 @@ const WkBattingGraph = () => {
           show: false,
         },
       },
-      padding: {},
+      padding: {
+        top: 10,
+      },
     },
     fill: {
       opacity: 0.8,
@@ -85,13 +70,24 @@ const WkBattingGraph = () => {
     tooltip: {
       theme: 'dark',
     },
+    plotOptions: {
+      bar: {
+        columnWidth: '25%',
+        borderRadius: 2,
+      },
+    },
   };
-
+  const series = [
+    {
+      name: 'Battings',
+      data: battings || [],
+    },
+  ];
   return (
     <div className="relative flex flex-col rounded-xl border bg-white text-gray-700 shadow-md">
       <ReactApexChart
         options={chartOptions}
-        series={chartOptions.series}
+        series={series}
         type="bar"
         height={220}
       />

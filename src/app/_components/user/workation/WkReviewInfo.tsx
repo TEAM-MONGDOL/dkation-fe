@@ -26,7 +26,7 @@ const WkReviewInfo = ({
 }: ReviewProps) => {
   return (
     <div>
-      <div className="mt-5 rounded-lg border">
+      <div className="rounded-lg border">
         <div className="flex flex-col px-8">
           <div className="my-5 flex items-center">
             <p className="mr-4 text-h3 font-semibold">{reviewer}</p>

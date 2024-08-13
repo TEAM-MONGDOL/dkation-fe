@@ -158,7 +158,7 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
           <WkDetailInfo url={urls} description={data.description} />
         </div>
         <div className="mt-16 flex flex-col" ref={resultRef}>
-          <WkResultInfo />
+          <WkResultInfo id={id} />
         </div>
         <div className="flex flex-col gap-10 pt-16" ref={reviewRef}>
           <UserFilteringSectionContainer

@@ -84,11 +84,23 @@ export const wktWinningUserInfosSchema = z.object({
   department: z.string(),
   penaltyAssignDate: z.string().nullable(),
   wktTitle: z.string(),
+  waitingNum: z.number(),
+});
+export const wktWaitingUserInfosSchema = z.object({
+  name: z.string(),
+  accountId: z.string(),
+  department: z.string(),
+  waitingNum: z.number(),
+});
+export const wktDistributionInfosSchema = z.object({
+  wktDistributionCount: z.number().array(),
 });
 
 export const WkResultPenaltyInfoSchema = z.object({
   wktResultInfo: wktResultInfosSchema,
   wktWinningUserInfos: wktWinningUserInfosSchema.array(),
+  wktWaitingUserInfos: wktWaitingUserInfosSchema.array(),
+  wktDistributionInfo: wktDistributionInfosSchema,
 });
 
 export const WkResultInfoSchema = z.object({
