@@ -37,8 +37,7 @@ const UserLoginSection = ({ onFindPasswordClick }: UserLoginSectionProps) => {
     });
 
     if (result?.error) {
-      console.log('로그인 실패');
-      console.log(result);
+      console.log('로그인 실패 : ', result);
     }
   };
   return (

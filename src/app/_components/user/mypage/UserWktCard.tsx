@@ -112,7 +112,6 @@ const WorkationCard = ({
   const handleSaveBettingPoint = () => {
     const point = Number(newBettingPoint);
     patchBettingPoint({ usedPoint: point });
-    console.log('new betting point:', point);
     handleModalClose();
   };
 

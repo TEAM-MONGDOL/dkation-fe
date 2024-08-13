@@ -36,7 +36,6 @@ const ReviewEditPage = ({ params }: UserReviewEditPageProps) => {
 
   useEffect(() => {
     if (data) {
-      console.log(data.reviewDetailInfo.openedType);
       setValues({
         fileUrls: data.reviewDetailInfo.imageUrls || [],
         contents: data.reviewDetailInfo.contents,
@@ -88,7 +87,6 @@ const ReviewEditPage = ({ params }: UserReviewEditPageProps) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(values);
 
     PatchReview({
       contents: values.contents,

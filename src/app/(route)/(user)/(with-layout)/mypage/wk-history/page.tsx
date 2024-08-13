@@ -165,7 +165,7 @@ const UserWkHistoryPage = () => {
                   />
                 </>
               ),
-              onRefresh: () => console.log('refresh'),
+              onRefresh: () => {},
             }}
             orderOption={{
               onClickOrder: () => {
