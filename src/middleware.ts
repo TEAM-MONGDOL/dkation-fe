@@ -1,44 +1,90 @@
-import { withAuth } from 'next-auth/middleware';
+import { getToken } from 'next-auth/jwt'; // JWT를 사용하는 경우
+import { getSession } from 'next-auth/react';
 import { NextRequest, NextResponse } from 'next/server';
 
-export default withAuth({
-  callbacks: {
-    authorized: ({ token }) => {
-      // 로그인 상태일 경우 true 반환, 비로그인 시 false 반환
-      return !!token;
-    },
-  },
-  pages: {
-    signIn: '/login', // 비로그인 시 리다이렉션될 로그인 페이지
-  },
-});
+const cookieToken = 'next-auth.session-token';
 
-export function middleware(req: NextRequest) {
-  const { pathname } = req.nextUrl;
-  const token =
-    req.cookies.get('next-auth.session-token') ||
-    req.cookies.get('__Secure-next-auth.session-token');
-  console.log('middleware', token);
-  // 로그인하지 않은 상태에서 보호된 페이지에 접근 시 로그인 페이지로 리다이렉트
-  if (!token && pathname !== '/' && pathname !== '/login') {
-    return NextResponse.redirect(new URL('/login', req.url));
+async function getSessionFromRequest(request: NextRequest) {
+  const token = await getToken({ req: request });
+  if (!token) return null;
+
+  // 필요한 경우 session 정보를 추가로 가져올 수 있습니다.
+  return { ...token };
+}
+
+const withAuth = async (request: NextRequest, session: any) => {
+  const url = request.nextUrl.clone();
+  url.pathname = '/login';
+
+  const token = request.cookies.get(cookieToken);
+
+  if (!token || !session) {
+    return NextResponse.redirect(url);
   }
 
-  // 로그인 상태에서 /login 페이지로 접근 시 홈으로 리다이렉션
-  if (pathname === '/login' && token) {
-    return NextResponse.redirect(new URL('/', req.url));
-  }
-
-  // 다른 모든 요청은 기본적으로 통과
   return NextResponse.next();
+};
+
+const withAdmin = async (request: NextRequest, session: any) => {
+  const url = request.nextUrl.clone();
+  url.pathname = '/admin/error';
+
+  const token = request.cookies.get(cookieToken);
+  const isAdmin = session?.isAdmin;
+
+  if (!token || !isAdmin) {
+    return NextResponse.redirect(url);
+  }
+
+  return NextResponse.next();
+};
+
+const withoutAuth = async (request: NextRequest, session: any) => {
+  const url = request.nextUrl.clone();
+  url.pathname = '/';
+
+  const token = request.cookies.get(cookieToken);
+
+  if (token && session) {
+    return NextResponse.redirect(url);
+  }
+
+  return NextResponse.next();
+};
+
+export async function middleware(request: NextRequest) {
+  const session = await getSessionFromRequest(request);
+
+  if (request.nextUrl.pathname.startsWith('/login')) {
+    console.log('call middleware - /login');
+
+    return await withoutAuth(request, session);
+  }
+
+  if (request.nextUrl.pathname.startsWith('/admin')) {
+    console.log('call middleware - /admin');
+
+    return await withAdmin(request, session);
+  }
+
+  if (request.nextUrl.pathname.startsWith('/workation')) {
+    console.log('call middleware - /workation');
+
+    return await withAuth(request, session);
+  }
 }
 
 export const config = {
   matcher: [
-    '/admin/:path*',
-    '/points/:path*',
+    '/login/:path*',
     '/workation/:path*',
+    '/points/:path*',
     '/support/:path*',
     '/mypage/:path*',
+    '/admin',
+    '/admin/members/:path*',
+    '/admin/notices/:path*',
+    '/admin/points/:path*',
+    '/admin/workation/:path*',
   ],
 };
