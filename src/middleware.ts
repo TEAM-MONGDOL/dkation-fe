@@ -67,11 +67,9 @@ export async function middleware(request: NextRequest) {
     return await withAdmin(request, session);
   }
 
-  if (request.nextUrl.pathname.startsWith('/workation')) {
-    console.log('call middleware - /workation');
+  console.log('call middleware - others');
 
-    return await withAuth(request, session);
-  }
+  return await withAuth(request, session);
 }
 
 export const config = {
