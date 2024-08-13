@@ -79,7 +79,7 @@ const RecentReviewSection = () => {
         />
         <div
           ref={scrollContainerRef}
-          className="flex snap-x scroll-pl-40 gap-x-[32px] overflow-x-scroll px-40 scrollbar-hide"
+          className="flex snap-x scroll-pl-40 gap-x-8 overflow-x-scroll px-40 scrollbar-hide"
         >
           {!data ? (
             isLoading ? (
