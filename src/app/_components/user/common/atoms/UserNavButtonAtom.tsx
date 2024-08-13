@@ -54,7 +54,7 @@ const UserNavButtonAtom = () => {
             text={`${memberDetail?.pointQuantity || 0} Point`}
             type="button"
             size="header"
-            onClick={() => router.push('/id/point')} // 라우팅 주소 변경 예정
+            onClick={() => router.push('/points/history')} // 라우팅 주소 변경 예정
           />
         )}
         <UserButtonAtom
