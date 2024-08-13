@@ -17,6 +17,7 @@ import { useWkNewMutation } from '@/_hooks/admin/useWkNewMutation';
 import { useGetWkPlaceListQuery } from '@/_hooks/admin/useGetWkPlaceListQuery';
 import { PlaceListItemType } from '@/_types/adminType';
 import AdminLoading from '@/_components/admin/adminLoading';
+import NetworkError from '@/_components/common/networkError';
 
 const WorkationNew = () => {
   const router = useRouter();
@@ -57,7 +58,7 @@ const WorkationNew = () => {
     return <AdminLoading />;
   }
   if (isError) {
-    return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정
+    return <NetworkError />; // 에러컴포넌트 추가시 변경예정
   }
   if (!data) {
     return <div>No data</div>;

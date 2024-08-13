@@ -9,6 +9,7 @@ import { dateConverter } from '@/_types/converter';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
 import { useGetPointPolicyDetailListQuery } from '@/_hooks/user/useGetPointsPolicyDetailListQuery';
 import UserLoading from '@/_components/user/userLoading';
+import NetworkError from '@/_components/common/networkError';
 
 const PointsPolicyPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -53,9 +54,9 @@ const PointsPolicyPage = () => {
               policyListIsLoading ? (
                 <UserLoading />
               ) : policyListIsError ? (
-                <EmptyContainer text="에러 발생" notTable />
+                <NetworkError />
               ) : (
-                <EmptyContainer text="데이터 없음" notTable />
+                <NetworkError />
               )
             ) : policyList.pointPolicyList.length < 1 ? (
               <EmptyContainer notTable />

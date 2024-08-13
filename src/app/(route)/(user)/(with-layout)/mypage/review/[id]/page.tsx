@@ -12,6 +12,7 @@ import UserModalTextAtom from '@/_components/user/common/atoms/UserModalTextAtom
 import UserModalAtom from '@/_components/user/common/atoms/UserModalAtom';
 import ReviewWktInfo from '@/_components/user/mypage/ReviewWktInfo';
 import UserLoading from '@/_components/user/userLoading';
+import NetworkError from '@/_components/common/networkError';
 
 interface UserReviewDetailPageProps {
   params: {
@@ -50,7 +51,7 @@ const UserReviewDetailPage = ({ params }: UserReviewDetailPageProps) => {
             isLoading ? (
               <UserLoading />
             ) : isError ? (
-              <div>에러 발생</div>
+              <NetworkError />
             ) : null
           ) : (
             <>

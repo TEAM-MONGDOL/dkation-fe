@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useGetUserWkDetailQuery } from '@/_hooks/user/useGetUserWkDetailQuery';
 import { dateConverter } from '@/_types/converter';
 import UserLoading from '@/_components/user/userLoading';
+import NetworkError from '@/_components/common/networkError';
 
 interface ReviewWktInfoProps {
   wktId: number;
@@ -21,7 +22,7 @@ const ReviewWktInfo = ({ wktId }: ReviewWktInfoProps) => {
         isLoading ? (
           <UserLoading />
         ) : isError ? (
-          <div>에러 발생</div>
+          <NetworkError />
         ) : (
           <div>데이터 없음</div>
         )
