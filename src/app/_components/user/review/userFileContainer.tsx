@@ -25,11 +25,9 @@ const UserFileContainer = ({
 
   const { mutate: postFile } = usePostFileMutation({
     successCallback: (fileInfos: { url: string }[]) => {
-      console.log('File upload successful:', fileInfos);
       const newFileUrls = fileInfos.map((file) => file.url);
       setFileUrls((prevFileUrls) => {
         const updatedFileUrls = [...prevFileUrls, ...newFileUrls];
-        console.log('File URLs after upload:', updatedFileUrls);
         onFileChange?.(updatedFileUrls);
         return updatedFileUrls;
       });
@@ -40,7 +38,6 @@ const UserFileContainer = ({
   });
 
   const handleFileAdd = (newFiles: File[]) => {
-    console.log('Adding new files:', newFiles);
     newFiles.forEach((file) => {
       const fileExtension = file.name.split('.').pop()?.toLowerCase();
       const validExtensions = ['jpg', 'jpeg', 'png'];
@@ -59,7 +56,6 @@ const UserFileContainer = ({
   };
 
   const handleDelete = (index: number) => {
-    console.log('Requesting delete for index:', index);
     onDeleteFile?.(index);
   };
 
@@ -104,7 +100,6 @@ const UserFileContainer = ({
         className="hidden"
         onChange={(e) => {
           const files = Array.from(e.target.files || []);
-          console.log('Files selected:', files);
           handleFileAdd(files);
         }}
       />

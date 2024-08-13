@@ -31,7 +31,6 @@ const RecentReviewSection = () => {
     )
       return;
     const nowCurrentIdx = Math.max(0, currentStartItem - 3);
-    console.log('left : ', nowCurrentIdx);
     scrollTo(scrollContainerRef.current, nowCurrentIdx);
     setCurrentStartItem(nowCurrentIdx);
   };
@@ -47,7 +46,6 @@ const RecentReviewSection = () => {
       data.reviewInfosForMember.length - 1,
       currentStartItem + 3,
     );
-    console.log('right : ', nowCurrentIdx);
     scrollTo(scrollContainerRef.current, nowCurrentIdx);
     setCurrentStartItem(nowCurrentIdx);
   };
