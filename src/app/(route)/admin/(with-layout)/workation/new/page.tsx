@@ -87,9 +87,7 @@ const WorkationNew = () => {
     }
     postWk({
       wktPlaceId: selectedPlace.id, // 워케이션 목록 api 가져와서 id 주기
-      thumbnailUrl: '썸네일 주소',
       title: formData.title,
-      address: formData.place, // 주소 삭제 예정
       startDate: dayjs(startDateWorkation!).format('YYYY-MM-DD'),
       endDate: dayjs(endDateWorkation!).format('YYYY-MM-DD'),
       applyStartDate: dayjs(startDateRecruitment!).format('YYYY-MM-DD'),
