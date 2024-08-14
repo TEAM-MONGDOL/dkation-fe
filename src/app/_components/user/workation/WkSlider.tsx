@@ -41,6 +41,7 @@ const Slider = ({ id }: { id: number }) => {
 
   const calculateLeftPosition = (index: number) => {
     let left = 0;
+    /* eslint-disable no-plusplus */
     for (let i = 0; i < index; i++) {
       left += getSliderWidth(i);
     }
@@ -88,7 +89,7 @@ const Slider = ({ id }: { id: number }) => {
               }}
             />
             {data.rafflePickedIndexInfos.map((winner) => (
-              <div>{winner.pickedIndex}</div>
+              <div key={winner.accountId}>{winner.pickedIndex}</div>
             ))}
             {data?.raffleMemberIndexInfos.map((member, index) => (
               <div

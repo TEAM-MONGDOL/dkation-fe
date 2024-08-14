@@ -34,7 +34,7 @@ export const workationRaffleSchema = z.object({
   raffleMemberIndexInfos: z.array(raffleMemberIndexInfosSchema),
   rafflePickedIndexInfos: z.array(rafflePickedIndexInfosSchema),
   raffleWinnerInfos: z.array(raffleWinnerInfosSchema),
-})
+});
 export const wkDetailForMemberSchema = z.object({
   title: z.string(),
   totalRecruit: z.number(),
