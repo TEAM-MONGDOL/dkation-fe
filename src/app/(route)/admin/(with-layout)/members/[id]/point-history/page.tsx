@@ -110,9 +110,9 @@ const AdminMembersPointHistoryPage = ({ params }: Props) => {
               const currentIndex = (currentPage - 1) * pageSize + index;
               const descendingIndex = totalElements - currentIndex;
               return (
-                <TableBodyModule key={`${item.pointType}-${item.getTime}`}>
+                <TableBodyModule key={`${item.pointTitle}-${item.getTime}`}>
                   <TableBodyAtom isFirst>{descendingIndex}</TableBodyAtom>
-                  <TableBodyAtom>{item.pointType}</TableBodyAtom>
+                  <TableBodyAtom>{item.pointTitle}</TableBodyAtom>
                   <TableBodyAtom>
                     {dayjs(item.getTime).format('YYYY-MM-DD')}
                   </TableBodyAtom>

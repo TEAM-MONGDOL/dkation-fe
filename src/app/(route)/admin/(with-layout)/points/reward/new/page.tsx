@@ -21,6 +21,7 @@ import { MemberType } from '@/_types/adminType';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
+import AdminLoading from '@/_components/admin/adminLoading';
 
 const AdminPointsRewardNewPage = () => {
   const router = useRouter();
@@ -43,7 +44,7 @@ const AdminPointsRewardNewPage = () => {
     isLoading: memberListIsLoading,
   } = useGetMemberListInifiniteQuery({
     // department: selectedOptions.join(','),
-    pageable: { page: 1, size: 100 },
+    pageable: { page: 1, size: 10 },
   });
 
   const {
@@ -131,14 +132,7 @@ const AdminPointsRewardNewPage = () => {
                 maxHeight="max-h-[300px]"
                 isInfiniteScroll
                 infiniteScrollProps={{
-                  load: (
-                    <p
-                      key={`loading-${!memberList ? 0 : memberList.pages[memberList.pages.length - 1].pageInfo.pageNum}`}
-                      className="w-full text-center"
-                    >
-                      로딩 중...
-                    </p>
-                  ),
+                  load: <AdminLoading />,
                   hasMore: memberListHasNextPage,
                   loadMore: () => {
                     memberListFetchNextPage();

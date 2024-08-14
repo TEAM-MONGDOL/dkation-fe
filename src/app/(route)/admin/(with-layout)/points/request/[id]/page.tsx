@@ -11,7 +11,9 @@ import { useGetPointApplyDetailQuery } from '@/_hooks/admin/useGetPointApplyDeta
 import { usePatchPointApplyMutation } from '@/_hooks/admin/usePatchPointApplyMutation';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import AdminLoading from '@/_components/admin/adminLoading';
+import NetworkError from '@/_components/common/networkError';
 
 interface AdminPointsRequestDetailPageProps {
   params: {
@@ -57,17 +59,11 @@ const AdminPointsRequestDetailPage = ({
         )}
         {!data ? (
           isLoading ? (
-            <p className="flex h-[100px] w-full items-center justify-center">
-              로딩 중...
-            </p>
+            <AdminLoading />
           ) : isError ? (
-            <p className="flex h-[100px] w-full items-center justify-center">
-              에러가 발생했습니다.
-            </p>
+            <NetworkError />
           ) : (
-            <p className="flex h-[100px] w-full items-center justify-center">
-              알 수 없는 에러가 발생했습니다.
-            </p>
+            <NetworkError />
           )
         ) : (
           <>

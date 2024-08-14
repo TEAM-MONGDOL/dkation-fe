@@ -272,7 +272,7 @@ const UserFindPasswordSection = ({
         )}
       </div>
       {modalContent !== null && (
-        <UserModalAtom>
+        <UserModalAtom onClose={() => setModalContent(null)}>
           <div className="flex flex-col items-center justify-center gap-y-10">
             <p>{modalContent.desc}</p>
             <UserButtonAtom

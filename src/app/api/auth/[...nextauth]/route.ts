@@ -74,11 +74,11 @@ const handler = NextAuth({
       // 4.Jwt Callback으로부터 반환받은 token값을 기존 세션에 추가한다
       if (token) {
         /* eslint-disable no-param-reassign */
-        session.user.admin = token.isAdmin as boolean;
+        session.isAdmin = token.isAdmin as boolean;
         session.accessToken = token.accessToken as string;
         session.accountId = token.accountId as number;
       }
-      console.log(session);
+      // console.log(session);
       return session;
     },
   },
@@ -87,7 +87,7 @@ const handler = NextAuth({
   },
   session: {
     strategy: 'jwt',
-    maxAge: 60 * 60, // 1 hour
+    maxAge: 60 * 30, // 30분
   },
   secret: process.env.NEXTAUTH_SECRET,
 });

@@ -4,7 +4,7 @@ import InfoSectionModule from '@/_components/common/modules/InfoSectionModule';
 interface InfoSectionContainerProps {
   title?: string;
   image?: string;
-  data: { subtitle: string; content: string }[];
+  data: { subtitle: string; content: string }[] | undefined;
   row?: boolean;
 }
 const InfoSectionContainer = ({
