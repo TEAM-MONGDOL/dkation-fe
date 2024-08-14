@@ -134,7 +134,9 @@ const AdminWorkationListPenaltyPage = ({ params }: WkResultProps) => {
           </div>
           <div className="flex w-full flex-col gap-4">
             <p className="text-3 font-bold">배팅 분포도</p>
-            <WkBattingGraph />
+            <WkBattingGraph
+              battings={data?.wktDistributionInfo.wktDistributionCount}
+            />
           </div>
           <div className="flex w-full flex-col">
             <p className="text-3 font-bold">페널티 관리</p>

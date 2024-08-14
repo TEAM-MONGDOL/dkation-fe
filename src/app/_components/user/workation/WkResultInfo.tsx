@@ -37,10 +37,10 @@ const WkResultInfo = ({ id }: { id: number }) => {
           {data?.wktWinningUserInfos.map((winner) => (
             <div
               key={winner.accountId}
-              className="flex h-16 w-48 min-w-48 items-center rounded-full bg-primary"
+              className={`flex h-16 w-48 min-w-48 items-center rounded-full ${winner.applyStatusType === 'CONFIRM' || 'VISITED' ? 'bg-primary' : 'bg-primary/50'}`}
             >
               <p className="ml-2.5 mr-4 h-12 w-12 rounded-full bg-white pt-3 text-center">
-                {winner.waitingNum < 0 ? '당첨' : winner.waitingNum}
+                최초
               </p>
               <p>
                 {winner.department} {winner.name}
@@ -50,7 +50,7 @@ const WkResultInfo = ({ id }: { id: number }) => {
           {data?.wktWaitingUserInfos.map((waiter) => (
             <div
               key={waiter.accountId}
-              className="flex h-16 w-48 min-w-48 items-center rounded-full bg-primary/50"
+              className={`flex h-16 w-48 min-w-48 items-center rounded-full ${waiter.applyStatusType === ('CONFIRM' || 'VISITED') ? 'bg-primary' : 'bg-primary/50'}`}
             >
               <p className="ml-2.5 mr-3.5 h-12 w-12 rounded-full bg-white pt-2.5 text-center">
                 {waiter.waitingNum}
