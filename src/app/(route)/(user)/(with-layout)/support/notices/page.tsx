@@ -163,6 +163,7 @@ const UserNoticePage = () => {
       {data && data.pageInfo.totalElements > 0 && (
         <div className="mt-40 flex justify-center">
           <PaginationModule
+            user
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
             totalPages={data.pageInfo.totalPages}
