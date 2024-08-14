@@ -8,7 +8,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout code
@@ -16,12 +15,16 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get latest tag
-        id: get_latest_tag
+      - name: Get release tag
+        id: get_tag
         run: |
-          git fetch --tags
-          latest_tag=$(git describe --tags --abbrev=0)
-          echo "::set-output name=latest_tag::$latest_tag"
+          if [[ ${{ github.event_name }} == 'release' ]]; then
+            echo "::set-output name=tag::${{ github.event.release.tag_name }}"
+          else
+            git fetch --tags
+            latest_tag=$(git describe --tags --abbrev=0)
+            echo "::set-output name=tag::$latest_tag"
+          fi
 
       - name: Deploy to Web Servers
         env:
@@ -31,7 +34,7 @@ jobs:
           KCR_USERNAME: ${{ secrets.ACCESS_KEY }}
           KCR_PASSWORD: ${{ secrets.ACCESS_SECRET_KEY }}
           WEB_IPS: ${{ secrets.WEB_IPS }}
-          LATEST_TAG: ${{ steps.get_latest_tag.outputs.latest_tag }}
+          DEPLOY_TAG: ${{ steps.get_tag.outputs.tag }}
         run: |
           # Write the SSH key to a file
           echo "$SSH_KEY" > ssh_key
@@ -53,8 +56,8 @@ jobs:
                 docker images dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe --format '{{.ID}}' | xargs -r docker rmi
 
                 # Pull and run new image with the latest tag
-                docker pull dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe:${LATEST_TAG}
-                docker run -d -p 80:3000 dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe:${LATEST_TAG}
+                docker pull dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe:${DEPLOY_TAG}
+                docker run -d -p 80:3000 dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe:${DEPLOY_TAG}
               ENDSSH
             done
           EOF
