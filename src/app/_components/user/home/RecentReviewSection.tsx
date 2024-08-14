@@ -3,8 +3,8 @@
 import { LeftKeyIcon, RightKeyIcon } from '@/_assets/icons';
 import Image from 'next/image';
 import { useRef, useState } from 'react';
-import RecentReviewItem from './RecentReviewItem';
 import { useGetWkReviewListQuery } from '@/_hooks/user/useGetWkReviewListQuery';
+import RecentReviewItem from './RecentReviewItem';
 
 const RecentReviewSection = () => {
   const scrollContainerRef = useRef(null);
@@ -31,7 +31,6 @@ const RecentReviewSection = () => {
     )
       return;
     const nowCurrentIdx = Math.max(0, currentStartItem - 3);
-    console.log('left : ', nowCurrentIdx);
     scrollTo(scrollContainerRef.current, nowCurrentIdx);
     setCurrentStartItem(nowCurrentIdx);
   };
@@ -44,10 +43,9 @@ const RecentReviewSection = () => {
     )
       return;
     const nowCurrentIdx = Math.min(
-      data.reviewInfosForMember.length * 3 - 3,
+      data.reviewInfosForMember.length - 1,
       currentStartItem + 3,
     );
-    console.log('right : ', nowCurrentIdx);
     scrollTo(scrollContainerRef.current, nowCurrentIdx);
     setCurrentStartItem(nowCurrentIdx);
   };
@@ -91,11 +89,7 @@ const RecentReviewSection = () => {
             )
           ) : (
             data.reviewInfosForMember.map((review) => (
-              <>
-                <RecentReviewItem key={review.reviewId} review={review} />
-                <RecentReviewItem key={review.reviewId} review={review} />
-                <RecentReviewItem key={review.reviewId} review={review} />
-              </>
+              <RecentReviewItem key={review.reviewId} review={review} />
             ))
           )}
         </div>

@@ -3,9 +3,7 @@ import api from '../Axios';
 
 interface PostWkProps {
   wktPlaceId: number;
-  thumbnailUrl: string;
   title: string;
-  address: string;
   startDate: string;
   endDate: string;
   applyStartDate: string;
@@ -19,9 +17,7 @@ export const useWkNewMutation = (successCallback?: () => void) => {
   return useMutation({
     mutationFn: async ({
       wktPlaceId,
-      thumbnailUrl,
       title,
-      address,
       startDate,
       endDate,
       applyStartDate,
@@ -31,9 +27,7 @@ export const useWkNewMutation = (successCallback?: () => void) => {
     }: PostWkProps) => {
       await api.post(`/api/wkt`, {
         wktPlaceId,
-        thumbnailUrl,
         title,
-        address,
         startDate,
         endDate,
         applyStartDate,

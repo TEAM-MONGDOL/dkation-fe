@@ -5,17 +5,20 @@ import InputModule from '@/_components/common/modules/InputModule';
 import FileContainer from '@/_components/common/containers/FileContainer';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ModalModule from '@/_components/common/modules/ModalModule';
 import InfoSectionContainer from '@/_components/common/containers/InfoSectionContainer';
 import { useRouter } from 'next/navigation';
 import { useWkNewPlaceMutation } from '@/_hooks/admin/useWkPlaceNewMutate';
 import dayjs from 'dayjs';
 import FileModule from '@/_components/common/modules/FileModule';
+import { Address, useDaumPostcodePopup } from 'react-daum-postcode';
+import { useGetKakaoAdddress } from '@/_hooks/admin/useGetKakaoAddress';
+import KakaoMapContainer from '@/_components/common/containers/KakaoMapContainer';
 
 const AdminWorkationPlaceNewPage = () => {
   const router = useRouter();
-
+  const [originAddress, setOriginAddress] = useState('');
   const [formData, setFormData] = useState({
     placeName: '',
     address: '',
@@ -23,6 +26,35 @@ const AdminWorkationPlaceNewPage = () => {
     maxPeople: 0,
     description: '',
   });
+  const open = useDaumPostcodePopup(
+    '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js',
+  );
+  const handleComplete = (data: Address) => {
+    let fullAddress = data.address;
+    setOriginAddress(data.address);
+
+    let extraAddress = '';
+
+    if (data.addressType === 'R') {
+      if (data.bname !== '') {
+        extraAddress += data.bname;
+      }
+      if (data.buildingName !== '') {
+        extraAddress +=
+          extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName;
+      }
+      fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
+    }
+    setFormData((prevData) => ({
+      ...prevData,
+      address: fullAddress,
+    }));
+  };
+
+  const { data: kakaoAddress } = useGetKakaoAdddress({
+    address: originAddress,
+  });
+
   const successCallback = () => {
     alert('워케이션 장소 등록 완료');
     router.replace('/admin/workation/place');
@@ -40,6 +72,13 @@ const AdminWorkationPlaceNewPage = () => {
     }));
   };
   const [isConfirmModelOpen, setIsConfirmModelOpen] = useState(false);
+
+  const handleAddressClick = () => {
+    open({
+      onComplete: handleComplete,
+    });
+  };
+
   const handleSubmit = () => {
     postWkPlace({
       place: formData.placeName,
@@ -47,6 +86,8 @@ const AdminWorkationPlaceNewPage = () => {
       maxPeople: formData.maxPeople,
       address: formData.address,
       description: formData.description,
+      latitude: kakaoAddress?.documents[0].y || '',
+      longitude: kakaoAddress?.documents[0].x || '',
     });
     setIsConfirmModelOpen(false);
   };
@@ -93,8 +134,9 @@ const AdminWorkationPlaceNewPage = () => {
           subtitle="주소"
           placeholder="주소를 입력하세요."
           value={formData.address}
-          onChange={handleChange}
+          status="cursor"
           name="address"
+          onClick={() => handleAddressClick()}
         />
       </div>
       <div className="flex w-full gap-7">
@@ -111,6 +153,12 @@ const AdminWorkationPlaceNewPage = () => {
           value={dayjs().format('YYYY.MM.DD')}
         />
       </div>
+      {kakaoAddress && (
+        <KakaoMapContainer
+          latitude={kakaoAddress.documents[0].y}
+          longitude={kakaoAddress.documents[0].x}
+        />
+      )}
       <div className="py-7">
         {formData.fileInfos.length > 0 && (
           <div className="py-2">
@@ -156,6 +204,7 @@ const AdminWorkationPlaceNewPage = () => {
           type="button"
           width="fixed"
           buttonStyle="dark"
+          onClick={() => router.back()}
         />
         <ButtonAtom
           text="등록"

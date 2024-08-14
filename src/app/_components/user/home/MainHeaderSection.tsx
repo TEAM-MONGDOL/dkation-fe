@@ -9,7 +9,7 @@ const MainHeaderSection = () => {
   const router = useRouter();
   return (
     <section className="flex h-[633px] w-full flex-col bg-primary px-40">
-      <div className="bg-home-bg flex h-full flex-col items-start justify-between bg-center bg-no-repeat object-cover pb-28 pt-36 text-sub-400">
+      <div className="flex h-full flex-col items-start justify-between bg-home-bg bg-center bg-no-repeat object-cover pb-28 pt-36 text-sub-400">
         <div className="flex flex-col gap-y-4">
           <Image src={LogoTextIcon} alt="home-logo" width={184} />
           <p className="text-h1 font-semibold">

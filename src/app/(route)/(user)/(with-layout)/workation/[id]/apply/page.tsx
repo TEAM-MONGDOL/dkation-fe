@@ -6,13 +6,15 @@ import Image from 'next/image';
 import { LocationIcon } from '@/_assets/icons';
 import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
 import { useGetUserPercentQuery } from '@/_hooks/user/useGetUserPercentQuery';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useGetMemberDetailQuery } from '@/_hooks/common/useGetMemberDetailQuery';
 import { useSession } from 'next-auth/react';
 import { useGetUserWkDetailQuery } from '@/_hooks/user/useGetUserWkDetailQuery';
 import dayjs from 'dayjs';
 import { usePostUserWkApplyMutation } from '@/_hooks/user/usePostUserWkApplyMutation';
 import { useRouter } from 'next/navigation';
+import UserLoading from '@/_components/user/userLoading';
+import NetworkError from '@/_components/common/networkError';
 
 interface Props {
   params: { id: number };
@@ -48,6 +50,16 @@ const UserWkApplyPage = ({ params }: Props) => {
     },
   });
 
+  if (isLoading || myPointIsLoading || pointIsLoading) {
+    return <UserLoading />;
+  }
+  if (isError || myPointIsError || pointIsError) {
+    return <NetworkError />;
+  }
+  if (!data || !myPointData || !pointData) {
+    return <NetworkError />;
+  }
+
   const handlePostApplyWk = () => {
     if (point === 0) {
       alert('포인트를 입력해주세요.');
@@ -75,7 +87,7 @@ const UserWkApplyPage = ({ params }: Props) => {
       <div className="">
         <div className="flex h-[450px] justify-center bg-primary/5 px-36 py-12">
           <Image
-            src={data?.files[0].url}
+            src={data?.files[0].url || ''}
             alt="place"
             width={630}
             height={1}

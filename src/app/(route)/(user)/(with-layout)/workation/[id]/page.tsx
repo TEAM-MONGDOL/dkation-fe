@@ -11,6 +11,8 @@ import { useGetUserWkDetailQuery } from '@/_hooks/user/useGetUserWkDetailQuery';
 import dayjs from 'dayjs';
 import { useGetUserWkPlaceReviewQuery } from '@/_hooks/user/useGetUserWkPlaceReviewQuery';
 import UserFilteringSectionContainer from '@/_components/user/common/containers/UserFilteringSectionContainer';
+import UserLoading from '@/_components/user/userLoading';
+import NetworkError from '@/_components/common/networkError';
 
 interface UserWkDetailProps {
   params: { id: number };
@@ -80,13 +82,13 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
     };
   }, []);
   if (isLoading || reviewIsLoading) {
-    return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
+    return <UserLoading />;
   }
   if (isError || reviewIsError) {
-    return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정
+    return <NetworkError />;
   }
   if (!data || !reviewData) {
-    return <div>No data</div>;
+    return <NetworkError />;
   }
 
   const scrollToSection = (section: string) => {
@@ -106,7 +108,13 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
       <hr />
       <div className="mt-20 px-40">
         <div className="flex w-full">
-          <Image width={402} height={304} src={urls[0]} alt="place" />
+          <Image
+            className="h-[304px] w-[402px] object-cover"
+            width={402}
+            height={304}
+            src={urls[0]}
+            alt="place"
+          />
           <div className="ml-8 flex-col">
             <p className="mb-3 text-sub-300">{data.title}</p>
             <h2 className="mb-12 text-h2 font-semibold text-sub-400">
@@ -155,7 +163,12 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
           </button>
         </div>
         <div className="mt-16 flex flex-col" ref={detailRef}>
-          <WkDetailInfo url={urls} description={data.description} />
+          <WkDetailInfo
+            url={urls}
+            description={data.description}
+            longitude={data.longitude}
+            latitude={data.latitude}
+          />
         </div>
         <div className="mt-16 flex flex-col" ref={resultRef}>
           <WkResultInfo id={id} />

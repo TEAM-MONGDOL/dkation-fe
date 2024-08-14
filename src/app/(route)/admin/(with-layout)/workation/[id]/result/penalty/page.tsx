@@ -19,6 +19,8 @@ import { useGetWkPenaltyQuery } from '@/_hooks/admin/useGetWkPenaltyQuery';
 import { usePostPenaltyMutation } from '@/_hooks/admin/usePostPenaltyMutation';
 import dayjs from 'dayjs';
 import WkBattingGraph from '@/_components/common/graph/WkBattingGraph';
+import AdminLoading from '@/_components/admin/adminLoading';
+import NetworkError from '@/_components/common/networkError';
 
 interface WkResultProps {
   params: { id: number };
@@ -67,13 +69,13 @@ const AdminWorkationListPenaltyPage = ({ params }: WkResultProps) => {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
+    return <AdminLoading />;
   }
   if (isError) {
-    return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정
+    return <NetworkError />;
   }
   if (!data) {
-    return <div>No data</div>;
+    return <NetworkError />;
   }
   const gcd = (a: number, b: number): number => {
     if (b === 0) return a;

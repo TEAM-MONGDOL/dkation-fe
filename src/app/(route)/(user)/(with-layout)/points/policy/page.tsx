@@ -8,6 +8,8 @@ import { DownArrowIcon } from '@/_assets/icons';
 import { dateConverter } from '@/_types/converter';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
 import { useGetPointPolicyDetailListQuery } from '@/_hooks/user/useGetPointsPolicyDetailListQuery';
+import UserLoading from '@/_components/user/userLoading';
+import NetworkError from '@/_components/common/networkError';
 
 const PointsPolicyPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -30,7 +32,7 @@ const PointsPolicyPage = () => {
 
   const getPolicyDetail = (title: string) => {
     const detail = policyDetailList.find(
-      (detail) => detail.data?.policyTitle === title,
+      (content) => content.data?.policyTitle === title,
     );
     return detail && detail.data ? detail.data.detail : '';
   };
@@ -50,11 +52,11 @@ const PointsPolicyPage = () => {
           <div className="flex w-full flex-col gap-y-2.5">
             {!policyList ? (
               policyListIsLoading ? (
-                <EmptyContainer text="로딩 중..." notTable />
+                <UserLoading />
               ) : policyListIsError ? (
-                <EmptyContainer text="에러 발생" notTable />
+                <NetworkError />
               ) : (
-                <EmptyContainer text="데이터 없음" notTable />
+                <NetworkError />
               )
             ) : policyList.pointPolicyList.length < 1 ? (
               <EmptyContainer notTable />
@@ -62,6 +64,7 @@ const PointsPolicyPage = () => {
               policyList.pointPolicyList.map((item, idx) => (
                 <div className="flex w-full flex-col" key={item.policyTitle}>
                   <div
+                    role="presentation"
                     key={item.id}
                     className="flex h-[63px] w-full cursor-pointer items-center justify-center gap-x-7 rounded border border-stroke-100 bg-white px-[68px] text-center font-medium text-sub-400"
                     onClick={() => {
