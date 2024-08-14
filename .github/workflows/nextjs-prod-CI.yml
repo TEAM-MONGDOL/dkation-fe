@@ -1,10 +1,9 @@
-name: Node.js CI
+name: NextJs CI
 
 on:
-  push:
-    branches: [main]
   pull_request:
-    branches: [main]
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
