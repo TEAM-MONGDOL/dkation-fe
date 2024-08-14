@@ -39,8 +39,13 @@ jobs:
           echo "$SSH_KEY" > ssh_key
           chmod 600 ssh_key
 
+          # Bastion 서버에 ssh_key 전송
+          scp -i ssh_key -o StrictHostKeyChecking=no ssh_key $USER@$BASTION_IP:/tmp/ssh_key
+
+          # Bastion 서버에 SSH 접속
           ssh -i ssh_key -o StrictHostKeyChecking=no $USER@$BASTION_IP << EOF
             set -x
+            chmod 600 /tmp/ssh_key
             echo "Environment variables:"
             echo "KCR_USERNAME: $KCR_USERNAME"
             echo "KCR_PASSWORD: $KCR_PASSWORD"
@@ -48,10 +53,9 @@ jobs:
             echo "WEB_IPS: $WEB_IPS"
 
             IFS=',' read -ra WEB_IP_ARRAY <<< "$WEB_IPS"
-
             for WEB_IP in "${WEB_IP_ARRAY[@]}"; do
-              echo "Testing SSH connection to web server $WEB_IP"
-              ssh -i ssh_key -o StrictHostKeyChecking=no $USER@$WEB_IP << 'ENDSSH'
+              # Bastion 서버에서 내부 웹 서버로 SSH 접속
+              ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no $USER@$WEB_IP << 'ENDSSH'
                 set -x
                 echo "Docker version:"
                 sudo docker version
