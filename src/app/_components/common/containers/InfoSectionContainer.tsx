@@ -20,6 +20,7 @@ const InfoSectionContainer = ({
       <div className={`flex ${row ? 'items-center gap-10' : 'flex-col gap-7'}`}>
         {image && (
           <Image
+            className="max-h-[210px] min-h-[210px] min-w-[330px] max-w-[330px]"
             width={typeof widthValue === 'number' ? widthValue : undefined}
             height={100}
             src={image}
