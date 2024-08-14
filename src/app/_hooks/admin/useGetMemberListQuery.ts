@@ -12,7 +12,7 @@ export const useGetMemberListQuery = ({
   pageParam: { page: number; size: number; sort?: string };
 }) => {
   return useQuery({
-    queryKey: [useGetMemberListQueryKey],
+    queryKey: [useGetMemberListQueryKey, department, pageParam],
     queryFn: async () => {
       const res = await api.get('/api/member', {
         params: { department, ...pageParam },
