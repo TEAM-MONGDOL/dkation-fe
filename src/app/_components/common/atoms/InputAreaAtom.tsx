@@ -2,12 +2,13 @@ import TextCountAtom from '@/_components/common/atoms/TextCountAtom';
 
 interface InputProps {
   placeholder?: string;
-  status?: 'error' | 'correct' | 'readonly' | 'disabled';
+  status?: 'error' | 'correct' | 'readonly' | 'disabled' | 'cursor';
   value: string | number;
   textCount?: number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   name?: string;
   type?: 'text' | 'password' | 'number';
+  onClick?: (e: React.MouseEvent<HTMLInputElement>) => void;
 }
 
 const InputAreaAtom = ({
@@ -18,6 +19,7 @@ const InputAreaAtom = ({
   onChange,
   name,
   type = 'text',
+  onClick,
 }: InputProps) => {
   const getStatus = () => {
     switch (status) {
@@ -29,6 +31,8 @@ const InputAreaAtom = ({
         return 'border-sub-100 cursor-not-allowed';
       case 'disabled':
         return 'bg-cus-100 cursor-not-allowed';
+      case 'cursor':
+        return 'cursor-pointer';
       default:
         return '';
     }
@@ -40,10 +44,11 @@ const InputAreaAtom = ({
     }
   };
 
-  const isInteractive = status !== 'readonly' && status !== 'disabled';
+  const isInteractive =
+    status !== 'readonly' && status !== 'disabled' && status !== 'cursor';
 
   return (
-    <div className="relative">
+    <div role="presentation" className="relative" onClick={onClick}>
       <input
         className={`w-full rounded-regular border border-stroke-100 py-3.5 pl-3 text-4 placeholder-sub-200 outline-0 ${getStatus()}`}
         placeholder={placeholder}

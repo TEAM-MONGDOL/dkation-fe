@@ -13,6 +13,8 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
         'login-bg': 'url("./_assets/icons/logoIllust.svg")',
+        'home-bg': 'url("./_assets/images/home_bg.png")',
+        'header-bg': 'url("./_assets/images/header_bg.png")',
       },
       colors: {
         transparent: 'transparent',
@@ -28,6 +30,7 @@ const config: Config = {
         'cus-100': '#F4F6FA',
         'cus-200': '#374553',
         'cus-300': '#323232',
+        'cus-400': '#F9F9F9',
         'stroke-100': '#DBDBDB',
         footer: '#888888',
         button: '#2A2A2A',
@@ -78,6 +81,15 @@ const config: Config = {
         '4xl': '40px',
         '5xl': '50px',
         '6xl': '60px',
+      },
+      keyframes: {
+        // 키프레임의 기본 형태를 설정합니다. (이후 컴포넌트에서 동적으로 업데이트됩니다)
+        slideHandle: {},
+        fillTrack: {},
+      },
+      animation: {
+        slideHandle: 'slideHandle 9s ease-in-out forwards',
+        fillTrack: 'fillTrack 9s ease-in-out forwards',
       },
     },
   },

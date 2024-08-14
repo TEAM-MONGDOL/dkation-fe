@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { wktPlaceDetailShema } from '@/_types/adminType';
+import { wktPlaceDetailSchema } from '@/_types/adminType';
 import api from '../Axios';
 
 export const useGetWkPlaceDetailQueryKey = 'useGetWkPlaceDetailQuery';
@@ -17,7 +17,7 @@ export const useGetWkPlaceDetailQuery = ({
           wktPlaceId,
         },
       });
-      return wktPlaceDetailShema.parse(res.data.data);
+      return wktPlaceDetailSchema.parse(res.data.data);
     },
   });
 };
