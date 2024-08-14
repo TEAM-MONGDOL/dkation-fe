@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
 import { useRouter } from 'next/navigation';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import WkDetailInfo from '@/_components/user/workation/WkDetailInfo';
 import WkResultInfo from '@/_components/user/workation/WkResultInfo';
 import WkReviewInfo from '@/_components/user/workation/WkReviewInfo';
@@ -11,6 +11,9 @@ import { useGetUserWkDetailQuery } from '@/_hooks/user/useGetUserWkDetailQuery';
 import dayjs from 'dayjs';
 import { useGetUserWkPlaceReviewQuery } from '@/_hooks/user/useGetUserWkPlaceReviewQuery';
 import { useGetWkSimulationQuery } from '@/_hooks/user/useGetWkSimulationQuery';
+import UserFilteringSectionContainer from '@/_components/user/common/containers/UserFilteringSectionContainer';
+import UserLoading from '@/_components/user/userLoading';
+import NetworkError from '@/_components/common/networkError';
 
 interface UserWkDetailProps {
   params: { id: number };
@@ -25,13 +28,24 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
   const { data, isLoading, isError } = useGetUserWkDetailQuery({
     wktId: id,
   });
+  const [param, setParam] = useState<{
+    order: string;
+  }>({
+    order: 'DESC',
+  });
   const {
     data: reviewData,
     isLoading: reviewIsLoading,
     isError: reviewIsError,
   } = useGetUserWkPlaceReviewQuery({
     wktPlaceId: data?.wktPlaceId,
+    pageParam: {
+      page: 1,
+      size: 100,
+      sort: `createdAt,${param.order}`,
+    },
   });
+
   const handleScroll = () => {
     if (detailRef.current && resultRef.current && reviewRef.current) {
       const detailPos = detailRef.current.getBoundingClientRect().top;
@@ -47,6 +61,20 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
       }
     }
   };
+  const [isFilteringSectionOpen, setIsFilteringSectionOpen] = useState<
+    'FILTER' | 'ORDER' | null
+  >(null);
+  const [selectedOrder, setSelectedOrder] = useState<string>('createdAt,DESC');
+  const updateParam = useCallback(() => {
+    setParam((prev) => ({
+      ...prev,
+      order: selectedOrder,
+    }));
+  }, [selectedOrder]);
+
+  useEffect(() => {
+    updateParam();
+  }, [selectedOrder, updateParam]);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
@@ -55,13 +83,13 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
     };
   }, []);
   if (isLoading || reviewIsLoading) {
-    return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
+    return <UserLoading />;
   }
   if (isError || reviewIsError) {
-    return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정
+    return <NetworkError />;
   }
   if (!data || !reviewData) {
-    return <div>No data</div>;
+    return <NetworkError />;
   }
 
   const scrollToSection = (section: string) => {
@@ -74,13 +102,20 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
     }
     setActiveTab(section);
   };
+
   const urls = data.files?.map((file) => file.url) || [''];
   return (
     <section>
       <hr />
       <div className="mt-20 px-40">
         <div className="flex w-full">
-          <Image width={402} height={304} src={urls[0]} alt="place" />
+          <Image
+            className="h-[304px] w-[402px] object-cover"
+            width={402}
+            height={304}
+            src={urls[0]}
+            alt="place"
+          />
           <div className="ml-8 flex-col">
             <p className="mb-3 text-sub-300">{data.title}</p>
             <h2 className="mb-12 text-h2 font-semibold text-sub-400">
@@ -131,12 +166,35 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
           </button>
         </div>
         <div className="mt-16 flex flex-col" ref={detailRef}>
-          <WkDetailInfo url={urls} description={data.description} />
+          <WkDetailInfo
+            url={urls}
+            description={data.description}
+            longitude={data.longitude}
+            latitude={data.latitude}
+          />
         </div>
         <div className="mt-16 flex flex-col" ref={resultRef}>
           <WkResultInfo id={id} />
         </div>
         <div className="flex flex-col gap-10 pt-16" ref={reviewRef}>
+          <UserFilteringSectionContainer
+            orderOption={{
+              onClickOrder: () => {
+                setIsFilteringSectionOpen(
+                  isFilteringSectionOpen === 'ORDER' ? null : 'ORDER',
+                );
+              },
+              isOrderOpen: isFilteringSectionOpen === 'ORDER',
+              orderProps: {
+                orders: [
+                  { key: 'createdAt,DESC', value: '최신순' },
+                  { key: 'createdAt,ASC', value: '오래된순' },
+                ],
+                selectedOrder,
+                setSelectedOrder,
+              },
+            }}
+          />
           {reviewData.reviewInfosForWkt.map((review) => (
             <WkReviewInfo
               key={review.wktTitle}

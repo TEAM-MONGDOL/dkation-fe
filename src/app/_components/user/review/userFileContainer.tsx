@@ -1,37 +1,46 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DragDropModule from '@/_components/common/modules/DragDropModule';
 import { usePostFileMutation } from '@/_hooks/common/usePostFileMutation';
 import { CloseIcon, PlusIcon } from '@/_assets/icons';
 import Image from 'next/image';
 
 interface FileContainerProps {
+  fileUrls: string[];
   onFileChange?: (fileUrls: string[]) => void;
   fileDomainType: string;
   onDeleteFile?: (index: number) => void;
 }
 
 const UserFileContainer = ({
+  fileUrls: initialFileUrls,
   onFileChange,
   fileDomainType,
   onDeleteFile,
 }: FileContainerProps) => {
-  const [fileUrls, setFileUrls] = useState<string[]>([]);
+  const [fileUrls, setFileUrls] = useState<string[]>(initialFileUrls);
+
+  useEffect(() => {
+    setFileUrls(initialFileUrls);
+  }, [initialFileUrls]);
 
   const { mutate: postFile } = usePostFileMutation({
     successCallback: (fileInfos: { url: string }[]) => {
       const newFileUrls = fileInfos.map((file) => file.url);
-      onFileChange?.(newFileUrls);
-      setFileUrls((prev) => [...prev, ...newFileUrls]);
+      setFileUrls((prevFileUrls) => {
+        const updatedFileUrls = [...prevFileUrls, ...newFileUrls];
+        onFileChange?.(updatedFileUrls);
+        return updatedFileUrls;
+      });
     },
     errorCallback: (error: Error) => {
-      console.error('파일 업로드 중 오류 발생:', error);
+      console.error('File upload error:', error);
     },
   });
 
   const handleFileAdd = (newFiles: File[]) => {
     newFiles.forEach((file) => {
       const fileExtension = file.name.split('.').pop()?.toLowerCase();
-      const validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
+      const validExtensions = ['jpg', 'jpeg', 'png'];
 
       if (!fileExtension || !validExtensions.includes(fileExtension)) {
         alert('이미지 형식의 파일만 업로드할 수 있습니다.');
@@ -47,8 +56,7 @@ const UserFileContainer = ({
   };
 
   const handleDelete = (index: number) => {
-    setFileUrls((prev) => prev.filter((_, idx) => idx !== index));
-    onDeleteFile?.(index); // 상위 컴포넌트에 삭제 알림
+    onDeleteFile?.(index);
   };
 
   return (
@@ -65,14 +73,16 @@ const UserFileContainer = ({
                 className="h-28 w-28 rounded-lg object-cover"
               />
               <button
+                type="button"
                 className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-white"
-                onClick={() => handleDelete(index)} // 인덱스를 사용하여 삭제
+                onClick={() => handleDelete(index)}
               >
                 <Image src={CloseIcon} alt="X" className="h-3 w-3" />
               </button>
             </div>
           ))}
           <button
+            type="button"
             className="flex h-28 w-28 items-center justify-center rounded-lg bg-gray-200 text-gray-600"
             onClick={handleAddMoreFiles}
           >

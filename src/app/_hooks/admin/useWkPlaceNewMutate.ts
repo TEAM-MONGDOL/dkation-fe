@@ -7,6 +7,8 @@ interface PostWkPlaceProps {
   maxPeople: number;
   address: string;
   description: string;
+  latitude: string;
+  longitude: string;
 }
 export const useGetWkPlaceListQuery = 'useGetWkPlaceListQuery';
 
@@ -20,6 +22,8 @@ export const useWkNewPlaceMutation = (successCallback?: () => void) => {
       maxPeople,
       address,
       description,
+      latitude,
+      longitude,
     }: PostWkPlaceProps) => {
       await api.post(`/api/wkt/place`, {
         place,
@@ -27,6 +31,8 @@ export const useWkNewPlaceMutation = (successCallback?: () => void) => {
         maxPeople,
         address,
         description,
+        latitude,
+        longitude,
       });
     },
     onSuccess: () => {

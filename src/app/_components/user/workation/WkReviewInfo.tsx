@@ -24,32 +24,9 @@ const WkReviewInfo = ({
   rating,
   title,
 }: ReviewProps) => {
-  const [isFilteringSectionOpen, setIsFilteringSectionOpen] = useState<
-    'FILTER' | 'ORDER' | null
-  >(null);
-  const [selectedOrder, setSelectedOrder] = useState<string>('createdAt,DESC');
-
   return (
     <div>
-      <UserFilteringSectionContainer
-        orderOption={{
-          onClickOrder: () => {
-            setIsFilteringSectionOpen(
-              isFilteringSectionOpen === 'ORDER' ? null : 'ORDER',
-            );
-          },
-          isOrderOpen: isFilteringSectionOpen === 'ORDER',
-          orderProps: {
-            orders: [
-              { key: 'createdAt,DESC', value: '최신순' },
-              { key: 'createdAt,ASC', value: '오래된순' },
-            ],
-            selectedOrder,
-            setSelectedOrder,
-          },
-        }}
-      />
-      <div className="mt-5 rounded-lg border">
+      <div className="rounded-lg border">
         <div className="flex flex-col px-8">
           <div className="my-5 flex items-center">
             <p className="mr-4 text-h3 font-semibold">{reviewer}</p>
@@ -65,7 +42,7 @@ const WkReviewInfo = ({
                 <Image src={StarRateIcon} alt="StarRateIcon" />
               </div>
               <p>
-                {rating}점({ReviewInfo[rating.toString()]})
+                {rating}점({ReviewInfo[rating as keyof typeof ReviewInfo]})
               </p>
             </div>
           </div>

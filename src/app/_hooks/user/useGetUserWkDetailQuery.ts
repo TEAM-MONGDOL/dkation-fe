@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { wkUserDetailInfoSchema } from '@/_types/adminType';
+import { wkDetailForMemberSchema } from '@/_types/userType';
 import api from '../Axios';
 
 export const useGetUserWkDetailQuery = ({ wktId }: { wktId: number }) => {
@@ -7,7 +8,7 @@ export const useGetUserWkDetailQuery = ({ wktId }: { wktId: number }) => {
     queryKey: [wktId],
     queryFn: async () => {
       const res = await api.get(`/api/wkt/${wktId}`);
-      return wkUserDetailInfoSchema.parse(res.data.data);
+      return wkDetailForMemberSchema.parse(res.data.data);
     },
   });
 };

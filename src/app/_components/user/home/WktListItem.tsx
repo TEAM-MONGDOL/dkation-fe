@@ -11,7 +11,7 @@ const WktListItem = ({ wktInfo }: WktListItemProps) => {
   return (
     <div className="flex h-[474px] w-[513px] shrink-0 snap-start flex-col bg-white">
       <Image
-        className="rounded-t-xl object-cover"
+        className="max-h-[280px] min-h-[280px] min-w-[513px] max-w-[513px] rounded-t-xl object-cover"
         src={wktInfo.thumbnailUrl}
         alt="thumbnail"
         width={513}
