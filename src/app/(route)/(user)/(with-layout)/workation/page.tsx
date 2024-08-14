@@ -17,6 +17,7 @@ import UserDatePickerContainer from '@/_components/user/common/containers/UserDa
 import { useRouter } from 'next/navigation';
 import UserLoading from '@/_components/user/userLoading';
 import NetworkError from '@/_components/common/networkError';
+import { HeaderPointIcon } from '@/_assets/icons';
 
 const Workation = () => {
   const router = useRouter();
@@ -182,6 +183,7 @@ const Workation = () => {
       <UserHeaderContainers
         title="워케이션"
         content="워케이션(Workation)을 통해 업무의 효율과 재충전의 기회를 놓치지 마세요!"
+        img="bg-header-bg"
       />
       <UserTabBarModule tabs={tabs} />
       <div className="mr-24 mt-8 flex justify-end">

@@ -50,7 +50,7 @@ const UserWkApplyPage = ({ params }: Props) => {
     },
   });
 
-  if (isLoading || myPointIsLoading || pointIsLoading) {
+  if (isLoading || myPointIsLoading) {
     return <UserLoading />;
   }
   if (isError || myPointIsError || pointIsError) {
@@ -148,6 +148,7 @@ const UserWkApplyPage = ({ params }: Props) => {
             />
           </div>
         </div>
+        ㄲ
       </div>
     </section>
   );
