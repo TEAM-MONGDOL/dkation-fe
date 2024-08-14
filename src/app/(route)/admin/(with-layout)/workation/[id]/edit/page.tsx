@@ -132,12 +132,17 @@ const WorkationEdit = ({ params }: WkEditProps) => {
       <TitleBarModule title="워케이션 수정" type="LEFT" />
       <div className="mt-10 flex flex-col gap-[30px]">
         <div className="flex h-52 gap-x-8">
-          <Image src={placeImsy} alt="placeImsy" />
+          <Image
+            src={data?.files[0].url}
+            width={400}
+            height={300}
+            alt="place"
+          />
           <div className="w-full">
             <div className="flex w-full gap-6">
               <div className="w-full">
                 <InputModule
-                  textCount={20}
+                  textCount={30}
                   placeholder="제목을 입력하세요"
                   subtitle="제목"
                   value={values.title}
