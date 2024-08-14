@@ -54,12 +54,12 @@ const UserPenaltyPage = () => {
           <tbody>
             {!data ? (
               isLoading ? (
-                <EmptyContainer colSpan={6} text="로딩 중입니다..." />
+                <EmptyContainer colSpan={4} text="로딩 중입니다..." />
               ) : (
-                <EmptyContainer colSpan={6} text="error" />
+                <EmptyContainer colSpan={4} text="error" />
               )
             ) : data.penaltyAmount <= 0 ? (
-              <EmptyContainer colSpan={6} />
+              <EmptyContainer colSpan={4} />
             ) : (
               [...sortedPenaltyInfos].reverse().map((item, index) => {
                 const expiryDate = calculateExpiryDate(
