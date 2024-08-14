@@ -5,8 +5,10 @@ import api from '../Axios';
 export const useGetUserWkPlaceReviewQuery = ({
   wktPlaceId,
   pageParam,
+  enable,
 }: {
   wktPlaceId: number | undefined;
+  enable: boolean;
   pageParam: {
     page: number;
     size: number;
@@ -21,5 +23,6 @@ export const useGetUserWkPlaceReviewQuery = ({
       });
       return workationUserPlaceReviewSchema.parse(res.data.data);
     },
+    enabled: enable,
   });
 };

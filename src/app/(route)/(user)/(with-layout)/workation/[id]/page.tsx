@@ -43,6 +43,7 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
       size: 100,
       sort: `createdAt,${param.order}`,
     },
+    enable: !!data,
   });
 
   const handleScroll = () => {
