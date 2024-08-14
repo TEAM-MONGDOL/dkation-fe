@@ -56,7 +56,7 @@ const UserWkApplyPage = ({ params }: Props) => {
   if (isError || myPointIsError || pointIsError) {
     return <NetworkError />;
   }
-  if (!data || !myPointData || !pointData) {
+  if (!data || !myPointData) {
     return <NetworkError />;
   }
 
