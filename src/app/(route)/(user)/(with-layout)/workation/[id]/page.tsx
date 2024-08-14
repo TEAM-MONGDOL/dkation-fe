@@ -117,11 +117,11 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
             alt="place"
           />
           <div className="ml-8 flex-col">
-            <p className="mb-3 text-sub-300">{data.title}</p>
-            <h2 className="mb-12 text-h2 font-semibold text-sub-400">
+            <p className="mb-4 text-sub-300">{data.title}</p>
+            <h2 className="mb-20 text-h2 font-semibold text-sub-400">
               {data.place}
             </h2>
-            <p className="mb-4 inline-block rounded-regular border border-primary bg-primary/10 px-5 py-1.5 text-3 text-primary">
+            <p className="mb-5 inline-block rounded-regular border border-primary bg-primary/10 px-5 py-1.5 text-3 text-primary">
               모집인원 : {data.totalRecruit}명
             </p>
             <p className="mb-0.5">
