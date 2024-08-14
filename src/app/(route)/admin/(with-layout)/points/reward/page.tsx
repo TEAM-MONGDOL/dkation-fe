@@ -16,7 +16,11 @@ import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import { useGetPointPolicyQuery } from '@/_hooks/admin/useGetPointPolicyQuery';
 import { useGetPointSupplyQuery } from '@/_hooks/admin/useGetPointSupplyQuery';
-import { orderList, pointRewardList } from '@/_types/adminType';
+import {
+  orderList,
+  pointRewardList,
+  rewardOrderList,
+} from '@/_types/adminType';
 import { DatePickerTagType } from '@/_types/commonType';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
@@ -35,7 +39,7 @@ const AdminPointsRewardPage = () => {
     type: string[];
     reason: string[];
   }>({
-    order: 'ASC',
+    order: 'createdAt,DESC',
     type: ['PERSONAL', 'GROUP'],
     reason: [],
   });
@@ -43,7 +47,7 @@ const AdminPointsRewardPage = () => {
   const refreshHandler = () => {
     setParam({
       ...param,
-      order: 'ASC',
+      order: 'createdAt,DESC',
       type: ['PERSONAL', 'GROUP'],
       reason: [],
     });
@@ -78,7 +82,7 @@ const AdminPointsRewardPage = () => {
     pageParam: {
       page: currentPage,
       size: 10,
-      sort: `createdAt,${param.order}`,
+      sort: param.order,
     },
   });
 
@@ -178,7 +182,7 @@ const AdminPointsRewardPage = () => {
       >
         <RadioButtonContainer
           title="정렬"
-          options={Object.entries(orderList) as [string, string][]}
+          options={Object.entries(rewardOrderList) as [string, string][]}
           selectedOption={param.order}
           setSelectedOption={(order: string) => setParam({ ...param, order })}
         />
