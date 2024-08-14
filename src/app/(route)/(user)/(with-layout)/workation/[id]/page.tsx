@@ -5,15 +5,14 @@ import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
 import { useRouter } from 'next/navigation';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import WkDetailInfo from '@/_components/user/workation/WkDetailInfo';
-import WkResultInfo from '@/_components/user/workation/WkResultInfo';
 import WkReviewInfo from '@/_components/user/workation/WkReviewInfo';
 import { useGetUserWkDetailQuery } from '@/_hooks/user/useGetUserWkDetailQuery';
 import dayjs from 'dayjs';
 import { useGetUserWkPlaceReviewQuery } from '@/_hooks/user/useGetUserWkPlaceReviewQuery';
-import { useGetWkSimulationQuery } from '@/_hooks/user/useGetWkSimulationQuery';
 import UserFilteringSectionContainer from '@/_components/user/common/containers/UserFilteringSectionContainer';
 import UserLoading from '@/_components/user/userLoading';
 import NetworkError from '@/_components/common/networkError';
+import WkResultInfo from '@/_components/user/workation/WkResultInfo';
 
 interface UserWkDetailProps {
   params: { id: number };
@@ -173,9 +172,7 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
             latitude={data.latitude}
           />
         </div>
-        <div className="mt-16 flex flex-col" ref={resultRef}>
-          <WkResultInfo id={id} />
-        </div>
+        <WkResultInfo id={id} />
         <div className="flex flex-col gap-10 pt-16" ref={reviewRef}>
           <UserFilteringSectionContainer
             orderOption={{
