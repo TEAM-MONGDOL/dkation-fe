@@ -7,7 +7,7 @@ import SearchingBoxModule from '@/_components/common/modules/SearchingBoxModule'
 import TableContainer from '@/_components/common/containers/TableContainer';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
 import RadioButtonContainer from '@/_components/common/containers/RadioButtonContainer';
-import { membersOrderList, teamList } from '@/_types/adminType';
+import { membersOrderList } from '@/_types/adminType';
 import CheckboxContainer from '@/_components/common/containers/CheckboxContainer';
 import FilteringBarContainer from '@/_components/common/containers/FilteringBarContainer';
 import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
@@ -18,6 +18,7 @@ import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
 import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAtom';
 import { useGetMemberListQuery } from '@/_hooks/admin/useGetMemberListQuery';
 import { MembersSearchQueryOptions } from '@/_constants/common';
+import { departmentConverter, departmentList } from '@/_types/commonType';
 
 const AdminMembersListPage = () => {
   const router = useRouter();
@@ -27,8 +28,8 @@ const AdminMembersListPage = () => {
     order: string;
     departmentType: string[];
   }>({
-    order: 'NAME',
-    departmentType: ['MANAGEMENT', 'SALES', 'MARKETING', 'PROMOTION', 'DEV'],
+    order: 'name,ASC',
+    departmentType: departmentList,
   });
 
   const [selectedOption, setSelectedOption] = useState(
@@ -47,8 +48,8 @@ const AdminMembersListPage = () => {
   const refreshHandler = () => {
     setParam({
       ...param,
-      order: 'NAME',
-      departmentType: ['MANAGEMENT', 'SALES', 'MARKETING', 'PROMOTION', 'DEV'],
+      order: 'name,ASC',
+      departmentType: departmentList,
     });
   };
 
@@ -88,7 +89,7 @@ const AdminMembersListPage = () => {
         <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         <CheckboxContainer
           title="소속"
-          options={Object.entries(teamList) as [string, string][]}
+          options={Object.entries(departmentConverter) as [string, string][]}
           selectedOptions={param.departmentType}
           setSelectedOptions={(departmentType: string[]) =>
             setParam({ ...param, departmentType })
@@ -115,9 +116,7 @@ const AdminMembersListPage = () => {
               <EmptyContainer colSpan={7} text="no data" />
             )
           ) : data.pageInfo.totalElements <= 0 ? (
-            <div>
-              <EmptyContainer colSpan={7} />
-            </div>
+            <EmptyContainer colSpan={7} />
           ) : (
             data.memberInfos.map((item, index) => (
               <TableBodyModule key={item.accountId}>

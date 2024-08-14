@@ -4,9 +4,13 @@ import { LeftKeyIcon, RightKeyIcon } from '@/_assets/icons';
 import Image from 'next/image';
 import { useRef, useState } from 'react';
 import { useGetWkReviewListQuery } from '@/_hooks/user/useGetWkReviewListQuery';
+import { useRouter } from 'next/navigation';
+import NetworkError from '@/_components/common/networkError';
+import { BeatLoader } from 'react-spinners';
 import RecentReviewItem from './RecentReviewItem';
 
 const RecentReviewSection = () => {
+  const router = useRouter();
   const scrollContainerRef = useRef(null);
   const [currentStartItem, setCurrentStartItem] = useState(0);
   const { data, isLoading, isError } = useGetWkReviewListQuery({
@@ -81,15 +85,23 @@ const RecentReviewSection = () => {
         >
           {!data ? (
             isLoading ? (
-              <div>loading ...</div>
+              <div className="flex h-[307px] w-full items-center justify-center">
+                <BeatLoader color="#FDE000" className="mx-auto" />
+              </div>
             ) : isError ? (
-              <div>error ...</div>
+              <NetworkError />
             ) : (
-              <div>no data ...</div>
+              <NetworkError />
             )
           ) : (
             data.reviewInfosForMember.map((review) => (
-              <RecentReviewItem key={review.reviewId} review={review} />
+              <RecentReviewItem
+                key={review.reviewId}
+                review={review}
+                onClick={() => {
+                  router.push(`/workation/${review.wktId}`);
+                }}
+              />
             ))
           )}
         </div>

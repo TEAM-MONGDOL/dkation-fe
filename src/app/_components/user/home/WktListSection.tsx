@@ -1,12 +1,16 @@
 'use client';
 
+import NetworkError from '@/_components/common/networkError';
+import { useRouter } from 'next/navigation';
 import { useGetWkListQuery } from '@/_hooks/admin/useGetWktListQuery';
 import Image from 'next/image';
 import { LeftKeyIcon, RightKeyIcon } from '@/_assets/icons';
 import { useRef, useState } from 'react';
 import WktListItem from './WktListItem';
+import UserLoading from '../userLoading';
 
 const WktListSection = () => {
+  const router = useRouter();
   const scrollContainerRef = useRef(null);
   const [currentStartItem, setCurrentStartItem] = useState(0);
   const { data, isLoading, isError } = useGetWkListQuery({
@@ -71,15 +75,21 @@ const WktListSection = () => {
         >
           {!data ? (
             isLoading ? (
-              <div>loading...</div>
+              <UserLoading />
             ) : isError ? (
-              <div>error...</div>
+              <NetworkError />
             ) : (
-              <div>no data...</div>
+              <NetworkError />
             )
           ) : (
             data.wktInfos.map((wktInfo) => (
-              <WktListItem key={wktInfo.wktId} wktInfo={wktInfo} />
+              <WktListItem
+                key={wktInfo.wktId}
+                wktInfo={wktInfo}
+                onClick={() => {
+                  router.push(`/workation/${wktInfo.wktId}`);
+                }}
+              />
             ))
           )}
         </div>

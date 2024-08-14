@@ -200,6 +200,7 @@ const UserWkHistoryPage = () => {
             <WorkationCard
               applyId={wkt.applyId}
               accountId={accountId}
+              reviewId={wkt.reviewId}
               key={wkt.wktId}
               wktId={wkt.wktId}
               thumbnailUrl={wkt.thumbnailUrl}
@@ -212,7 +213,7 @@ const UserWkHistoryPage = () => {
               endDate={wkt.endDate}
               bettingPoint={wkt.bettingPoint}
               applyStatusType={wkt.applyStatusType}
-              waitingNumber={4} // 수정 필요
+              waitingNumber={wkt.waitNumber} // 수정 필요
               onClick={() => handleCardClick(wkt.applyStatusType, wkt.wktId)}
             />
           ))

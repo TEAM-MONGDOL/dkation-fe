@@ -137,7 +137,7 @@ const WorkationList = () => {
           ) : (
             data.wktInfos.map((item, index) => (
               <TableBodyModule key={item.wktId}>
-                <TableBodyAtom isFirst>{item.wktId}</TableBodyAtom>
+                <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
                 <TableBodyAtom>{item.title}</TableBodyAtom>
                 <TableBodyAtom>
                   {dayjs(item.createdAt).format('YYYY.MM.DD')}

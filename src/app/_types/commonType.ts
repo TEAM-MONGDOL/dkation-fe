@@ -41,6 +41,22 @@ export const WktStatusConverter: { [key in WktStatusType]: string } = {
   CLOSED: '모집 완료',
 };
 
+export type DepartmentType = '개발팀' | '인사팀' | '회계팀' | '마케팅팀';
+
+export const departmentList: DepartmentType[] = [
+  '개발팀',
+  '인사팀',
+  '회계팀',
+  '마케팅팀',
+];
+
+export const departmentConverter: { [key in DepartmentType]: string } = {
+  개발팀: '개발팀',
+  인사팀: '인사팀',
+  회계팀: '회계팀',
+  마케팅팀: '마케팅팀',
+};
+
 export const KakaoMetaSchema = z.object({
   total_count: z.number(),
   pageable_count: z.number(),

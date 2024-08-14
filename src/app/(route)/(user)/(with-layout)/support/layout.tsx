@@ -11,6 +11,7 @@ const UserSupportLayout = ({ children }: Props) => {
     {
       text: '공지사항',
       path: '/support/notices',
+      parent: '/support/notices',
     },
     {
       text: '자주 묻는 질문',

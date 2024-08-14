@@ -10,7 +10,7 @@ const Userlayout = ({ children }: Props) => {
   return (
     <div>
       <UserNavBarContainer />
-      <main className="mb-20 flex-1 overflow-y-auto">{children}</main>
+      <main className="mb-20 min-h-screen flex-1">{children}</main>
       <UserFooterContainer />
     </div>
   );

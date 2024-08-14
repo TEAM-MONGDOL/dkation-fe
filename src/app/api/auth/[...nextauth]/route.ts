@@ -1,7 +1,9 @@
 import api from '@/_hooks/Axios';
 import axios from 'axios';
+import dayjs from 'dayjs';
 import NextAuth, { User } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
+import { signOut } from 'next-auth/react';
 
 type ExtendedUser = User & {
   isAdmin: boolean;
@@ -18,19 +20,16 @@ const handler = NextAuth({
         password: { label: '비밀번호', type: 'password' },
       },
       async authorize(credentials) {
-        // console.log('credentials');
-
         if (!credentials) {
           throw new Error('로그인 정보가 없습니다.');
         }
 
         try {
           const authResponse = await api.post('/api/auth/login', credentials);
-          // console.log(authResponse);
 
           if (authResponse.data.data) {
             return {
-              id: authResponse.data.data.accountId, // id 필드 추가
+              id: authResponse.data.data.accountId,
               ...authResponse.data.data,
             };
           }
@@ -47,38 +46,53 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
-      // console.log('Jwt Callback()');
-      // console.log(token);
-      // console.log(user);
-      // authorize 함수의 반환값이 user에 담겨서 넘어온다.
-      // user 객체가 있다는 것은 signin이 성공한 직후의 요청
-      if (user) {
+    async jwt({ token, user, account }) {
+      if (account && user) {
         const extendedUser = user as ExtendedUser;
-        return {
+
+        /* eslint-disable no-param-reassign */
+        token = {
           ...token,
+          accountId: extendedUser.id,
           isAdmin: extendedUser.isAdmin,
           accessToken: extendedUser.accessToken,
-          accountId: extendedUser.accountId,
+          expiredAt: dayjs().add(10, 'minute').valueOf(), // 밀리초 단위로 수정
         };
+
+        return token;
       }
-      // user 객체가 없다는 것은 단순 세션 조회를 위한 요청
-      // console.log(token);
+
+      console.log('jwt token:', token);
+
+      if (
+        token.expiredAt &&
+        dayjs(token.expiredAt as number).isBefore(dayjs())
+      ) {
+        console.log('refresh token');
+        const res = await api.get('/api/auth/refresh');
+        const { accessToken } = res.data.data;
+        if (!accessToken) {
+          signOut();
+        }
+        console.log('new access token:', accessToken);
+
+        token.accessToken = accessToken;
+        token.expiredAt = dayjs().add(10, 'minute').valueOf();
+
+        return token;
+      }
+
       return token;
     },
 
     async session({ session, token }) {
-      // console.log('Session Callback()');
-      // console.log(session);
-      // console.log(token);
-      // 4.Jwt Callback으로부터 반환받은 token값을 기존 세션에 추가한다
+      /* eslint-disable no-param-reassign */
       if (token) {
-        /* eslint-disable no-param-reassign */
         session.isAdmin = token.isAdmin as boolean;
         session.accessToken = token.accessToken as string;
         session.accountId = token.accountId as number;
+        session.expiredAt = token.expiredAt as number;
       }
-      // console.log(session);
       return session;
     },
   },
@@ -87,7 +101,7 @@ const handler = NextAuth({
   },
   session: {
     strategy: 'jwt',
-    maxAge: 60 * 30, // 30분
+    maxAge: 60 * 10, // 10 minutes
   },
   secret: process.env.NEXTAUTH_SECRET,
 });

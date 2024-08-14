@@ -40,7 +40,7 @@ export const wkDetailInfoSchema = z.object({
   description: z.string(),
   wktPlaceId: z.number(),
   place: z.string(),
-  files: fileInfoSchema.array().nullable().optional(),
+  files: fileInfoSchema.array(),
 });
 
 export const wkApplyPercentageInfoSchema = z.object({
@@ -357,7 +357,9 @@ export const applyListSchema = z.object({
 
 export const userApplyInfoSchema = z.object({
   applyId: z.number(),
+  reviewId: z.number().nullable(),
   thumbnailUrl: z.string(),
+  waitNumber: z.number(),
   wktId: z.number(),
   wktName: z.string(),
   place: z.string(),
@@ -577,7 +579,6 @@ export type TeamType =
   | 'MARKETING'
   | 'PROMOTION'
   | 'DEV';
-export type MembersOrderType = 'NAME' | 'HIGHEST' | 'LOWEST';
 
 export type PointRequestStatusType = 'WAITING' | 'REJECTED' | 'ACCEPTED';
 
@@ -657,18 +658,16 @@ export const pointRequestStatusList: {
   ACCEPTED: '승인',
 };
 
-export const membersOrderList: { [key in MembersOrderType]: string } = {
-  NAME: '이름순',
-  HIGHEST: '보유 포인트 높은순',
-  LOWEST: '보유 포인트 낮은순',
+// OrderList
+export const membersOrderList: Record<string, string> = {
+  'name,ASC': '이름순',
+  'pointQuantity,DESC': '보유 포인트 높은순',
+  'pointQuantity,ASC': '보유 포인트 낮은순',
 };
 
-export const teamList: { [key in TeamType]: string } = {
-  MANAGEMENT: '경영팀',
-  SALES: '영업팀',
-  MARKETING: '마케팅팀',
-  PROMOTION: '홍보팀',
-  DEV: '개발팀',
+export const rewardOrderList: Record<string, string> = {
+  'createdAt,DESC': '최신순',
+  'createdAt,ASC': '오래된순',
 };
 
 export const orderList: { [key in OrderType]: string } = {
