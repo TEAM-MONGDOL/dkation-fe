@@ -611,10 +611,16 @@ export const pointRequestStatusList: {
   ACCEPTED: '승인',
 };
 
+// OrderList
 export const membersOrderList: Record<string, string> = {
   'name,ASC': '이름순',
   'pointQuantity,DESC': '보유 포인트 높은순',
   'pointQuantity,ASC': '보유 포인트 낮은순',
+};
+
+export const rewardOrderList: Record<string, string> = {
+  'createdAt,DESC': '최신순',
+  'createdAt,ASC': '오래된순',
 };
 
 export const orderList: { [key in OrderType]: string } = {
