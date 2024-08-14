@@ -5,11 +5,15 @@ import Image from 'next/image';
 
 interface RecentReviewItemProps {
   review: ReviewInfoForMemberType;
+  onClick: () => void;
 }
 
-const RecentReviewItem = ({ review }: RecentReviewItemProps) => {
+const RecentReviewItem = ({ review, onClick }: RecentReviewItemProps) => {
   return (
-    <div className="flex h-[307px] w-[331px] shrink-0 snap-start flex-col rounded-xl border border-sub-100 text-sub-400">
+    <div
+      className="flex h-[307px] w-[331px] shrink-0 cursor-pointer snap-start flex-col rounded-xl border border-sub-100 text-sub-400"
+      onClick={onClick}
+    >
       <div className="border-b border-sub-100 px-7 py-6">
         <div className="flex w-full items-center justify-between">
           <p className="text-4 font-medium text-sub-200">{review.wktPlace}</p>

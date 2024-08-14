@@ -12,7 +12,7 @@ const UserOrderContainer = ({
   setSelectedOrder,
 }: UserOrderContainerProps) => {
   return (
-    <div className="flex w-[250px] flex-col rounded-xl border border-sub-100/50 bg-white shadow-[2px_2px_2px_2px_rgba(0,0,0,0.02)]">
+    <div className="mb-10 flex w-[250px] flex-col rounded-xl border border-sub-100/50 bg-white shadow-[2px_2px_2px_2px_rgba(0,0,0,0.02)]">
       <div className="flex w-full items-center justify-between px-8 py-7">
         <span className="text-1 font-semibold">정렬</span>
       </div>
