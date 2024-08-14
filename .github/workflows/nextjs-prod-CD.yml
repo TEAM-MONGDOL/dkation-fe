@@ -39,7 +39,7 @@ jobs:
           echo "$SSH_KEY" > ssh_key
           chmod 600 ssh_key
 
-          ssh -i ssh_key -o StrictHostKeyChecking=no $USER@$BASTION_IP << 'EOF'
+          ssh -i ssh_key -o StrictHostKeyChecking=no $USER@$BASTION_IP << EOF
             set -x
             echo "Environment variables:"
             echo "KCR_USERNAME: $KCR_USERNAME"
@@ -56,16 +56,16 @@ jobs:
                 echo "Docker version:"
                 sudo docker version
                 echo "Logging into Docker registry"
-                echo $KCR_PASSWORD | sudo docker login dkation.kr-central-2.kcr.dev -u $KCR_USERNAME --password-stdin || { echo 'Docker login failed'; exit 1; }
+                echo \$KCR_PASSWORD | sudo docker login dkation.kr-central-2.kcr.dev -u \$KCR_USERNAME --password-stdin || { echo 'Docker login failed'; exit 1; }
                 echo "Stopping and removing existing containers"
                 sudo docker ps -q --filter ancestor=dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe | xargs -r sudo docker stop
                 sudo docker ps -aq --filter ancestor=dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe | xargs -r sudo docker rm
                 echo "Removing old Docker images"
                 sudo docker images dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe --format '{{.ID}}' | xargs -r sudo docker rmi
                 echo "Pulling new Docker image"
-                sudo docker pull dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe:${DEPLOY_TAG} || { echo 'Docker pull failed'; exit 1; }
+                sudo docker pull dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe:\$DEPLOY_TAG || { echo 'Docker pull failed'; exit 1; }
                 echo "Running new Docker container"
-                sudo docker run -d -p 80:3000 dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe:${DEPLOY_TAG} || { echo 'Docker run failed'; exit 1; }
+                sudo docker run -d -p 80:3000 dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe:\$DEPLOY_TAG || { echo 'Docker run failed'; exit 1; }
               ENDSSH
             done
           EOF
