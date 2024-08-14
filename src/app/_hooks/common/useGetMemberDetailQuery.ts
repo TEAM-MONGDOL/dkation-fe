@@ -6,8 +6,10 @@ export const useGetMemberDetailQueryKey = 'useGetMemberDetailQuery';
 
 export const useGetMemberDetailQuery = ({
   accountId,
+  enable = true,
 }: {
   accountId: string;
+  enable?: boolean;
 }) => {
   return useQuery({
     queryKey: [useGetMemberDetailQueryKey, accountId],
@@ -17,5 +19,6 @@ export const useGetMemberDetailQuery = ({
       });
       return memberDetailSchema.parse(res.data.data);
     },
+    enabled: enable,
   });
 };

@@ -73,6 +73,7 @@ export const wktResultInfosSchema = z.object({
 });
 
 export const wktWinningUserInfosSchema = z.object({
+  wktTitle: z.string(),
   penaltyType: z
     .union([
       z.literal('NOSHOW'),
@@ -85,12 +86,56 @@ export const wktWinningUserInfosSchema = z.object({
   accountId: z.string(),
   department: z.string(),
   penaltyAssignDate: z.string().nullable(),
+  applyStatusType: z
+    .union([
+      z.literal('APPLIED'),
+      z.literal('RAFFLE_WAIT'),
+      z.literal('NO_WINNING'),
+      z.literal('CONFIRM_WAIT'),
+      z.literal('CANCEL'),
+      z.literal('CONFIRM'),
+      z.literal('WAIT'),
+      z.literal('VISITED'),
+    ])
+    .nullable(),
+});
+export const wktWaitingUserInfosSchema = z.object({
   wktTitle: z.string(),
+  penaltyType: z
+    .union([
+      z.literal('NOSHOW'),
+      z.literal('REPORT'),
+      z.literal('NEGLIGENCE'),
+      z.literal('ABUSE'),
+    ])
+    .nullable(),
+  waitingNum: z.number(),
+  name: z.string(),
+  accountId: z.string(),
+  department: z.string(),
+  applyStatusType: z
+    .union([
+      z.literal('APPLIED'),
+      z.literal('RAFFLE_WAIT'),
+      z.literal('NO_WINNING'),
+      z.literal('CONFIRM_WAIT'),
+      z.literal('CANCEL'),
+      z.literal('CONFIRM'),
+      z.literal('WAIT'),
+      z.literal('VISITED'),
+    ])
+    .nullable(),
+  penaltyAssignDate: z.string().nullable(),
+});
+export const wktDistributionInfosSchema = z.object({
+  wktDistributionCount: z.number().array(),
 });
 
 export const WkResultPenaltyInfoSchema = z.object({
   wktResultInfo: wktResultInfosSchema,
   wktWinningUserInfos: wktWinningUserInfosSchema.array(),
+  wktWaitingUserInfos: wktWaitingUserInfosSchema.array(),
+  wktDistributionInfo: wktDistributionInfosSchema,
 });
 
 export const WkResultInfoSchema = z.object({

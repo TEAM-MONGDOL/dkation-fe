@@ -9,7 +9,9 @@ import RatingStar from '@/_components/user/review/userRatingStarContainer';
 import { useGetReviewDetailQuery } from '@/_hooks/user/useGetReviewDetailQuery';
 import { usePatchReviewMutation } from '@/_hooks/user/usePatchReviewMutation';
 import CheckboxAtom from '@/_components/common/atoms/CheckboxAtom';
-import ReviewWktInfo from '@/_components/user/mypage/ReviewWktInfo'; // Import CheckboxAtom
+import ReviewWktInfo from '@/_components/user/mypage/ReviewWktInfo';
+import UserLoading from '@/_components/user/userLoading';
+import NetworkError from '@/_components/common/networkError'; // Import CheckboxAtom
 
 interface UserReviewEditPageProps {
   params: {
@@ -21,9 +23,13 @@ const ReviewEditPage = ({ params }: UserReviewEditPageProps) => {
   const { id } = params;
   const router = useRouter();
 
-  const { data } = useGetReviewDetailQuery({
+  const { data, isLoading, isError } = useGetReviewDetailQuery({
     reviewId: id,
   });
+
+  if (isLoading) <UserLoading />;
+  if (isError) <NetworkError />;
+  if (!data) <NetworkError />;
 
   const [values, setValues] = useState({
     fileUrls: data?.reviewDetailInfo.imageUrls || [],

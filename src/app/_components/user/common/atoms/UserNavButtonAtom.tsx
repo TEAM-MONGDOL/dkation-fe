@@ -21,7 +21,7 @@ const UserNavButtonAtom = () => {
     }
   };
   const { data: memberDetail, isError: memberDetailIsError } =
-    useGetMemberDetailQuery({ accountId });
+    useGetMemberDetailQuery({ accountId, enable: !!session.data });
 
   if (!session.data) {
     return (

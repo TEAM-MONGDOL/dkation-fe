@@ -10,6 +10,7 @@ import { usePostPointApplyMutation } from '@/_hooks/user/usePostPointApplyMutati
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import AdminLoading from '@/_components/admin/adminLoading';
 
 const getFileType = (url: string) => {
   const parts = url.split('.');
@@ -100,7 +101,7 @@ const PointsApplyNewPage = () => {
   };
 
   if (policyListIsLoading) {
-    return <div>로딩 중...</div>;
+    return <AdminLoading />;
   }
 
   if (policyListIsError) {

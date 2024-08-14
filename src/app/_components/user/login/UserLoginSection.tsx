@@ -12,6 +12,7 @@ interface UserLoginSectionProps {
 
 const UserLoginSection = ({ onFindPasswordClick }: UserLoginSectionProps) => {
   const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({
     accountId: '',
     password: '',
@@ -33,11 +34,14 @@ const UserLoginSection = ({ onFindPasswordClick }: UserLoginSectionProps) => {
     const result = await signIn('credentials', {
       accountId: form.accountId,
       password: form.password,
-      callbackUrl: '/',
+      redirect: false,
     });
 
     if (result?.error) {
+      setError(result.error);
       console.log('로그인 실패 : ', result);
+    } else {
+      router.refresh();
     }
   };
   return (
@@ -56,7 +60,7 @@ const UserLoginSection = ({ onFindPasswordClick }: UserLoginSectionProps) => {
                 value={form.accountId}
                 onChange={onChange}
                 placeholder="아이디"
-                error={null}
+                error={error === '사용자를 찾을 수 없습니다.' ? error : null}
               />
               <UserLoginInput
                 type="password"
@@ -64,7 +68,7 @@ const UserLoginSection = ({ onFindPasswordClick }: UserLoginSectionProps) => {
                 value={form.password}
                 onChange={onChange}
                 placeholder="비밀번호"
-                error={null}
+                error={error !== '사용자를 찾을 수 없습니다.' ? error : null}
               />
             </div>
             <UserButtonAtom

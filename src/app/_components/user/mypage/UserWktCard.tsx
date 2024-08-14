@@ -122,7 +122,7 @@ const WorkationCard = ({
         height={304}
         src={thumbnailUrl}
         alt="place"
-        className="rounded object-cover"
+        className="h-[304px] w-[402px] rounded object-cover"
       />
       <div className="ml-8 flex-grow">
         <p className="mb-3 text-sub-300">{wktName}</p>

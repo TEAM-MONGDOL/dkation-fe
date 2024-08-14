@@ -15,6 +15,8 @@ import FileContainer from '@/_components/common/containers/FileContainer';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import { Address, useDaumPostcodePopup } from 'react-daum-postcode';
 import { useGetKakaoAdddress } from '@/_hooks/admin/useGetKakaoAddress';
+import AdminLoading from '@/_components/admin/adminLoading';
+import NetworkError from '@/_components/common/networkError';
 
 interface WkPlaceEditProps {
   params: { id: number };
@@ -100,13 +102,13 @@ const AdminWorkationPlaceEditPage = ({ params }: WkPlaceEditProps) => {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
+    return <AdminLoading />;
   }
   if (isError) {
-    return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정
+    return <NetworkError />;
   }
   if (!data) {
-    return <div>No data</div>;
+    return <NetworkError />;
   }
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
