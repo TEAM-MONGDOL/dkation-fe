@@ -200,6 +200,7 @@ const UserWkHistoryPage = () => {
             <WorkationCard
               applyId={wkt.applyId}
               accountId={accountId}
+              reviewId={wkt.reviewId}
               key={wkt.wktId}
               wktId={wkt.wktId}
               thumbnailUrl={wkt.thumbnailUrl}
