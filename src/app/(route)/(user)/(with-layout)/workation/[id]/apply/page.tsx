@@ -1,11 +1,9 @@
 'use client';
 
-import place from '@/_assets/images/place_impy.png';
 import WkBannerPeriodModule from '@/_components/user/common/modules/WkBannerPeriodModule';
 import Image from 'next/image';
 import { LocationIcon } from '@/_assets/icons';
 import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
-import { useGetUserPercentQuery } from '@/_hooks/user/useGetUserPercentQuery';
 import React, { useState } from 'react';
 import { useGetMemberDetailQuery } from '@/_hooks/common/useGetMemberDetailQuery';
 import { useSession } from 'next-auth/react';
@@ -15,6 +13,7 @@ import { usePostUserWkApplyMutation } from '@/_hooks/user/usePostUserWkApplyMuta
 import { useRouter } from 'next/navigation';
 import UserLoading from '@/_components/user/userLoading';
 import NetworkError from '@/_components/common/networkError';
+import { useGetWinningPercentageQuery } from '@/_hooks/user/useGetWinningPercentageQuery';
 
 interface Props {
   params: { id: number };
@@ -32,13 +31,14 @@ const UserWkApplyPage = ({ params }: Props) => {
     isError: myPointIsError,
   } = useGetMemberDetailQuery({
     accountId,
+    enable: !!session.data,
   });
 
   const {
     data: pointData,
     isLoading: pointIsLoading,
     isError: pointIsError,
-  } = useGetUserPercentQuery({ wktId: id, point });
+  } = useGetWinningPercentageQuery({ wktId: id, point, enable: point > 0 });
 
   const { data, isLoading, isError } = useGetUserWkDetailQuery({
     wktId: id,
@@ -113,7 +113,9 @@ const UserWkApplyPage = ({ params }: Props) => {
         <div>
           <p className="mb-10 text-h2 font-semibold">나의 당첨 확률</p>
           <div className="flex items-end justify-center gap-10 rounded-[17px] border border-[#E5CD07] bg-gradient-to-r from-primary/5 to-primary/60 px-9 pb-2.5">
-            <p className="text-[78px] font-bold">{pointData?.percentage}%</p>
+            <p className="text-[78px] font-bold">
+              {pointData?.percentage || 0}%
+            </p>
             <p className="mb-5 text-h3 text-[#E5CD07]">±{pointData?.error}%</p>
           </div>
         </div>
