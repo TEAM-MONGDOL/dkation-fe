@@ -12,6 +12,8 @@ import logo from '@/_assets/images/logo_imsy.png';
 import { useGetWkDetailQuery } from '@/_hooks/admin/useGetWkDetailQuery';
 import { useGetWkPlaceListQuery } from '@/_hooks/admin/useGetWkPlaceListQuery';
 import { useDeleteWkMutation } from '@/_hooks/admin/useDeleteWkQuery';
+import AdminLoading from '@/_components/admin/adminLoading';
+import NetworkError from '@/_components/common/networkError';
 
 interface WkDetailProps {
   params: { id: number };
@@ -37,13 +39,13 @@ const WorkationDetail = ({ params }: WkDetailProps) => {
   const { mutate: deleteWkMutation } = useDeleteWkMutation(id);
 
   if (isLoading || isPlaceLoading) {
-    return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
+    return <AdminLoading />;
   }
   if (isError || isPlaceError) {
-    return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정
+    return <NetworkError />;
   }
   if (!data || !placeData) {
-    return <div>No data</div>;
+    return <NetworkError />;
   }
   const placeInfo = placeData.wktPlaceInfos.find(
     (place) => place.id === data.wktPlaceId,

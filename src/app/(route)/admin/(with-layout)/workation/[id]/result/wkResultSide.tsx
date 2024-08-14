@@ -1,10 +1,12 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import InfoSectionContainer from '@/_components/common/containers/InfoSectionContainer';
 import SidebarModule from '@/_components/common/modules/SidebarModule';
 import { useGetWkDetailQuery } from '@/_hooks/admin/useGetWkDetailQuery';
 import dayjs from 'dayjs';
 import { useGetWkPlaceListQuery } from '@/_hooks/admin/useGetWkPlaceListQuery';
+import AdminLoading from '@/_components/admin/adminLoading';
+import NetworkError from '@/_components/common/networkError';
 
 const WkResultSide = ({ id }: { id: number }) => {
   const wktId = id;
@@ -22,13 +24,13 @@ const WkResultSide = ({ id }: { id: number }) => {
   });
 
   if (isLoading || isPlaceLoading) {
-    return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
+    return <AdminLoading />;
   }
   if (isError || isPlaceError) {
-    return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정
+    return <NetworkError />;
   }
   if (!data || !placeData) {
-    return <div>No data</div>;
+    return <NetworkError />;
   }
 
   const placeInfo = placeData.wktPlaceInfos.find(

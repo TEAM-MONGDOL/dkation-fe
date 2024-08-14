@@ -9,6 +9,8 @@ import { useGetWkReviewDetailQuery } from '@/_hooks/admin/useGetWkReviewDetailQu
 import React from 'react';
 import dayjs from 'dayjs';
 import { usePatchWkReviewMutation } from '@/_hooks/admin/usePatchWkReviewMutation';
+import AdminLoading from '@/_components/admin/adminLoading';
+import NetworkError from '@/_components/common/networkError';
 
 interface WkDetailProps {
   params: { id: number };
@@ -31,13 +33,13 @@ const AdminWorkationReviewDetailPage = ({ params }: WkDetailProps) => {
   const patchReviewQuery = usePatchWkReviewMutation(successCallback);
 
   if (isLoading) {
-    return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
+    return <AdminLoading />;
   }
   if (isError) {
-    return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정
+    return <NetworkError />;
   }
   if (!data) {
-    return <div>No data</div>;
+    return <NetworkError />;
   }
 
   const handleConfirmBlind = () => {
