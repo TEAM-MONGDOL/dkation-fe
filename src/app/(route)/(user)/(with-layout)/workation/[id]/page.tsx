@@ -173,7 +173,9 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
             latitude={data.latitude}
           />
         </div>
-        <WkResultInfo id={id} />
+        <div ref={resultRef}>
+          <WkResultInfo id={id} />
+        </div>
         <div className="flex flex-col gap-10 pt-16" ref={reviewRef}>
           <UserFilteringSectionContainer
             orderOption={{
