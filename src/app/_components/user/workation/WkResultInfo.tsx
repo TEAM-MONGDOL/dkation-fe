@@ -72,7 +72,7 @@ const Slider = ({ id }: { id: number }) => {
         const nextPos =
           matchingMemberIndex < data.raffleMemberIndexInfos.length - 1
             ? calculateLeftPosition(matchingMemberIndex + 1)
-            : 100; // 마지막 멤버라면 끝까지
+            : 100;
         // 당첨자 위치와 그 다음 위치 사이의 중간점
         return (currentPos + nextPos) / 2;
       }
