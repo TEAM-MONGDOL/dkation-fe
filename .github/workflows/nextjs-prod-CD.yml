@@ -2,7 +2,8 @@ name: NextJS CD
 
 on:
   release:
-    types: [published]
+    types:
+      - published
   workflow_dispatch:
 
 jobs:
@@ -19,11 +20,11 @@ jobs:
         id: get_tag
         run: |
           if [[ ${{ github.event_name }} == 'release' ]]; then
-            echo "::set-output name=tag::${{ github.event.release.tag_name }}"
+            echo "tag=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
           else
             git fetch --tags
             latest_tag=$(git describe --tags --abbrev=0)
-            echo "::set-output name=tag::$latest_tag"
+            echo "tag=$latest_tag" >> $GITHUB_OUTPUT
           fi
 
       - name: Deploy to Web Servers
@@ -36,31 +37,21 @@ jobs:
           WEB_IPS: ${{ secrets.WEB_IPS }}
           DEPLOY_TAG: ${{ steps.get_tag.outputs.tag }}
         run: |
-          # Write the SSH key to a file
           echo "$SSH_KEY" > ssh_key
           chmod 600 ssh_key
-
-          # Connect to Bastion and run deployment on each Web server
-          ssh -i ssh_key -o StrictHostKeyChecking=no $BASTION_USER@$BASTION_IP << EOF
+          
+          ssh -i ssh_key -o StrictHostKeyChecking=no $BASTION_USER@$BASTION_IP << 'EOF'
             IFS=',' read -ra WEB_IP_ARRAY <<< "$WEB_IPS"
-            for WEB_IP in "\${WEB_IP_ARRAY[@]}"; do
-              ssh -i ssh_key -o StrictHostKeyChecking=no ec2-user@\$WEB_IP << ENDSSH
-                # Login to KCR
+            for WEB_IP in "${WEB_IP_ARRAY[@]}"; do
+              ssh -i ssh_key -o StrictHostKeyChecking=no ec2-user@$WEB_IP << 'ENDSSH'
                 echo $KCR_PASSWORD | docker login dkation.kr-central-2.kcr.dev -u $KCR_USERNAME --password-stdin
-
-                # Stop and remove existing containers
                 docker ps -q --filter ancestor=dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe | xargs -r docker stop
                 docker ps -aq --filter ancestor=dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe | xargs -r docker rm
-
-                # Remove existing images
                 docker images dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe --format '{{.ID}}' | xargs -r docker rmi
-
-                # Pull and run new image with the latest tag
                 docker pull dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe:${DEPLOY_TAG}
                 docker run -d -p 80:3000 dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe:${DEPLOY_TAG}
-              ENDSSH
+          ENDSSH
             done
           EOF
           
-          # Clean up key file
           rm ssh_key
