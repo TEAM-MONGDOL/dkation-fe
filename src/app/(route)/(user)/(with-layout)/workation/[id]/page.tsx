@@ -81,7 +81,13 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
       <hr />
       <div className="mt-20 px-40">
         <div className="flex w-full">
-          <Image width={402} height={304} src={urls[0]} alt="place" />
+          <Image
+            className="h-[304px] w-[402px] object-cover"
+            width={402}
+            height={304}
+            src={urls[0]}
+            alt="place"
+          />
           <div className="ml-8 flex-col">
             <p className="mb-3 text-sub-300">{data.title}</p>
             <h2 className="mb-12 text-h2 font-semibold text-sub-400">

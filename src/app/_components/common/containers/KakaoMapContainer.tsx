@@ -23,7 +23,7 @@ const KakaoMapContainer = ({
       window.kakao.maps.load(() => {
         const container = document.getElementById('map');
         const options = {
-          draggable: false,
+          // draggable: false,
           center: new window.kakao.maps.LatLng(
             Number(latitude),
             Number(longitude),
