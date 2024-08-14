@@ -44,6 +44,12 @@ const UserWkApplyPage = ({ params }: Props) => {
     wktId: id,
   });
 
+  const { mutate: postWkApply } = usePostUserWkApplyMutation({
+    successCallback: () => {
+      router.push('/workation/success');
+    },
+  });
+
   if (isLoading || myPointIsLoading || pointIsLoading) {
     return <UserLoading />;
   }
@@ -53,12 +59,6 @@ const UserWkApplyPage = ({ params }: Props) => {
   if (!data || !myPointData || !pointData) {
     return <NetworkError />;
   }
-
-  const { mutate: postWkApply } = usePostUserWkApplyMutation({
-    successCallback: () => {
-      router.push('/workation/success');
-    },
-  });
 
   const handlePostApplyWk = () => {
     if (point === 0) {
