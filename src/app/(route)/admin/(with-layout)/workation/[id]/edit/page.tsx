@@ -133,7 +133,7 @@ const WorkationEdit = ({ params }: WkEditProps) => {
       <div className="mt-10 flex flex-col gap-[30px]">
         <div className="flex h-52 gap-x-8">
           <Image
-            src={data?.files[0].url}
+            src={data?.files[0].url || ''}
             width={400}
             height={300}
             alt="place"

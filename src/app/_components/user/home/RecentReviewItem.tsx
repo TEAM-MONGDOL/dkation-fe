@@ -11,6 +11,7 @@ interface RecentReviewItemProps {
 const RecentReviewItem = ({ review, onClick }: RecentReviewItemProps) => {
   return (
     <div
+      role="presentation"
       className="flex h-[307px] w-[331px] shrink-0 cursor-pointer snap-start flex-col rounded-xl border border-sub-100 text-sub-400"
       onClick={onClick}
     >

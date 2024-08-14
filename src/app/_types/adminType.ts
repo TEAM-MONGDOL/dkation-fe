@@ -40,7 +40,7 @@ export const wkDetailInfoSchema = z.object({
   description: z.string(),
   wktPlaceId: z.number(),
   place: z.string(),
-  files: fileInfoSchema.array().nullable().optional(),
+  files: fileInfoSchema.array(),
 });
 
 export const wkApplyPercentageInfoSchema = z.object({

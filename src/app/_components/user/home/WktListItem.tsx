@@ -11,6 +11,7 @@ interface WktListItemProps {
 const WktListItem = ({ wktInfo, onClick }: WktListItemProps) => {
   return (
     <div
+      role="presentation"
       className="flex h-[474px] w-[513px] shrink-0 cursor-pointer snap-start flex-col bg-white"
       onClick={onClick}
     >

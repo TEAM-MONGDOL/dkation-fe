@@ -50,6 +50,7 @@ const handler = NextAuth({
       if (account && user) {
         const extendedUser = user as ExtendedUser;
 
+        /* eslint-disable no-param-reassign */
         token = {
           ...token,
           accountId: extendedUser.id,
@@ -85,6 +86,7 @@ const handler = NextAuth({
     },
 
     async session({ session, token }) {
+      /* eslint-disable no-param-reassign */
       if (token) {
         session.isAdmin = token.isAdmin as boolean;
         session.accessToken = token.accessToken as string;

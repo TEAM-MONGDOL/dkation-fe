@@ -4,11 +4,10 @@ import { LeftKeyIcon, RightKeyIcon } from '@/_assets/icons';
 import Image from 'next/image';
 import { useRef, useState } from 'react';
 import { useGetWkReviewListQuery } from '@/_hooks/user/useGetWkReviewListQuery';
-import RecentReviewItem from './RecentReviewItem';
 import { useRouter } from 'next/navigation';
-import UserLoading from '../userLoading';
 import NetworkError from '@/_components/common/networkError';
 import { BeatLoader } from 'react-spinners';
+import RecentReviewItem from './RecentReviewItem';
 
 const RecentReviewSection = () => {
   const router = useRouter();
