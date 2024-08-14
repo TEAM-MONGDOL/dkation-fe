@@ -5,8 +5,10 @@ import Image from 'next/image';
 import { LeftKeyIcon, RightKeyIcon } from '@/_assets/icons';
 import { useRef, useState } from 'react';
 import WktListItem from './WktListItem';
+import { useRouter } from 'next/navigation';
 
 const WktListSection = () => {
+  const router = useRouter();
   const scrollContainerRef = useRef(null);
   const [currentStartItem, setCurrentStartItem] = useState(0);
   const { data, isLoading, isError } = useGetWkListQuery({
@@ -79,7 +81,13 @@ const WktListSection = () => {
             )
           ) : (
             data.wktInfos.map((wktInfo) => (
-              <WktListItem key={wktInfo.wktId} wktInfo={wktInfo} />
+              <WktListItem
+                key={wktInfo.wktId}
+                wktInfo={wktInfo}
+                onClick={() => {
+                  router.push(`/workation/${wktInfo.wktId}`);
+                }}
+              />
             ))
           )}
         </div>

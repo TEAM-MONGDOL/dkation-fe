@@ -5,11 +5,15 @@ import React from 'react';
 
 interface WktListItemProps {
   wktInfo: WktInfoType;
+  onClick: () => void;
 }
 
-const WktListItem = ({ wktInfo }: WktListItemProps) => {
+const WktListItem = ({ wktInfo, onClick }: WktListItemProps) => {
   return (
-    <div className="flex h-[474px] w-[513px] shrink-0 snap-start flex-col bg-white">
+    <div
+      className="flex h-[474px] w-[513px] shrink-0 cursor-pointer snap-start flex-col bg-white"
+      onClick={onClick}
+    >
       <Image
         className="max-h-[280px] min-h-[280px] min-w-[513px] max-w-[513px] rounded-t-xl object-cover"
         src={wktInfo.thumbnailUrl}
