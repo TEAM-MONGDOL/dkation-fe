@@ -18,23 +18,6 @@ export const reviewInfosForMemberSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
-export const raffleMemberIndexInfosSchema = z.object({
-  accountId: z.string(),
-  raffleIndex: z.number(),
-});
-export const rafflePickedIndexInfosSchema = z.object({
-  accountId: z.string(),
-  pickedIndex: z.number(),
-});
-export const raffleWinnerInfosSchema = z.object({
-  accountId: z.string(),
-});
-export const workationRaffleSchema = z.object({
-  wktId: z.number(),
-  raffleMemberIndexInfos: z.array(raffleMemberIndexInfosSchema),
-  rafflePickedIndexInfos: z.array(rafflePickedIndexInfosSchema),
-  raffleWinnerInfos: z.array(raffleWinnerInfosSchema),
-})
 export const wkDetailForMemberSchema = z.object({
   title: z.string(),
   totalRecruit: z.number(),

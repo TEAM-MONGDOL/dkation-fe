@@ -83,13 +83,18 @@ const config: Config = {
         '6xl': '60px',
       },
       keyframes: {
-        // 키프레임의 기본 형태를 설정합니다. (이후 컴포넌트에서 동적으로 업데이트됩니다)
-        slideHandle: {},
-        fillTrack: {},
+        slideHandle: {
+          '0%': { left: '0%' },
+          '100%': { left: 'calc(100% - 2.65rem)' },
+        },
+        fillTrack: {
+          '0%': { width: '0%' },
+          '100%': { width: '100%' },
+        },
       },
       animation: {
-        slideHandle: 'slideHandle 9s ease-in-out forwards',
-        fillTrack: 'fillTrack 9s ease-in-out forwards',
+        slideHandle: 'slideHandle 8s ease-in-out forwards',
+        fillTrack: 'fillTrack 8s ease-in-out forwards',
       },
     },
   },

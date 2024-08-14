@@ -134,12 +134,10 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
             <p>주소 : {data.address}</p>
           </div>
           <UserButtonAtom
-            onClick={() =>
-              data.isApplied || router.push(`/workation/${id}/apply`)
-            }
-            className={`ml-auto mt-auto rounded-[8px] ${data.isApplied && 'cursor-default'}`}
-            buttonStyle={`${data.isApplied ? 'red' : 'black'}`}
-            text={`${data.isApplied ? '응모마감' : '응모하기'}`}
+            onClick={() => router.push(`/workation/${id}/apply`)}
+            className="ml-auto mt-auto rounded-[8px]"
+            buttonStyle="black"
+            text="응모하기"
             type="button"
             size="md"
           />
