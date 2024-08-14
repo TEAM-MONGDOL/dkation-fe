@@ -18,6 +18,7 @@ import WkResultSide from '@/(route)/admin/(with-layout)/workation/[id]/result/wk
 import { useGetWkPenaltyQuery } from '@/_hooks/admin/useGetWkPenaltyQuery';
 import { usePostPenaltyMutation } from '@/_hooks/admin/usePostPenaltyMutation';
 import dayjs from 'dayjs';
+import WkBattingGraph from '@/_components/common/graph/WkBattingGraph';
 import AdminLoading from '@/_components/admin/adminLoading';
 import NetworkError from '@/_components/common/networkError';
 
@@ -51,7 +52,6 @@ const AdminWorkationListPenaltyPage = ({ params }: WkResultProps) => {
   const router = useRouter();
   const { id } = params;
   const { data, isLoading, isError } = useGetWkPenaltyQuery({ wktId: id });
-
   const { mutate: PostPenalty } = usePostPenaltyMutation({
     successCallback: () => {
       alert('페널티 등록 완료');
@@ -77,6 +77,22 @@ const AdminWorkationListPenaltyPage = ({ params }: WkResultProps) => {
   if (!data) {
     return <NetworkError />;
   }
+  const gcd = (a: number, b: number): number => {
+    if (b === 0) return a;
+    return gcd(b, a % b);
+  };
+
+  const getReducedRatio = (
+    totalRecruit: number,
+    totalApply: number,
+  ): string => {
+    const divisor = gcd(totalRecruit, totalApply);
+    return `${totalRecruit / divisor} : ${totalApply / divisor}`;
+  };
+
+  const { totalRecruit, totalApply } = data.wktResultInfo;
+  const reducedRatio = getReducedRatio(totalRecruit, totalApply);
+
   return (
     <section className="flex">
       <WkResultSide id={id} />
@@ -90,16 +106,14 @@ const AdminWorkationListPenaltyPage = ({ params }: WkResultProps) => {
             <div className="flex w-full flex-col gap-4">
               <p className="text-3 font-bold">경쟁률</p>
               <div className="flex w-full flex-col gap-1 border py-7 text-center">
-                <p className="text-h1 font-bold">
-                  {`${data.wktResultInfo.totalRecruit} : ${data.wktResultInfo.totalApply}`}
-                </p>
+                <p className="text-h1 font-bold">{reducedRatio}</p>
                 <p className="text-4 text-sub-300">
                   신청 인원 {data.wktResultInfo.totalRecruit}명
                 </p>
               </div>
             </div>
             <div className="flex w-full flex-col gap-4">
-              <p className="text-3 font-bold">모집 기간</p>
+              <p className="text-3 font-bold">포인트 통계</p>
               <div className="w-full border px-10 py-5">
                 <InfoSectionModule
                   data={[
@@ -122,9 +136,9 @@ const AdminWorkationListPenaltyPage = ({ params }: WkResultProps) => {
           </div>
           <div className="flex w-full flex-col gap-4">
             <p className="text-3 font-bold">배팅 분포도</p>
-            <div className="w-full border py-14 text-center text-h1 font-bold">
-              그래프
-            </div>
+            <WkBattingGraph
+              battings={data?.wktDistributionInfo.wktDistributionCount}
+            />
           </div>
           <div className="flex w-full flex-col">
             <p className="text-3 font-bold">페널티 관리</p>
