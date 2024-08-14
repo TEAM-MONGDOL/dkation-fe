@@ -51,9 +51,10 @@ jobs:
             echo "WEB_IPS: $WEB_IPS"
           
           IFS=',' read -ra WEB_IP_ARRAY <<< "$WEB_IPS"
+          
           for WEB_IP in "${WEB_IP_ARRAY[@]}"; do
             echo "Testing SSH connection to web server $WEB_IP"
-            ssh -o StrictHostKeyChecking=no $USER@$WEB_IP << 'ENDSSH'
+            ssh -i ssh_key -o StrictHostKeyChecking=no $USER@$WEB_IP << 'ENDSSH'
               set -x
               echo "Docker version:"
               docker version
@@ -70,5 +71,5 @@ jobs:
               docker run -d -p 80:3000 dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe:${DEPLOY_TAG} || { echo 'Docker run failed'; exit 1; }
             ENDSSH
           done
-          EOF
+
           rm ssh_key
