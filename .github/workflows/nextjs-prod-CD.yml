@@ -45,7 +45,7 @@ jobs:
           ssh -i ssh_key -o StrictHostKeyChecking=no $USER@$BASTION_IP "echo 'SSH to Bastion host successful. User: $(whoami)'"
 
           # SSH 세션에서의 작업
-          ssh -i ssh_key -o StrictHostKeyChecking=no $USER@$BASTION_IP << 'EOF'
+          ssh -i ssh_key -o StrictHostKeyChecking=no $USER@$BASTION_IP << EOF
             set -x  # 디버깅 모드 활성화
             echo "Environment variables:"
             echo "KCR_USERNAME: $KCR_USERNAME"
@@ -54,11 +54,9 @@ jobs:
             echo "WEB_IPS: $WEB_IPS"
 
             IFS=',' read -ra WEB_IP_ARRAY <<< "$WEB_IPS"
-            for WEB_IP in "${WEB_IP_ARRAY[@]}"; do
-              echo "Testing SSH connection to web server $WEB_IP"
-              ssh -i ssh_key -o StrictHostKeyChecking=no $USER@$WEB_IP "echo 'SSH to web server successful. User: $(whoami)'"
-
-              ssh -i ssh_key -o StrictHostKeyChecking=no $USER@$WEB_IP << 'ENDSSH'
+            for WEB_IP in "\${WEB_IP_ARRAY[@]}"; do
+              echo "Testing SSH connection to web server \$WEB_IP"
+              ssh -i ssh_key -o StrictHostKeyChecking=no $USER@\$WEB_IP << 'ENDSSH'
                 set -x  # 디버깅 모드 활성화
                 echo "Docker version:"
                 docker version
@@ -81,5 +79,5 @@ jobs:
               ENDSSH
             done
           EOF
-
+  
           rm ssh_key
