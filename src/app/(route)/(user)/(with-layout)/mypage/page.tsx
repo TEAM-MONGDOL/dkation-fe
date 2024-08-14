@@ -7,8 +7,21 @@ import MyPoint from '@/_components/user/mypage/MyPoint';
 import UserModalAtom from '@/_components/user/common/atoms/UserModalAtom';
 import UserModalTitleAtom from '@/_components/user/common/atoms/UserModalTextAtom';
 import UserPasswordInput from '@/_components/user/mypage/UserPasswordInput';
+import { useSession } from 'next-auth/react';
+import { useGetMemberDetailQuery } from '@/_hooks/common/useGetMemberDetailQuery';
+import { usePostVerifyPasswordMutation } from '@/_hooks/user/usePostVerifyPasswordMutation';
+import { usePasswordChangeMutation } from '@/_hooks/user/usePasswordChangeMutation';
+import UserLoading from '@/_components/user/userLoading';
+import NetworkError from '@/_components/common/networkError';
+
+const passwordValidationRegex =
+  /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
 
 const UserMyPage = () => {
+  const session = useSession();
+  const accountId = String(session.data?.accountId || '');
+  const { data, isLoading, isError } = useGetMemberDetailQuery({ accountId });
+
   const [currentModal, setCurrentModal] = useState<
     'none' | 'password' | 'newPassword' | 'completed'
   >('none');
@@ -21,6 +34,27 @@ const UserMyPage = () => {
     passwordError: null as string | null,
     newPasswordError: null as string | null,
     confirmPasswordError: null as string | null,
+  });
+
+  const { mutate: verifyPassword } = usePostVerifyPasswordMutation({
+    successCallback: () => {
+      setCurrentModal('newPassword');
+    },
+    errorCallback: () => {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        passwordError: '비밀번호가 일치하지 않습니다.',
+      }));
+    },
+  });
+
+  const { mutate: changePassword } = usePasswordChangeMutation({
+    successCallback: () => {
+      setCurrentModal('completed');
+    },
+    errorCallback: (error) => {
+      console.error(error);
+    },
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,6 +83,10 @@ const UserMyPage = () => {
     if (form.newPassword.trim() === '') {
       newErrors.newPasswordError = '새 비밀번호를 입력해 주세요.';
       hasError = true;
+    } else if (!passwordValidationRegex.test(form.newPassword)) {
+      newErrors.newPasswordError =
+        '비밀번호는 8~16자의 영문 대소문자, 숫자, 특수문자를 포함해야 합니다.';
+      hasError = true;
     } else {
       newErrors.newPasswordError = null;
     }
@@ -71,11 +109,11 @@ const UserMyPage = () => {
     e.preventDefault();
     if (currentModal === 'password') {
       if (validatePassword()) {
-        setCurrentModal('newPassword');
+        verifyPassword({ password: form.password });
       }
     } else if (currentModal === 'newPassword') {
       if (validateNewPasswords()) {
-        setCurrentModal('completed');
+        changePassword({ accountId, password: form.newPassword });
       }
     }
   };
@@ -90,31 +128,34 @@ const UserMyPage = () => {
     });
   };
 
+  if (isLoading) return <UserLoading />;
+  if (isError) return <NetworkError />;
+
   return (
     <section className="px-40 pt-18">
       <div className="pb-14">
-        <MyPoint point={2000} />
+        <MyPoint point={Number(data?.pointQuantity)} />
       </div>
       <h2 className="text-h2 font-semibold">회원정보</h2>
       <div className="py-14">
         <UserInfosectionModule title="이름">
           <p className="flex h-4xl w-[300px] items-center bg-sub-100/20 pl-3">
-            홍길동
+            {data?.name}
           </p>
         </UserInfosectionModule>
         <UserInfosectionModule title="아이디">
           <p className="flex h-4xl w-[300px] items-center bg-sub-100/20 pl-3">
-            abcd.ef
+            {data?.accountId}
           </p>
         </UserInfosectionModule>
         <UserInfosectionModule title="부서">
           <p className="flex h-4xl w-[300px] items-center bg-sub-100/20 pl-3">
-            개발팀
+            {data?.department}
           </p>
         </UserInfosectionModule>
         <UserInfosectionModule title="총 포인트">
           <p className="flex h-4xl w-[300px] items-center bg-sub-100/20 pl-3">
-            2000 P
+            {data?.pointQuantity} P
           </p>
         </UserInfosectionModule>
       </div>
@@ -133,7 +174,7 @@ const UserMyPage = () => {
       </div>
 
       {currentModal === 'password' && (
-        <UserModalAtom>
+        <UserModalAtom onClose={closeModal}>
           <UserModalTitleAtom className="text-1 font-semibold">
             비밀번호 확인
           </UserModalTitleAtom>
@@ -168,7 +209,7 @@ const UserMyPage = () => {
       )}
 
       {currentModal === 'newPassword' && (
-        <UserModalAtom>
+        <UserModalAtom onClose={closeModal}>
           <UserModalTitleAtom className="text-1 font-semibold">
             비밀번호 변경
           </UserModalTitleAtom>
@@ -212,7 +253,7 @@ const UserMyPage = () => {
       )}
 
       {currentModal === 'completed' && (
-        <UserModalAtom>
+        <UserModalAtom onClose={closeModal}>
           <UserModalTitleAtom className="text-2">
             비밀번호 변경이 완료되었습니다.
           </UserModalTitleAtom>

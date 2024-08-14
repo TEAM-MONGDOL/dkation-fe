@@ -11,6 +11,8 @@ interface PatchWkPlaceProps {
   maxPeople: number;
   address: string;
   description: string;
+  latitude: string;
+  longitude: string;
 }
 export const useGetWkPlaceListQueryKey = 'useGetWkPlaceListQuery';
 export const usePatchWkPlaceQuery = (
@@ -26,6 +28,8 @@ export const usePatchWkPlaceQuery = (
       maxPeople,
       address,
       description,
+      latitude,
+      longitude,
     }: PatchWkPlaceProps) => {
       const response = await api.patch(`/api/wkt/place/${wktPlaceId}`, {
         place,
@@ -33,6 +37,8 @@ export const usePatchWkPlaceQuery = (
         maxPeople,
         address,
         description,
+        latitude,
+        longitude,
       });
       return response.data;
     },

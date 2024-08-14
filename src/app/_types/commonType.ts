@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import { WktStatusType } from './adminType';
 
 export type AxiosErrorResponse = {
@@ -39,3 +40,49 @@ export const WktStatusConverter: { [key in WktStatusType]: string } = {
   ONGOING: '모집 중',
   CLOSED: '모집 완료',
 };
+
+export const KakaoMetaSchema = z.object({
+  total_count: z.number(),
+  pageable_count: z.number(),
+  is_end: z.boolean(),
+});
+
+export const KakaoDocumentSchema = z.object({
+  address: z.object({
+    address_name: z.string(),
+    region_1depth_name: z.string(),
+    region_2depth_name: z.string(),
+    region_3depth_name: z.string(),
+    region_3depth_h_name: z.string(),
+    h_code: z.string(),
+    b_code: z.string(),
+    mountain_yn: z.string(),
+    main_address_no: z.string(),
+    sub_address_no: z.string(),
+    x: z.string(),
+    y: z.string(),
+  }),
+  address_name: z.string(),
+  address_type: z.string(),
+  road_address: z.object({
+    address_name: z.string(),
+    building_name: z.string(),
+    main_building_no: z.string(),
+    region_1depth_name: z.string(),
+    region_2depth_name: z.string(),
+    region_3depth_name: z.string(),
+    road_name: z.string(),
+    sub_building_no: z.string(),
+    underground_yn: z.string(),
+    x: z.string(),
+    y: z.string(),
+    zone_no: z.string(),
+  }),
+  x: z.string(),
+  y: z.string(),
+});
+
+export const KakaoPlaceSchema = z.object({
+  documents: z.array(KakaoDocumentSchema),
+  meta: KakaoMetaSchema,
+});

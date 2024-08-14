@@ -1,8 +1,9 @@
 export interface HomeBannerProps {
   title: string;
+  textColor: string;
 }
-const UserHomeBannerTitleAtom = ({ title }: HomeBannerProps) => {
-  return <p className="text-1">{title} 추첨 결과를 확인하세요!</p>;
+const UserHomeBannerTitleAtom = ({ title, textColor }: HomeBannerProps) => {
+  return <p className={`text-center text-1 ${textColor}`}>{title}</p>;
 };
 
 export default UserHomeBannerTitleAtom;

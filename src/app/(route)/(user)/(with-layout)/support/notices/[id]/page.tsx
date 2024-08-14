@@ -12,6 +12,8 @@ import { useRouter } from 'next/navigation';
 import UserNavigationButtonAtom from '@/_components/user/common/atoms/UserNavigationButtonAtom';
 import { useGetNoticeDetailQuery } from '@/_hooks/admin/useGetNoticeDetailQuery';
 import dayjs from 'dayjs';
+import AdminLoading from '@/_components/admin/adminLoading';
+import NetworkError from '@/_components/common/networkError';
 
 interface NoticeDetailPageProps {
   params: {
@@ -32,9 +34,9 @@ const UserNoticeDetailPage = ({ params }: NoticeDetailPageProps) => {
       <div>
         {!data ? (
           isLoading ? (
-            <div>로딩 중...</div>
+            <AdminLoading />
           ) : isError ? (
-            <div>에러 발생</div>
+            <NetworkError />
           ) : (
             <div>데이터 없음</div>
           )
