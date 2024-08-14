@@ -6,7 +6,7 @@ import Image from 'next/image';
 
 interface ModalModuleProps {
   title: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   onConfirm: () => void;
   onCancel: () => void;
   confirmText?: string;

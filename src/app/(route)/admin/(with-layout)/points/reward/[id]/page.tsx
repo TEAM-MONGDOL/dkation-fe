@@ -12,7 +12,9 @@ import TableHeaderModule from '@/_components/common/modules/TableHeaderModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import { useGetPointSupplyDetailQuery } from '@/_hooks/admin/useGetPointSupplyDetailQuery';
 import { pointSupplyTypeConvertList } from '@/_types/adminType';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import AdminLoading from '@/_components/admin/adminLoading';
+import NetworkError from '@/_components/common/networkError';
 
 interface RewardDetailPageProps {
   params: {
@@ -32,9 +34,9 @@ const AdminPointsRewardDetailPage = ({ params }: RewardDetailPageProps) => {
       <TitleBarModule title="포인트 지급 내역 상세" type="LEFT" />
       {!data ? (
         isLoading ? (
-          <p>로딩 중...</p>
+          <AdminLoading />
         ) : isError ? (
-          <p>에러 발생</p>
+          <NetworkError />
         ) : null
       ) : (
         <div className="flex w-full items-start gap-x-3xl">

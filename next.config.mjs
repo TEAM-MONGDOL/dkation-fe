@@ -19,6 +19,11 @@ const nextConfig = {
         destination: '/support/notices',
         permanent: true,
       },
+      {
+        source: '/points',
+        destination: '/points/history',
+        permanent: true,
+      },
     ];
   },
   images: {

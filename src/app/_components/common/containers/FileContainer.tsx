@@ -9,12 +9,14 @@ interface FileInfo {
 
 interface FileContainerProps {
   onFileChange?: (fileInfos: FileInfo[]) => void;
-  fileDomainType: string;
+  fileDomainType: 'ANNOUNCEMENT' | 'POINT_APPLY' | 'WKT_PLACE';
+  maxFileCount?: number;
 }
 
 const FileContainer = ({
   onFileChange,
   fileDomainType,
+  maxFileCount,
 }: FileContainerProps) => {
   const { mutate: postFile } = usePostFileMutation({
     successCallback: (fileInfos: FileInfo[]) => {
@@ -26,6 +28,11 @@ const FileContainer = ({
   });
 
   const handleFileAdd = (newFiles: File[]) => {
+    if (maxFileCount && newFiles.length > maxFileCount) {
+      console.error(`최대 ${maxFileCount}개까지 업로드 가능합니다.`);
+      return;
+    }
+
     newFiles.forEach((file) => {
       postFile({ file, fileDomainType });
     });
@@ -33,7 +40,11 @@ const FileContainer = ({
 
   return (
     <div className="flex w-full flex-col">
-      <DragDropModule onFileAdd={handleFileAdd} />
+      <DragDropModule
+        onFileAdd={handleFileAdd}
+        maxFileCount={maxFileCount}
+        fileDomainType={fileDomainType}
+      />
     </div>
   );
 };

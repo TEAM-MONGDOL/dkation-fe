@@ -10,8 +10,10 @@ import { useDeletePointPolicyMutation } from '@/_hooks/admin/useDeletePointPolic
 import { useGetPointPolicyDetailQuery } from '@/_hooks/admin/useGetPointPolicyDetailQuery';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { set, z } from 'zod';
+import AdminLoading from '@/_components/admin/adminLoading';
+import NetworkError from '@/_components/common/networkError';
 
 interface AdminPointsPolicyDetailPageProps {
   params: {
@@ -25,7 +27,9 @@ const AdminPointsPolicyDetailPage = ({
   const { id } = params;
   const router = useRouter();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const { data, isLoading, isError } = useGetPointPolicyDetailQuery(Number(id));
+  const { data, isLoading, isError } = useGetPointPolicyDetailQuery({
+    id: Number(id),
+  });
   const { mutate: tryDeletePointPolicy } = useDeletePointPolicyMutation({
     successCallback: () => {
       setIsDeleteModalOpen(false);
@@ -39,9 +43,9 @@ const AdminPointsPolicyDetailPage = ({
       <section className="flex w-full flex-col gap-y-[60px]">
         {!data ? (
           isLoading ? (
-            <div>로딩 중...</div>
+            <AdminLoading />
           ) : isError ? (
-            <div>에러 발생</div>
+            <NetworkError />
           ) : null
         ) : (
           <div className="flex w-full flex-col gap-y-[30px]">
