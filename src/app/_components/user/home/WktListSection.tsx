@@ -6,6 +6,8 @@ import { LeftKeyIcon, RightKeyIcon } from '@/_assets/icons';
 import { useRef, useState } from 'react';
 import WktListItem from './WktListItem';
 import { useRouter } from 'next/navigation';
+import UserLoading from '../userLoading';
+import NetworkError from '@/_components/common/networkError';
 
 const WktListSection = () => {
   const router = useRouter();
@@ -73,11 +75,11 @@ const WktListSection = () => {
         >
           {!data ? (
             isLoading ? (
-              <div>loading...</div>
+              <UserLoading />
             ) : isError ? (
-              <div>error...</div>
+              <NetworkError />
             ) : (
-              <div>no data...</div>
+              <NetworkError />
             )
           ) : (
             data.wktInfos.map((wktInfo) => (
