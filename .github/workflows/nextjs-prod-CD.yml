@@ -2,9 +2,9 @@ name: NextJS CD
 
 on:
   release:
-    types:
-      - published
+    types: [created]
   workflow_dispatch:
+  repository_dispatch:
 
 jobs:
   deploy:
@@ -30,7 +30,7 @@ jobs:
       - name: Deploy to Web Servers
         env:
           BASTION_IP: ${{ secrets.BASTION_IP }}
-          BASTION_USER: ${{ secrets.BASTION_USER }}
+          USER: ${{ secrets.BASTION_USER }}
           SSH_KEY: ${{ secrets.SSH_KEY }}
           KCR_USERNAME: ${{ secrets.ACCESS_KEY }}
           KCR_PASSWORD: ${{ secrets.ACCESS_SECRET_KEY }}
@@ -40,10 +40,10 @@ jobs:
           echo "$SSH_KEY" > ssh_key
           chmod 600 ssh_key
           
-          ssh -i ssh_key -o StrictHostKeyChecking=no $BASTION_USER@$BASTION_IP << 'EOF'
+          ssh -i ssh_key -o StrictHostKeyChecking=no $USER@$BASTION_IP << 'EOF'
             IFS=',' read -ra WEB_IP_ARRAY <<< "$WEB_IPS"
             for WEB_IP in "${WEB_IP_ARRAY[@]}"; do
-              ssh -i ssh_key -o StrictHostKeyChecking=no ec2-user@$WEB_IP << 'ENDSSH'
+              ssh -i ssh_key -o StrictHostKeyChecking=no $USER@$WEB_IP << 'ENDSSH'
                 echo $KCR_PASSWORD | docker login dkation.kr-central-2.kcr.dev -u $KCR_USERNAME --password-stdin
                 docker ps -q --filter ancestor=dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe | xargs -r docker stop
                 docker ps -aq --filter ancestor=dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe | xargs -r docker rm
