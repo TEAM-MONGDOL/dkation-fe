@@ -357,6 +357,7 @@ export const applyListSchema = z.object({
 
 export const userApplyInfoSchema = z.object({
   applyId: z.number(),
+  reviewId: z.number().nullable(),
   thumbnailUrl: z.string(),
   wktId: z.number(),
   wktName: z.string(),

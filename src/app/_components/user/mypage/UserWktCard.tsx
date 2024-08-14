@@ -16,6 +16,7 @@ import { usePatchBettingPointMutation } from '@/_hooks/user/usePatchBettingPoint
 interface WorkationCardProps {
   thumbnailUrl: string;
   wktName: string;
+  reviewId: number | null;
   wktId: number;
   place: string;
   totalRecruit: number;
@@ -35,6 +36,7 @@ const WorkationCard = ({
   thumbnailUrl,
   place,
   wktName,
+  reviewId,
   totalRecruit,
   applyStartDate,
   applyEndDate,
@@ -115,6 +117,9 @@ const WorkationCard = ({
     handleModalClose();
   };
 
+  const isReviewButtonDisabled =
+    applyStatusType === 'VISITED' && reviewId !== null;
+
   return (
     <div className="flex w-full p-4">
       <Image
@@ -163,9 +168,9 @@ const WorkationCard = ({
             buttonStyle={buttonStyle}
             type="button"
             className="w-32 rounded-md py-2.5"
-            disabled={buttonDisabled}
+            cursorDefault={isReviewButtonDisabled || buttonDisabled}
             onClick={
-              !buttonDisabled && onClick
+              !isReviewButtonDisabled && !buttonDisabled && onClick
                 ? () => onClick(applyStatusType)
                 : undefined
             }

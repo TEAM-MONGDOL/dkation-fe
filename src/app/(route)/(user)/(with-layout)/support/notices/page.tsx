@@ -137,11 +137,13 @@ const UserNoticePage = () => {
                 <UserTableBodyModule key={item.id}>
                   <UserTableBodyAtom isFirst>{index + 1}</UserTableBodyAtom>
                   <UserTableBodyAtom>
-                    <UserTextLabelAtom
-                      text={noticeTypeConverter[item.announcementType]}
-                      size="sm"
-                      className={getCategoryStyle(item.announcementType)}
-                    />
+                    <div className="flex items-center justify-center">
+                      <UserTextLabelAtom
+                        text={noticeTypeConverter[item.announcementType]}
+                        size="sm"
+                        className={getCategoryStyle(item.announcementType)}
+                      />
+                    </div>
                   </UserTableBodyAtom>
                   <UserTableBodyAtom>{item.title}</UserTableBodyAtom>
                   <UserTableBodyAtom>
@@ -161,6 +163,7 @@ const UserNoticePage = () => {
       {data && data.pageInfo.totalElements > 0 && (
         <div className="mt-40 flex justify-center">
           <PaginationModule
+            user
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
             totalPages={data.pageInfo.totalPages}

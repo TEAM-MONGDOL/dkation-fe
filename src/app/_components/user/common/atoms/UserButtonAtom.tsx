@@ -10,6 +10,7 @@ interface UserButtonAtomProps {
   className?: string;
   onClick?: () => void;
   disabled?: boolean;
+  cursorDefault?: boolean;
 }
 
 const UserButtonAtom = ({
@@ -21,6 +22,7 @@ const UserButtonAtom = ({
   className = '',
   onClick,
   disabled = false,
+  cursorDefault = false,
 }: UserButtonAtomProps) => {
   const sizeStyles = {
     sm: 'px-4 py-2.5',
@@ -45,7 +47,7 @@ const UserButtonAtom = ({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`flex items-center justify-center gap-4 ${size ? sizeStyles[size] : ''} ${buttonStyles[buttonStyle]} ${disabled ? 'cursor-not-allowed' : ''} ${className}`}
+      className={`flex items-center justify-center gap-4 ${size ? sizeStyles[size] : ''} ${buttonStyles[buttonStyle]} ${disabled ? 'cursor-not-allowed' : cursorDefault ? 'cursor-default' : ''} ${className}`}
     >
       <span className="shrink-0">{text}</span>
       {rightArrow && <Image src={RightArrowIcon} alt="rightArrow" />}
