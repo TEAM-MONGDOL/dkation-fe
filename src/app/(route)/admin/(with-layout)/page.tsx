@@ -15,17 +15,6 @@ import { useState } from 'react';
 import { useGetPointApply } from '@/_hooks/admin/useGetPointApply';
 import { pointApplyTypeConvertList } from '@/_types/adminType';
 
-const pointData = [
-  {
-    id: 1,
-    구분: '봉사활동',
-    이름: '홍길동',
-    신청일시: '2024.07.03',
-    심사일시: '2024.07.05',
-    상태: { text: '지급 완료', color: 'blue' },
-  },
-];
-
 const AdminMainPage = () => {
   const router = useRouter();
   const [statusOption, setStatusOption] = useState<{
@@ -126,7 +115,7 @@ const AdminMainPage = () => {
             ) : (
               wkData.wktInfos.map((item, index) => (
                 <TableBodyModule key={item.wktId}>
-                  <TableBodyAtom isFirst>{item.wktId}</TableBodyAtom>
+                  <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
                   <TableBodyAtom>{item.wktPlaceTitle}</TableBodyAtom>
                   <TableBodyAtom>
                     {dayjs(item.applyStartDate).format('YYYY.MM.DD')} -
