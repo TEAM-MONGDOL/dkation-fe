@@ -18,7 +18,6 @@ import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
 import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAtom';
 import { useGetMemberListQuery } from '@/_hooks/admin/useGetMemberListQuery';
 import { MembersSearchQueryOptions } from '@/_constants/common';
-import NetworkError from '@/_components/common/networkError';
 
 const AdminMembersListPage = () => {
   const router = useRouter();
