@@ -12,53 +12,53 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
-    - name: Get latest tag
-      id: get_latest_tag
-      run: |
-        git fetch --tags
-        latest_tag=$(git describe --tags --abbrev=0)
-        echo "::set-output name=latest_tag::$latest_tag"
+      - name: Get latest tag
+        id: get_latest_tag
+        run: |
+          git fetch --tags
+          latest_tag=$(git describe --tags --abbrev=0)
+          echo "::set-output name=latest_tag::$latest_tag"
 
-    - name: Deploy to Web Servers
-      env:
-        BASTION_IP: ${{ secrets.BASTION_IP }}
-        BASTION_USER: ${{ secrets.BASTION_USER }}
-        SSH_KEY: ${{ secrets.SSH_KEY }}
-        KCR_USERNAME: ${{ secrets.ACCESS_KEY }}
-        KCR_PASSWORD: ${{ secrets.ACCESS_SECRET_KEY }}
-        WEB_IPS: ${{ secrets.WEB_IPS }}
-        LATEST_TAG: ${{ steps.get_latest_tag.outputs.latest_tag }}
-      run: |
-        # Write the SSH key to a file
-        echo "$SSH_KEY" > ssh_key
-        chmod 600 ssh_key
+      - name: Deploy to Web Servers
+        env:
+          BASTION_IP: ${{ secrets.BASTION_IP }}
+          BASTION_USER: ${{ secrets.BASTION_USER }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          KCR_USERNAME: ${{ secrets.ACCESS_KEY }}
+          KCR_PASSWORD: ${{ secrets.ACCESS_SECRET_KEY }}
+          WEB_IPS: ${{ secrets.WEB_IPS }}
+          LATEST_TAG: ${{ steps.get_latest_tag.outputs.latest_tag }}
+        run: |
+          # Write the SSH key to a file
+          echo "$SSH_KEY" > ssh_key
+          chmod 600 ssh_key
 
-        # Connect to Bastion and run deployment on each Web server
-        ssh -i ssh_key -o StrictHostKeyChecking=no $BASTION_USER@$BASTION_IP << EOF
-          IFS=',' read -ra WEB_IP_ARRAY <<< "$WEB_IPS"
-          for WEB_IP in "\${WEB_IP_ARRAY[@]}"; do
-            ssh -i ssh_key -o StrictHostKeyChecking=no ec2-user@\$WEB_IP << ENDSSH
-              # Login to KCR
-              echo $KCR_PASSWORD | docker login dkation.kr-central-2.kcr.dev -u $KCR_USERNAME --password-stdin
+          # Connect to Bastion and run deployment on each Web server
+          ssh -i ssh_key -o StrictHostKeyChecking=no $BASTION_USER@$BASTION_IP << EOF
+            IFS=',' read -ra WEB_IP_ARRAY <<< "$WEB_IPS"
+            for WEB_IP in "\${WEB_IP_ARRAY[@]}"; do
+              ssh -i ssh_key -o StrictHostKeyChecking=no ec2-user@\$WEB_IP << ENDSSH
+                # Login to KCR
+                echo $KCR_PASSWORD | docker login dkation.kr-central-2.kcr.dev -u $KCR_USERNAME --password-stdin
 
-              # Stop and remove existing containers
-              docker ps -q --filter ancestor=dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe | xargs -r docker stop
-              docker ps -aq --filter ancestor=dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe | xargs -r docker rm
+                # Stop and remove existing containers
+                docker ps -q --filter ancestor=dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe | xargs -r docker stop
+                docker ps -aq --filter ancestor=dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe | xargs -r docker rm
 
-              # Remove existing images
-              docker images dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe --format '{{.ID}}' | xargs -r docker rmi
+                # Remove existing images
+                docker images dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe --format '{{.ID}}' | xargs -r docker rmi
 
-              # Pull and run new image with the latest tag
-              docker pull dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe:${LATEST_TAG}
-              docker run -d -p 80:3000 dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe:${LATEST_TAG}
-ENDSSH
-          done
-EOF
-
-        # Clean up key file
-        rm ssh_key
+                # Pull and run new image with the latest tag
+                docker pull dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe:${LATEST_TAG}
+                docker run -d -p 80:3000 dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe:${LATEST_TAG}
+              ENDSSH
+            done
+          EOF
+          
+          # Clean up key file
+          rm ssh_key
