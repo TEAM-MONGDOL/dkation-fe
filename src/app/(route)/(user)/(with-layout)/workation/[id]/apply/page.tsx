@@ -85,19 +85,23 @@ const UserWkApplyPage = ({ params }: Props) => {
   return (
     <section>
       <div className="">
-        <div className="flex h-[450px] justify-center bg-primary/5 px-36 py-12">
+        <div className="flex h-[450px] justify-center gap-16 bg-primary/5 px-36 py-12">
           <Image
             src={data?.files[0].url || ''}
             alt="place"
-            width={630}
+            width={530}
             height={1}
             className="rounded-lg"
           />
           <div className="ml-auto pr-16 pt-52">
             <p className="text-2">{data?.title}</p>
             <p className="mb-4 text-h1 font-semibold">{data?.place}</p>
-            <div className="flex">
-              <Image src={LocationIcon} alt="LocationIcon" />
+            <div className="flex gap-2">
+              <Image
+                className="mb-auto mt-1"
+                src={LocationIcon}
+                alt="LocationIcon"
+              />
               <p className="text-2">주소 : {data?.address}</p>
             </div>
           </div>

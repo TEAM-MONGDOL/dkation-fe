@@ -13,7 +13,7 @@ const InfoSectionContainer = ({
   title,
   row,
 }: InfoSectionContainerProps) => {
-  const widthValue = row ? 300 : '100%'; // width, height 재설정해야함
+  const widthValue = row ? 330 : '100%'; // width, height 재설정해야함
   return (
     <div className="w-full rounded-regular border border-stroke-100 bg-cus-100 px-4 py-5">
       {title && <p className="mb-7 text-1 font-bold">{title}</p>}
