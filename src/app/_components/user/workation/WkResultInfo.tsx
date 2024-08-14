@@ -50,14 +50,14 @@ const WkResultInfo = ({ id }: { id: number }) => {
           )}
           <div className="h-13 w-[1px] bg-sub-100" />
           {data?.wktWaitingUserInfos.map(
-            (waiter) =>
+            (waiter, index) =>
               waiter.waitingNum < 0 || (
                 <div
                   key={waiter.accountId}
                   className={`flex h-16 w-[200px] min-w-[200px] items-center rounded-full ${waiter.applyStatusType === ('CONFIRM' || 'VISITED') ? 'bg-primary' : 'bg-primary/50'}`}
                 >
                   <p className="ml-2.5 mr-3.5 h-12 w-12 rounded-full bg-white pt-2.5 text-center">
-                    {waiter.waitingNum}
+                    {index + 1}
                   </p>
                   <p>
                     {waiter.department} {waiter.name}
