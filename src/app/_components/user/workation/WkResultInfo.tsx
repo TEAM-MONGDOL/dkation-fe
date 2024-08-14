@@ -31,33 +31,40 @@ const WkResultInfo = ({ id }: { id: number }) => {
       <WkSlider id={id} />
       <div className="flex flex-col">
         <UserSubtitleAtom subtitle="추첨 결과" />
-        <div className="flex w-full justify-between gap-3.5 overflow-x-auto scrollbar-hide">
-          {data?.wktWinningUserInfos.map((winner) => (
-            <div
-              key={winner.accountId}
-              className={`flex h-16 w-48 min-w-48 items-center rounded-full ${winner.applyStatusType === 'CONFIRM' || 'VISITED' ? 'bg-primary' : 'bg-primary/50'}`}
-            >
-              <p className="ml-2.5 mr-4 h-12 w-12 rounded-full bg-white pt-3 text-center">
-                최초
-              </p>
-              <p>
-                {winner.department} {winner.name}
-              </p>
-            </div>
-          ))}
-          {data?.wktWaitingUserInfos.map((waiter) => (
-            <div
-              key={waiter.accountId}
-              className={`flex h-16 w-48 min-w-48 items-center rounded-full ${waiter.applyStatusType === ('CONFIRM' || 'VISITED') ? 'bg-primary' : 'bg-primary/50'}`}
-            >
-              <p className="ml-2.5 mr-3.5 h-12 w-12 rounded-full bg-white pt-2.5 text-center">
-                {waiter.waitingNum}
-              </p>
-              <p>
-                {waiter.department} {waiter.name}
-              </p>
-            </div>
-          ))}
+        <div className="flex w-full gap-3.5 overflow-x-auto scrollbar-hide">
+          {data?.wktWinningUserInfos.map(
+            (winner) =>
+              winner.applyStatusType === 'CANCEL' || (
+                <div
+                  key={winner.accountId}
+                  className={`flex h-16 w-[200px] min-w-[200px] items-center rounded-full ${winner.applyStatusType === 'CONFIRM' || 'VISITED' ? 'bg-primary' : 'bg-primary/50'}`}
+                >
+                  <p className="ml-2.5 mr-4 h-12 w-12 rounded-full bg-white pt-3 text-center">
+                    최초
+                  </p>
+                  <p>
+                    {winner.department} {winner.name}
+                  </p>
+                </div>
+              ),
+          )}
+          <div className="h-13 w-[1px] bg-sub-100" />
+          {data?.wktWaitingUserInfos.map(
+            (waiter) =>
+              waiter.waitingNum < 0 || (
+                <div
+                  key={waiter.accountId}
+                  className={`flex h-16 w-[200px] min-w-[200px] items-center rounded-full ${waiter.applyStatusType === ('CONFIRM' || 'VISITED') ? 'bg-primary' : 'bg-primary/50'}`}
+                >
+                  <p className="ml-2.5 mr-3.5 h-12 w-12 rounded-full bg-white pt-2.5 text-center">
+                    {waiter.waitingNum}
+                  </p>
+                  <p>
+                    {waiter.department} {waiter.name}
+                  </p>
+                </div>
+              ),
+          )}
         </div>
         <div className="mt-16 flex flex-col gap-10">
           <div className="flex flex-col gap-4">
