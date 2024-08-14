@@ -13,6 +13,9 @@ import ModalModule from '@/_components/common/modules/ModalModule';
 import Image from 'next/image';
 import logo from '@/_assets/images/logo_imsy.png';
 import { useDeleteWkPlaceMutation } from '@/_hooks/admin/useDeleteWkPlaceQuery';
+import KakaoMapContainer from '@/_components/common/containers/KakaoMapContainer';
+import AdminLoading from '@/_components/admin/adminLoading';
+import NetworkError from '@/_components/common/networkError';
 
 interface WkPlaceDetailProps {
   params: { id: number };
@@ -35,13 +38,13 @@ const AdminWorkationPlaceDetailPage = ({ params }: WkPlaceDetailProps) => {
   const { mutate: deleteWkPlaceMutation } = useDeleteWkPlaceMutation(id);
 
   if (isLoading) {
-    return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
+    return <AdminLoading />;
   }
   if (isError) {
-    return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정
+    return <NetworkError />;
   }
   if (!data) {
-    return <div>No data</div>;
+    return <NetworkError />;
   }
   return (
     <section className="flex flex-col gap-7">
@@ -73,6 +76,13 @@ const AdminWorkationPlaceDetailPage = ({ params }: WkPlaceDetailProps) => {
           value={dayjs(data.wktPlaceDetailInfo.createdAt).format('YYYY-MM-DD')}
         />
       </div>
+      {data.wktPlaceDetailInfo.longitude &&
+        data.wktPlaceDetailInfo.latitude && (
+          <KakaoMapContainer
+            latitude={data.wktPlaceDetailInfo.latitude}
+            longitude={data.wktPlaceDetailInfo.longitude}
+          />
+        )}
       <div className="py-4">
         {data.wktPlaceDetailInfo.fileInfos &&
         data.wktPlaceDetailInfo.fileInfos.length > 0 ? (

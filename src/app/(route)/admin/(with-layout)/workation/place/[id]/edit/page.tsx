@@ -13,6 +13,10 @@ import dayjs from 'dayjs';
 import FileModule from '@/_components/common/modules/FileModule';
 import FileContainer from '@/_components/common/containers/FileContainer';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
+import { Address, useDaumPostcodePopup } from 'react-daum-postcode';
+import { useGetKakaoAdddress } from '@/_hooks/admin/useGetKakaoAddress';
+import AdminLoading from '@/_components/admin/adminLoading';
+import NetworkError from '@/_components/common/networkError';
 
 interface WkPlaceEditProps {
   params: { id: number };
@@ -32,6 +36,7 @@ const AdminWorkationPlaceEditPage = ({ params }: WkPlaceEditProps) => {
   const router = useRouter();
   const { id } = params;
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [originAddress, setOriginAddress] = useState('');
   const successCallback = () => {
     alert('워케이션 장소 수정 완료');
     router.push('/admin/workation/place');
@@ -61,16 +66,49 @@ const AdminWorkationPlaceEditPage = ({ params }: WkPlaceEditProps) => {
         fileInfos: data.wktPlaceDetailInfo.fileInfos || [],
         description: data.wktPlaceDetailInfo.description,
       });
+      setOriginAddress(data.wktPlaceDetailInfo.address);
     }
   }, [data]);
+
+  const open = useDaumPostcodePopup(
+    '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js',
+  );
+  const handleComplete = (addressData: Address) => {
+    let fullAddress = addressData.address;
+    setOriginAddress(addressData.address);
+
+    let extraAddress = '';
+
+    if (addressData.addressType === 'R') {
+      if (addressData.bname !== '') {
+        extraAddress += addressData.bname;
+      }
+      if (addressData.buildingName !== '') {
+        extraAddress +=
+          extraAddress !== ''
+            ? `, ${addressData.buildingName}`
+            : addressData.buildingName;
+      }
+      fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
+    }
+    setValues((prevData) => ({
+      ...prevData,
+      address: fullAddress,
+    }));
+  };
+
+  const { data: kakaoAddress } = useGetKakaoAdddress({
+    address: originAddress,
+  });
+
   if (isLoading) {
-    return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
+    return <AdminLoading />;
   }
   if (isError) {
-    return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정
+    return <NetworkError />;
   }
   if (!data) {
-    return <div>No data</div>;
+    return <NetworkError />;
   }
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -106,6 +144,8 @@ const AdminWorkationPlaceEditPage = ({ params }: WkPlaceEditProps) => {
       maxPeople: values.maxPeople,
       address: values.address,
       description: values.description || '',
+      latitude: kakaoAddress?.documents[0].y || '',
+      longitude: kakaoAddress?.documents[0].x || '',
     });
   };
 

@@ -31,12 +31,12 @@
     ],
     "no-nested-ternary": "off",
     "no-useless-catch": "off",
+    "consistent-return": "off",
     "import/prefer-default-export": "off",
     "react/require-default-props": "off",
     "@typescript-eslint/no-unused-expressions": "off",
     "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/no-unused-expressions": "off",
     "react/button-has-type": "off",
     "react/function-component-definition": [
       2,

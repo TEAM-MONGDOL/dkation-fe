@@ -2,7 +2,7 @@
 
 import UserHeaderContainers from '@/_components/user/common/containers/UserHeaderContainers';
 import UserTabBarModule from '@/_components/user/common/modules/UserTabBarModule';
-import { useEffect, useState, useMemo, useCallback } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import Image from 'next/image';
 import UserTextLabelAtom from '@/_components/user/common/atoms/UserTextLabelAtom';
 import UserStateFilteringContainer from '@/_components/user/common/containers/UserStateFilteringContainer';
@@ -14,9 +14,12 @@ import { useGetWkListQuery } from '@/_hooks/admin/useGetWktListQuery';
 import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 import { useGetWkPlaceListQuery } from '@/_hooks/admin/useGetWkPlaceListQuery';
 import UserDatePickerContainer from '@/_components/user/common/containers/UserDatePickerContainer';
-import path from 'path';
+import { useRouter } from 'next/navigation';
+import UserLoading from '@/_components/user/userLoading';
+import NetworkError from '@/_components/common/networkError';
 
 const Workation = () => {
+  const router = useRouter();
   const tabs = [
     {
       text: '워케이션 목록',
@@ -164,6 +167,16 @@ const Workation = () => {
     return { label: '모집 중', color: 'bg-primary' };
   };
 
+  if (isLoading || placeIsLoading) {
+    return <UserLoading />;
+  }
+  if (isError || placeIsError) {
+    return <NetworkError />;
+  }
+  if (!data || !placeData) {
+    return <NetworkError />;
+  }
+
   return (
     <div className="">
       <UserHeaderContainers
@@ -226,16 +239,22 @@ const Workation = () => {
       <div className="mt-10 px-40">
         {!data ? (
           isLoading ? (
-            <EmptyContainer text="loading" />
+            <EmptyContainer text="loading" notTable />
           ) : (
-            <EmptyContainer text="no data" />
+            <EmptyContainer text="no data" notTable />
           )
         ) : data.pageInfo.totalElements <= 0 ? (
-          <EmptyContainer />
+          <EmptyContainer notTable />
         ) : (
           data.wktInfos.map((wkt) => (
-            <div key={wkt.wktId} className="mb-24 flex w-full">
+            <div
+              role="presentation"
+              key={wkt.wktId}
+              className="mb-24 flex w-full"
+              onClick={() => router.push(`/workation/${wkt.wktId}`)}
+            >
               <Image
+                className="h-[304px] w-[402px] object-cover"
                 width={402}
                 height={304}
                 src={wkt.thumbnailUrl}
