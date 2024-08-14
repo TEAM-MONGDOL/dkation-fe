@@ -21,9 +21,7 @@ const WkResultInfo = ({ id }: { id: number }) => {
     return `${totalRecruit / divisor} : ${totalApply / divisor}`;
   };
 
-  if (isLoading) return <div>로딩 중...</div>;
-  if (isError) return <div>오류 발생</div>;
-  if (!data) return <div>데이터 없음</div>;
+  if (!data) return;
 
   const { totalRecruit, totalApply } = data.wktResultInfo;
   const reducedRatio = getReducedRatio(totalRecruit, totalApply);
