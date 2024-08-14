@@ -17,6 +17,8 @@ import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
 import WkResultSide from '@/(route)/admin/(with-layout)/workation/[id]/result/wkResultSide';
 import { useGetWkResultQuery } from '@/_hooks/admin/useGetWkResultQuery';
+import AdminLoading from '@/_components/admin/adminLoading';
+import NetworkError from '@/_components/common/networkError';
 
 interface WkResultProps {
   params: { id: number };
@@ -98,13 +100,13 @@ const AdminWorkationListResultPage = ({ params }: WkResultProps) => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
+    return <AdminLoading />;
   }
   if (isError) {
-    return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정
+    return <NetworkError />;
   }
   if (!data) {
-    return <div>No data</div>;
+    return <NetworkError />;
   }
 
   return (

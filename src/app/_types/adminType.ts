@@ -39,6 +39,8 @@ export const wkDetailInfoSchema = z.object({
   applyEndDate: z.string(),
   description: z.string(),
   wktPlaceId: z.number(),
+  place: z.string(),
+  files: fileInfoSchema.array().nullable().optional(),
 });
 
 export const wkApplyPercentageInfoSchema = z.object({
@@ -71,6 +73,7 @@ export const wktResultInfosSchema = z.object({
 });
 
 export const wktWinningUserInfosSchema = z.object({
+  wktTitle: z.string(),
   penaltyType: z
     .union([
       z.literal('NOSHOW'),
@@ -83,12 +86,56 @@ export const wktWinningUserInfosSchema = z.object({
   accountId: z.string(),
   department: z.string(),
   penaltyAssignDate: z.string().nullable(),
+  applyStatusType: z
+    .union([
+      z.literal('APPLIED'),
+      z.literal('RAFFLE_WAIT'),
+      z.literal('NO_WINNING'),
+      z.literal('CONFIRM_WAIT'),
+      z.literal('CANCEL'),
+      z.literal('CONFIRM'),
+      z.literal('WAIT'),
+      z.literal('VISITED'),
+    ])
+    .nullable(),
+});
+export const wktWaitingUserInfosSchema = z.object({
   wktTitle: z.string(),
+  penaltyType: z
+    .union([
+      z.literal('NOSHOW'),
+      z.literal('REPORT'),
+      z.literal('NEGLIGENCE'),
+      z.literal('ABUSE'),
+    ])
+    .nullable(),
+  waitingNum: z.number(),
+  name: z.string(),
+  accountId: z.string(),
+  department: z.string(),
+  applyStatusType: z
+    .union([
+      z.literal('APPLIED'),
+      z.literal('RAFFLE_WAIT'),
+      z.literal('NO_WINNING'),
+      z.literal('CONFIRM_WAIT'),
+      z.literal('CANCEL'),
+      z.literal('CONFIRM'),
+      z.literal('WAIT'),
+      z.literal('VISITED'),
+    ])
+    .nullable(),
+  penaltyAssignDate: z.string().nullable(),
+});
+export const wktDistributionInfosSchema = z.object({
+  wktDistributionCount: z.number().array(),
 });
 
 export const WkResultPenaltyInfoSchema = z.object({
   wktResultInfo: wktResultInfosSchema,
   wktWinningUserInfos: wktWinningUserInfosSchema.array(),
+  wktWaitingUserInfos: wktWaitingUserInfosSchema.array(),
+  wktDistributionInfo: wktDistributionInfosSchema,
 });
 
 export const WkResultInfoSchema = z.object({
@@ -110,7 +157,7 @@ export const ReviewListInfoSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
-export const wktPlaceDetailShema = z.object({
+export const wktPlaceDetailSchema = z.object({
   wktPlaceDetailInfo: z.object({
     id: z.number(),
     place: z.string(),
@@ -118,6 +165,8 @@ export const wktPlaceDetailShema = z.object({
     maxPeople: z.number(),
     createdAt: z.string(),
     description: z.string(),
+    latitude: z.string(),
+    longitude: z.string(),
     fileInfos: fileInfoSchema.array().nullable().optional(),
   }),
 });
@@ -306,6 +355,31 @@ export const applyListSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
+export const userApplyInfoSchema = z.object({
+  applyId: z.number(),
+  thumbnailUrl: z.string(),
+  wktId: z.number(),
+  wktName: z.string(),
+  place: z.string(),
+  totalRecruit: z.number(),
+  applyStartDate: z.string(),
+  applyEndDate: z.string(),
+  startDate: z.string(),
+  endDate: z.string(),
+  applyStatusType: applyStatusSchema,
+  bettingPoint: z.number(),
+});
+
+export const winningPercentageInfoSchema = z.object({
+  percentage: z.number(),
+  error: z.number(),
+});
+
+export const userApplyListSchema = z.object({
+  applyInfoList: userApplyInfoSchema.array(),
+  pageInfo: pageInfoSchema,
+});
+
 export const memberInfoSchema = z.object({
   name: z.string(),
   accountId: z.string(),
@@ -316,6 +390,20 @@ export const memberInfoSchema = z.object({
 
 export const memberListSchema = z.object({
   memberInfos: memberInfoSchema.array(),
+  pageInfo: pageInfoSchema,
+});
+
+export const bannerInfoSchema = z.object({
+  id: z.number(),
+  title: z.string(),
+  linkUrl: z.string(),
+  announcementType: z.string(),
+  announcementTitle: z.string(),
+  backgroundColor: z.string(),
+});
+
+export const bannerInfoListSchema = z.object({
+  bannerInfoList: bannerInfoSchema.array(),
   pageInfo: pageInfoSchema,
 });
 
@@ -355,6 +443,8 @@ export const wktPlaceInfoSchema = z.object({
   createdAt: z.string(),
   maxPeople: z.number(),
   description: z.string(),
+  latitude: z.string(),
+  longitude: z.string(),
 });
 
 export const workationPlaceListSchema = z.object({
@@ -392,22 +482,6 @@ export const workationUserPlaceReviewSchema = z.object({
   pageInfo: pageInfoSchema,
 });
 
-export const bannerInfoSchema = z.object({
-  id: z.number(),
-  title: z.string(),
-  linkUrl: z.string(),
-  backgroundColor: z.union([
-    z.literal('DARK'),
-    z.literal('YELLOW'),
-    z.literal('LIGHTGRAY'),
-  ]),
-});
-
-export const bannerInfoListSchema = z.object({
-  bannerInfoList: bannerInfoSchema.array(),
-  pageInfo: pageInfoSchema,
-});
-
 export const reviewsInfoForMeSchema = z.object({
   id: z.number(),
   wktTitle: z.string(),
@@ -417,6 +491,25 @@ export const reviewsInfoForMeSchema = z.object({
 export const reviewsInfosForMeListSchema = z.object({
   reviewInfosForMe: reviewsInfoForMeSchema.array(),
   pageInfo: pageInfoSchema,
+});
+
+export const reviewDetailSchema = z.object({
+  id: z.number(),
+  wktId: z.number(),
+  reviewer: z.string(),
+  department: z.string(),
+  wktTitle: z.string(),
+  wktPlace: z.string(),
+  rating: z.number(),
+  lastModifiedAt: z.string(),
+  contents: z.string(),
+  imageUrls: z.array(z.string()).nullable().optional(),
+  blindedType: z.union([z.literal('TRUE'), z.literal('FALSE')]),
+  openedType: z.union([z.literal('TRUE'), z.literal('FALSE')]),
+});
+
+export const reviewsDetailInfoSchema = z.object({
+  reviewDetailInfo: reviewDetailSchema,
 });
 
 // Type
@@ -464,6 +557,8 @@ export type PointRewardType = 'PERSONAL' | 'GROUP';
 
 export type NoticeType = 'ANNOUNCEMENT' | 'RESULT' | 'EVENT';
 
+export type PlaceListItemType = z.infer<typeof wktPlaceInfoSchema>;
+
 export const noticeTypeList: NoticeType[] = ['ANNOUNCEMENT', 'RESULT', 'EVENT'];
 
 export const noticeTypeConverter: { [key in NoticeType]: string } = {
@@ -500,6 +595,20 @@ export type PointOrderType = 'POINT_HIGHEST' | 'POINT_LOWEST';
 export type PointChangeType = 'INCREASE' | 'DECREASE';
 
 export type PenaltyType = 'NOSHOW' | 'REPORT' | 'NEGLIGENCE' | 'ABUSE';
+
+export type BannerStyleType = 'DARK' | 'LIGHTGRAY' | 'YELLOW';
+
+export const bannerStyleTypeList: BannerStyleType[] = [
+  'DARK',
+  'LIGHTGRAY',
+  'YELLOW',
+];
+
+export const colorClassConverter: { [key in BannerStyleType]: string } = {
+  DARK: 'bg-sub-300',
+  LIGHTGRAY: 'bg-sub-100',
+  YELLOW: 'bg-primary',
+};
 
 // Convert Type / List
 export const applyStatusList: StatusType[] = [
@@ -589,12 +698,6 @@ export const noticeList: { [key in NoticeType]: string } = {
   ANNOUNCEMENT: '공지',
   RESULT: '결과 발표',
   EVENT: '이벤트 안내',
-};
-
-export const resultList: { [key in ResultType]: string } = {
-  NAME: '가나다순',
-  LOWEST: '확률 낮은 순',
-  HIGHEST: '확률 높은 순',
 };
 
 export const penaltyList: { [key in PenaltyType]: string } = {

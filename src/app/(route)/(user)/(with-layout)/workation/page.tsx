@@ -15,6 +15,8 @@ import EmptyContainer from '@/_components/common/containers/EmptyContainer';
 import { useGetWkPlaceListQuery } from '@/_hooks/admin/useGetWkPlaceListQuery';
 import UserDatePickerContainer from '@/_components/user/common/containers/UserDatePickerContainer';
 import { useRouter } from 'next/navigation';
+import UserLoading from '@/_components/user/userLoading';
+import NetworkError from '@/_components/common/networkError';
 
 const Workation = () => {
   const router = useRouter();
@@ -166,13 +168,13 @@ const Workation = () => {
   };
 
   if (isLoading || placeIsLoading) {
-    return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
+    return <UserLoading />;
   }
   if (isError || placeIsError) {
-    return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정
+    return <NetworkError />;
   }
   if (!data || !placeData) {
-    return <div>No data</div>;
+    return <NetworkError />;
   }
 
   return (
@@ -252,6 +254,7 @@ const Workation = () => {
               onClick={() => router.push(`/workation/${wkt.wktId}`)}
             >
               <Image
+                className="h-[304px] w-[402px] object-cover"
                 width={402}
                 height={304}
                 src={wkt.thumbnailUrl}

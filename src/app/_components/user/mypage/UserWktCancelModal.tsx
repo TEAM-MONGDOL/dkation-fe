@@ -1,16 +1,17 @@
-import React from 'react';
 import UserModalAtom from '@/_components/user/common/atoms/UserModalAtom';
 import UserModalTitleAtom from '@/_components/user/common/atoms/UserModalTextAtom';
 import UserButtonAtom from '@/_components/user/common/atoms/UserButtonAtom';
 
+interface UserWktCancelModalProps {
+  onClose: () => void;
+  onConfirm: () => void;
+}
+
 const UserWktCancelModal = ({
   onClose,
   onConfirm,
-}: {
-  onClose: () => void;
-  onConfirm: () => void;
-}) => (
-  <UserModalAtom>
+}: UserWktCancelModalProps) => (
+  <UserModalAtom onClose={onClose}>
     <UserModalTitleAtom className="text-2">
       신청을 취소하시겠습니까?
     </UserModalTitleAtom>

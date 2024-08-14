@@ -15,13 +15,15 @@ import { useRouter } from 'next/navigation';
 import InfoSectionContainer from '@/_components/common/containers/InfoSectionContainer';
 import { useWkNewMutation } from '@/_hooks/admin/useWkNewMutation';
 import { useGetWkPlaceListQuery } from '@/_hooks/admin/useGetWkPlaceListQuery';
+import { PlaceListItemType } from '@/_types/adminType';
+import AdminLoading from '@/_components/admin/adminLoading';
+import NetworkError from '@/_components/common/networkError';
 
 const WorkationNew = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({
     title: '',
     number: '',
-    place: '',
     description: '',
   });
   const { data, isLoading, isError } = useGetWkPlaceListQuery({
@@ -30,6 +32,9 @@ const WorkationNew = () => {
       size: 100,
     },
   });
+  const [selectedPlace, setSelectedPlace] = useState<PlaceListItemType | null>(
+    null,
+  );
   const [startDateRecruitment, setStartDateRecruitment] = useState<Date | null>(
     dayjs().subtract(1, 'year').toDate(),
   );
@@ -50,13 +55,13 @@ const WorkationNew = () => {
   const { mutate: postWk } = useWkNewMutation(successCallback);
 
   if (isLoading) {
-    return <div>Loading...</div>; // 로딩컴포넌트 추가시 변경예정
+    return <AdminLoading />;
   }
   if (isError) {
-    return <div>Error loading data</div>; // 에러컴포넌트 추가시 변경예정
+    return <NetworkError />; // 에러컴포넌트 추가시 변경예정
   }
   if (!data) {
-    return <div>No data</div>;
+    return <NetworkError />;
   }
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -68,19 +73,11 @@ const WorkationNew = () => {
     }));
   };
   const handleSelect = (option: string) => {
-    const selectedPlace = data.wktPlaceInfos.find(
-      (place) => place.place === option,
-    );
-    setFormData((prevValues) => ({
-      ...prevValues,
-      place: selectedPlace ? selectedPlace.id.toString() : '',
-    }));
+    const selected = data.wktPlaceInfos.find((place) => place.place === option);
+    setSelectedPlace(selected || null);
   };
 
   const handleSubmit = () => {
-    const selectedPlace = data.wktPlaceInfos.find(
-      (place) => place.id.toString() === formData.place,
-    );
     if (!selectedPlace) {
       alert('선택한 장소를 찾을 수 없습니다.');
       return;
@@ -104,14 +101,24 @@ const WorkationNew = () => {
       <TitleBarModule title="워케이션 등록" type="LEFT" />
       <div className="mt-10 flex flex-col gap-[30px]">
         <div className="flex h-52 gap-x-8">
-          <div className="flex w-[550px] flex-col items-center justify-center gap-y-2 bg-cus-100 text-sub-200">
-            <Image src={ImageIcon} alt="PlaceGallery" />
-            <p className="mt-2 text-center">
-              장소 선택 시
-              <br />
-              대표 이미지를 확인할 수 있습니다.
-            </p>
-          </div>
+          {selectedPlace ? (
+            <Image
+              className="h-[204px] min-w-[400px] object-cover"
+              src={selectedPlace.thumbnailUrl}
+              alt="PlaceGallery"
+              width={400}
+              height={204}
+            />
+          ) : (
+            <div className="flex h-[204px] min-w-[400px] flex-col items-center justify-center gap-y-2 bg-cus-100 text-sub-200">
+              <Image src={ImageIcon} alt="PlaceGallery" />
+              <p className="mt-2 w-full text-center">
+                장소 선택 시
+                <br />
+                대표 이미지를 확인할 수 있습니다.
+              </p>
+            </div>
+          )}
           <div className="w-full">
             <div className="flex w-full gap-6">
               <div className="w-full">
@@ -137,11 +144,7 @@ const WorkationNew = () => {
             <div className="mt-6 flex w-full flex-col gap-4">
               <p className="text-3 font-semibold">장소</p>
               <DropdownModule
-                selectedOption={
-                  data.wktPlaceInfos.find(
-                    (place) => place.id.toString() === formData.place,
-                  )?.place
-                }
+                selectedOption={selectedPlace?.place || null}
                 options={placeOptions}
                 onSelect={handleSelect}
                 placeholder="장소를 선택해주세요."
@@ -213,10 +216,7 @@ const WorkationNew = () => {
               },
               {
                 subtitle: '장소',
-                content:
-                  data.wktPlaceInfos.find(
-                    (place) => place.id.toString() === formData.place,
-                  )?.place || 'Unknown place',
+                content: selectedPlace?.place || 'Unknown place',
               },
               {
                 subtitle: '모집 기간',

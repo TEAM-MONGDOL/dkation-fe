@@ -1,4 +1,4 @@
-import { DktechinLogo } from '@/_assets/icons';
+import { DkationLogo, DktechinLogo } from '@/_assets/icons';
 import { ServiceInfo } from '@/_constants/common';
 import Image from 'next/image';
 
@@ -7,7 +7,7 @@ const UserFooterContainer = () => {
     <div className="flex w-full min-w-[780px] flex-col gap-y-10 border-t border-sub-100 px-28 pb-11 pt-16">
       <div className="flex w-full items-end justify-between gap-x-5">
         <div className="flex flex-col gap-y-16">
-          <Image src={DktechinLogo} alt="company_logo" />
+          <Image src={DkationLogo} alt="company_logo" />
           <div className="flex flex-col gap-y-1.5 text-4 text-footer">
             <span>고객지원</span>
             <p className="flex flex-wrap items-center gap-x-5">

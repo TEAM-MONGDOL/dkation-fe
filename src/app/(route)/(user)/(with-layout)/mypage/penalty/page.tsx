@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useSession } from 'next-auth/react';
 import UserTableContainer from '@/_components/user/common/containers/UserTableContainer';
 import UserTableHeaderModule from '@/_components/user/common/modules/UserTableHeaderModule';
 import UserTableHeaderAtom from '@/_components/user/common/atoms/UserTableHeaderAtom';
@@ -9,22 +10,7 @@ import { penaltyList } from '@/_types/adminType';
 import dayjs from 'dayjs';
 import UserTableBodyModule from '@/_components/common/modules/TableBodyModule';
 import UserTableBodyAtom from '@/_components/user/common/atoms/UserTableBodyAtom';
-
-const data = {
-  penaltyAmount: 2,
-  penaltyInfos: [
-    {
-      wktName: '김가현',
-      penaltyType: 'ABUSE',
-      createdAt: '2024-01-07T05:38:39.034Z',
-    },
-    {
-      wktName: '김가현',
-      penaltyType: 'NOSHOW',
-      createdAt: '2024-08-07T05:38:39.034Z',
-    },
-  ],
-};
+import { useGetMemberPenaltyHistoryQuery } from '@/_hooks/admin/useGetMemberPenaltyHistoryQuery';
 
 const calculateExpiryDate = (penaltyDate: string, index: number) => {
   const penaltyDateObj = dayjs(penaltyDate);
@@ -38,8 +24,14 @@ const calculateExpiryDate = (penaltyDate: string, index: number) => {
 };
 
 const UserPenaltyPage = () => {
-  const penaltyInfos = data?.penaltyInfos || [];
+  const session = useSession();
+  const accountId = String(session.data?.accountId || '');
 
+  const { data, isLoading, isError } = useGetMemberPenaltyHistoryQuery({
+    accountId,
+  });
+
+  const penaltyInfos = data?.penaltyInfos || [];
   const sortedPenaltyInfos = [...penaltyInfos].sort(
     (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
   );
@@ -60,8 +52,14 @@ const UserPenaltyPage = () => {
           </UserTableHeaderModule>
 
           <tbody>
-            {sortedPenaltyInfos.length === 0 ? (
-              <EmptyContainer colSpan={6} text="데이터가 없습니다" />
+            {!data ? (
+              isLoading ? (
+                <EmptyContainer colSpan={6} text="로딩 중입니다..." />
+              ) : (
+                <EmptyContainer colSpan={6} text="error" />
+              )
+            ) : data.penaltyAmount <= 0 ? (
+              <EmptyContainer colSpan={6} />
             ) : (
               [...sortedPenaltyInfos].reverse().map((item, index) => {
                 const expiryDate = calculateExpiryDate(
@@ -86,8 +84,56 @@ const UserPenaltyPage = () => {
         </UserTableContainer>
       </div>
       <div className="mt-5xl flex w-full flex-col gap-y-4 rounded-lg bg-[#F9F9F9] p-6">
-        <p className="text-2 font-semibold text-sub-400">페널티 규정 안내</p>
-        <p className="whitespace-pre-line">내용은 추후 추가 예정 ...</p>
+        <div className="whitespace-pre-line">
+          <p className="mb-2 text-2 font-semibold text-sub-400">
+            페널티 규정 안내
+          </p>
+          서비스의 원활한 운영과 사용자 만족도를 높이기 위해 페널티 제도를
+          시행하고 있습니다.
+          <br />
+          아래 조항에 따라 페널티가 부여되며, 이외에도 위법 또는 부당한 행위가
+          의심되는 경우 페널티가 적용될 수 있습니다.
+          <br />
+          <br />
+          <strong>[페널티 항목]</strong>
+          <ul>
+            <li>
+              <strong>노쇼:</strong> 워케이션 방문 확정 후 불참
+            </li>
+            <li>
+              <strong>협력체 신고:</strong> 제휴 워케이션 장소에서 신고 접수
+            </li>
+            <li>
+              <strong>포인트 제도 악용:</strong> 포인트 제도를 부정하게 이용한
+              경우
+            </li>
+            <li>
+              <strong>근무 태만:</strong> 업무 불이행
+            </li>
+          </ul>
+          <p className="text-sub-200">
+            * 근무 태만은 팀원 또는 함께 워케이션에 방문한 인원의 판단에
+            기반합니다.
+            <br />* 한 워케이션에 대해서는 최대 1개의 페널티만 부여할 수
+            있습니다.
+          </p>
+          <br />
+          <strong>[페널티 조치 방법]</strong>
+          <ul>
+            <li>
+              <strong>누적 1회:</strong> 6개월간 워케이션 응모 및 포인트 획득
+              불가
+            </li>
+            <li>
+              <strong>누적 2회:</strong> 12개월간 워케이션 응모 및 포인트 획득
+              불가
+            </li>
+            <li>
+              <strong>누적 3회:</strong> 서비스 이용 정지 (워케이션 신청 및 참여
+              등 모든 행위 불가)
+            </li>
+          </ul>
+        </div>
       </div>
     </section>
   );

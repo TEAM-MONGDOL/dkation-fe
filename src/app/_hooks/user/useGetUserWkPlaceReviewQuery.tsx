@@ -4,13 +4,21 @@ import api from '../Axios';
 
 export const useGetUserWkPlaceReviewQuery = ({
   wktPlaceId,
+  pageParam,
 }: {
   wktPlaceId: number | undefined;
+  pageParam: {
+    page: number;
+    size: number;
+    sort?: string;
+  };
 }) => {
   return useQuery({
-    queryKey: [wktPlaceId],
+    queryKey: [wktPlaceId, pageParam],
     queryFn: async () => {
-      const res = await api.get(`/api/review/wktplace/${wktPlaceId}`);
+      const res = await api.get(`/api/review/wktplace/${wktPlaceId}`, {
+        params: { ...pageParam },
+      });
       return workationUserPlaceReviewSchema.parse(res.data.data);
     },
   });

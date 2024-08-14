@@ -3,7 +3,7 @@
 import { useGetWkListQuery } from '@/_hooks/admin/useGetWktListQuery';
 import Image from 'next/image';
 import { LeftKeyIcon, RightKeyIcon } from '@/_assets/icons';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import WktListItem from './WktListItem';
 
 const WktListSection = () => {
@@ -28,7 +28,6 @@ const WktListSection = () => {
     if (!scrollContainerRef.current || !data || data.wktInfos.length < 1)
       return;
     const nowCurrentIdx = Math.max(0, currentStartItem - 3);
-    console.log('left : ', nowCurrentIdx);
     scrollTo(scrollContainerRef.current, nowCurrentIdx);
     setCurrentStartItem(nowCurrentIdx);
   };
@@ -37,10 +36,9 @@ const WktListSection = () => {
     if (!scrollContainerRef.current || !data || data.wktInfos.length < 1)
       return;
     const nowCurrentIdx = Math.min(
-      data.wktInfos.length * 3 - 3,
+      data.wktInfos.length - 1,
       currentStartItem + 3,
     );
-    console.log('right : ', nowCurrentIdx);
     scrollTo(scrollContainerRef.current, nowCurrentIdx);
     setCurrentStartItem(nowCurrentIdx);
   };
@@ -81,11 +79,7 @@ const WktListSection = () => {
             )
           ) : (
             data.wktInfos.map((wktInfo) => (
-              <>
-                <WktListItem key={wktInfo.wktId} wktInfo={wktInfo} />
-                <WktListItem key={wktInfo.wktId} wktInfo={wktInfo} />
-                <WktListItem key={wktInfo.wktId} wktInfo={wktInfo} />
-              </>
+              <WktListItem key={wktInfo.wktId} wktInfo={wktInfo} />
             ))
           )}
         </div>

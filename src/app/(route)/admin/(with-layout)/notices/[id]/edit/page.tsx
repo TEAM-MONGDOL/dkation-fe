@@ -15,6 +15,8 @@ import Image from 'next/image';
 import logo from '@/_assets/images/logo_imsy.png';
 import { useGetNoticeDetailQuery } from '@/_hooks/admin/useGetNoticeDetailQuery';
 import { usePatchNoticeMutation } from '@/_hooks/admin/usePatchNoticeMutation';
+import AdminLoading from '@/_components/admin/adminLoading';
+import NetworkError from '@/_components/common/networkError';
 
 interface NoticeEditPageProps {
   params: {
@@ -124,6 +126,8 @@ const AdminWriteNoticesEditPage = ({ params }: NoticeEditPageProps) => {
     router.push('/admin/notices');
   };
 
+  if (isLoading) <AdminLoading />;
+  if (isError) <NetworkError />;
   return (
     <section>
       <TitleBarModule title="공지 수정" type="LEFT" />
