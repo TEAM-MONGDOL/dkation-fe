@@ -15,5 +15,6 @@ declare module 'next-auth' {
     accessToken: string;
     accountId: number;
     isAdmin: boolean;
+    expiredAt: number;
   }
 }
