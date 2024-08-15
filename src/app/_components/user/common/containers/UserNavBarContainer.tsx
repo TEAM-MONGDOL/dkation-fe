@@ -33,8 +33,8 @@ const UserNavBarContainer = () => {
                 className={
                   (item.href === '/' && currentPath === '/') ||
                   (item.href !== '/' && currentPath.startsWith(item.href))
-                    ? 'px-5 text-center font-semibold'
-                    : 'px-5 text-center'
+                    ? 'px-2 text-center font-semibold xl:px-5'
+                    : 'px-2 text-center xl:px-5'
                 }
               >
                 {item.text}
