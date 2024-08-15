@@ -35,7 +35,7 @@ const PointsHistoryPage = () => {
             <UserTableHeaderAtom isFirst text="번호" width="100px" />
             <UserTableHeaderAtom text="사유" />
             <UserTableHeaderAtom text="일시" />
-            <UserTableHeaderAtom text="적립/사용" width="100px" />
+            <UserTableHeaderAtom text="적립/사용" width="150px" />
             <UserTableHeaderAtom isLast text="잔여 포인트" width="150px" />
           </UserTableHeaderModule>
           <tbody>
