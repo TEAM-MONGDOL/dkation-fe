@@ -90,18 +90,18 @@ const AdminMainPage = () => {
           type="RIGHT"
           url="/admin/workation"
         />
-        <TableContainer>
+        <TableContainer minWidth="1200px">
           <TableHeaderModule>
             <TableHeaderAtom isFirst width="80px">
               번호
             </TableHeaderAtom>
             <TableHeaderAtom>워케이션</TableHeaderAtom>
-            <TableHeaderAtom width="260px">모집 기간</TableHeaderAtom>
-            <TableHeaderAtom width="260px">워케이션 기간</TableHeaderAtom>
+            <TableHeaderAtom width="100px">모집 기간</TableHeaderAtom>
+            <TableHeaderAtom width="100px">워케이션 기간</TableHeaderAtom>
             <TableHeaderAtom width="100px">모집 인원</TableHeaderAtom>
             <TableHeaderAtom width="120px">지원자 수</TableHeaderAtom>
             <TableHeaderAtom width="160px">결과 및 페널티</TableHeaderAtom>
-            <TableHeaderAtom isLast width="160px" />
+            <TableHeaderAtom isLast width="140px" />
           </TableHeaderModule>
           <tbody>
             {!wkData ? (
