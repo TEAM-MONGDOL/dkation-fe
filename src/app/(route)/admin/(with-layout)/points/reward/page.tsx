@@ -188,7 +188,7 @@ const AdminPointsRewardPage = () => {
         />
         <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         <CheckboxContainer
-          title="분류"
+          title="구분"
           options={Object.entries(pointRewardList) as [string, string][]}
           selectedOptions={param.type}
           setSelectedOptions={(type: string[]) => setParam({ ...param, type })}
@@ -196,7 +196,7 @@ const AdminPointsRewardPage = () => {
         <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         {pointPolicyList && (
           <CheckboxContainer
-            title="구분"
+            title="분류"
             options={pointPolicyList.pointPolicyList.map((item) => [
               item.id.toString(),
               item.policyTitle,
