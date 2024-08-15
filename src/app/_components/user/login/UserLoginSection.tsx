@@ -41,7 +41,7 @@ const UserLoginSection = ({ onFindPasswordClick }: UserLoginSectionProps) => {
       setError(result.error);
       console.log('로그인 실패 : ', result);
     } else {
-      router.refresh();
+      router.replace('/');
     }
   };
   return (
