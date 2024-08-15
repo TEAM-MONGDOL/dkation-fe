@@ -252,35 +252,45 @@ const Workation = () => {
             <div
               role="presentation"
               key={wkt.wktId}
-              className="mb-24 flex w-full"
+              className="mb-24 flex w-full justify-between gap-x-4"
               onClick={() => router.push(`/workation/${wkt.wktId}`)}
             >
-              <Image
-                className="h-[304px] w-[402px] object-cover"
-                width={402}
-                height={304}
-                src={wkt.thumbnailUrl}
-                alt="place"
-              />
-              <div className="ml-8 flex-col">
-                <p className="mb-1.5 text-sub-300">{wkt.wktPlaceTitle}</p>
-                <h2 className="mb-24 text-h2 font-semibold text-sub-400">
-                  {wkt.title}
-                </h2>
-                <p className="mb-4 inline-block rounded-regular bg-[#FF2424]/10 px-5 py-1.5 text-3 text-[#FF2424]">
-                  모집인원 : {wkt.totalRecruit}명
-                </p>
-                <p className="mb-0.5">
-                  모집 기간 : {dayjs(wkt.applyStartDate).format('YYYY.MM.DD')} -{' '}
-                  {dayjs(wkt.applyEndDate).format('YYYY.MM.DD')}
-                </p>
-                <p>
-                  워케이션 기간 : {dayjs(wkt.startDate).format('YYYY.MM.DD')} -{' '}
-                  {dayjs(wkt.endDate).format('YYYY.MM.DD')}
-                </p>
+              <div className="flex items-end gap-x-8">
+                <Image
+                  className="h-[237px] w-[345px] object-cover xl:h-[304px] xl:w-[442px]"
+                  width={402}
+                  height={304}
+                  src={wkt.thumbnailUrl}
+                  alt="place"
+                />
+                <div className="flex h-full flex-col items-start justify-between gap-y-4">
+                  <div className="flex flex-col gap-y-1.5">
+                    <p className="text-sub-300">{wkt.wktPlaceTitle}</p>
+                    <h2 className="line-clamp-1 break-keep text-h2 font-semibold text-sub-400 xl:line-clamp-2">
+                      {wkt.title}
+                    </h2>
+                  </div>
+                  <div className="flex flex-col items-start gap-y-4">
+                    <p className="flex items-center justify-center rounded-regular bg-[#FF2424]/10 px-5 py-1.5 text-3 text-[#FF2424]">
+                      모집인원 : {wkt.totalRecruit}명
+                    </p>
+                    <div className="flex flex-col gap-y-0.5">
+                      <p>
+                        모집 기간 : <br className="block xl:hidden" />
+                        {dayjs(wkt.applyStartDate).format('YYYY.MM.DD')} -{' '}
+                        {dayjs(wkt.applyEndDate).format('YYYY.MM.DD')}
+                      </p>
+                      <p>
+                        워케이션 기간 : <br className="block xl:hidden" />
+                        {dayjs(wkt.startDate).format('YYYY.MM.DD')} -{' '}
+                        {dayjs(wkt.endDate).format('YYYY.MM.DD')}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
               <UserTextLabelAtom
-                className={`ml-auto mt-auto ${getStatusLabelAndColor(wkt.applyStartDate, wkt.applyEndDate).color}`}
+                className={`mt-auto shrink-0 ${getStatusLabelAndColor(wkt.applyStartDate, wkt.applyEndDate).color}`}
                 text={
                   getStatusLabelAndColor(wkt.applyStartDate, wkt.applyEndDate)
                     .label
