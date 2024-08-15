@@ -74,10 +74,10 @@ const AdminPointsPolicyPage = () => {
           <TableHeaderAtom isFirst width="80px">
             번호
           </TableHeaderAtom>
-          <TableHeaderAtom width="200px">분류</TableHeaderAtom>
-          <TableHeaderAtom width="200px">포인트</TableHeaderAtom>
+          <TableHeaderAtom width="230px">분류</TableHeaderAtom>
+          <TableHeaderAtom width="150px">포인트</TableHeaderAtom>
           <TableHeaderAtom>상세 내용</TableHeaderAtom>
-          <TableHeaderAtom>등록/수정 일시</TableHeaderAtom>
+          <TableHeaderAtom width="150px">등록/수정 일시</TableHeaderAtom>
           <TableHeaderAtom isLast width="160px" />
         </TableHeaderModule>
         <tbody>
@@ -95,9 +95,17 @@ const AdminPointsPolicyPage = () => {
             data.pointPolicyList.map((item, idx) => (
               <TableBodyModule key={item.id}>
                 <TableBodyAtom isFirst>{idx + 1}</TableBodyAtom>
-                <TableBodyAtom>{item.policyTitle}</TableBodyAtom>
+                <TableBodyAtom>
+                  <div className="line-clamp-2 w-full text-start">
+                    {item.policyTitle}
+                  </div>
+                </TableBodyAtom>
                 <TableBodyAtom>{item.quantity}</TableBodyAtom>
-                <TableBodyAtom>{item.detail}</TableBodyAtom>
+                <TableBodyAtom>
+                  <div className="line-clamp-1 w-full text-start">
+                    {item.detail}
+                  </div>
+                </TableBodyAtom>
                 <TableBodyAtom>
                   {dayjs(item.modifiedAt).format('YYYY.MM.DD')}
                 </TableBodyAtom>
