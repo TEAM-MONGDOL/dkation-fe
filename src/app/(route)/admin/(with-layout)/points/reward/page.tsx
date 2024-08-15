@@ -118,7 +118,7 @@ const AdminPointsRewardPage = () => {
           <TableHeaderAtom width="80px" isFirst>
             번호
           </TableHeaderAtom>
-          <TableHeaderAtom width="150px">구분</TableHeaderAtom>
+          <TableHeaderAtom width="100px">구분</TableHeaderAtom>
           <TableHeaderAtom>분류</TableHeaderAtom>
           <TableHeaderAtom width="200px">이름</TableHeaderAtom>
           <TableHeaderAtom width="200px">지급일</TableHeaderAtom>
