@@ -13,7 +13,7 @@ const UserTableHeaderAtom = ({
 }: UserTableHeaderAtomProps) => {
   return (
     <th
-      className={`px-5 py-2.5 text-center align-middle text-4 font-normal text-sub-300 ${isFirst ? 'rounded-l pl-[68px]' : ''} ${isLast ? 'rounded-r pr-[68px]' : ''}`}
+      className={`px-5 py-2.5 text-center align-middle text-4 font-normal text-sub-300 ${isFirst ? 'rounded-l pl-6 xl:pl-10' : ''} ${isLast ? 'rounded-r pr-6 xl:pr-10' : ''}`}
       style={{ width }}
     >
       {text}
