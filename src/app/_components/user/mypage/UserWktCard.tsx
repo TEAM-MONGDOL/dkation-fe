@@ -12,6 +12,7 @@ import { StatusType } from '@/_types/adminType';
 import { useGetWinningPercentageQuery } from '@/_hooks/user/useGetWinningPercentageQuery';
 import { useGetMemberDetailQuery } from '@/_hooks/common/useGetMemberDetailQuery';
 import { usePatchBettingPointMutation } from '@/_hooks/user/usePatchBettingPointMutation';
+import { dateConverter } from '@/_types/converter';
 
 interface WorkationCardProps {
   thumbnailUrl: string;
@@ -121,44 +122,59 @@ const WorkationCard = ({
     applyStatusType === 'VISITED' && reviewId !== null;
 
   return (
-    <div className="flex w-full p-4">
-      <Image
-        width={402}
-        height={304}
-        src={thumbnailUrl}
-        alt="place"
-        className="h-[304px] w-[402px] rounded object-cover"
-      />
-      <div className="ml-8 flex-grow">
-        <p className="mb-3 text-sub-300">{wktName}</p>
-        <h2 className="mb-20 text-h2 font-semibold text-sub-400">{place}</h2>
-        <div className="flex items-end justify-between">
-          <div className="mb-4">
-            <p className="mb-1">모집 인원 : {totalRecruit}명</p>
-            <p className="mb-1">
-              모집 기간 : {applyStartDate} - {applyEndDate}
-            </p>
-            <p>
-              워케이션 기간 : {startDate} - {endDate}
-            </p>
+    <div className="flex w-full flex-col gap-4 p-4 xl:flex-row xl:justify-between">
+      <div className="flex items-end gap-x-8">
+        <Image
+          width={402}
+          height={304}
+          src={thumbnailUrl}
+          alt="place"
+          className="h-[237px] w-[345px] rounded object-cover xl:h-[304px] xl:w-[442px]"
+        />
+        <div className="flex h-full flex-col justify-between">
+          <div className="flex flex-col gap-y-3">
+            <p className="line-clamp-1 text-sub-300">{wktName}</p>
+            <h2 className="line-clamp-1 text-h2 font-semibold text-sub-400">
+              {place}
+            </h2>
           </div>
-          <div className="mb-4 flex items-center gap-x-2">
-            <p className="flex items-center rounded-full bg-sub-100/40 px-5 py-2.5">
+          <div className="flex flex-col gap-y-4">
+            <div className="flex flex-col gap-y-1">
+              <p>모집 인원 : {totalRecruit}명</p>
+              <p>
+                모집 기간 : {dateConverter(applyStartDate)} -{' '}
+                {dateConverter(applyEndDate)}
+              </p>
+              <p>
+                워케이션 기간 :<br className="block xl:hidden" />{' '}
+                {dateConverter(startDate)} - {dateConverter(endDate)}
+              </p>
+            </div>
+            <UserTextLabelAtom
+              text={textLabel}
+              size="fix"
+              className={textLabelClass}
+            />
+          </div>
+        </div>
+      </div>
+      <div className="mt-auto flex flex-row items-center justify-between gap-y-4 xl:flex-col xl:items-end xl:justify-end">
+        <div className="flex items-end justify-between">
+          <div className="flex items-center gap-x-2">
+            <p className="flex shrink-0 items-center rounded-full bg-sub-100/40 px-5 py-2.5">
               베팅 포인트 : {currentBettingPoint} 점
             </p>
             {applyStatusType === 'APPLIED' && (
-              <button onClick={() => setIsModalOpen(true)}>
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="h-8 w-8 shrink-0"
+              >
                 <Image src={PointEditIcon} alt="edit" />
               </button>
             )}
           </div>
         </div>
         <div className="flex justify-between">
-          <UserTextLabelAtom
-            text={textLabel}
-            size="fix"
-            className={textLabelClass}
-          />
           <UserButtonAtom
             text={
               typeof buttonText === 'function'
@@ -167,7 +183,7 @@ const WorkationCard = ({
             }
             buttonStyle={buttonStyle}
             type="button"
-            className="w-32 rounded-md py-2.5"
+            className="w-32 rounded-md py-2"
             cursorDefault={isReviewButtonDisabled || buttonDisabled}
             onClick={
               !isReviewButtonDisabled && !buttonDisabled && onClick
