@@ -117,10 +117,10 @@ const UserNoticePage = () => {
         <UserTableContainer>
           <UserTableHeaderModule>
             <UserTableHeaderAtom isFirst width="120px" text="번호" />
-            <UserTableHeaderAtom width="180px" text="구분" />
+            <UserTableHeaderAtom width="150px" text="구분" />
             <UserTableHeaderAtom text="제목" />
-            <UserTableHeaderAtom width="200px" text="등록 일시" />
-            <UserTableHeaderAtom isLast width="140px" text="" />
+            <UserTableHeaderAtom width="150px" text="등록 일시" />
+            <UserTableHeaderAtom isLast width="100px" text="" />
           </UserTableHeaderModule>
 
           <tbody>
@@ -145,7 +145,11 @@ const UserNoticePage = () => {
                       />
                     </div>
                   </UserTableBodyAtom>
-                  <UserTableBodyAtom>{item.title}</UserTableBodyAtom>
+                  <UserTableBodyAtom>
+                    <p className="line-clamp-1 w-full text-start">
+                      {item.title}
+                    </p>
+                  </UserTableBodyAtom>
                   <UserTableBodyAtom>
                     {dayjs(item.createdAt).format('YYYY.MM.DD')}
                   </UserTableBodyAtom>
