@@ -1,12 +1,13 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import logo from '@/_assets/images/logo.png';
 import UserNavButtonAtom from '@/_components/user/common/atoms/UserNavButtonAtom';
 import Link from 'next/link';
 
 const UserNavBarContainer = () => {
+  const router = useRouter();
   const currentPath = usePathname();
 
   const menuItems = [
@@ -18,7 +19,14 @@ const UserNavBarContainer = () => {
   ];
   return (
     <div className="flex h-20 w-full items-center justify-between gap-x-5 px-28">
-      <div className="flex min-w-[100px] max-w-[145px] items-center justify-center">
+      <div
+        role="presentation"
+        className="flex min-w-[100px] max-w-[145px] cursor-pointer items-center justify-center"
+        onClick={() => {
+          if (currentPath === '/') return;
+          router.push('/');
+        }}
+      >
         <Image src={logo} alt="logo" className="w-full" />
       </div>
       <div className="flex lg:gap-5 xl:gap-10">
