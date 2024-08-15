@@ -93,6 +93,10 @@ const RecentReviewSection = () => {
             ) : (
               <NetworkError />
             )
+          ) : data.pageInfo.totalElements <= 0 ? (
+            <div className="flex h-[307px] w-screen items-center justify-center">
+              <p className="text-sub-300">최근 후기가 없습니다.</p>
+            </div>
           ) : (
             data.reviewInfosForMember.map((review) => (
               <RecentReviewItem
