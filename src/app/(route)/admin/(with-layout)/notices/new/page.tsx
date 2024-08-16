@@ -69,6 +69,16 @@ const WriteNoticesPage = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!values.announcementType) {
+      alert('구분을 선택해 주세요.');
+      return;
+    }
+
+    if (!values.title) {
+      alert('제목을 입력해 주세요.');
+      return;
+    }
     const fileUrls = values.fileInfos.map((info) => info.url);
     const payload = { ...values, fileUrls };
     postAnnouncement(payload);
