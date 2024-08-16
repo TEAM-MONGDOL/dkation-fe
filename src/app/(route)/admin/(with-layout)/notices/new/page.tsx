@@ -11,9 +11,11 @@ import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import { NoticeType, noticeTypeConverter } from '@/_types/adminType';
 import { usePostNoticeMutation } from '@/_hooks/admin/usePostNoticeMutation';
 import FileModule from '@/_components/common/modules/FileModule';
+import ModalModule from '@/_components/common/modules/ModalModule';
 
 const WriteNoticesPage = () => {
   const router = useRouter();
+  const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [values, setValues] = useState({
     announcementType: '' as NoticeType | '',
     title: '',
@@ -23,6 +25,8 @@ const WriteNoticesPage = () => {
 
   const { mutate: postAnnouncement } = usePostNoticeMutation({
     successCallback: () => {
+      alert('게시글이 등록되었습니다.');
+      setIsPostModalOpen(false);
       router.replace('/admin/notices');
     },
     errorCallback: (error: Error) => {
@@ -79,6 +83,11 @@ const WriteNoticesPage = () => {
       alert('제목을 입력해 주세요.');
       return;
     }
+
+    setIsPostModalOpen(true);
+  };
+
+  const confirmPost = () => {
     const fileUrls = values.fileInfos.map((info) => info.url);
     const payload = { ...values, fileUrls };
     postAnnouncement(payload);
@@ -161,6 +170,15 @@ const WriteNoticesPage = () => {
           </div>
         </div>
       </form>
+      {isPostModalOpen && (
+        <ModalModule
+          title="해당 게시글을 등록하시겠습니까?"
+          cancelText="취소"
+          confirmText="확인"
+          onCancel={() => setIsPostModalOpen(false)}
+          onConfirm={confirmPost}
+        />
+      )}
     </section>
   );
 };
