@@ -12,7 +12,8 @@ interface UserLoginSectionProps {
 
 const UserLoginSection = ({ onFindPasswordClick }: UserLoginSectionProps) => {
   const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
+  const [idError, setIdError] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
   const [form, setForm] = useState({
     accountId: '',
     password: '',
@@ -28,9 +29,19 @@ const UserLoginSection = ({ onFindPasswordClick }: UserLoginSectionProps) => {
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!form.accountId || !form.password) {
+    setIdError(null);
+    setPasswordError(null);
+
+    if (!form.accountId) {
+      setIdError('아이디를 입력해주세요.');
       return;
     }
+
+    if (!form.password) {
+      setPasswordError('비밀번호를 입력해주세요.');
+      return;
+    }
+
     const result = await signIn('credentials', {
       accountId: form.accountId,
       password: form.password,
@@ -38,7 +49,14 @@ const UserLoginSection = ({ onFindPasswordClick }: UserLoginSectionProps) => {
     });
 
     if (result?.error) {
-      setError(result.error);
+      if (result.error === '사용자를 찾을 수 없습니다.') {
+        setIdError(result.error);
+        return;
+      }
+      if (result.error !== '사용자를 찾을 수 없습니다.') {
+        setPasswordError(result.error);
+        return;
+      }
       console.log('로그인 실패 : ', result);
     } else {
       router.replace('/');
@@ -60,7 +78,7 @@ const UserLoginSection = ({ onFindPasswordClick }: UserLoginSectionProps) => {
                 value={form.accountId}
                 onChange={onChange}
                 placeholder="아이디"
-                error={error === '사용자를 찾을 수 없습니다.' ? error : null}
+                error={idError}
               />
               <UserLoginInput
                 type="password"
@@ -68,7 +86,7 @@ const UserLoginSection = ({ onFindPasswordClick }: UserLoginSectionProps) => {
                 value={form.password}
                 onChange={onChange}
                 placeholder="비밀번호"
-                error={error !== '사용자를 찾을 수 없습니다.' ? error : null}
+                error={passwordError}
               />
             </div>
             <UserButtonAtom
