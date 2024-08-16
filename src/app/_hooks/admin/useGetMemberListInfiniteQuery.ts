@@ -19,7 +19,7 @@ export const useGetMemberListInifiniteQuery = ({
       });
       return memberListSchema.parse(res.data.data);
     },
-    initialPageParam: { page: 1, size: 10 },
+    initialPageParam: { page: 1, size: 100 },
     getNextPageParam: (lastPage) => {
       return lastPage.pageInfo.totalElements === 0 ||
         lastPage.pageInfo.totalPages - 1 === lastPage.pageInfo.pageNum

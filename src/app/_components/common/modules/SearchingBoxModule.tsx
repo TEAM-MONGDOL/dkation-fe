@@ -43,10 +43,12 @@ const SearchingBoxModule = ({
   if (widthFull) {
     widthClass = 'w-full';
   } else {
-    widthClass = filter ? 'w-[312px]' : 'w-[528px]';
+    widthClass = filter ? 'max-w-[312px]' : 'max-w-[528px]';
   }
   return (
-    <div className={`flex gap-x-2.5 ${widthFull ? 'w-full' : ''}`}>
+    <div
+      className={`flex grow items-start justify-end gap-x-2.5 ${widthFull ? 'w-full' : ''}`}
+    >
       {options && options.length > 0 ? (
         <DropdownModule
           size="small"
@@ -57,7 +59,7 @@ const SearchingBoxModule = ({
         />
       ) : null}
       <div
-        className={`flex ${height} items-center gap-x-2.5 rounded-regular border border-stroke-100 bg-white px-3 py-1.5 ${widthClass}`}
+        className={`flex ${height} ${widthClass} grow items-center gap-x-2.5 rounded-regular border border-stroke-100 bg-white px-3 py-1.5`}
       >
         <input
           className="h-full grow text-4 placeholder-sub-100 outline-0"

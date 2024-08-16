@@ -48,9 +48,13 @@ const InputAreaAtom = ({
     status !== 'readonly' && status !== 'disabled' && status !== 'cursor';
 
   return (
-    <div role="presentation" className="relative" onClick={onClick}>
+    <div
+      role="presentation"
+      className={`flex w-full items-center gap-x-4 rounded-regular border border-stroke-100 px-3 py-3.5 text-4 ${getStatus()}`}
+      onClick={onClick}
+    >
       <input
-        className={`w-full rounded-regular border border-stroke-100 py-3.5 pl-3 text-4 placeholder-sub-200 outline-0 ${getStatus()}`}
+        className="min-w-0 grow bg-transparent placeholder-sub-200 outline-0"
         placeholder={placeholder}
         readOnly={!isInteractive}
         value={value || ''}
@@ -60,7 +64,7 @@ const InputAreaAtom = ({
         onWheel={(e) => e.currentTarget.blur()}
       />
       {isInteractive && textCount && (
-        <div className="absolute bottom-3.5 right-3.5">
+        <div className="flex shrink-0 items-center justify-center">
           <TextCountAtom text={value.toString()} maxLength={textCount} />
         </div>
       )}

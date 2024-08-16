@@ -79,6 +79,20 @@ const AdminWorkationPlaceNewPage = () => {
     });
   };
 
+  const checkData = () => {
+    if (
+      formData.placeName === '' ||
+      formData.address === '' ||
+      formData.maxPeople === 0 ||
+      formData.fileInfos.length === 0
+    ) {
+      alert('모든 정보를 입력해주세요.');
+      return false;
+    }
+
+    setIsConfirmModelOpen(true);
+  };
+
   const handleSubmit = () => {
     postWkPlace({
       place: formData.placeName,
@@ -211,7 +225,7 @@ const AdminWorkationPlaceNewPage = () => {
           type="button"
           width="fixed"
           buttonStyle="yellow"
-          onClick={() => setIsConfirmModelOpen(true)}
+          onClick={checkData}
         />
       </div>
       {isConfirmModelOpen && (

@@ -123,7 +123,7 @@ const NoticesListPage = () => {
           endDatePlaceholder="마감일 선택"
         />
       </FilteringBarContainer>
-      <TableContainer>
+      <TableContainer minWidth="1000px">
         <TableHeaderModule>
           <TableHeaderAtom isFirst width="80px">
             번호

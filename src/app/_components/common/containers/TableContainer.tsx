@@ -4,6 +4,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 interface TableContainerProps {
   children: ReactNode;
   maxHeight?: string;
+  minWidth?: string;
   isInfiniteScroll?: boolean;
   infiniteScrollProps?: {
     load: ReactElement;
@@ -16,6 +17,7 @@ interface TableContainerProps {
 const TableContainer = ({
   children,
   maxHeight,
+  minWidth,
   isInfiniteScroll,
   infiniteScrollProps,
 }: TableContainerProps) => {
@@ -33,7 +35,10 @@ const TableContainer = ({
           </table>
         </InfiniteScroll>
       ) : (
-        <table className="min-w-full table-fixed border-separate border-spacing-y-2.5">
+        <table
+          className="table-fixed border-separate border-spacing-y-2.5 overflow-auto"
+          style={{ minWidth: minWidth || 'auto' }}
+        >
           {children}
         </table>
       )}

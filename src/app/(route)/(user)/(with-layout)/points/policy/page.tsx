@@ -42,12 +42,12 @@ const PointsPolicyPage = () => {
       <h2 className="text-h2 font-semibold text-sub-400">포인트 정책</h2>
       <div className="flex w-full flex-col gap-y-[200px]">
         <div className="flex w-full flex-col gap-y-2.5">
-          <div className="flex h-10 w-full items-center justify-center gap-x-7 rounded bg-sub-100/20 px-[68px] text-center text-4 text-sub-300">
-            <p className="w-[100px]">번호</p>
+          <div className="flex h-10 w-full items-center justify-center gap-x-7 rounded bg-sub-100/20 px-6 text-center text-4 text-sub-300 xl:px-10">
+            <p className="w-1/12 shrink-0">번호</p>
             <p className="grow">분류</p>
-            <p className="w-60">점수</p>
-            <p className="w-48">등록 일시</p>
-            <p className="w-10" />
+            <p className="w-2/12 shrink-0">점수</p>
+            <p className="w-2/12 shrink-0">등록 일시</p>
+            <p className="w-1/12 shrink-0" />
           </div>
           <div className="flex w-full flex-col gap-y-2.5">
             {!policyList ? (
@@ -66,18 +66,22 @@ const PointsPolicyPage = () => {
                   <div
                     role="presentation"
                     key={item.id}
-                    className="flex h-[63px] w-full cursor-pointer items-center justify-center gap-x-7 rounded border border-stroke-100 bg-white px-[68px] text-center font-medium text-sub-400"
+                    className="flex h-[63px] w-full cursor-pointer items-center justify-center gap-x-7 rounded border border-stroke-100 bg-white px-6 text-center font-medium text-sub-400 xl:px-10"
                     onClick={() => {
                       setCurrentOpen(currentOpen === item.id ? null : item.id);
                     }}
                   >
-                    <p className="w-[100px]">
+                    <p className="w-1/12 shrink-0">
                       {(currentPage - 1) * 5 + idx + 1}
                     </p>
                     <p className="grow">{item.policyTitle}</p>
-                    <p className="w-60">{item.quantity.toLocaleString()}</p>
-                    <p className="w-48">{dateConverter(item.modifiedAt)}</p>
-                    <div className="w-10">
+                    <p className="w-2/12 shrink-0">
+                      {item.quantity.toLocaleString()}
+                    </p>
+                    <p className="w-2/12 shrink-0">
+                      {dateConverter(item.modifiedAt)}
+                    </p>
+                    <div className="flex w-1/12 justify-center">
                       <Image
                         src={DownArrowIcon}
                         alt="policy-toggle"

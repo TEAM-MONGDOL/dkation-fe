@@ -34,11 +34,6 @@ const UserFilteringContainer = ({
         )}
       </div>
       <div className="flex w-full flex-col">{filterChildren}</div>
-      <div className="mt-[100px] flex w-full items-center justify-end gap-x-2.5 px-8 py-7">
-        {/* 머지 후 버튼 컴포넌트로 대체 필요 */}
-        <button>취소</button>
-        <button>확인</button>
-      </div>
     </div>
   );
 };

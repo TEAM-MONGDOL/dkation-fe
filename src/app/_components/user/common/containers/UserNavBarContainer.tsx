@@ -1,12 +1,13 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import logo from '@/_assets/images/logo.png';
 import UserNavButtonAtom from '@/_components/user/common/atoms/UserNavButtonAtom';
 import Link from 'next/link';
 
 const UserNavBarContainer = () => {
+  const router = useRouter();
   const currentPath = usePathname();
 
   const menuItems = [
@@ -17,30 +18,37 @@ const UserNavBarContainer = () => {
     { href: '/mypage', text: '마이페이지' },
   ];
   return (
-    <div className="mx-28 flex h-20 items-center">
-      <div className="mr-28 flex">
-        <Image src={logo} alt="logo" className="w-[145px]" />
+    <div className="flex h-20 w-full items-center justify-between gap-x-5 px-28">
+      <div
+        role="presentation"
+        className="flex min-w-[100px] max-w-[145px] cursor-pointer items-center justify-center"
+        onClick={() => {
+          if (currentPath === '/') return;
+          router.push('/');
+        }}
+      >
+        <Image src={logo} alt="logo" className="w-full" />
       </div>
-      <div className="flex gap-10">
+      <div className="flex lg:gap-5 xl:gap-10">
         {menuItems.map((item) => (
           <div
             role="presentation"
             key={item.href}
-            className="flex h-20 w-[90px] cursor-pointer flex-col items-center justify-center gap-2"
+            className="flex h-20 cursor-pointer flex-col items-center justify-center gap-2"
           >
             <Link href={item.href}>
               <p
                 className={
                   (item.href === '/' && currentPath === '/') ||
                   (item.href !== '/' && currentPath.startsWith(item.href))
-                    ? 'text-center font-semibold'
-                    : 'text-center'
+                    ? 'px-2 text-center font-semibold xl:px-5'
+                    : 'px-2 text-center xl:px-5'
                 }
               >
                 {item.text}
               </p>
               <div
-                className={`h-[3px] w-[100px] translate-y-2 ${(item.href === '/' && currentPath === '/') || (item.href !== '/' && currentPath.startsWith(item.href)) ? 'bg-primary' : 'bg-transparent'}`}
+                className={`h-[3px] w-full translate-y-2 ${(item.href === '/' && currentPath === '/') || (item.href !== '/' && currentPath.startsWith(item.href)) ? 'bg-primary' : 'bg-transparent'}`}
               />
             </Link>
           </div>

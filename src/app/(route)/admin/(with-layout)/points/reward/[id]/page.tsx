@@ -15,6 +15,7 @@ import { pointSupplyTypeConvertList } from '@/_types/adminType';
 import React, { useState } from 'react';
 import AdminLoading from '@/_components/admin/adminLoading';
 import NetworkError from '@/_components/common/networkError';
+import { dateConverter } from '@/_types/converter';
 
 interface RewardDetailPageProps {
   params: {
@@ -59,7 +60,7 @@ const AdminPointsRewardDetailPage = ({ params }: RewardDetailPageProps) => {
             />
             <InputModule
               subtitle="지급일시"
-              value={data.pointSupplyDetailInfo.supplyTime}
+              value={dateConverter(data.pointSupplyDetailInfo.supplyTime)}
               onChange={() => {}}
               status="readonly"
             />
