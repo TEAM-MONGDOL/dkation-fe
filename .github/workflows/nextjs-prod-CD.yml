@@ -44,10 +44,18 @@ jobs:
           echo "BASTION_IP: ${{ secrets.BASTION_IP }}"
           echo "WEB_IPS: ${{ secrets.WEB_IPS }}"
           ssh-keyscan -H ${{ secrets.BASTION_IP }} >> ~/.ssh/known_hosts
+          if [ $? -ne 0 ]; then
+            echo "Failed to add BASTION_IP to known_hosts"
+            exit 1
+          fi
           IFS=',' read -r -a HOSTS <<< "${{ secrets.WEB_IPS }}"
           for host in "${HOSTS[@]}"; do
             echo "Adding host $host to known_hosts"
             ssh-keyscan -H $host >> ~/.ssh/known_hosts
+            if [ $? -ne 0 ]; then
+              echo "Failed to add $host to known_hosts"
+              exit 1
+            fi
           done
 
       - name: Deploy to FE
