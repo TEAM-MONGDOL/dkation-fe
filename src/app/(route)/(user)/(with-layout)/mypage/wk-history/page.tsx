@@ -253,7 +253,7 @@ const UserWkHistoryPage = () => {
               endDate={wkt.endDate}
               bettingPoint={wkt.bettingPoint}
               applyStatusType={wkt.applyStatusType}
-              waitingNumber={wkt.waitNumber} // 수정 필요
+              waitingNumber={wkt.waitNumber}
               onClick={() => handleCardClick(wkt.applyStatusType, wkt.wktId)}
             />
           ))
