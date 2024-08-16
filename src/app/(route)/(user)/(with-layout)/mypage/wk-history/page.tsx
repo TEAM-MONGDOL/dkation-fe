@@ -232,7 +232,9 @@ const UserWkHistoryPage = () => {
             <NetworkError />
           )
         ) : data.pageInfo.totalElements <= 0 ? (
-          <p>내역이 존재하지 않습니다</p>
+          <p className="py-20 text-center text-sub-300">
+            내역이 존재하지 않습니다
+          </p>
         ) : (
           data?.applyInfoList.map((wkt) => (
             <WorkationCard
