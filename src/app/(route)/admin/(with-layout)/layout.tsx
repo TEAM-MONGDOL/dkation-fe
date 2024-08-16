@@ -1,12 +1,17 @@
 import { DkationAdminLogo } from '@/_assets/icons';
 import NavBarContainer from '@/_components/common/containers/NavBarContainer';
 import HeaderModule from '@/_components/common/modules/HeaderModule';
+import { Metadata } from 'next';
 import Image from 'next/image';
 import { ReactNode } from 'react';
 
 interface Props {
   children: ReactNode;
 }
+
+export const metadata: Metadata = {
+  title: 'Dkation ADMIN',
+};
 
 const AdminLayout = ({ children }: Props) => {
   return (
