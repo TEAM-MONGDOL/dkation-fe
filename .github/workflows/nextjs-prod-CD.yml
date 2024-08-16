@@ -49,6 +49,8 @@ jobs:
             KCR_REGISTRY="${{ env.KCR_REGISTRY }}"
             KCR_REPOSITORY="${{ env.KCR_REPOSITORY }}"
             VERSION="${{ steps.get_version.outputs.version }}"
+            AK="${{ env.ACCESS_KEY }}"
+            SK="${{ env.ACCESS_SECRET_KEY }}"
 
             for host in "${HOSTS[@]}"
             do
@@ -62,6 +64,9 @@ jobs:
 
                 echo "Removing old Docker images"
                 docker images --format '{{.Repository}}:{{.Tag}}' | grep '$KCR_REGISTRY/$KCR_REPOSITORY' | xargs -r docker rmi
+
+                echo "Docker login"
+                echo "$SK" | docker login $KCR_REGISTRY -u "$AK" --password-stdin
 
                 echo "Pulling new Docker image"
                 docker pull $KCR_REGISTRY/$KCR_REPOSITORY:$VERSION
