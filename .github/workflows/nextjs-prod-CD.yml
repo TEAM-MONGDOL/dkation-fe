@@ -89,6 +89,8 @@ jobs:
                 echo "Deployment to $host failed"
                 exit 1
               fi
+            
+              echo "Deployment completed successfully"
+            
             done
 
-          echo "Deployment completed successfully"
