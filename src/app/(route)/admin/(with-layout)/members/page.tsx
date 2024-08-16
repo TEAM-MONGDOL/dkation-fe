@@ -31,13 +31,19 @@ const AdminMembersListPage = () => {
     order: 'name,ASC',
     departmentType: departmentList,
   });
-
+  const [searchText, setSearchText] = useState('');
   const [selectedOption, setSelectedOption] = useState(
     MembersSearchQueryOptions.NAME,
   );
 
+  const departmentFilter =
+    param.departmentType.length > 0 ? param.departmentType : [];
+
   const { data, isLoading, error } = useGetMemberListQuery({
-    department: param.departmentType.join(','),
+    searchParam: {
+      searchText,
+      department: departmentFilter,
+    },
     pageParam: {
       page: currentPage,
       size: 10,
@@ -51,10 +57,15 @@ const AdminMembersListPage = () => {
       order: 'name,ASC',
       departmentType: departmentList,
     });
+    setSearchText('');
   };
 
   const handleSelect = (option: string) => {
-    setSelectedOption(option); // Update the selected option
+    setSelectedOption(option);
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchText(query);
   };
 
   const moveToMembersDetail = (id: string) => {
@@ -73,6 +84,7 @@ const AdminMembersListPage = () => {
           placeholder="검색어를 입력하세요."
           filter
           onClick={() => setIsFilteringBarOpen(true)}
+          onSearch={handleSearch}
         />
       </div>
       <FilteringBarContainer
