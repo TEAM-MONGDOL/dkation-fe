@@ -53,7 +53,7 @@ jobs:
             for host in "${HOSTS[@]}"
             do
               echo "Deploying to $host"
-              ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.USER }}@$host << EOF
+              ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.USER }}@$host << 'EOF'
                 set -e
 
                 echo "Stopping and removing existing containers"
