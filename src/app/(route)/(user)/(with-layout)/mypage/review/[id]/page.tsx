@@ -57,12 +57,13 @@ const UserReviewDetailPage = ({ params }: UserReviewDetailPageProps) => {
           ) : (
             <>
               <div>
-                {data.reviewDetailInfo.blindedType && (
-                  <div className="flex items-center gap-x-1.5 text-negative">
-                    <Image src={ErrorIcon} alt="error" />
-                    관리자에 의해 블라인드 처리된 후기입니다.
-                  </div>
-                )}
+                {data.reviewDetailInfo.blindedType &&
+                  data.reviewDetailInfo.blindedType === 'TRUE' && (
+                    <div className="flex items-center gap-x-1.5 text-negative">
+                      <Image src={ErrorIcon} alt="error" />
+                      관리자에 의해 블라인드 처리된 후기입니다.
+                    </div>
+                  )}
                 <div className="flex flex-col gap-y-7 pb-8 pt-4">
                   <p className="mb-4 text-h2 font-semibold">
                     이번 워케이션 장소 어때요?
