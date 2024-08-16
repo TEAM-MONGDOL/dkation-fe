@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import dayjs from 'dayjs';
+import InfiniteScroll from 'react-infinite-scroller';
 import { usePatchWktStatusMutation } from '@/_hooks/user/usePatchWktStatusMutation';
 import UserFilteringSectionContainer from '@/_components/user/common/containers/UserFilteringSectionContainer';
 import UserStateFilteringContainer from '@/_components/user/common/containers/UserStateFilteringContainer';
@@ -21,7 +22,6 @@ const UserWkHistoryPage = () => {
   const router = useRouter();
   const session = useSession();
   const accountId = String(session.data?.accountId || '');
-  const [currentPage, setCurrentPage] = useState(1);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [param, setParam] = useState<{
@@ -60,18 +60,21 @@ const UserWkHistoryPage = () => {
     | null
   >(null);
 
-  const { data, isLoading, isError } = useGetMyWktHistoryQuery({
-    statuses: param.type.join(','),
-    startDate: startDate
-      ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
-      : undefined,
-    endDate: endDate ? dayjs(endDate).format('YYYY-MM-DDTHH:mm:ss') : undefined,
-    pageParam: {
-      page: currentPage,
-      size: 10,
-      sort: `createdAt,${param.order}`,
-    },
-  });
+  const { data, isLoading, isError, fetchNextPage, hasNextPage } =
+    useGetMyWktHistoryQuery({
+      statuses: param.type.join(','),
+      startDate: startDate
+        ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
+        : undefined,
+      endDate: endDate
+        ? dayjs(endDate).format('YYYY-MM-DDTHH:mm:ss')
+        : undefined,
+      pageable: {
+        page: 1,
+        size: 10,
+        sort: param.order,
+      },
+    });
 
   const { mutate: patchWktStatus } = usePatchWktStatusMutation({
     wktId: selectedWorkationId || 0,
@@ -231,32 +234,44 @@ const UserWkHistoryPage = () => {
           ) : (
             <NetworkError />
           )
-        ) : data.pageInfo.totalElements <= 0 ? (
+        ) : data.pages.length === 0 ||
+          data.pages[0].applyInfoList.length <= 0 ? (
           <p className="py-20 text-center text-sub-300">
             내역이 존재하지 않습니다
           </p>
         ) : (
-          data?.applyInfoList.map((wkt) => (
-            <WorkationCard
-              applyId={wkt.applyId}
-              accountId={accountId}
-              reviewId={wkt.reviewId}
-              key={wkt.wktId}
-              wktId={wkt.wktId}
-              thumbnailUrl={wkt.thumbnailUrl}
-              wktName={wkt.wktName}
-              place={wkt.place}
-              totalRecruit={wkt.totalRecruit}
-              applyStartDate={wkt.applyStartDate}
-              applyEndDate={wkt.applyEndDate}
-              startDate={wkt.startDate}
-              endDate={wkt.endDate}
-              bettingPoint={wkt.bettingPoint}
-              applyStatusType={wkt.applyStatusType}
-              waitingNumber={wkt.waitNumber}
-              onClick={() => handleCardClick(wkt.applyStatusType, wkt.wktId)}
-            />
-          ))
+          <InfiniteScroll
+            loadMore={() => fetchNextPage()}
+            hasMore={hasNextPage}
+            loader={<UserLoading key={0} />}
+            useWindow
+          >
+            {data.pages.map((page) =>
+              page.applyInfoList.map((wkt) => (
+                <WorkationCard
+                  applyId={wkt.applyId}
+                  accountId={accountId}
+                  reviewId={wkt.reviewId}
+                  key={wkt.wktId}
+                  wktId={wkt.wktId}
+                  thumbnailUrl={wkt.thumbnailUrl}
+                  wktName={wkt.wktName}
+                  place={wkt.place}
+                  totalRecruit={wkt.totalRecruit}
+                  applyStartDate={wkt.applyStartDate}
+                  applyEndDate={wkt.applyEndDate}
+                  startDate={wkt.startDate}
+                  endDate={wkt.endDate}
+                  bettingPoint={wkt.bettingPoint}
+                  applyStatusType={wkt.applyStatusType}
+                  waitingNumber={wkt.waitNumber}
+                  onClick={() =>
+                    handleCardClick(wkt.applyStatusType, wkt.wktId)
+                  }
+                />
+              )),
+            )}
+          </InfiniteScroll>
         )}
       </div>
 
