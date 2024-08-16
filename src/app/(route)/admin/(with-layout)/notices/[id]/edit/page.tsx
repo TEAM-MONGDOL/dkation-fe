@@ -108,6 +108,17 @@ const AdminWriteNoticesEditPage = ({ params }: NoticeEditPageProps) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!values.announcementType) {
+      alert('구분을 선택해 주세요.');
+      return;
+    }
+
+    if (!values.title) {
+      alert('제목을 입력해 주세요.');
+      return;
+    }
+
     setIsEditModalOpen(true);
   };
 
@@ -126,8 +137,9 @@ const AdminWriteNoticesEditPage = ({ params }: NoticeEditPageProps) => {
     router.push('/admin/notices');
   };
 
-  if (isLoading) <AdminLoading />;
-  if (isError) <NetworkError />;
+  if (isLoading) return <AdminLoading />;
+  if (isError) return <NetworkError />;
+
   return (
     <section>
       <TitleBarModule title="공지 수정" type="LEFT" />
@@ -207,9 +219,8 @@ const AdminWriteNoticesEditPage = ({ params }: NoticeEditPageProps) => {
             <ButtonAtom
               buttonStyle="yellow"
               text="수정"
-              type="button"
+              type="submit"
               width="fixed"
-              onClick={() => setIsEditModalOpen(true)}
             />
           </div>
         </div>
