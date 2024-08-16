@@ -101,6 +101,7 @@ const AdminWriteNoticesEditPage = ({ params }: NoticeEditPageProps) => {
   const { mutate: PatchNotice } = usePatchNoticeMutation({
     announcementId: id,
     successCallback: () => {
+      alert('게시글이 수정되었습니다.');
       setIsEditModalOpen(false);
       router.replace(`/admin/notices`);
     },
