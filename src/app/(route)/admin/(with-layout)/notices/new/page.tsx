@@ -132,6 +132,9 @@ const WriteNoticesPage = () => {
             <FileContainer
               onFileChange={handleFilesChange}
               fileDomainType="ANNOUNCEMENT"
+              maxFileCount={5}
+              maxFileSizeMB={10}
+              existingFiles={values.fileInfos}
             />
           </div>
           <p className="mb-4 text-3 font-bold">내용</p>
