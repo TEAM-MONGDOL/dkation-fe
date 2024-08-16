@@ -8,7 +8,7 @@ import FileContainer from '@/_components/common/containers/FileContainer';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import DropdownModule from '@/_components/common/modules/DropdownModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
-import { noticeTypeConverter, NoticeType } from '@/_types/adminType';
+import { NoticeType, noticeTypeConverter } from '@/_types/adminType';
 import FileModule from '@/_components/common/modules/FileModule';
 import ModalModule from '@/_components/common/modules/ModalModule';
 import Image from 'next/image';
@@ -152,7 +152,7 @@ const AdminWriteNoticesEditPage = ({ params }: NoticeEditPageProps) => {
                     ? '해당 게시글의 제목이 메인 페이지 배너에 노출됩니다'
                     : '제목을 입력하세요.'
                 }
-                textCount={20}
+                textCount={30}
                 value={values.title}
                 onChange={handleChange}
               />
