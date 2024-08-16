@@ -7,7 +7,6 @@ import InfoSectionModule from '@/_components/common/modules/InfoSectionModule';
 
 const WkResultInfo = ({ id }: { id: number }) => {
   const { data, isLoading, isError } = useGetWkPenaltyQuery({ wktId: id });
-  console.log(data);
   const gcd = (a: number, b: number): number => {
     if (b === 0) return a;
     return gcd(b, a % b);
@@ -37,7 +36,7 @@ const WkResultInfo = ({ id }: { id: number }) => {
               winner.applyStatusType === 'CANCEL' || (
                 <div
                   key={winner.accountId}
-                  className={`flex h-16 w-[200px] min-w-[200px] items-center rounded-full ${winner.applyStatusType === 'CONFIRM' || 'VISITED' ? 'bg-primary' : 'bg-primary/50'}`}
+                  className={`flex h-16 w-[200px] min-w-[200px] items-center rounded-full ${winner.applyStatusType === 'CONFIRM' || winner.applyStatusType === 'VISITED' ? 'bg-primary' : 'bg-primary/50'}`}
                 >
                   <p className="ml-2.5 mr-4 h-12 w-12 rounded-full bg-white pt-3 text-center">
                     최초
@@ -54,7 +53,7 @@ const WkResultInfo = ({ id }: { id: number }) => {
               waiter.waitingNum < 0 || (
                 <div
                   key={waiter.accountId}
-                  className={`flex h-16 w-[200px] min-w-[200px] items-center rounded-full ${waiter.applyStatusType === ('CONFIRM' || 'VISITED') ? 'bg-primary' : 'bg-primary/50'}`}
+                  className={`flex h-16 w-[200px] min-w-[200px] items-center rounded-full ${waiter.applyStatusType === 'CONFIRM' || waiter.applyStatusType === 'VISITED' ? 'bg-primary' : 'bg-primary/50'}`}
                 >
                   <p className="ml-2.5 mr-3.5 h-12 w-12 rounded-full bg-white pt-2.5 text-center">
                     {index + 1}

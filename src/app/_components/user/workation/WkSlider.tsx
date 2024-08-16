@@ -5,6 +5,8 @@ import { useGetWkSimulationQuery } from '@/_hooks/user/useGetWkSimulationQuery';
 import { useSession } from 'next-auth/react';
 
 const Slider = ({ id }: { id: number }) => {
+  console.log('id', id);
+
   const [animate, setAnimate] = useState(false);
   const [hoveredAccount, setHoveredAccount] = useState<string | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState({ left: '0%' });
@@ -22,7 +24,6 @@ const Slider = ({ id }: { id: number }) => {
   }, []);
 
   const { data, isLoading, isError } = useGetWkSimulationQuery({ wktId: id });
-
   if (isLoading) return null;
   if (isError) return null;
   if (!data) return null;
