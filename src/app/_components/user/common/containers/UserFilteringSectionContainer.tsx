@@ -35,13 +35,20 @@ const UserFilteringSectionContainer = ({
             onClick={filterOption.onClickFilter}
           />
           {filterOption.isFilterOpen && (
-            <div className="absolute bottom-[-10px] right-0 translate-y-full">
-              <UserFilteringContainer
-                type={filterOption.type}
-                filterChildren={filterOption.filterChildren}
-                onRefresh={filterOption.onRefresh}
+            <>
+              <div
+                role="presentation"
+                className="fixed left-0 top-0 h-screen w-screen"
+                onClick={filterOption.onClickFilter}
               />
-            </div>
+              <div className="absolute bottom-[-10px] right-0 translate-y-full">
+                <UserFilteringContainer
+                  type={filterOption.type}
+                  filterChildren={filterOption.filterChildren}
+                  onRefresh={filterOption.onRefresh}
+                />
+              </div>
+            </>
           )}
         </>
       )}
@@ -49,13 +56,20 @@ const UserFilteringSectionContainer = ({
         <>
           <UserFilteringAtom type="SORT" onClick={orderOption.onClickOrder} />
           {orderOption.isOrderOpen && (
-            <div className="absolute bottom-[-10px] right-0 translate-y-full">
-              <UserOrderContainer
-                orders={orderOption.orderProps.orders}
-                selectedOrder={orderOption.orderProps.selectedOrder}
-                setSelectedOrder={orderOption.orderProps.setSelectedOrder}
+            <>
+              <div
+                role="presentation"
+                className="fixed left-0 top-0 h-screen w-screen"
+                onClick={orderOption.onClickOrder}
               />
-            </div>
+              <div className="absolute bottom-[-10px] right-0 translate-y-full">
+                <UserOrderContainer
+                  orders={orderOption.orderProps.orders}
+                  selectedOrder={orderOption.orderProps.selectedOrder}
+                  setSelectedOrder={orderOption.orderProps.setSelectedOrder}
+                />
+              </div>
+            </>
           )}
         </>
       )}

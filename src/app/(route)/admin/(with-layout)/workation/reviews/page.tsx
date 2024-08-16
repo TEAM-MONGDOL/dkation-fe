@@ -78,7 +78,7 @@ const AdminWorkationReviewsPage = () => {
         <TitleBarModule title="워케이션 후기" />
         <FilteringButtonAtom onClick={handleFilteringBar} />
       </div>
-      <TableContainer>
+      <TableContainer minWidth="1000px">
         <TableHeaderModule>
           <TableHeaderAtom width="80px" isFirst>
             번호

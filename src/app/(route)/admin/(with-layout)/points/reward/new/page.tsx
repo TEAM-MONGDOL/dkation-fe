@@ -44,7 +44,7 @@ const AdminPointsRewardNewPage = () => {
     isLoading: memberListIsLoading,
   } = useGetMemberListInifiniteQuery({
     // department: selectedOptions.join(','),
-    pageable: { page: 1, size: 10 },
+    pageable: { page: 1, size: 100 },
   });
 
   const {

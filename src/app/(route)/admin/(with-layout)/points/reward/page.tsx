@@ -105,7 +105,7 @@ const AdminPointsRewardPage = () => {
 
   return (
     <section className="flex w-full flex-col gap-y-10 overflow-y-auto">
-      <div className="flex w-full items-center justify-between">
+      <div className="flex w-full items-center justify-between gap-x-10">
         <TitleBarModule title="포인트 지급 내역" />
         <SearchingBoxModule
           placeholder="이름을 검색하세요."
@@ -113,12 +113,12 @@ const AdminPointsRewardPage = () => {
           onClick={() => setIsFilteringBarOpen(true)}
         />
       </div>
-      <TableContainer>
+      <TableContainer minWidth="1000px">
         <TableHeaderModule>
           <TableHeaderAtom width="80px" isFirst>
             번호
           </TableHeaderAtom>
-          <TableHeaderAtom width="150px">구분</TableHeaderAtom>
+          <TableHeaderAtom width="100px">구분</TableHeaderAtom>
           <TableHeaderAtom>분류</TableHeaderAtom>
           <TableHeaderAtom width="200px">이름</TableHeaderAtom>
           <TableHeaderAtom width="200px">지급일</TableHeaderAtom>
@@ -188,7 +188,7 @@ const AdminPointsRewardPage = () => {
         />
         <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         <CheckboxContainer
-          title="분류"
+          title="구분"
           options={Object.entries(pointRewardList) as [string, string][]}
           selectedOptions={param.type}
           setSelectedOptions={(type: string[]) => setParam({ ...param, type })}
@@ -196,7 +196,7 @@ const AdminPointsRewardPage = () => {
         <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         {pointPolicyList && (
           <CheckboxContainer
-            title="구분"
+            title="분류"
             options={pointPolicyList.pointPolicyList.map((item) => [
               item.id.toString(),
               item.policyTitle,

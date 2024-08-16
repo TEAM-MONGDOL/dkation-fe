@@ -110,7 +110,7 @@ const WorkationList = () => {
         <TitleBarModule title="워케이션 목록" />
         <FilteringButtonAtom onClick={handleFilteringBar} />
       </div>
-      <TableContainer>
+      <TableContainer minWidth="1200px">
         <TableHeaderModule>
           <TableHeaderAtom width="80px" isFirst>
             번호

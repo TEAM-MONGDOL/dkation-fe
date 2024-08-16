@@ -32,11 +32,11 @@ const PointsHistoryPage = () => {
       <div className="flex w-full flex-col gap-y-[200px]">
         <UserTableContainer>
           <UserTableHeaderModule>
-            <UserTableHeaderAtom isFirst text="번호" width="200px" />
+            <UserTableHeaderAtom isFirst text="번호" width="100px" />
             <UserTableHeaderAtom text="사유" />
-            <UserTableHeaderAtom text="일시" width="200px" />
-            <UserTableHeaderAtom text="적립/사용" width="250px" />
-            <UserTableHeaderAtom isLast text="잔여 포인트" width="200px" />
+            <UserTableHeaderAtom text="일시" />
+            <UserTableHeaderAtom text="적립/사용" width="150px" />
+            <UserTableHeaderAtom isLast text="잔여 포인트" width="150px" />
           </UserTableHeaderModule>
           <tbody>
             {!data ? (
@@ -55,7 +55,11 @@ const PointsHistoryPage = () => {
                   <UserTableBodyAtom isFirst>
                     {(currentPage - 1) * 6 + idx + 1}
                   </UserTableBodyAtom>
-                  <UserTableBodyAtom>{item.pointTitle}</UserTableBodyAtom>
+                  <UserTableBodyAtom>
+                    <div className="line-clamp-1 w-full text-center">
+                      {item.pointTitle}
+                    </div>
+                  </UserTableBodyAtom>
                   <UserTableBodyAtom>
                     {dateConverter(item.getTime)}
                   </UserTableBodyAtom>

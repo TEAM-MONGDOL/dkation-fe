@@ -25,7 +25,7 @@ const UserNavButtonAtom = () => {
 
   if (!session.data) {
     return (
-      <div className="ml-auto flex gap-3 text-4">
+      <div className="flex gap-3 text-4">
         <UserButtonAtom
           text="로그인"
           size="header"
@@ -38,12 +38,12 @@ const UserNavButtonAtom = () => {
   }
 
   return (
-    <div className="ml-auto flex gap-3 text-4">
+    <div className="flex gap-3 text-4">
       {session.data.isAdmin ? (
         <UserButtonAtom
           className="font-semibold"
           buttonStyle="black"
-          text="관리자 페이지로 이동"
+          text="관리자 페이지"
           type="button"
           size="header"
           onClick={() => router.push('/admin')} // 라우팅 주소 변경 예정

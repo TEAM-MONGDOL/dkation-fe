@@ -28,7 +28,7 @@ const HeaderModule = ({ showLogout = true }: HeaderModuleProps) => {
               router.push('/');
             }}
           >
-            유저 페이지로 이동
+            유저 페이지
           </button>
           <LogoutButtonAtom />
         </div>

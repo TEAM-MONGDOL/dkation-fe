@@ -6,8 +6,8 @@ import { useGetWkListQuery } from '@/_hooks/admin/useGetWktListQuery';
 import Image from 'next/image';
 import { LeftKeyIcon, RightKeyIcon } from '@/_assets/icons';
 import { useRef, useState } from 'react';
+import { BeatLoader } from 'react-spinners';
 import WktListItem from './WktListItem';
-import UserLoading from '../userLoading';
 
 const WktListSection = () => {
   const router = useRouter();
@@ -75,12 +75,22 @@ const WktListSection = () => {
         >
           {!data ? (
             isLoading ? (
-              <UserLoading />
+              <div className="flex h-[474px] w-full items-center justify-center">
+                <BeatLoader color="#FDE000" className="mx-auto" />
+              </div>
             ) : isError ? (
-              <NetworkError />
+              <div className="flex h-[474px] w-full items-center justify-center">
+                <NetworkError />
+              </div>
             ) : (
-              <NetworkError />
+              <div className="flex h-[474px] w-full items-center justify-center">
+                <NetworkError />
+              </div>
             )
+          ) : data.pageInfo.totalElements <= 0 ? (
+            <div className="flex h-[474px] w-full items-center justify-center">
+              <p className="text-sub-400">모집 중인 워케이션이 없습니다.</p>
+            </div>
           ) : (
             data.wktInfos.map((wktInfo) => (
               <WktListItem
