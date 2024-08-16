@@ -72,7 +72,7 @@ const UserWkHistoryPage = () => {
       pageable: {
         page: 1,
         size: 10,
-        sort: param.order,
+        sort: selectedOrder,
       },
     });
 
