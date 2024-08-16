@@ -137,8 +137,12 @@ const AdminMembersWkHistoryPage = ({ params }: Props) => {
                   <TableBodyAtom>
                     {dayjs(item.applicationDate).format('YYYY.MM.DD')}
                   </TableBodyAtom>
-                  <TableBodyAtom>{item.bettingPoint}</TableBodyAtom>
-                  <TableBodyAtom>{item.winningProbability}</TableBodyAtom>
+                  <TableBodyAtom color="text-primaryDark">
+                    {item.bettingPoint}
+                  </TableBodyAtom>
+                  <TableBodyAtom color="text-primaryDark">
+                    {item.winningProbability}%
+                  </TableBodyAtom>
                   <TableBodyAtom isLast>
                     {applyStatusListConverter[item.applyStatusType]}
                   </TableBodyAtom>
