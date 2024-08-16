@@ -153,6 +153,24 @@ const UserWkHistoryPage = () => {
     }));
   }, [selectedState, selectedOrder, startDate, endDate]);
 
+  const refreshHandler = () => {
+    setParam({
+      order: 'DESC',
+      type: [
+        'APPLIED',
+        'RAFFLE_WAIT',
+        'NO_WINNING',
+        'CONFIRM_WAIT',
+        'CANCEL',
+        'CONFIRM',
+        'WAIT',
+        'VISITED',
+      ],
+    });
+    setStartDate(null);
+    setEndDate(null);
+  };
+
   useEffect(() => {
     updateParam();
   }, [selectedState, selectedOrder, startDate, endDate, updateParam]);
@@ -187,7 +205,7 @@ const UserWkHistoryPage = () => {
                   />
                 </>
               ),
-              onRefresh: () => {},
+              onRefresh: refreshHandler,
             }}
             orderOption={{
               onClickOrder: () => {
