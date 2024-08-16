@@ -1,12 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import dayjs from 'dayjs';
 import { usePatchWktStatusMutation } from '@/_hooks/user/usePatchWktStatusMutation';
 import UserFilteringSectionContainer from '@/_components/user/common/containers/UserFilteringSectionContainer';
 import UserStateFilteringContainer from '@/_components/user/common/containers/UserStateFilteringContainer';
-import UserPlaceFilteringContainer from '@/_components/user/common/containers/UserPlaceFilteringContainer';
 import WorkationCard from '@/_components/user/mypage/UserWktCard';
 import { useGetMyWktHistoryQuery } from '@/_hooks/user/useGetMyWktHistoryQuery';
 import UserWktCancelModal from '@/_components/user/mypage/UserWktCancelModal';
@@ -15,6 +14,8 @@ import { useDeleteWktApplyMutation } from '@/_hooks/user/useDeleteWktApplyMutati
 import { useSession } from 'next-auth/react';
 import UserLoading from '@/_components/user/userLoading';
 import NetworkError from '@/_components/common/networkError';
+import UserDatePickerContainer from '@/_components/user/common/containers/UserDatePickerContainer';
+import { DatePickerTagType } from '@/_types/commonType';
 
 const UserWkHistoryPage = () => {
   const router = useRouter();
@@ -43,9 +44,9 @@ const UserWkHistoryPage = () => {
   const [isFilteringSectionOpen, setIsFilteringSectionOpen] = useState<
     'FILTER' | 'ORDER' | null
   >(null);
-  const [selectedState, setSelectedState] = useState<string>('ALL');
+  const [selectedState, setSelectedState] = useState<string>('');
   const [selectedOrder, setSelectedOrder] = useState<string>('createdAt,DESC');
-  const [selectedSpace, setSelectedSpace] = useState<string[]>(['양양 쏠비치']);
+  const [selectedTag, setSelectedTag] = useState<DatePickerTagType>('ALL');
   const [selectedWorkationId, setSelectedWorkationId] = useState<number | null>(
     null,
   );
@@ -60,7 +61,7 @@ const UserWkHistoryPage = () => {
   >(null);
 
   const { data, isLoading, isError } = useGetMyWktHistoryQuery({
-    // statuses: param.type.join(','),
+    statuses: param.type.join(','),
     startDate: startDate
       ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
       : undefined,
@@ -140,6 +141,22 @@ const UserWkHistoryPage = () => {
     setConfirmModalType(null);
   };
 
+  const updateParam = useCallback(() => {
+    setParam((prev) => ({
+      ...prev,
+      type: selectedState ? [selectedState] : prev.type,
+      order: selectedOrder,
+      startDate: startDate
+        ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
+        : null,
+      endDate: endDate ? dayjs(endDate).format('YYYY-MM-DDTHH:mm:ss') : null,
+    }));
+  }, [selectedState, selectedOrder, startDate, endDate]);
+
+  useEffect(() => {
+    updateParam();
+  }, [selectedState, selectedOrder, startDate, endDate, updateParam]);
+
   return (
     <section className="px-40 pt-18">
       <div className="flex flex-col gap-y-14">
@@ -155,15 +172,18 @@ const UserWkHistoryPage = () => {
               isFilterOpen: isFilteringSectionOpen === 'FILTER',
               filterChildren: (
                 <>
+                  <UserDatePickerContainer
+                    selectedTag={selectedTag}
+                    onClickTag={(tag) => setSelectedTag(tag)}
+                    startDate={startDate}
+                    setStartDate={setStartDate}
+                    endDate={endDate}
+                    setEndDate={setEndDate}
+                  />
                   <UserStateFilteringContainer
                     type="MYPAGE"
                     selectedOption={selectedState}
                     onClickOption={setSelectedState}
-                  />
-                  <UserPlaceFilteringContainer
-                    places={['양양 쏠비치', '양양 쏠비치2', '양양 쏠비치3']}
-                    clickedPlace={selectedSpace}
-                    onClickPlace={setSelectedSpace}
                   />
                 </>
               ),
@@ -194,7 +214,7 @@ const UserWkHistoryPage = () => {
             <NetworkError />
           )
         ) : data.pageInfo.totalElements <= 0 ? (
-          <NetworkError />
+          <p>내역이 존재하지 않습니다</p>
         ) : (
           data?.applyInfoList.map((wkt) => (
             <WorkationCard
