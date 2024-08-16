@@ -8,8 +8,7 @@ import { ExtensionIcon } from '@/_assets/icons';
 import SubtitleModule from '@/_components/common/modules/SubtitleModule';
 import {
   applyStatusListConverter,
-  orderList,
-  pointOrderList,
+  wkHistoryOrderList,
 } from '@/_types/adminType';
 import { DatePickerTagType } from '@/_types/commonType';
 import RadioButtonContainer from '@/_components/common/containers/RadioButtonContainer';
@@ -23,11 +22,6 @@ import TableBodyModule from '@/_components/common/modules/TableBodyModule';
 import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
 import { useGetMemberWkHistoryQuery } from '@/_hooks/admin/useGetMemberWkHistoryQuery';
 import dayjs from 'dayjs';
-
-const wkHistoryOrderList = {
-  ...orderList,
-  ...pointOrderList,
-};
 
 interface Props {
   params: { id: string };
@@ -56,7 +50,7 @@ const AdminMembersWkHistoryPage = ({ params }: Props) => {
     order: string;
     type: string[];
   }>({
-    order: 'DESC',
+    order: 'createdAt,DESC',
     type: [
       'APPLIED',
       'RAFFLE_WAIT',
@@ -99,7 +93,7 @@ const AdminMembersWkHistoryPage = ({ params }: Props) => {
     pageParam: {
       page: currentPage,
       size: 10,
-      sort: `createdAt,${param.order}`,
+      sort: param.order,
     },
   });
 
