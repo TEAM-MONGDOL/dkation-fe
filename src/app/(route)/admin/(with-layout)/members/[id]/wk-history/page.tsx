@@ -33,6 +33,17 @@ interface Props {
   params: { id: string };
 }
 
+const statusColors: Record<string, string> = {
+  APPLIED: 'text-positive',
+  RAFFLE_WAIT: 'text-[#00A62F]',
+  NO_WINNING: 'text-sub-300',
+  CONFIRM_WAIT: 'text-primary',
+  CANCEL: 'text-negative',
+  CONFIRM: 'text-[#007120]',
+  WAIT: 'text-[#003AD1]',
+  VISITED: 'text-sub-400',
+};
+
 const AdminMembersWkHistoryPage = ({ params }: Props) => {
   const accountId = params.id;
   const [currentPage, setCurrentPage] = useState(1);
@@ -143,7 +154,10 @@ const AdminMembersWkHistoryPage = ({ params }: Props) => {
                   <TableBodyAtom color="text-primaryDark">
                     {item.winningProbability}%
                   </TableBodyAtom>
-                  <TableBodyAtom isLast>
+                  <TableBodyAtom
+                    isLast
+                    color={statusColors[item.applyStatusType]}
+                  >
                     {applyStatusListConverter[item.applyStatusType]}
                   </TableBodyAtom>
                 </TableBodyModule>
