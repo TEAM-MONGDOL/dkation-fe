@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 import { useNavigate } from 'react-router-dom';
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
+  baseURL: 'http://was.dkation.com',
   withCredentials: true,
 });
 
