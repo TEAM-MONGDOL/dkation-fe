@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - MF-361-Next.js-CD-Github-Action
   workflow_dispatch:
 
 permissions:

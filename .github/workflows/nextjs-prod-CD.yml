@@ -2,8 +2,6 @@ name: NextJS CD
 on:
   release:
     types: [created]
-  workflow_dispatch:
-  repository_dispatch:
 
 env:
   KCR_REGISTRY: dkation.kr-central-2.kcr.dev
