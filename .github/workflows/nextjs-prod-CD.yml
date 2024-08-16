@@ -60,9 +60,6 @@ jobs:
                 echo "Removing old Docker images"
                 docker images --format '{{.Repository}}:{{.Tag}}' | grep 'dkation.kr-central-2.kcr.dev/dkation-prod-front/dkation-prod-fe' | xargs -r docker rmi
 
-                echo "Login to KCR"
-                echo ${{ env.ACCESS_SECRET_KEY }} | docker login $KCR_REGISTRY --username ${{ env.ACCESS_KEY}} --password-stdin
-
                 echo "Pulling new Docker image"
                 docker pull $KCR_REGISTRY/$KCR_REPOSITORY:${{ steps.get_version.outputs.version }}
 
