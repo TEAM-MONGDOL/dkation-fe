@@ -7,9 +7,11 @@ on:
       - MF-361-Next.js-CD-Github-Action
   workflow_dispatch:
   repository_dispatch:
+
 env:
   KCR_REGISTRY: dkation.kr-central-2.kcr.dev
   KCR_REPOSITORY: dkation-prod-front/dkation-prod-fe
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -54,7 +56,7 @@ jobs:
                 docker images $KCR_REGISTRY/$KCR_REPOSITORY --format '{{.ID}}' | xargs -r docker rmi || true
                 
                 echo "Login to KCR"
-                echo "$ACCESS_SECRET_KEY" | docker login $KCR_REGISTRY --username $ACCESS_KEY --password-stdin
+                docker login $KCR_REGISTRY --username ${{ secrets.ACCESS_KEY }} --password ${{ secrets.ACCESS_SECRET_KEY }}
                 
                 echo "Pulling new Docker image"
                 docker pull $KCR_REGISTRY/$KCR_REPOSITORY:${{ steps.get_version.outputs.version }}
@@ -78,12 +80,12 @@ jobs:
                 fi
                 
                 echo "Container is up and running"
-            
+EOF
               if [ $? -ne 0 ]; then
                 echo "Deployment to $host failed"
                 exit 1
               fi
             
-            EOF
+              echo "Deployment completed successfully"
+            
             done
-            echo "Deployment completed successfully"
