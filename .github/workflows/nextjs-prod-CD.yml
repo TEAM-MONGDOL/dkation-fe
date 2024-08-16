@@ -36,7 +36,7 @@ jobs:
       - name: Deploy to FE
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.BASTION_HOST }}
+          host: ${{ secrets.BASTION_IP }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
