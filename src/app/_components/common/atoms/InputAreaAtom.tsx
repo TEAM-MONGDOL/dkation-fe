@@ -50,11 +50,11 @@ const InputAreaAtom = ({
   return (
     <div
       role="presentation"
-      className="flex w-full items-center gap-x-4 rounded-regular border border-stroke-100 px-3 py-3.5 text-4"
+      className={`flex w-full items-center gap-x-4 rounded-regular border border-stroke-100 px-3 py-3.5 text-4 ${getStatus()}`}
       onClick={onClick}
     >
       <input
-        className={`min-w-0 grow placeholder-sub-200 outline-0 ${getStatus()}`}
+        className="min-w-0 grow bg-transparent placeholder-sub-200 outline-0"
         placeholder={placeholder}
         readOnly={!isInteractive}
         value={value || ''}
