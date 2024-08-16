@@ -41,11 +41,11 @@ const PointsApplyPage = () => {
       <div className="flex w-full flex-col">
         <UserTableContainer>
           <UserTableHeaderModule>
-            <UserTableHeaderAtom isFirst text="번호" width="200px" />
+            <UserTableHeaderAtom isFirst text="번호" width="100px" />
             <UserTableHeaderAtom text="구분" />
             <UserTableHeaderAtom text="신청 일시" width="200px" />
-            <UserTableHeaderAtom text="상태" width="200px" />
-            <UserTableHeaderAtom isLast text="" width="100px" />
+            <UserTableHeaderAtom text="상태" width="150px" />
+            <UserTableHeaderAtom isLast text="" width="80px" />
           </UserTableHeaderModule>
           <tbody>
             {!data ? (
