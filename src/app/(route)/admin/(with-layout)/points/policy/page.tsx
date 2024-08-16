@@ -65,11 +65,11 @@ const AdminPointsPolicyPage = () => {
 
   return (
     <div className="flex w-full flex-col gap-y-10">
-      <div className="flex w-full items-center justify-between">
+      <div className="flex w-full items-center justify-between gap-x-10">
         <TitleBarModule title="포인트 정책 설정" />
         <FilteringButtonAtom onClick={() => setIsFilteringBarOpen(true)} />
       </div>
-      <TableContainer>
+      <TableContainer minWidth="1000px">
         <TableHeaderModule>
           <TableHeaderAtom isFirst width="80px">
             번호

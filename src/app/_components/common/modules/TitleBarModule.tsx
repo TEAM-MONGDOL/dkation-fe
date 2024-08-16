@@ -12,7 +12,7 @@ interface TypeProps {
 const TitleBarModule = ({ type, title, url }: TypeProps) => {
   const router = useRouter();
   return (
-    <div className="flex gap-[5px]">
+    <div className="flex shrink-0 gap-[5px]">
       {type === 'LEFT' && (
         <Image
           className="cursor-pointer"

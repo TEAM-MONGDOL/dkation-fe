@@ -166,7 +166,7 @@ const AdminMainPage = () => {
           type="RIGHT"
           url="/admin/points/request"
         />
-        <TableContainer>
+        <TableContainer minWidth="1200px">
           <TableHeaderModule>
             <TableHeaderAtom isFirst width="80px">
               번호

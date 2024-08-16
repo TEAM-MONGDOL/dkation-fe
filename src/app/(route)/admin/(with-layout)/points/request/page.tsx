@@ -115,7 +115,7 @@ const AdminPointsRequestPage = () => {
 
   return (
     <div className="flex w-full flex-col gap-y-10 overflow-y-auto">
-      <div className="flex w-full items-center justify-between">
+      <div className="flex w-full items-center justify-between gap-x-10">
         <TitleBarModule title="포인트 신청 내역" />
         <SearchingBoxModule
           placeholder="이름을 검색하세요."
@@ -125,7 +125,7 @@ const AdminPointsRequestPage = () => {
           onChange={(e) => setSearchValue(e.target.value)}
         />
       </div>
-      <TableContainer>
+      <TableContainer minWidth="1000px">
         <TableHeaderModule>
           <TableHeaderAtom isFirst width="80px">
             번호
