@@ -99,11 +99,7 @@ const WriteNoticesPage = () => {
             />
             <InputModule
               name="title"
-              placeholder={
-                values.announcementType === 'RESULT'
-                  ? '해당 게시글의 제목이 메인 페이지 배너에 노출됩니다.'
-                  : '제목을 입력하세요.'
-              }
+              placeholder="제목을 입력하세요."
               textCount={30}
               value={values.title}
               onChange={handleChange}
