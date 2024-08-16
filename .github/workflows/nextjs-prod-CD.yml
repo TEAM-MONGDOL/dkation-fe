@@ -22,15 +22,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get release tag
-        id: get_tag
+      - name: Get release tag or commit hash
+        id: get_version
         run: |
           if [[ ${{ github.event_name }} == 'release' ]]; then
-            echo "tag=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
+            echo "version=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
+          elif [[ ${{ github.event_name }} == 'push' ]]; then
+            echo "version=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
           else
             git fetch --tags
             latest_tag=$(git describe --tags --abbrev=0)
-            echo "tag=$latest_tag" >> $GITHUB_OUTPUT
+            echo "version=$latest_tag" >> $GITHUB_OUTPUT
           fi
 
       - name: Setup SSH
@@ -73,10 +75,10 @@ jobs:
               echo "$ACCESS_SECRET_KEY" | docker login $KCR_REGISTRY --username $ACCESS_KEY --password-stdin
               
               echo "Pulling new Docker image"
-              docker pull $KCR_REGISTRY/$KCR_REPOSITORY:${{ steps.get_tag.outputs.tag }}
+              docker pull $KCR_REGISTRY/$KCR_REPOSITORY:${{ steps.get_version.outputs.version }}
               
               echo "Running new Docker container"
-              docker run -d -p 80:3000 --name frontend $KCR_REGISTRY/$KCR_REPOSITORY:${{ steps.get_tag.outputs.tag }}
+              docker run -d -p 80:3000 --name frontend $KCR_REGISTRY/$KCR_REPOSITORY:${{ steps.get_version.outputs.version }}
               
               echo "Checking container health"
               max_retries=5
