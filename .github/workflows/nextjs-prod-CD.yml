@@ -41,22 +41,22 @@ jobs:
       - name: Add known hosts
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.BASTION_IP }} ${{ secrets.BASTION_HOST }}" >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.BASTION_IP }} >> ~/.ssh/known_hosts
           echo "${{ secrets.WEB_IPS }}" | tr ',' '\n' | while read ip; do
-            echo "$ip" >> ~/.ssh/known_hosts
+            ssh-keyscan -H $ip >> ~/.ssh/known_hosts
           done
 
       - name: Setup SSH config
         run: |
-          echo "Host bastion" >> ~/.ssh/config
-          echo "  HostName ${{ secrets.BASTION_HOST }}" >> ~/.ssh/config
-          echo "  User ${{ secrets.USER }}" >> ~/.ssh/config
-          echo "  IdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
+          echo "Host bastion" > ~/.ssh/config
+          echo "    HostName ${{ secrets.BASTION_IP }}" >> ~/.ssh/config
+          echo "    User ${{ secrets.USER }}" >> ~/.ssh/config
+          echo "    IdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
           echo "" >> ~/.ssh/config
           echo "Host webserver" >> ~/.ssh/config
-          echo "  ProxyCommand ssh -W %h:%p bastion" >> ~/.ssh/config
-          echo "  User ${{ secrets.USER }}" >> ~/.ssh/config
-          echo "  IdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
+          echo "    ProxyCommand ssh -W %h:%p bastion" >> ~/.ssh/config
+          echo "    User ${{ secrets.USER }}" >> ~/.ssh/config
+          echo "    IdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
 
       - name: Deploy to FE
         env:
