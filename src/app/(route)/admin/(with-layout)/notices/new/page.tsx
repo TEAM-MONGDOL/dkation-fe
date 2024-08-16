@@ -172,7 +172,7 @@ const WriteNoticesPage = () => {
       </form>
       {isPostModalOpen && (
         <ModalModule
-          title="해당 게시글을 등록하시겠습니까?"
+          title={`해당 ${noticeTypeConverter[values.announcementType as NoticeType] || '게시글'}를 등록하시겠습니까?`}
           cancelText="취소"
           confirmText="확인"
           onCancel={() => setIsPostModalOpen(false)}
