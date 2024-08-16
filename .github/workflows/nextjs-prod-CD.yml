@@ -43,9 +43,12 @@ jobs:
       - name: Add known hosts
         run: |
           mkdir -p ~/.ssh
+          echo "BASTION_HOST: ${{ secrets.BASTION_HOST }}"
+          echo "WEB_IPS: ${{ secrets.WEB_IPS }}"
           ssh-keyscan -H ${{ secrets.BASTION_HOST }} >> ~/.ssh/known_hosts
           IFS=',' read -r -a HOSTS <<< "${{ secrets.WEB_IPS }}"
           for host in "${HOSTS[@]}"; do
+            echo "Adding host $host to known_hosts"
             ssh-keyscan -H $host >> ~/.ssh/known_hosts
           done
 
