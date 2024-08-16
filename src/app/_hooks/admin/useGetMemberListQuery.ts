@@ -5,17 +5,22 @@ import api from '../Axios';
 export const useGetMemberListQueryKey = 'useGetMemberListQuery';
 
 export const useGetMemberListQuery = ({
-  department,
+  searchParam,
   pageParam,
 }: {
-  department?: string;
+  searchParam: { searchText: string; department: string[] };
   pageParam: { page: number; size: number; sort?: string };
 }) => {
   return useQuery({
-    queryKey: [useGetMemberListQueryKey, department, pageParam],
+    queryKey: [useGetMemberListQueryKey, searchParam, pageParam],
     queryFn: async () => {
+      const { searchText, department } = searchParam;
       const res = await api.get('/api/member', {
-        params: { department, ...pageParam },
+        params: {
+          searchText,
+          department: department.join(','),
+          ...pageParam,
+        },
       });
       return memberListSchema.parse(res.data.data);
     },
