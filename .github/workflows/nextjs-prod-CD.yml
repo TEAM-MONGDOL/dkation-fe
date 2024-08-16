@@ -80,7 +80,7 @@ jobs:
                 fi
                 
                 echo "Container is up and running"
-              EOF
+            EOF
             
               if [ $? -ne 0 ]; then
                 echo "Deployment to $host failed"
