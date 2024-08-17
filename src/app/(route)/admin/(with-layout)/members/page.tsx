@@ -31,13 +31,16 @@ const AdminMembersListPage = () => {
     order: 'name,ASC',
     departmentType: departmentList,
   });
+  const [searchText, setSearchText] = useState('');
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
-  const [selectedOption, setSelectedOption] = useState(
-    MembersSearchQueryOptions.NAME,
-  );
+  const departmentParam =
+    param.departmentType.length > 0 ? param.departmentType.join(',') : '';
 
   const { data, isLoading, error } = useGetMemberListQuery({
-    department: param.departmentType.join(','),
+    name: selectedOption === '이름' ? searchText : '',
+    accountId: selectedOption === '아이디' ? searchText : '',
+    department: departmentParam,
     pageParam: {
       page: currentPage,
       size: 10,
@@ -51,15 +54,24 @@ const AdminMembersListPage = () => {
       order: 'name,ASC',
       departmentType: departmentList,
     });
+    setSearchText('');
   };
 
   const handleSelect = (option: string) => {
-    setSelectedOption(option); // Update the selected option
+    setSelectedOption(option);
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchText(query);
   };
 
   const moveToMembersDetail = (id: string) => {
     router.push(`/admin/members/${id}`);
   };
+
+  const isNoData = param.departmentType.length === 0;
+  const hasData = data && data.pageInfo.totalElements > 0;
+  const showPagination = !isNoData && hasData;
 
   return (
     <section className="flex w-full flex-col gap-y-10">
@@ -68,11 +80,12 @@ const AdminMembersListPage = () => {
         <SearchingBoxModule
           options={Object.values(MembersSearchQueryOptions)}
           onSelect={handleSelect}
-          dropdownPlaceholder="검색 조건 선택"
-          selectedOption={selectedOption}
+          dropdownPlaceholder="검색 조건"
+          selectedOption={selectedOption ?? undefined}
           placeholder="검색어를 입력하세요."
           filter
           onClick={() => setIsFilteringBarOpen(true)}
+          onSearch={handleSearch}
         />
       </div>
       <FilteringBarContainer
@@ -101,21 +114,19 @@ const AdminMembersListPage = () => {
           <TableHeaderAtom isFirst width="80px">
             번호
           </TableHeaderAtom>
-          <TableHeaderAtom width="150px">이름</TableHeaderAtom>
-          <TableHeaderAtom width="150px">아이디</TableHeaderAtom>
+          <TableHeaderAtom width="200px">이름</TableHeaderAtom>
+          <TableHeaderAtom width="200px">아이디</TableHeaderAtom>
           <TableHeaderAtom>소속</TableHeaderAtom>
-          <TableHeaderAtom width="140px">보유 포인트</TableHeaderAtom>
-          <TableHeaderAtom width="120px">포인트 신청</TableHeaderAtom>
+          <TableHeaderAtom width="160px">보유 포인트</TableHeaderAtom>
+          <TableHeaderAtom width="140px">포인트 신청</TableHeaderAtom>
           <TableHeaderAtom isLast width="160px" />
         </TableHeaderModule>
         <tbody>
-          {!data ? (
-            isLoading ? (
-              <EmptyContainer colSpan={7} text="loading" />
-            ) : (
-              <EmptyContainer colSpan={7} text="no data" />
-            )
-          ) : data.pageInfo.totalElements <= 0 ? (
+          {isNoData ? (
+            <EmptyContainer colSpan={7} />
+          ) : isLoading ? (
+            <EmptyContainer colSpan={7} text="loading" />
+          ) : !hasData ? (
             <EmptyContainer colSpan={7} />
           ) : (
             data.memberInfos.map((item, index) => (
@@ -136,10 +147,10 @@ const AdminMembersListPage = () => {
           )}
         </tbody>
       </TableContainer>
-      {data && data.pageInfo.totalElements > 0 && (
+      {showPagination && (
         <div className="flex w-full items-center justify-center">
           <PaginationModule
-            totalPages={data.pageInfo.totalPages}
+            totalPages={data?.pageInfo.totalPages || 0}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
           />

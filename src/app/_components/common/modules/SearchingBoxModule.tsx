@@ -14,6 +14,7 @@ interface BoxProps {
   height?: string;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSearch?: (query: string) => void;
   options?: string[];
   onSelect?: (option: string) => void;
   dropdownPlaceholder?: string;
@@ -28,16 +29,25 @@ const SearchingBoxModule = ({
   placeholder,
   value: initialValue = '',
   onChange,
+  onSearch,
   options = [],
   onSelect = () => {},
   dropdownPlaceholder = '',
   selectedOption,
 }: BoxProps) => {
   const [value, setValue] = useState(initialValue);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
+    const newValue = e.target.value;
+    setValue(newValue);
     onChange?.(e);
   };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSearch?.(value);
+  };
+
   let widthClass = '';
 
   if (widthFull) {
@@ -45,9 +55,11 @@ const SearchingBoxModule = ({
   } else {
     widthClass = filter ? 'max-w-[312px]' : 'max-w-[528px]';
   }
+
   return (
-    <div
+    <form
       className={`flex grow items-start justify-end gap-x-2.5 ${widthFull ? 'w-full' : ''}`}
+      onSubmit={handleSearch}
     >
       {options && options.length > 0 ? (
         <DropdownModule
@@ -67,14 +79,16 @@ const SearchingBoxModule = ({
           value={value || ''}
           onChange={handleChange}
         />
-        <Image
-          className="cursor-pointer"
-          src={SearchIcon}
-          alt="SearchingGlasses"
-        />
+        <button type="submit">
+          <Image
+            className="cursor-pointer"
+            src={SearchIcon}
+            alt="SearchingGlasses"
+          />
+        </button>
       </div>
       {filter && <FilteringButtonAtom onClick={onClick} />}
-    </div>
+    </form>
   );
 };
 
