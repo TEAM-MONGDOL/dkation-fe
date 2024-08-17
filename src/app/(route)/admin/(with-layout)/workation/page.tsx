@@ -33,6 +33,7 @@ const WorkationList = () => {
     status: ['PLANNED', 'ONGOING', 'CLOSED'],
   });
   const [currentPage, setCurrentPage] = useState(1);
+
   const getStatusLabelAndColor = (
     applyStartDate: string,
     applyEndDate: string,
@@ -53,6 +54,7 @@ const WorkationList = () => {
   const penaltyRouteButtonClick = (id: number) => {
     router.push(`/admin/workation/${id}/result`);
   };
+
   const [selectedTag, setSelectedTag] = useState<DatePickerTagType>('ALL');
   const [selectedApplyTag, setApplySelectedTag] =
     useState<DatePickerTagType>('ALL');
@@ -60,15 +62,19 @@ const WorkationList = () => {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [applyStartDate, setApplyStartDate] = useState<Date | null>(null);
   const [applyEndDate, setApplyEndDate] = useState<Date | null>(null);
+
   const handleFilteringBar = () => {
     setIsFilteringBarOpen(true);
   };
+
   const onClickRowDetail = (id: number) => {
     router.push(`/admin/workation/${id}`);
   };
+
   const moveToWritePage = () => {
     router.push('/admin/workation/new');
   };
+
   const refreshHandler = () => {
     setParam({
       ...param,
@@ -80,8 +86,9 @@ const WorkationList = () => {
     setApplyStartDate(dayjs().subtract(1, 'year').toDate());
     setApplyEndDate(dayjs().toDate());
   };
+
   const { data, isLoading, isError } = useGetWkListQuery({
-    status: param.status.join(','),
+    status: param.status.length > 0 ? param.status.join(',') : undefined,
     wktStartDate:
       startDate === null
         ? undefined
@@ -104,6 +111,7 @@ const WorkationList = () => {
       sort: `createdAt,${param.order}`,
     },
   });
+
   return (
     <section className="flex h-full w-full flex-col gap-y-10 overflow-y-auto">
       <div className="flex w-full items-center justify-between">
@@ -126,7 +134,9 @@ const WorkationList = () => {
           </TableHeaderAtom>
         </TableHeaderModule>
         <tbody>
-          {!data ? (
+          {param.status.length === 0 ? (
+            <EmptyContainer colSpan={8} text="no data" />
+          ) : !data ? (
             isLoading ? (
               <EmptyContainer colSpan={8} text="loading" />
             ) : (
