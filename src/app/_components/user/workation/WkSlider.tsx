@@ -10,12 +10,16 @@ const Slider = ({ id }: { id: number }) => {
   const [tooltipPosition, setTooltipPosition] = useState({ left: '0%' });
   const sliderRef = useRef(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [visibleWinner, setVisibleWinner] = useState(null);
   const { data: sessionData } = useSession();
   const userId = String(sessionData?.accountId);
 
   const restartAnimation = () => {
     setAnimate(false);
-    setTimeout(() => setAnimate(true), 10);
+    setTimeout(() => {
+      setAnimate(true);
+      setVisibleWinner(null); // Ensure winner is reset on animation restart
+    }, 10);
   };
 
   useEffect(() => {
@@ -23,9 +27,7 @@ const Slider = ({ id }: { id: number }) => {
   }, []);
 
   const { data, isLoading, isError } = useGetWkSimulationQuery({ wktId: id });
-  if (isLoading) return null;
-  if (isError) return null;
-  if (!data) return null;
+  if (isLoading || isError || !data) return;
 
   const totalRange = data?.raffleMemberIndexInfos.reduce((max, member) => {
     return Math.max(max, member.raffleIndex);
@@ -52,7 +54,7 @@ const Slider = ({ id }: { id: number }) => {
   const handleMouseEnter = (accountId: string, index: number) => {
     setHoveredAccount(accountId);
     setTooltipPosition({
-      left: `${calculateLeftPosition(index) + getSliderWidth(index) / 3}%`,
+      left: `${calculateLeftPosition(index) + getSliderWidth(index)}%`,
     });
     setHoveredIndex(index);
   };
@@ -65,20 +67,34 @@ const Slider = ({ id }: { id: number }) => {
   const handleMouseMove = (event) => {
     const rect = sliderRef.current.getBoundingClientRect();
     const xPos = event.clientX - rect.left; // Calculate mouse position within the slider
-    const relativePosition = (xPos / rect.width) * totalRange; // Convert to relative position within the total range
+    const relativePosition = (xPos / rect.width) * 100; // Convert to relative percentage position
 
-    // Find the closest account based on mouse position
+    // Find the closest account based on mouse position percentage
     let closestAccount = null;
     let minDiff = Infinity;
-    data.raffleMemberIndexInfos.forEach((member) => {
-      const diff = Math.abs(member.raffleIndex - relativePosition);
-      if (diff < minDiff) {
-        minDiff = diff;
-        closestAccount = member.accountId;
+
+    data.raffleMemberIndexInfos.forEach((member, index) => {
+      // Calculate the start and end percentage positions for this index
+      const startPercent = index === 0 ? 0 : calculateLeftPosition(index);
+      const endPercent = startPercent + getSliderWidth(index);
+
+      // Check if the current mouse position falls within this range
+      if (relativePosition >= startPercent && relativePosition < endPercent) {
+        const diff = Math.min(
+          Math.abs(startPercent - relativePosition),
+          Math.abs(endPercent - relativePosition),
+        );
+        if (diff < minDiff) {
+          minDiff = diff;
+          closestAccount = member.accountId;
+        }
       }
     });
-    setHoveredAccount(closestAccount);
-    setTooltipPosition({ left: `${(xPos / rect.width) * 100}%` });
+
+    if (closestAccount) {
+      setHoveredAccount(closestAccount);
+      setTooltipPosition({ left: `${(xPos / rect.width) * 100}%` });
+    }
   };
 
   // pausePositions 계산 로직 변경
@@ -86,6 +102,7 @@ const Slider = ({ id }: { id: number }) => {
     .map((winner) => {
       return {
         position: (winner.pickedIndex / totalRange) * 100,
+        accountId: winner.accountId,
         pickedIndex: winner.pickedIndex,
       };
     })
@@ -155,11 +172,11 @@ const Slider = ({ id }: { id: number }) => {
               `}
               </style>
               <div
-                className={`absolute top-0 h-full rounded-full bg-primary ${animate ? 'animate-fillTrack' : ''}`}
+                className={`absolute top-0 h-full rounded-full bg-[#FFF5A5] ${animate ? 'animate-fillTrack' : ''}`}
               />
 
               <div
-                className={`${animate ? 'linear animate-slideHandle' : ''} absolute z-50 h-6 w-6 rounded-full border-[2.5px] border-white bg-yellow-500/90`}
+                className={`${animate ? 'linear animate-slideHandle' : ''} absolute z-50 h-6 w-6 rounded-full border-[2px] border-[#FFFBE0] bg-primary`}
                 style={{
                   top: '50%',
                   transform: 'translate(-50%, -50%)',
@@ -174,13 +191,13 @@ const Slider = ({ id }: { id: number }) => {
                     width: `${getSliderWidth(index)}%`,
                     zIndex: 10,
                     backgroundColor:
-                      member.accountId === userId ? 'orange' : 'transparent',
+                      member.accountId === userId ? '#FDE000' : 'transparent',
                   }}
                   onMouseEnter={() => handleMouseEnter(member.accountId, index)}
                   onMouseLeave={handleMouseLeave}
                 >
                   {member.accountId === userId && (
-                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-xs font-bold text-white">
+                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-xs text-sub-200">
                       {userId}
                     </div>
                   )}
@@ -209,7 +226,7 @@ const Slider = ({ id }: { id: number }) => {
                     left: tooltipPosition.left,
                   }}
                 >
-                  {hoveredAccount}
+                  ID {hoveredAccount}
                 </div>
               )}
             </div>
