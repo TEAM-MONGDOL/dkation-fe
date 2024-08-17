@@ -256,7 +256,7 @@ const Workation = () => {
             <div
               role="presentation"
               key={wkt.wktId}
-              className="mb-24 flex w-full justify-between gap-x-4"
+              className="mb-24 flex w-full cursor-pointer justify-between gap-x-4"
               onClick={() => router.push(`/workation/${wkt.wktId}`)}
             >
               <div className="flex items-end gap-x-8">
