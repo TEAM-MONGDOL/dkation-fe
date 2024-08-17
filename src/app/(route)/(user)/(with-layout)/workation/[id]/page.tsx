@@ -190,26 +190,30 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
         <div ref={resultRef}>
           <WkResultInfo id={id} />
         </div>
-        <div className="flex flex-col gap-10 pt-16" ref={reviewRef}>
-          <UserFilteringSectionContainer
-            orderOption={{
-              onClickOrder: () => {
-                setIsFilteringSectionOpen(
-                  isFilteringSectionOpen === 'ORDER' ? null : 'ORDER',
-                );
-              },
-              isOrderOpen: isFilteringSectionOpen === 'ORDER',
-              orderProps: {
-                orders: [
-                  { key: 'createdAt,DESC', value: '최신순' },
-                  { key: 'createdAt,ASC', value: '오래된순' },
-                ],
-                selectedOrder,
-                setSelectedOrder,
-              },
-            }}
-          />
-          {reviewData.reviewInfosForWkt.map((review) => (
+        {reviewData.reviewInfosForWkt.map((review) => (
+          <div
+            className="flex flex-col gap-10 pt-16"
+            ref={reviewRef}
+            key={review.id}
+          >
+            <UserFilteringSectionContainer
+              orderOption={{
+                onClickOrder: () => {
+                  setIsFilteringSectionOpen(
+                    isFilteringSectionOpen === 'ORDER' ? null : 'ORDER',
+                  );
+                },
+                isOrderOpen: isFilteringSectionOpen === 'ORDER',
+                orderProps: {
+                  orders: [
+                    { key: 'createdAt,DESC', value: '최신순' },
+                    { key: 'createdAt,ASC', value: '오래된순' },
+                  ],
+                  selectedOrder,
+                  setSelectedOrder,
+                },
+              }}
+            />
             <WkReviewInfo
               key={review.wktTitle}
               title={review.wktTitle}
@@ -219,8 +223,8 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
               contents={review.contents}
               rating={review.rating}
             />
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </section>
   );
