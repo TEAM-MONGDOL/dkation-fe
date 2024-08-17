@@ -537,7 +537,10 @@ export const pointApplyTypeList: PointApplyType[] = [
   'DECLINED',
 ];
 
-export const pointApplyTypeConvertList: { [key in PointApplyType]: string } = {
+export const pointApplyTypeConvertList: {
+  [key in PointApplyType | string]: string;
+} = {
+  'PENDING,APPROVED,DECLINED': '전체',
   PENDING: '대기',
   APPROVED: '승인',
   DECLINED: '반려',

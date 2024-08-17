@@ -44,11 +44,11 @@ const AdminPointsRequestPage = () => {
   const [searchValue, setSearchValue] = useState('');
   const [param, setParam] = useState<{
     order: string;
-    state: string[];
+    state: string;
     type: string[];
   }>({
     order: 'DESC',
-    state: pointApplyTypeList,
+    state: pointApplyTypeList.join(','),
     type: [],
   });
   const [selectedDateTag, setSelectedDateTag] =
@@ -68,11 +68,11 @@ const AdminPointsRequestPage = () => {
     params: {
       name: searchValue || undefined,
       accountId: searchValue || undefined,
-      applyTypes:
-        param.state.length > 0 && param.state.length < 3
-          ? param.state.join(',')
+      applyTypes: param.state,
+      pointPolicyIds:
+        param.type.length < (pointPolicyList?.pageInfo.totalElements || 0)
+          ? param.type.join(',')
           : undefined,
-      pointPolicyIds: param.type.length > 0 ? param.type.join(',') : undefined,
       startDate: startDate
         ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
         : undefined,
@@ -85,6 +85,7 @@ const AdminPointsRequestPage = () => {
       size: 10,
       sort: `createdAt,${param.order}`,
     },
+    enable: param.type.length > 0,
   });
 
   const onClickRowDetail = (id: number) => {
@@ -94,8 +95,8 @@ const AdminPointsRequestPage = () => {
   const refreshHandler = () => {
     setParam({
       ...param,
-      order: 'RECENT',
-      state: pointApplyTypeList,
+      order: 'DESC',
+      state: pointApplyTypeList.join(','),
       type: pointPolicyList
         ? pointPolicyList.pointPolicyList.map((item) => item.id.toString())
         : [],
@@ -138,7 +139,9 @@ const AdminPointsRequestPage = () => {
           <TableHeaderAtom isLast width="160px" />
         </TableHeaderModule>
         <tbody>
-          {!data ? (
+          {param.type.length <= 0 ? (
+            <EmptyContainer colSpan={7} text="분류를 선택해주세요." />
+          ) : !data ? (
             isLoading ? (
               <EmptyContainer colSpan={7} text="로딩 중..." />
             ) : isError ? (
@@ -154,7 +157,9 @@ const AdminPointsRequestPage = () => {
           ) : (
             data.pointApplyInfos.map((item, idx) => (
               <TableBodyModule key={item.pointApplyId}>
-                <TableBodyAtom isFirst>{idx + 1}</TableBodyAtom>
+                <TableBodyAtom isFirst>
+                  {(page - 1) * 10 + idx + 1}
+                </TableBodyAtom>
                 <TableBodyAtom>{item.pointTitle}</TableBodyAtom>
                 <TableBodyAtom>{item.name}</TableBodyAtom>
                 <TableBodyAtom>
@@ -198,20 +203,18 @@ const AdminPointsRequestPage = () => {
           setSelectedOption={(order) => setParam({ ...param, order })}
         />
         <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
-        <CheckboxContainer
-          title="분류"
+        <RadioButtonContainer
+          title="상태"
           options={
             Object.entries(pointApplyTypeConvertList) as [string, string][]
           }
-          selectedOptions={param.state}
-          setSelectedOptions={(state: string[]) =>
-            setParam({ ...param, state })
-          }
+          selectedOption={param.state}
+          setSelectedOption={(state: string) => setParam({ ...param, state })}
         />
         <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         {pointPolicyList && (
           <CheckboxContainer
-            title="구분"
+            title="분류"
             options={pointPolicyList.pointPolicyList.map((item) => [
               item.id.toString(),
               item.policyTitle,
