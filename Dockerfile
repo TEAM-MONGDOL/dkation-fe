@@ -25,16 +25,6 @@ FROM node:18-alpine AS runner
 # Set working directory
 WORKDIR /app
 
-ARG NEXT_PUBLIC_SERVER_URL
-ARG NEXTAUTH_SECRET
-ARG NEXTAUTH_URL
-ARG NEXT_PUBLIC_KAKAO_API_KEY
-
-ENV NEXT_PUBLIC_SERVER_URL=${NEXT_PUBLIC_SERVER_URL}
-ENV NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
-ENV NEXTAUTH_URL=${NEXTAUTH_URL}
-ARG NEXT_PUBLIC_KAKAO_API_KEY=${NEXT_PUBLIC_KAKAO_API_KEY}
-
 # Set node environment to production
 ENV NODE_ENV=production
 
@@ -50,6 +40,9 @@ COPY --from=builder /app/package.json ./package.json
 # Copy the built app
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+# Copy the .env.local file
+COPY --from=builder /app/.env.local ./
 
 # Set the correct permission for prerender cache
 RUN mkdir -p .next
