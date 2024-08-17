@@ -3,6 +3,7 @@
 import UserTabBarModule from '@/_components/user/common/modules/UserTabBarModule';
 import UserHeaderContainers from '@/_components/user/common/containers/UserHeaderContainers';
 import { usePathname } from 'next/navigation';
+import { HeaderMypageIcon } from '@/_assets/icons';
 
 const UserMyPageFix = () => {
   const pathname = usePathname();
@@ -35,6 +36,8 @@ const UserMyPageFix = () => {
       <UserHeaderContainers
         title="마이페이지"
         content="마이페이지를 통해 나의 정보들을 쉽게 확인하세요."
+        img="bg-header-bg"
+        headerIcon={HeaderMypageIcon}
       />
       <UserTabBarModule tabs={tabs} />
     </div>
