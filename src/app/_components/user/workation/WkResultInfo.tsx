@@ -28,7 +28,7 @@ const WkResultInfo = ({ id }: { id: number }) => {
   return (
     <div>
       <WkSlider id={id} />
-      <div className="flex flex-col">
+      <div className="mt-10 flex flex-col">
         <UserSubtitleAtom subtitle="추첨 결과" />
         <div className="flex w-full gap-3.5 overflow-x-auto scrollbar-hide">
           {data?.wktWinningUserInfos.map(
