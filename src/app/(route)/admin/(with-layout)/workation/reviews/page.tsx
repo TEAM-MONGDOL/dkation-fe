@@ -98,8 +98,6 @@ const AdminWorkationReviewsPage = () => {
     }
   }, [placeOptions]);
 
-  useEffect(() => router.refresh());
-
   return (
     <div className="flex flex-col">
       <div className="mb-9 flex items-center justify-between">

@@ -20,5 +20,6 @@ export const useGetWkReviewDetailQuery = ({
       });
       return wktReviewDetailSchema.parse(res.data.data);
     },
+    refetchOnMount: true,
   });
 };
