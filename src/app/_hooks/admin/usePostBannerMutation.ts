@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useGetBannerListInfiniteQuery } from '@/_hooks/admin/useGetBannerListInfiniteQuery';
+import { useGetBannerListInfiniteQueryKey } from '@/_hooks/admin/useGetBannerListInfiniteQuery';
 import api from '../Axios';
 
 interface PostAnnouncementRequest {
@@ -24,16 +24,19 @@ export const usePostBannerMutation = ({
       const response = await api.post('/api/banner', request);
       return response;
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [useGetBannerListInfiniteQuery],
+        queryKey: [useGetBannerListInfiniteQueryKey],
       });
+
       queryClient.refetchQueries({
-        queryKey: [useGetBannerListInfiniteQuery],
+        queryKey: [useGetBannerListInfiniteQueryKey],
       });
+
       successCallback && successCallback();
     },
     onError: (error: Error) => {
+      console.error('Failed to create banner:', error);
       errorCallback && errorCallback(error);
     },
   });
