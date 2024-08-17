@@ -160,7 +160,10 @@ const Workation = () => {
     const end = dayjs(applyEndDate).endOf('day');
 
     if (now.isBefore(start)) {
-      return { label: '모집 예정', color: '' };
+      return {
+        label: '모집 예정',
+        color: 'border-negative border text-negative',
+      };
     }
     if (now.isAfter(end)) {
       return { label: '모집 완료', color: 'bg-cus-100 text-sub-300' };

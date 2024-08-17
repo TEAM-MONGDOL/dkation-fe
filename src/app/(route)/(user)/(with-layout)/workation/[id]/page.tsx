@@ -136,11 +136,13 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
           </div>
           <UserButtonAtom
             onClick={() =>
-              data.isApplied || router.push(`/workation/${id}/apply`)
+              data.isApplied ||
+              dayjs().isBefore(dayjs(data.applyStartDate)) ||
+              router.push(`/workation/${id}/apply`)
             }
-            className={`ml-auto mt-auto rounded-[8px] ${data.isApplied && 'cursor-default'}`}
-            buttonStyle={`${data.isApplied ? 'red' : 'black'}`}
-            text={`${data.isApplied ? '응모마감' : '응모하기'}`}
+            className={`ml-auto mt-auto rounded-[8px] ${data.isApplied || (dayjs().isBefore(dayjs(data.applyStartDate)) && 'cursor-default')}`}
+            buttonStyle={`${data.isApplied || dayjs().isBefore(dayjs(data.applyStartDate)) ? 'red' : 'black'}`}
+            text={`${data.isApplied ? '모집 마감' : dayjs().isBefore(dayjs(data.applyStartDate)) ? '모집 예정' : '응모하기'}`}
             type="button"
             size="md"
           />
