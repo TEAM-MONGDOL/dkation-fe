@@ -111,8 +111,8 @@ const AdminWorkationReviewsPage = () => {
           </TableHeaderAtom>
           <TableHeaderAtom width="150px">평점</TableHeaderAtom>
           <TableHeaderAtom>워케이션</TableHeaderAtom>
-          <TableHeaderAtom width="100px">작성자</TableHeaderAtom>
-          <TableHeaderAtom width="150px">등록일</TableHeaderAtom>
+          <TableHeaderAtom width="100px">작성일자</TableHeaderAtom>
+          <TableHeaderAtom width="150px">최종수정일</TableHeaderAtom>
           <TableHeaderAtom width="100px">상태</TableHeaderAtom>
           <TableHeaderAtom width="160px" isLast />
         </TableHeaderModule>
