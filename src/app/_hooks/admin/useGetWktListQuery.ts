@@ -34,7 +34,7 @@ export const useGetWkListQuery = ({
       applyStartDate,
       applyEndDate,
       wktStartDate,
-      wktStartDate,
+      wktEndDate,
     ],
     queryFn: async () => {
       const res = await api.get(`/api/wkt`, {

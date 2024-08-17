@@ -17,7 +17,6 @@ import UserDatePickerContainer from '@/_components/user/common/containers/UserDa
 import { useRouter } from 'next/navigation';
 import UserLoading from '@/_components/user/userLoading';
 import NetworkError from '@/_components/common/networkError';
-import { HeaderPointIcon } from '@/_assets/icons';
 
 const Workation = () => {
   const router = useRouter();
@@ -75,7 +74,7 @@ const Workation = () => {
       setSelectedSpace(placeOptions.map((place) => place.place));
       setParam((prev) => ({
         ...prev,
-        places: placeOptions.map((place) => place.id.toString()), // Convert id to string
+        places: placeOptions.map((place) => place.id.toString()),
       }));
     }
   }, [placeOptions]);
@@ -86,7 +85,7 @@ const Workation = () => {
       status: [selectedState],
       places: placeOptions
         .filter((place) => selectedSpace.includes(place.place))
-        .map((place) => place.id.toString()), // Convert id to string
+        .map((place) => place.id.toString()),
       order: selectedOrder,
       startDate: startDate
         ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
@@ -122,8 +121,10 @@ const Workation = () => {
       startDate: null,
       endDate: null,
     });
-    setStartDate(dayjs().subtract(1, 'year').toDate());
-    setEndDate(dayjs().subtract(1, 'year').toDate());
+    setSelectedTag('ALL');
+    setStartDate(null);
+    setEndDate(null);
+    setSelectedState('ONGOING');
   };
 
   const { data, isLoading, isError } = useGetWkListQuery({
