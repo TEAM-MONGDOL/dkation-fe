@@ -28,6 +28,14 @@ WORKDIR /app
 # Set node environment to production
 ENV NODE_ENV=production
 
+# Set timezone to KST
+ENV TZ=Asia/Seoul
+
+# Install tzdata package and set timezone
+RUN apk add --no-cache tzdata && \
+    cp /usr/share/zoneinfo/$TZ /etc/localtime && \
+    echo $TZ > /etc/timezone
+
 # Add a non-root user
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
