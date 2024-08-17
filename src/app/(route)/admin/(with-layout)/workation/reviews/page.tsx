@@ -85,7 +85,7 @@ const AdminWorkationReviewsPage = () => {
   const refreshHandler = () => {
     setParam({
       ...param,
-      order: 'RECENT',
+      order: 'DESC',
       type: placeOptions.map((option) => option.id),
     });
   };
