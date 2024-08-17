@@ -102,7 +102,20 @@ const AdminWorkationListResultPage = ({ params }: WkResultProps) => {
 
   return (
     <section className="flex">
-      <WkResultSide id={id} />
+      <WkResultSide
+        id={id}
+        result={
+          !!data?.wktMemberResultInfos.some(
+            (item) =>
+              item.applyStatusType === 'CONFIRM_WAIT' ||
+              item.applyStatusType === 'CANCEL' ||
+              item.applyStatusType === 'NO_WINNING' ||
+              item.applyStatusType === 'CONFIRM' ||
+              item.applyStatusType === 'WAIT' ||
+              item.applyStatusType === 'VISITED',
+          )
+        }
+      />
       <div className="w-full">
         <div className="mb-6 flex items-center justify-between">
           <div className="flex gap-2">
@@ -148,7 +161,7 @@ const AdminWorkationListResultPage = ({ params }: WkResultProps) => {
                     color={statusColors[item.applyStatusType]}
                   >
                     {statusLabels[item.applyStatusType] || item.applyStatusType}
-                  </TableBodyAtom>{' '}
+                  </TableBodyAtom>
                 </TableBodyModule>
               ))
             )}

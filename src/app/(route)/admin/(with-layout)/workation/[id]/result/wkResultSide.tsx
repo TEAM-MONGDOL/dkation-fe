@@ -8,10 +8,9 @@ import { useGetWkPlaceListQuery } from '@/_hooks/admin/useGetWkPlaceListQuery';
 import AdminLoading from '@/_components/admin/adminLoading';
 import NetworkError from '@/_components/common/networkError';
 
-const WkResultSide = ({ id }: { id: number }) => {
+const WkResultSide = ({ id, result }: { id: number; result: boolean }) => {
   const wktId = id;
   const { data, isLoading, isError } = useGetWkDetailQuery({ wktId });
-
   const {
     data: placeData,
     isLoading: isPlaceLoading,
@@ -36,6 +35,7 @@ const WkResultSide = ({ id }: { id: number }) => {
   const placeInfo = placeData.wktPlaceInfos.find(
     (place) => place.id === data.wktPlaceId,
   );
+
   const realData = [
     {
       subtitle: '모집 기간',
@@ -51,17 +51,22 @@ const WkResultSide = ({ id }: { id: number }) => {
     },
     { subtitle: '장소', content: placeInfo?.place ?? '' },
   ];
+
   const WkResultDetailSidebar = [
     {
       id: '1',
       title: '추첨 결과',
       url: `/admin/workation/${id}/result`,
     },
-    {
-      id: '2',
-      title: '결과 통계 및 페널티',
-      url: `/admin/workation/${id}/result/penalty`,
-    },
+    ...(result
+      ? [
+          {
+            id: '2',
+            title: '결과 통계 및 페널티',
+            url: `/admin/workation/${id}/result/penalty`,
+          },
+        ]
+      : []),
   ];
 
   return (
