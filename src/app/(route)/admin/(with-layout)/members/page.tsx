@@ -117,11 +117,11 @@ const AdminMembersListPage = () => {
           <TableHeaderAtom isFirst width="80px">
             번호
           </TableHeaderAtom>
-          <TableHeaderAtom width="150px">이름</TableHeaderAtom>
-          <TableHeaderAtom width="150px">아이디</TableHeaderAtom>
+          <TableHeaderAtom width="200px">이름</TableHeaderAtom>
+          <TableHeaderAtom width="200px">아이디</TableHeaderAtom>
           <TableHeaderAtom>소속</TableHeaderAtom>
-          <TableHeaderAtom width="140px">보유 포인트</TableHeaderAtom>
-          <TableHeaderAtom width="120px">포인트 신청</TableHeaderAtom>
+          <TableHeaderAtom width="160px">보유 포인트</TableHeaderAtom>
+          <TableHeaderAtom width="140px">포인트 신청</TableHeaderAtom>
           <TableHeaderAtom isLast width="160px" />
         </TableHeaderModule>
         <tbody>
