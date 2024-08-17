@@ -53,7 +53,7 @@ const AdminWorkationReviewsPage = () => {
   };
 
   const { data, isLoading, isError } = useGetAdminWkReviewListQuery({
-    wktPlaceFilter: param.type.join(','),
+    wktPlaceFilter: param.type.length > 0 ? param.type.join(',') : undefined,
     minRating: param.startPoint,
     maxRating: param.endPoint,
     pageParam: {
@@ -117,11 +117,13 @@ const AdminWorkationReviewsPage = () => {
           <TableHeaderAtom width="160px" isLast />
         </TableHeaderModule>
         <tbody>
-          {!data ? (
+          {param.type.length === 0 ? (
+            <EmptyContainer colSpan={7} />
+          ) : !data ? (
             isLoading || isPlaceLoading ? (
               <EmptyContainer colSpan={7} text="loading" />
             ) : (
-              <EmptyContainer colSpan={7} text="no data" />
+              <EmptyContainer colSpan={7} />
             )
           ) : data.pageInfo.totalElements <= 0 ? (
             <EmptyContainer colSpan={7} />
@@ -171,15 +173,16 @@ const AdminWorkationReviewsPage = () => {
           )}
         </tbody>
       </TableContainer>
-      {data && data.pageInfo.totalPages > 0 && (
-        <div className="mt-6 flex justify-center">
-          <PaginationModule
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            totalPages={1}
-          />
-        </div>
-      )}
+      {param.type.length === 0 ||
+        (data && data.pageInfo.totalPages > 0 && (
+          <div className="mt-6 flex justify-center">
+            <PaginationModule
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              totalPages={1}
+            />
+          </div>
+        ))}
       <FilteringBarContainer
         isOpen={isFilteringBarOpen}
         setIsOpen={setIsFilteringBarOpen}
