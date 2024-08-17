@@ -22,20 +22,18 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import AdminLoading from '@/_components/admin/adminLoading';
+import { departmentList } from '@/_types/commonType';
 
 const AdminPointsRewardNewPage = () => {
   const router = useRouter();
-  const memberListRef = useRef<HTMLDivElement>(null);
   const [selectedRequest, setSelectedRequest] = useState<MemberType[]>([]);
+  const [searchText, setSearchText] = useState('');
   const [selectedDelete, setSelectedDelete] = useState<MemberType[]>([]);
   const [isConfirmModelOpen, setIsConfirmModelOpen] = useState(false);
   const [isTeamFilterOpen, setIsTeamFilterOpen] = useState(false);
   const [selectedType, setSelectedType] = useState<number | null>(null);
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([
-    '개발팀',
-    '디자인팀',
-    '기획팀',
-  ]);
+  const [selectedOptions, setSelectedOptions] =
+    useState<string[]>(departmentList);
 
   const {
     data: memberList,
@@ -43,8 +41,9 @@ const AdminPointsRewardNewPage = () => {
     hasNextPage: memberListHasNextPage,
     isLoading: memberListIsLoading,
   } = useGetMemberListInifiniteQuery({
-    // department: selectedOptions.join(','),
-    pageable: { page: 1, size: 100 },
+    searchText,
+    department: selectedOptions.join(','),
+    pageable: { page: 1, size: 100, sort: 'name,ASC' },
   });
 
   const {
@@ -100,6 +99,8 @@ const AdminPointsRewardNewPage = () => {
                     onClick={() => {}}
                     height="h-5xl"
                     widthFull
+                    value={searchText}
+                    onChange={(e) => setSearchText(e.target.value)}
                   />
                 </div>
                 <div className="relative">
@@ -120,7 +121,7 @@ const AdminPointsRewardNewPage = () => {
                     <div className="absolute bottom-[-10px] right-0 z-10 translate-y-full bg-white">
                       <SelectContainer
                         title="소속"
-                        options={['개발팀', '디자인팀', '기획팀']}
+                        options={departmentList}
                         selectedOptions={selectedOptions}
                         setSelectedOptions={setSelectedOptions}
                       />
@@ -176,7 +177,7 @@ const AdminPointsRewardNewPage = () => {
                   <TableHeaderAtom isLast>아이디</TableHeaderAtom>
                 </TableHeaderModule>
                 <tbody>
-                  {!memberList ? (
+                  {!memberList || selectedOptions.length <= 0 ? (
                     memberListIsLoading ? (
                       <EmptyContainer colSpan={4} text="is loading..." />
                     ) : (
@@ -215,15 +216,7 @@ const AdminPointsRewardNewPage = () => {
           <div className="flex flex-1 flex-col gap-y-4">
             <h3 className="font-bold">지급 대상({selectedRequest.length})</h3>
             <div className="flex flex-col gap-y-10">
-              <div className="flex w-full items-center gap-x-5">
-                <div className="grow">
-                  <SearchingBoxModule
-                    placeholder="이름을 검색하세요."
-                    onClick={() => {}}
-                    height="h-5xl"
-                    widthFull
-                  />
-                </div>
+              <div className="flex w-full items-center justify-end gap-x-5">
                 <ButtonAtom
                   type="button"
                   buttonStyle="dark"
