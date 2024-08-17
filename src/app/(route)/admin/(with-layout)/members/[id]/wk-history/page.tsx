@@ -66,7 +66,7 @@ const AdminMembersWkHistoryPage = ({ params }: Props) => {
   const refreshHandler = () => {
     setParam({
       ...param,
-      order: 'DESC',
+      order: 'createdAt,DESC',
       type: [
         'APPLIED',
         'RAFFLE_WAIT',
