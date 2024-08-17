@@ -13,6 +13,8 @@ import UserFilteringSectionContainer from '@/_components/user/common/containers/
 import UserLoading from '@/_components/user/userLoading';
 import NetworkError from '@/_components/common/networkError';
 import WkResultInfo from '@/_components/user/workation/WkResultInfo';
+import { useSession } from 'next-auth/react';
+import { useGetMemberPenaltyHistoryQuery } from '@/_hooks/admin/useGetMemberPenaltyHistoryQuery';
 
 interface UserWkDetailProps {
   params: { id: number };
@@ -82,16 +84,25 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-  if (isLoading || reviewIsLoading) {
+  const session = useSession();
+  const accountId = String(session.data?.accountId || '');
+
+  const {
+    data: userData,
+    isLoading: userIsLoading,
+    isError: userIsError,
+  } = useGetMemberPenaltyHistoryQuery({
+    accountId,
+  });
+  if (isLoading || reviewIsLoading || userIsLoading) {
     return <UserLoading />;
   }
-  if (isError || reviewIsError) {
+  if (isError || reviewIsError || userIsError) {
     return <NetworkError />;
   }
-  if (!data || !reviewData) {
+  if (!data || !reviewData || !userData) {
     return <NetworkError />;
   }
-
   const scrollToSection = (section: string) => {
     if (section === '상세정보' && detailRef.current) {
       detailRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -136,11 +147,14 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
           </div>
           <UserButtonAtom
             onClick={() =>
-              data.isApplied || router.push(`/workation/${id}/apply`)
+              dayjs().isAfter(dayjs(data.applyEndDate).endOf('day')) ||
+              dayjs().isBefore(dayjs(data.applyStartDate)) ||
+              userData.memberType === 'PENALTY' ||
+              router.push(`/workation/${id}/apply`)
             }
-            className={`ml-auto mt-auto rounded-[8px] ${data.isApplied && 'cursor-default'}`}
-            buttonStyle={`${data.isApplied ? 'red' : 'black'}`}
-            text={`${data.isApplied ? '응모마감' : '응모하기'}`}
+            className={`ml-auto mt-auto rounded-[8px] ${(dayjs().isAfter(dayjs(data.applyEndDate).endOf('day')) && 'cursor-default') || dayjs().isBefore(dayjs(data.applyStartDate)) || (userData.memberType === 'PENALTY' && 'cursor-default')}`}
+            buttonStyle={`${dayjs().isAfter(dayjs(data.applyEndDate).endOf('day')) || dayjs().isBefore(dayjs(data.applyStartDate)) || userData.memberType === 'PENALTY' ? 'red' : 'black'}`}
+            text={`${userData.memberType === 'PENALTY' ? '페널티 기간' : dayjs().isBefore(dayjs(data.applyStartDate)) ? '모집 예정' : dayjs().isAfter(dayjs(data.applyEndDate).endOf('day')) ? '모집 마감' : '응모하기'}`}
             type="button"
             size="md"
           />
@@ -176,26 +190,30 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
         <div ref={resultRef}>
           <WkResultInfo id={id} />
         </div>
-        <div className="flex flex-col gap-10 pt-16" ref={reviewRef}>
-          <UserFilteringSectionContainer
-            orderOption={{
-              onClickOrder: () => {
-                setIsFilteringSectionOpen(
-                  isFilteringSectionOpen === 'ORDER' ? null : 'ORDER',
-                );
-              },
-              isOrderOpen: isFilteringSectionOpen === 'ORDER',
-              orderProps: {
-                orders: [
-                  { key: 'createdAt,DESC', value: '최신순' },
-                  { key: 'createdAt,ASC', value: '오래된순' },
-                ],
-                selectedOrder,
-                setSelectedOrder,
-              },
-            }}
-          />
-          {reviewData.reviewInfosForWkt.map((review) => (
+        {reviewData.reviewInfosForWkt.map((review) => (
+          <div
+            className="flex flex-col gap-10 pt-16"
+            ref={reviewRef}
+            key={review.id}
+          >
+            <UserFilteringSectionContainer
+              orderOption={{
+                onClickOrder: () => {
+                  setIsFilteringSectionOpen(
+                    isFilteringSectionOpen === 'ORDER' ? null : 'ORDER',
+                  );
+                },
+                isOrderOpen: isFilteringSectionOpen === 'ORDER',
+                orderProps: {
+                  orders: [
+                    { key: 'createdAt,DESC', value: '최신순' },
+                    { key: 'createdAt,ASC', value: '오래된순' },
+                  ],
+                  selectedOrder,
+                  setSelectedOrder,
+                },
+              }}
+            />
             <WkReviewInfo
               key={review.wktTitle}
               title={review.wktTitle}
@@ -205,8 +223,8 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
               contents={review.contents}
               rating={review.rating}
             />
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </section>
   );
