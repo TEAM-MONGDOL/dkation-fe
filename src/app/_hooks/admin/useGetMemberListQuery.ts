@@ -8,7 +8,7 @@ export const useGetMemberListQuery = ({
   searchParam,
   pageParam,
 }: {
-  searchParam: { searchText: string; department: string[] };
+  searchParam: { searchText: string; department: string };
   pageParam: { page: number; size: number; sort?: string };
 }) => {
   return useQuery({
@@ -18,7 +18,7 @@ export const useGetMemberListQuery = ({
       const res = await api.get('/api/member', {
         params: {
           searchText,
-          department: department.join(','),
+          department,
           ...pageParam,
         },
       });

@@ -36,13 +36,13 @@ const AdminMembersListPage = () => {
     MembersSearchQueryOptions.NAME,
   );
 
-  const departmentFilter =
-    param.departmentType.length > 0 ? param.departmentType : [];
+  const departmentParam =
+    param.departmentType.length > 0 ? param.departmentType.join(',') : '';
 
   const { data, isLoading, error } = useGetMemberListQuery({
     searchParam: {
       searchText,
-      department: departmentFilter,
+      department: departmentParam,
     },
     pageParam: {
       page: currentPage,
@@ -71,6 +71,10 @@ const AdminMembersListPage = () => {
   const moveToMembersDetail = (id: string) => {
     router.push(`/admin/members/${id}`);
   };
+
+  const isNoData = param.departmentType.length === 0;
+  const hasData = data && data.pageInfo.totalElements > 0;
+  const showPagination = !isNoData && hasData;
 
   return (
     <section className="flex w-full flex-col gap-y-10">
@@ -121,14 +125,12 @@ const AdminMembersListPage = () => {
           <TableHeaderAtom isLast width="160px" />
         </TableHeaderModule>
         <tbody>
-          {!data ? (
-            isLoading ? (
-              <EmptyContainer colSpan={7} text="loading" />
-            ) : (
-              <EmptyContainer colSpan={7} text="no data" />
-            )
-          ) : data.pageInfo.totalElements <= 0 ? (
-            <EmptyContainer colSpan={7} />
+          {isNoData ? (
+            <EmptyContainer colSpan={7} text="내용이 존재하지 않습니다." />
+          ) : isLoading ? (
+            <EmptyContainer colSpan={7} text="loading" />
+          ) : !hasData ? (
+            <EmptyContainer colSpan={7} text="no data" />
           ) : (
             data.memberInfos.map((item, index) => (
               <TableBodyModule key={item.accountId}>
@@ -148,10 +150,10 @@ const AdminMembersListPage = () => {
           )}
         </tbody>
       </TableContainer>
-      {data && data.pageInfo.totalElements > 0 && (
+      {showPagination && (
         <div className="flex w-full items-center justify-center">
           <PaginationModule
-            totalPages={data.pageInfo.totalPages}
+            totalPages={data?.pageInfo.totalPages || 0}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
           />
