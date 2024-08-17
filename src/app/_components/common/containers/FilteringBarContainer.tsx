@@ -24,7 +24,7 @@ const FilteringBarContainer = ({
       />
       <div
         role="presentation"
-        className={`fixed bottom-0 right-0 top-0 z-20 flex h-full min-h-screen w-[280px] transform flex-col gap-y-3 rounded-tl-2xl bg-white py-5 transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'} shadow-lg`}
+        className={`fixed bottom-0 right-0 top-0 z-20 flex h-full min-h-screen w-[280px] transform flex-col gap-y-3 overflow-y-auto rounded-tl-2xl bg-white py-5 transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'} shadow-lg`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex w-full items-center justify-between gap-x-2.5 px-3 py-2.5">
