@@ -13,6 +13,7 @@ import UserModalAtom from '@/_components/user/common/atoms/UserModalAtom';
 import ReviewWktInfo from '@/_components/user/mypage/ReviewWktInfo';
 import UserLoading from '@/_components/user/userLoading';
 import NetworkError from '@/_components/common/networkError';
+import { ErrorIcon } from '@/_assets/icons';
 
 interface UserReviewDetailPageProps {
   params: {
@@ -55,11 +56,20 @@ const UserReviewDetailPage = ({ params }: UserReviewDetailPageProps) => {
             ) : null
           ) : (
             <>
-              <div className="flex flex-col gap-y-7 py-8">
-                <p className="mb-4 text-h2 font-semibold">
-                  이번 워케이션 장소 어때요?
-                </p>
-                <RatingStar readonly rating={data.reviewDetailInfo.rating} />
+              <div>
+                {data.reviewDetailInfo.blindedType &&
+                  data.reviewDetailInfo.blindedType === 'TRUE' && (
+                    <div className="flex items-center gap-x-1.5 text-negative">
+                      <Image src={ErrorIcon} alt="error" />
+                      관리자에 의해 블라인드 처리된 후기입니다.
+                    </div>
+                  )}
+                <div className="flex flex-col gap-y-7 pb-8 pt-4">
+                  <p className="mb-4 text-h2 font-semibold">
+                    이번 워케이션 장소 어때요?
+                  </p>
+                  <RatingStar readonly rating={data.reviewDetailInfo.rating} />
+                </div>
               </div>
 
               <div className="flex flex-col">
