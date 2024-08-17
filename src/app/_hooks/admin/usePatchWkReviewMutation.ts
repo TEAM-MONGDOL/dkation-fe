@@ -1,5 +1,6 @@
 import api from '@/_hooks/Axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useGetReviewDetailQueryKey } from '@/_hooks/admin/useGetWkReviewDetailQuery';
 import { useGetAdminWkReviewListQueryKey } from './useGetAdminWkReviewListQuery';
 
 interface PatchWkReviewProps {
@@ -19,7 +20,10 @@ export const usePatchWkReviewMutation = (successCallback?: () => void) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [useGetAdminWkReviewListQueryKey],
+        queryKey: [useGetAdminWkReviewListQueryKey, useGetReviewDetailQueryKey],
+      });
+      queryClient.refetchQueries({
+        queryKey: [useGetAdminWkReviewListQueryKey, useGetReviewDetailQueryKey],
       });
       if (successCallback) successCallback();
     },
