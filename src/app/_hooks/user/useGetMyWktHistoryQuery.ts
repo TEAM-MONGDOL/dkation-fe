@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { userApplyListSchema } from '@/_types/adminType';
 import api from '../Axios';
 
@@ -8,35 +8,49 @@ export const useGetMyWktHistoryQuery = ({
   startDate,
   endDate,
   statuses,
-  pageParam,
+  pageable,
 }: {
   startDate?: string;
   endDate?: string;
   statuses?: string;
-  pageParam: {
+  pageable: {
     page: number;
     size: number;
-    sort?: string;
+    sort: string;
   };
 }) => {
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: [
       useGetMyWktHistoryQueryKey,
       statuses,
       startDate,
       endDate,
-      pageParam,
+      pageable,
     ],
-    queryFn: async () => {
+    queryFn: async ({ pageParam = pageable }) => {
+      const { page, size, sort } = pageable;
       const res = await api.get(`/api/apply/my`, {
         params: {
           startDate,
           endDate,
           statuses,
-          ...pageParam,
+          page,
+          size,
+          sort,
         },
       });
       return userApplyListSchema.parse(res.data.data);
+    },
+    initialPageParam: { page: 1, size: 10, sort: 'createdAt,DESC' },
+    getNextPageParam: (lastPage) => {
+      return lastPage.pageInfo.totalElements === 0 ||
+        lastPage.pageInfo.totalPages - 1 === lastPage.pageInfo.pageNum
+        ? undefined
+        : {
+            page: lastPage.pageInfo.pageNum + 2,
+            size: pageable.size,
+            sort: pageable.sort,
+          };
     },
   });
 };

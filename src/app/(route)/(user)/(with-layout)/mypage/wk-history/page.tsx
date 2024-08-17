@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import dayjs from 'dayjs';
+import InfiniteScroll from 'react-infinite-scroller';
 import { usePatchWktStatusMutation } from '@/_hooks/user/usePatchWktStatusMutation';
 import UserFilteringSectionContainer from '@/_components/user/common/containers/UserFilteringSectionContainer';
 import UserStateFilteringContainer from '@/_components/user/common/containers/UserStateFilteringContainer';
-import UserPlaceFilteringContainer from '@/_components/user/common/containers/UserPlaceFilteringContainer';
 import WorkationCard from '@/_components/user/mypage/UserWktCard';
 import { useGetMyWktHistoryQuery } from '@/_hooks/user/useGetMyWktHistoryQuery';
 import UserWktCancelModal from '@/_components/user/mypage/UserWktCancelModal';
@@ -15,12 +15,13 @@ import { useDeleteWktApplyMutation } from '@/_hooks/user/useDeleteWktApplyMutati
 import { useSession } from 'next-auth/react';
 import UserLoading from '@/_components/user/userLoading';
 import NetworkError from '@/_components/common/networkError';
+import UserDatePickerContainer from '@/_components/user/common/containers/UserDatePickerContainer';
+import { DatePickerTagType } from '@/_types/commonType';
 
 const UserWkHistoryPage = () => {
   const router = useRouter();
   const session = useSession();
   const accountId = String(session.data?.accountId || '');
-  const [currentPage, setCurrentPage] = useState(1);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [param, setParam] = useState<{
@@ -43,9 +44,9 @@ const UserWkHistoryPage = () => {
   const [isFilteringSectionOpen, setIsFilteringSectionOpen] = useState<
     'FILTER' | 'ORDER' | null
   >(null);
-  const [selectedState, setSelectedState] = useState<string>('ALL');
+  const [selectedState, setSelectedState] = useState<string>('');
   const [selectedOrder, setSelectedOrder] = useState<string>('createdAt,DESC');
-  const [selectedSpace, setSelectedSpace] = useState<string[]>(['양양 쏠비치']);
+  const [selectedTag, setSelectedTag] = useState<DatePickerTagType>('ALL');
   const [selectedWorkationId, setSelectedWorkationId] = useState<number | null>(
     null,
   );
@@ -59,18 +60,21 @@ const UserWkHistoryPage = () => {
     | null
   >(null);
 
-  const { data, isLoading, isError } = useGetMyWktHistoryQuery({
-    // statuses: param.type.join(','),
-    startDate: startDate
-      ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
-      : undefined,
-    endDate: endDate ? dayjs(endDate).format('YYYY-MM-DDTHH:mm:ss') : undefined,
-    pageParam: {
-      page: currentPage,
-      size: 10,
-      sort: `createdAt,${param.order}`,
-    },
-  });
+  const { data, isLoading, isError, fetchNextPage, hasNextPage } =
+    useGetMyWktHistoryQuery({
+      statuses: param.type.join(','),
+      startDate: startDate
+        ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
+        : undefined,
+      endDate: endDate
+        ? dayjs(endDate).format('YYYY-MM-DDTHH:mm:ss')
+        : undefined,
+      pageable: {
+        page: 1,
+        size: 10,
+        sort: selectedOrder,
+      },
+    });
 
   const { mutate: patchWktStatus } = usePatchWktStatusMutation({
     wktId: selectedWorkationId || 0,
@@ -140,6 +144,40 @@ const UserWkHistoryPage = () => {
     setConfirmModalType(null);
   };
 
+  const updateParam = useCallback(() => {
+    setParam((prev) => ({
+      ...prev,
+      type: selectedState ? [selectedState] : prev.type,
+      order: selectedOrder,
+      startDate: startDate
+        ? dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss')
+        : null,
+      endDate: endDate ? dayjs(endDate).format('YYYY-MM-DDTHH:mm:ss') : null,
+    }));
+  }, [selectedState, selectedOrder, startDate, endDate]);
+
+  const refreshHandler = () => {
+    setParam({
+      order: 'DESC',
+      type: [
+        'APPLIED',
+        'RAFFLE_WAIT',
+        'NO_WINNING',
+        'CONFIRM_WAIT',
+        'CANCEL',
+        'CONFIRM',
+        'WAIT',
+        'VISITED',
+      ],
+    });
+    setStartDate(null);
+    setEndDate(null);
+  };
+
+  useEffect(() => {
+    updateParam();
+  }, [selectedState, selectedOrder, startDate, endDate, updateParam]);
+
   return (
     <section className="px-40 pt-18">
       <div className="flex flex-col gap-y-14">
@@ -155,19 +193,22 @@ const UserWkHistoryPage = () => {
               isFilterOpen: isFilteringSectionOpen === 'FILTER',
               filterChildren: (
                 <>
+                  <UserDatePickerContainer
+                    selectedTag={selectedTag}
+                    onClickTag={(tag) => setSelectedTag(tag)}
+                    startDate={startDate}
+                    setStartDate={setStartDate}
+                    endDate={endDate}
+                    setEndDate={setEndDate}
+                  />
                   <UserStateFilteringContainer
                     type="MYPAGE"
                     selectedOption={selectedState}
                     onClickOption={setSelectedState}
                   />
-                  <UserPlaceFilteringContainer
-                    places={['양양 쏠비치', '양양 쏠비치2', '양양 쏠비치3']}
-                    clickedPlace={selectedSpace}
-                    onClickPlace={setSelectedSpace}
-                  />
                 </>
               ),
-              onRefresh: () => {},
+              onRefresh: refreshHandler,
             }}
             orderOption={{
               onClickOrder: () => {
@@ -193,30 +234,44 @@ const UserWkHistoryPage = () => {
           ) : (
             <NetworkError />
           )
-        ) : data.pageInfo.totalElements <= 0 ? (
-          <NetworkError />
+        ) : data.pages.length === 0 ||
+          data.pages[0].applyInfoList.length <= 0 ? (
+          <p className="py-20 text-center text-sub-300">
+            내역이 존재하지 않습니다
+          </p>
         ) : (
-          data?.applyInfoList.map((wkt) => (
-            <WorkationCard
-              applyId={wkt.applyId}
-              accountId={accountId}
-              reviewId={wkt.reviewId}
-              key={wkt.wktId}
-              wktId={wkt.wktId}
-              thumbnailUrl={wkt.thumbnailUrl}
-              wktName={wkt.wktName}
-              place={wkt.place}
-              totalRecruit={wkt.totalRecruit}
-              applyStartDate={wkt.applyStartDate}
-              applyEndDate={wkt.applyEndDate}
-              startDate={wkt.startDate}
-              endDate={wkt.endDate}
-              bettingPoint={wkt.bettingPoint}
-              applyStatusType={wkt.applyStatusType}
-              waitingNumber={wkt.waitNumber} // 수정 필요
-              onClick={() => handleCardClick(wkt.applyStatusType, wkt.wktId)}
-            />
-          ))
+          <InfiniteScroll
+            loadMore={() => fetchNextPage()}
+            hasMore={hasNextPage}
+            loader={<UserLoading key={0} />}
+            useWindow
+          >
+            {data.pages.map((page) =>
+              page.applyInfoList.map((wkt) => (
+                <WorkationCard
+                  applyId={wkt.applyId}
+                  accountId={accountId}
+                  reviewId={wkt.reviewId}
+                  key={wkt.wktId}
+                  wktId={wkt.wktId}
+                  thumbnailUrl={wkt.thumbnailUrl}
+                  wktName={wkt.wktName}
+                  place={wkt.place}
+                  totalRecruit={wkt.totalRecruit}
+                  applyStartDate={wkt.applyStartDate}
+                  applyEndDate={wkt.applyEndDate}
+                  startDate={wkt.startDate}
+                  endDate={wkt.endDate}
+                  bettingPoint={wkt.bettingPoint}
+                  applyStatusType={wkt.applyStatusType}
+                  waitingNumber={wkt.waitNumber}
+                  onClick={() =>
+                    handleCardClick(wkt.applyStatusType, wkt.wktId)
+                  }
+                />
+              )),
+            )}
+          </InfiniteScroll>
         )}
       </div>
 

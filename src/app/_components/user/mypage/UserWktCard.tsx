@@ -122,7 +122,7 @@ const WorkationCard = ({
     applyStatusType === 'VISITED' && reviewId !== null;
 
   return (
-    <div className="flex w-full flex-col gap-4 p-4 xl:flex-row xl:justify-between">
+    <div className="mb-10 flex w-full flex-col gap-4 p-4 xl:flex-row xl:justify-between">
       <div className="flex items-end gap-x-8">
         <Image
           width={402}
