@@ -14,7 +14,7 @@ const WktListSection = () => {
   const scrollContainerRef = useRef(null);
   const [currentStartItem, setCurrentStartItem] = useState(0);
   const { data, isLoading, isError } = useGetWkListQuery({
-    // status: 'ONGOING',
+    status: 'ONGOING',
     pageParam: {
       page: 1,
       size: 10,
