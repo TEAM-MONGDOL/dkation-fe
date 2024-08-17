@@ -668,8 +668,8 @@ export const membersOrderList: Record<string, string> = {
 export const wkHistoryOrderList: Record<string, string> = {
   'createdAt,DESC': '최신순',
   'createdAt,ASC': '오래된순',
-  'bettingPoint,DESC': '베팅 포인트 높은순',
-  'bettingPoint,ASC': '베팅 포인트 낮은순',
+  'usedPoint,DESC': '베팅 포인트 높은순',
+  'usedPoint,ASC': '베팅 포인트 낮은순',
 };
 
 export const rewardOrderList: Record<string, string> = {
