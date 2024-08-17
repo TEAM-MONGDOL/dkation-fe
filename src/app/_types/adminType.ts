@@ -569,7 +569,7 @@ export const noticeTypeConverter: { [key in NoticeType]: string } = {
   EVENT: '이벤트 안내',
 };
 
-export type ResultType = 'DESC' | 'PERCENTAGEDESC' | 'PERCENTAGEASC';
+export type ResultType = 'ASC' | 'PERCENTAGEDESC' | 'PERCENTAGEASC';
 
 export type WktStatusType = 'PLANNED' | 'ONGOING' | 'CLOSED';
 
@@ -688,9 +688,9 @@ export const pointRewardList: { [key in PointRewardType]: string } = {
 };
 
 export const resultOrderList: { [key in ResultType]: string } = {
-  DESC: '가나다 순',
+  ASC: '가나다 순',
   PERCENTAGEASC: '확률 높은 순',
-  PERCENTAGEDESC: '확률 은 순',
+  PERCENTAGEDESC: '확률 낮은 순',
 };
 
 export const noticeList: { [key in NoticeType]: string } = {
