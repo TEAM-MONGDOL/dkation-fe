@@ -32,18 +32,15 @@ const AdminMembersListPage = () => {
     departmentType: departmentList,
   });
   const [searchText, setSearchText] = useState('');
-  const [selectedOption, setSelectedOption] = useState(
-    MembersSearchQueryOptions.NAME,
-  );
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   const departmentParam =
     param.departmentType.length > 0 ? param.departmentType.join(',') : '';
 
   const { data, isLoading, error } = useGetMemberListQuery({
-    searchParam: {
-      searchText,
-      department: departmentParam,
-    },
+    name: selectedOption === '이름' ? searchText : '',
+    accountId: selectedOption === '아이디' ? searchText : '',
+    department: departmentParam,
     pageParam: {
       page: currentPage,
       size: 10,
@@ -83,8 +80,8 @@ const AdminMembersListPage = () => {
         <SearchingBoxModule
           options={Object.values(MembersSearchQueryOptions)}
           onSelect={handleSelect}
-          dropdownPlaceholder="검색 조건 선택"
-          selectedOption={selectedOption}
+          dropdownPlaceholder="검색 조건"
+          selectedOption={selectedOption ?? undefined}
           placeholder="검색어를 입력하세요."
           filter
           onClick={() => setIsFilteringBarOpen(true)}
@@ -126,11 +123,11 @@ const AdminMembersListPage = () => {
         </TableHeaderModule>
         <tbody>
           {isNoData ? (
-            <EmptyContainer colSpan={7} text="내용이 존재하지 않습니다." />
+            <EmptyContainer colSpan={7} />
           ) : isLoading ? (
             <EmptyContainer colSpan={7} text="loading" />
           ) : !hasData ? (
-            <EmptyContainer colSpan={7} text="no data" />
+            <EmptyContainer colSpan={7} />
           ) : (
             data.memberInfos.map((item, index) => (
               <TableBodyModule key={item.accountId}>

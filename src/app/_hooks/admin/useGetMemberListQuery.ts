@@ -5,19 +5,29 @@ import api from '../Axios';
 export const useGetMemberListQueryKey = 'useGetMemberListQuery';
 
 export const useGetMemberListQuery = ({
-  searchParam,
+  name,
+  accountId,
+  department,
   pageParam,
 }: {
-  searchParam: { searchText: string; department: string };
+  name: string;
+  accountId: string;
+  department: string;
   pageParam: { page: number; size: number; sort?: string };
 }) => {
   return useQuery({
-    queryKey: [useGetMemberListQueryKey, searchParam, pageParam],
+    queryKey: [
+      useGetMemberListQueryKey,
+      name,
+      accountId,
+      department,
+      pageParam,
+    ],
     queryFn: async () => {
-      const { searchText, department } = searchParam;
       const res = await api.get('/api/member', {
         params: {
-          searchText,
+          name,
+          accountId,
           department,
           ...pageParam,
         },
