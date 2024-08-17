@@ -17,7 +17,6 @@ import UserDatePickerContainer from '@/_components/user/common/containers/UserDa
 import { useRouter } from 'next/navigation';
 import UserLoading from '@/_components/user/userLoading';
 import NetworkError from '@/_components/common/networkError';
-import { HeaderPointIcon } from '@/_assets/icons';
 
 const Workation = () => {
   const router = useRouter();
