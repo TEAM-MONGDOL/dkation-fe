@@ -13,7 +13,6 @@ const InfoSectionContainer = ({
   title,
   row,
 }: InfoSectionContainerProps) => {
-  const widthValue = row ? 330 : '100%'; // width, height 재설정해야함
   return (
     <div className="w-full rounded-regular border border-stroke-100 bg-cus-100 px-4 py-5">
       {title && <p className="mb-7 text-1 font-bold">{title}</p>}
@@ -21,7 +20,7 @@ const InfoSectionContainer = ({
         {image && (
           <Image
             className="max-h-[210px] min-h-[210px] min-w-[330px] max-w-[330px]"
-            width={typeof widthValue === 'number' ? widthValue : undefined}
+            width={100}
             height={100}
             src={image}
             alt="Image"
