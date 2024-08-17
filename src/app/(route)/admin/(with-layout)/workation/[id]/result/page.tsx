@@ -54,6 +54,7 @@ const AdminWorkationListResultPage = ({ params }: WkResultProps) => {
 
   const refreshHandler = () => {
     setFilterOptions({
+      ...filterOptions,
       order: 'DESC',
       status: [
         'APPLIED',
@@ -99,16 +100,6 @@ const AdminWorkationListResultPage = ({ params }: WkResultProps) => {
     VISITED: 'text-lime',
   };
 
-  if (isLoading) {
-    return <AdminLoading />;
-  }
-  if (isError) {
-    return <NetworkError />;
-  }
-  if (!data) {
-    return <NetworkError />;
-  }
-
   return (
     <section className="flex">
       <WkResultSide id={id} />
@@ -134,7 +125,13 @@ const AdminWorkationListResultPage = ({ params }: WkResultProps) => {
             </TableHeaderAtom>
           </TableHeaderModule>
           <tbody>
-            {data.wktMemberResultInfos.length <= 0 ? (
+            {!data ? (
+              isLoading ? (
+                <EmptyContainer colSpan={6} text="loading" />
+              ) : (
+                <EmptyContainer colSpan={6} text="no data" />
+              )
+            ) : data.wktMemberResultInfos.length <= 0 ? (
               <EmptyContainer colSpan={6} />
             ) : (
               data.wktMemberResultInfos.map((item, index) => (
