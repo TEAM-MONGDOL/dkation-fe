@@ -60,7 +60,7 @@ const UserWkHistoryPage = () => {
     | null
   >(null);
 
-  const { data, isLoading, isError, fetchNextPage, hasNextPage } =
+  const { data, isLoading, isError, fetchNextPage, hasNextPage, refetch } =
     useGetMyWktHistoryQuery({
       statuses: param.type.join(','),
       startDate: startDate
@@ -78,7 +78,9 @@ const UserWkHistoryPage = () => {
 
   const { mutate: patchWktStatus } = usePatchWktStatusMutation({
     wktId: selectedWorkationId || 0,
-    successCallback: () => {},
+    successCallback: () => {
+      refetch();
+    },
     errorCallback: (error) => {
       alert(`에러가 발생했습니다 : ${error.message}`);
     },
@@ -88,6 +90,7 @@ const UserWkHistoryPage = () => {
     successCallback: () => {
       alert('신청이 취소되었습니다.');
       setIsCancelModalOpen(false);
+      refetch();
     },
     errorCallback: (error) => {
       alert(`에러가 발생했습니다 : ${error.message}`);
