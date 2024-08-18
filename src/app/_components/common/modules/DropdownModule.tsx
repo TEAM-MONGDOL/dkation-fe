@@ -23,7 +23,7 @@ const DropdownModule = ({
   const [isOpen, setIsOpen] = useState(false);
 
   const sizeClass =
-    size === 'small' ? 'w-28' : size === 'large' ? 'w-52' : 'w-full';
+    size === 'small' ? 'w-36' : size === 'large' ? 'w-52' : 'w-full';
 
   return (
     <div>

@@ -138,7 +138,7 @@ const AdminWorkationPlaceNewPage = () => {
       <div className="flex w-full gap-7">
         <InputModule
           subtitle="이름"
-          textCount={20}
+          textCount={50}
           placeholder="장소 이름을 입력하세요."
           value={formData.placeName}
           onChange={handleChange}
@@ -200,6 +200,9 @@ const AdminWorkationPlaceNewPage = () => {
         <FileContainer
           onFileChange={handleFilesChange}
           fileDomainType="WKT_PLACE"
+          maxFileCount={5}
+          maxFileSizeMB={10}
+          existingFiles={formData.fileInfos}
         />
       </div>
       <div>

@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import SearchingBoxModule from '@/_components/common/modules/SearchingBoxModule';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import TableContainer from '@/_components/common/containers/TableContainer';
@@ -21,6 +20,7 @@ import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
 import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAtom';
 import { useGetNoticeListQuery } from '@/_hooks/admin/useGetNoticeListQuery';
 import dayjs from 'dayjs';
+import FilteringButtonAtom from '@/_components/common/atoms/FilteringButtonAtom';
 
 const NoticesListPage = () => {
   const router = useRouter();
@@ -79,11 +79,7 @@ const NoticesListPage = () => {
       <div className="mb-12 flex items-center justify-between">
         <TitleBarModule title="공지사항 목록" />
         <div className="ml-auto flex items-center space-x-4">
-          <SearchingBoxModule
-            placeholder="이름을 검색하세요"
-            filter
-            onClick={handleFilteringBar}
-          />
+          <FilteringButtonAtom onClick={handleFilteringBar} />
         </div>
       </div>
       <FilteringBarContainer

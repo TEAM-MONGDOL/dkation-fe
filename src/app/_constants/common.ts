@@ -13,8 +13,8 @@ export const DragDropContent = {
 
 export const PlaceOptions = ['양양', '제주도'];
 export const MembersSearchQueryOptions = {
-  NAME: '이름',
-  ID: '아이디',
+  name: '이름',
+  accountId: '아이디',
 };
 
 export const ServiceInfo = {

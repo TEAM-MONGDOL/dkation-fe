@@ -6,7 +6,10 @@ import PaginationModule from '@/_components/common/modules/PaginationModule';
 import FilteringButtonAtom from '@/_components/common/atoms/FilteringButtonAtom';
 import { ExtensionIcon } from '@/_assets/icons';
 import SubtitleModule from '@/_components/common/modules/SubtitleModule';
-import { applyStatusList, orderList, pointOrderList } from '@/_types/adminType';
+import {
+  applyStatusListConverter,
+  wkHistoryOrderList,
+} from '@/_types/adminType';
 import { DatePickerTagType } from '@/_types/commonType';
 import RadioButtonContainer from '@/_components/common/containers/RadioButtonContainer';
 import DatePickerContainer from '@/_components/common/containers/DatePickerContainer';
@@ -20,14 +23,20 @@ import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
 import { useGetMemberWkHistoryQuery } from '@/_hooks/admin/useGetMemberWkHistoryQuery';
 import dayjs from 'dayjs';
 
-const wkHistoryOrderList = {
-  ...orderList,
-  ...pointOrderList,
-};
-
 interface Props {
   params: { id: string };
 }
+
+const statusColors: Record<string, string> = {
+  APPLIED: 'text-positive',
+  RAFFLE_WAIT: 'text-[#00A62F]',
+  NO_WINNING: 'text-sub-300',
+  CONFIRM_WAIT: 'text-primary',
+  CANCEL: 'text-negative',
+  CONFIRM: 'text-[#007120]',
+  WAIT: 'text-[#003AD1]',
+  VISITED: 'text-sub-400',
+};
 
 const AdminMembersWkHistoryPage = ({ params }: Props) => {
   const accountId = params.id;
@@ -41,7 +50,7 @@ const AdminMembersWkHistoryPage = ({ params }: Props) => {
     order: string;
     type: string[];
   }>({
-    order: 'ASC',
+    order: 'createdAt,DESC',
     type: [
       'APPLIED',
       'RAFFLE_WAIT',
@@ -57,7 +66,7 @@ const AdminMembersWkHistoryPage = ({ params }: Props) => {
   const refreshHandler = () => {
     setParam({
       ...param,
-      order: 'ASC',
+      order: 'createdAt,DESC',
       type: [
         'APPLIED',
         'RAFFLE_WAIT',
@@ -84,7 +93,7 @@ const AdminMembersWkHistoryPage = ({ params }: Props) => {
     pageParam: {
       page: currentPage,
       size: 10,
-      sort: `createdAt,${param.order}`,
+      sort: param.order,
     },
   });
 
@@ -122,7 +131,7 @@ const AdminMembersWkHistoryPage = ({ params }: Props) => {
           ) : data.pageInfo.totalElements <= 0 ? (
             <EmptyContainer colSpan={6} />
           ) : (
-            [...data.applyInfoList].reverse().map((item, index) => {
+            data.applyInfoList.map((item, index) => {
               const { totalElements, pageSize } = data.pageInfo;
               const currentIndex = (currentPage - 1) * pageSize + index;
               const descendingIndex = totalElements - currentIndex;
@@ -133,9 +142,18 @@ const AdminMembersWkHistoryPage = ({ params }: Props) => {
                   <TableBodyAtom>
                     {dayjs(item.applicationDate).format('YYYY.MM.DD')}
                   </TableBodyAtom>
-                  <TableBodyAtom>{item.bettingPoint}</TableBodyAtom>
-                  <TableBodyAtom>{item.winningProbability}</TableBodyAtom>
-                  <TableBodyAtom isLast>{item.applyStatusType}</TableBodyAtom>
+                  <TableBodyAtom color="text-primaryDark">
+                    {item.bettingPoint}
+                  </TableBodyAtom>
+                  <TableBodyAtom color="text-primaryDark">
+                    {item.winningProbability}%
+                  </TableBodyAtom>
+                  <TableBodyAtom
+                    isLast
+                    color={statusColors[item.applyStatusType]}
+                  >
+                    {applyStatusListConverter[item.applyStatusType]}
+                  </TableBodyAtom>
                 </TableBodyModule>
               );
             })
@@ -181,7 +199,9 @@ const AdminMembersWkHistoryPage = ({ params }: Props) => {
         <hr className="h-[0.5px] w-full border-0 bg-sub-100" />
         <CheckboxContainer
           title="진행 상태"
-          options={Object.entries(applyStatusList) as [string, string][]}
+          options={
+            Object.entries(applyStatusListConverter) as [string, string][]
+          }
           selectedOptions={param.type}
           setSelectedOptions={(type: string[]) => setParam({ ...param, type })}
         />

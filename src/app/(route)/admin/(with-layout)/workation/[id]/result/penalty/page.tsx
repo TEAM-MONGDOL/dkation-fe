@@ -92,10 +92,9 @@ const AdminWorkationListPenaltyPage = ({ params }: WkResultProps) => {
 
   const { totalRecruit, totalApply } = data.wktResultInfo;
   const reducedRatio = getReducedRatio(totalRecruit, totalApply);
-
   return (
     <section className="flex">
-      <WkResultSide id={id} />
+      <WkResultSide id={id} result />
       <div className="w-full">
         <div className="mb-8 flex gap-2">
           <Image src={ExtensionIcon} alt="StatisticsIcon" />

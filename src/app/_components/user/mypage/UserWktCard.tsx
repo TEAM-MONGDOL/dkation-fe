@@ -31,6 +31,7 @@ interface WorkationCardProps {
   accountId?: string;
   applyId: number;
   onClick?: (applyStatusType: WorkationCardProps['applyStatusType']) => void;
+  refetch: () => void;
 }
 
 const WorkationCard = ({
@@ -50,6 +51,7 @@ const WorkationCard = ({
   waitingNumber = -1,
   applyId,
   onClick,
+  refetch,
 }: WorkationCardProps) => {
   const { textLabel, buttonText, textLabelClass, buttonStyle, buttonDisabled } =
     StatusConfig[applyStatusType];
@@ -75,9 +77,10 @@ const WorkationCard = ({
 
   const { mutate: patchBettingPoint } = usePatchBettingPointMutation({
     applyId,
-    successCallback: () => {
-      setCurrentBettingPoint(Number(newBettingPoint));
-      alert('베팅 포인트가 수정되었습니다.');
+    successCallback: (usedPoint) => {
+      alert(`베팅 포인트가 수정되었습니다.`);
+      setCurrentBettingPoint(usedPoint);
+      refetch?.();
     },
     errorCallback: (error) => {
       alert(`베팅 포인트 수정 실패 : ${error.message}`);
@@ -122,7 +125,7 @@ const WorkationCard = ({
     applyStatusType === 'VISITED' && reviewId !== null;
 
   return (
-    <div className="flex w-full flex-col gap-4 p-4 xl:flex-row xl:justify-between">
+    <div className="mb-10 flex w-full flex-col gap-4 p-4 xl:flex-row xl:justify-between">
       <div className="flex items-end gap-x-8">
         <Image
           width={402}

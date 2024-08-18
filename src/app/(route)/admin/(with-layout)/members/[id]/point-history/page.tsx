@@ -37,7 +37,7 @@ const AdminMembersPointHistoryPage = ({ params }: Props) => {
     type: string[];
     point: string[];
   }>({
-    order: 'ASC',
+    order: 'DESC',
     type: [],
     point: ['INCREASE', 'DECREASE'],
   });
@@ -45,7 +45,7 @@ const AdminMembersPointHistoryPage = ({ params }: Props) => {
   const refreshHandler = () => {
     setParam({
       ...param,
-      order: 'ASC',
+      order: 'DESC',
       type: [],
       point: ['INCREASE', 'DECREASE'],
     });
@@ -104,7 +104,7 @@ const AdminMembersPointHistoryPage = ({ params }: Props) => {
           ) : data.pageInfo.totalElements <= 0 ? (
             <EmptyContainer colSpan={6} />
           ) : (
-            [...data.pointInfos].reverse().map((item, index) => {
+            data.pointInfos.map((item, index) => {
               const { totalElements } = data.pageInfo;
               const { pageSize } = data.pageInfo;
               const currentIndex = (currentPage - 1) * pageSize + index;

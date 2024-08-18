@@ -25,10 +25,14 @@ interface RewardDetailPageProps {
 
 const AdminPointsRewardDetailPage = ({ params }: RewardDetailPageProps) => {
   const { id } = params;
+  const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, isError } = useGetPointSupplyDetailQuery({
     supplyId: Number(id),
+    pageable: {
+      size: 5,
+      page: currentPage,
+    },
   });
-  const [currentPage, setCurrentPage] = useState(1);
 
   return (
     <section className="flex w-full flex-col gap-y-10 overflow-y-auto">
@@ -67,7 +71,7 @@ const AdminPointsRewardDetailPage = ({ params }: RewardDetailPageProps) => {
           </div>
           <div className="flex grow flex-col gap-y-4 rounded-regular border border-stroke-100 bg-cus-100 p-4">
             <h4 className="font-bold">
-              지급대상 ({data.pointSupplyMemberList.length})
+              지급대상 ({data.pageInfo.totalElements})
             </h4>
             <div className="flex w-full flex-col gap-y-10">
               <TableContainer>
@@ -83,22 +87,16 @@ const AdminPointsRewardDetailPage = ({ params }: RewardDetailPageProps) => {
                   {data.pointSupplyMemberList.length <= 0 ? (
                     <EmptyContainer colSpan={4} />
                   ) : (
-                    data.pointSupplyMemberList
-                      .slice(
-                        (currentPage - 1) * 5,
-                        Math.min(
-                          data.pointSupplyMemberList.length,
-                          (currentPage - 1) * 5 + 5,
-                        ),
-                      )
-                      .map((user, idx) => (
-                        <TableBodyModule key={user.accountId}>
-                          <TableBodyAtom isFirst>{idx + 1}</TableBodyAtom>
-                          <TableBodyAtom>{user.name}</TableBodyAtom>
-                          <TableBodyAtom>{user.department}</TableBodyAtom>
-                          <TableBodyAtom isLast>{user.accountId}</TableBodyAtom>
-                        </TableBodyModule>
-                      ))
+                    data.pointSupplyMemberList.map((user, idx) => (
+                      <TableBodyModule key={user.accountId}>
+                        <TableBodyAtom isFirst>
+                          {(currentPage - 1) * 5 + idx + 1}
+                        </TableBodyAtom>
+                        <TableBodyAtom>{user.name}</TableBodyAtom>
+                        <TableBodyAtom>{user.department}</TableBodyAtom>
+                        <TableBodyAtom isLast>{user.accountId}</TableBodyAtom>
+                      </TableBodyModule>
+                    ))
                   )}
                 </tbody>
               </TableContainer>
@@ -108,7 +106,7 @@ const AdminPointsRewardDetailPage = ({ params }: RewardDetailPageProps) => {
                 <PaginationModule
                   currentPage={currentPage}
                   setCurrentPage={setCurrentPage}
-                  totalPages={Math.ceil(data.pointSupplyMemberList.length / 5)}
+                  totalPages={data.pageInfo.totalPages}
                 />
               </div>
             )}

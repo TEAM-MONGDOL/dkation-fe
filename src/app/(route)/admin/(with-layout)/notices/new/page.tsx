@@ -11,9 +11,11 @@ import TextAreaModule from '@/_components/common/modules/TextAreaModule';
 import { NoticeType, noticeTypeConverter } from '@/_types/adminType';
 import { usePostNoticeMutation } from '@/_hooks/admin/usePostNoticeMutation';
 import FileModule from '@/_components/common/modules/FileModule';
+import ModalModule from '@/_components/common/modules/ModalModule';
 
 const WriteNoticesPage = () => {
   const router = useRouter();
+  const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [values, setValues] = useState({
     announcementType: '' as NoticeType | '',
     title: '',
@@ -23,6 +25,8 @@ const WriteNoticesPage = () => {
 
   const { mutate: postAnnouncement } = usePostNoticeMutation({
     successCallback: () => {
+      alert('게시글이 등록되었습니다.');
+      setIsPostModalOpen(false);
       router.replace('/admin/notices');
     },
     errorCallback: (error: Error) => {
@@ -69,6 +73,21 @@ const WriteNoticesPage = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!values.announcementType) {
+      alert('구분을 선택해 주세요.');
+      return;
+    }
+
+    if (!values.title) {
+      alert('제목을 입력해 주세요.');
+      return;
+    }
+
+    setIsPostModalOpen(true);
+  };
+
+  const confirmPost = () => {
     const fileUrls = values.fileInfos.map((info) => info.url);
     const payload = { ...values, fileUrls };
     postAnnouncement(payload);
@@ -99,12 +118,8 @@ const WriteNoticesPage = () => {
             />
             <InputModule
               name="title"
-              placeholder={
-                values.announcementType === 'RESULT'
-                  ? '해당 게시글의 제목이 메인 페이지 배너에 노출됩니다.'
-                  : '제목을 입력하세요.'
-              }
-              textCount={20}
+              placeholder="제목을 입력하세요."
+              textCount={30}
               value={values.title}
               onChange={handleChange}
             />
@@ -136,6 +151,9 @@ const WriteNoticesPage = () => {
             <FileContainer
               onFileChange={handleFilesChange}
               fileDomainType="ANNOUNCEMENT"
+              maxFileCount={5}
+              maxFileSizeMB={10}
+              existingFiles={values.fileInfos}
             />
           </div>
           <p className="mb-4 text-3 font-bold">내용</p>
@@ -152,6 +170,15 @@ const WriteNoticesPage = () => {
           </div>
         </div>
       </form>
+      {isPostModalOpen && (
+        <ModalModule
+          title={`해당 ${noticeTypeConverter[values.announcementType as NoticeType] || '게시글'}를 등록하시겠습니까?`}
+          cancelText="취소"
+          confirmText="확인"
+          onCancel={() => setIsPostModalOpen(false)}
+          onConfirm={confirmPost}
+        />
+      )}
     </section>
   );
 };

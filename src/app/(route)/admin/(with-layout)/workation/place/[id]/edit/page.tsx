@@ -155,7 +155,7 @@ const AdminWorkationPlaceEditPage = ({ params }: WkPlaceEditProps) => {
       <div className="flex w-full gap-7">
         <InputModule
           subtitle="이름"
-          textCount={20}
+          textCount={50}
           placeholder="장소 이름을 입력하세요."
           value={values.placeName}
           onChange={handleChange}
@@ -208,6 +208,9 @@ const AdminWorkationPlaceEditPage = ({ params }: WkPlaceEditProps) => {
         <FileContainer
           onFileChange={handleFilesChange}
           fileDomainType="WKT_PLACE"
+          maxFileCount={5}
+          maxFileSizeMB={10}
+          existingFiles={values.fileInfos}
         />
         <p className="mb-4 text-3 font-bold">상세 내용</p>
         <TextAreaModule

@@ -44,7 +44,10 @@ const NavBarContainer = () => {
         plusContents={[
           { content: '공지사항 등록', route: '/admin/notices/new' },
         ]}
-        contents={[{ content: '공지사항 목록', route: '/admin/notices' }]}
+        contents={[
+          { content: '배너 목록', route: '/admin/notices/banner' },
+          { content: '공지사항 목록', route: '/admin/notices' },
+        ]}
       />
     </div>
   );

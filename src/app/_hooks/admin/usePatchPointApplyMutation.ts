@@ -5,7 +5,7 @@ import {
 } from '@tanstack/react-query';
 import api from '../Axios';
 import { useGetPointApplyKey } from './useGetPointApply';
-import { useGetPointApplyDetailQueryKey } from './useGetPointApplyDetailQuery';
+import { getPointApplyDetailQueryKey } from './useGetPointApplyDetailQuery';
 
 export const usePatchPointApplyMutation = ({
   pointApplyId,
@@ -35,15 +35,7 @@ export const usePatchPointApplyMutation = ({
       queryClient.invalidateQueries({
         queryKey: [
           useGetPointApplyKey,
-          useGetPointApplyDetailQueryKey,
-          pointApplyId,
-        ],
-      });
-      queryClient.refetchQueries({
-        queryKey: [
-          useGetPointApplyKey,
-          useGetPointApplyDetailQueryKey,
-          pointApplyId,
+          getPointApplyDetailQueryKey(pointApplyId),
         ],
       });
       successCallback && successCallback();

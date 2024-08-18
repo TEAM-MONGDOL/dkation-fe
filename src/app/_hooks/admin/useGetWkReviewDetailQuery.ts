@@ -2,7 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import { wktReviewDetailSchema } from '@/_types/adminType';
 import api from '../Axios';
 
-export const useGetReviewDetailQueryKey = 'useGetReviewDetailQueryKey';
+export const getReviewDetailQueryKey = (id: string) =>
+  `useGetReviewDetailQuery-${id}`;
 
 export const useGetWkReviewDetailQuery = ({
   reviewId,
@@ -10,7 +11,7 @@ export const useGetWkReviewDetailQuery = ({
   reviewId: number;
 }) => {
   return useQuery({
-    queryKey: [useGetReviewDetailQueryKey, reviewId],
+    queryKey: [getReviewDetailQueryKey(reviewId.toString()), reviewId],
     queryFn: async () => {
       const res = await api.get(`/api/review/${reviewId}`, {
         params: {
@@ -19,5 +20,6 @@ export const useGetWkReviewDetailQuery = ({
       });
       return wktReviewDetailSchema.parse(res.data.data);
     },
+    refetchOnMount: true,
   });
 };

@@ -8,7 +8,7 @@ import FileContainer from '@/_components/common/containers/FileContainer';
 import ButtonAtom from '@/_components/common/atoms/ButtonAtom';
 import DropdownModule from '@/_components/common/modules/DropdownModule';
 import TextAreaModule from '@/_components/common/modules/TextAreaModule';
-import { noticeTypeConverter, NoticeType } from '@/_types/adminType';
+import { NoticeType, noticeTypeConverter } from '@/_types/adminType';
 import FileModule from '@/_components/common/modules/FileModule';
 import ModalModule from '@/_components/common/modules/ModalModule';
 import Image from 'next/image';
@@ -101,6 +101,7 @@ const AdminWriteNoticesEditPage = ({ params }: NoticeEditPageProps) => {
   const { mutate: PatchNotice } = usePatchNoticeMutation({
     announcementId: id,
     successCallback: () => {
+      alert('게시글이 수정되었습니다.');
       setIsEditModalOpen(false);
       router.replace(`/admin/notices`);
     },
@@ -108,6 +109,17 @@ const AdminWriteNoticesEditPage = ({ params }: NoticeEditPageProps) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!values.announcementType) {
+      alert('구분을 선택해 주세요.');
+      return;
+    }
+
+    if (!values.title) {
+      alert('제목을 입력해 주세요.');
+      return;
+    }
+
     setIsEditModalOpen(true);
   };
 
@@ -126,8 +138,9 @@ const AdminWriteNoticesEditPage = ({ params }: NoticeEditPageProps) => {
     router.push('/admin/notices');
   };
 
-  if (isLoading) <AdminLoading />;
-  if (isError) <NetworkError />;
+  if (isLoading) return <AdminLoading />;
+  if (isError) return <NetworkError />;
+
   return (
     <section>
       <TitleBarModule title="공지 수정" type="LEFT" />
@@ -152,7 +165,7 @@ const AdminWriteNoticesEditPage = ({ params }: NoticeEditPageProps) => {
                     ? '해당 게시글의 제목이 메인 페이지 배너에 노출됩니다'
                     : '제목을 입력하세요.'
                 }
-                textCount={20}
+                textCount={30}
                 value={values.title}
                 onChange={handleChange}
               />
@@ -182,6 +195,9 @@ const AdminWriteNoticesEditPage = ({ params }: NoticeEditPageProps) => {
             <FileContainer
               onFileChange={handleFilesChange}
               fileDomainType="ANNOUNCEMENT"
+              maxFileCount={5}
+              maxFileSizeMB={10}
+              existingFiles={values.fileInfos}
             />
           </div>
           <p className="mb-4 text-3 font-bold">내용</p>
@@ -204,9 +220,8 @@ const AdminWriteNoticesEditPage = ({ params }: NoticeEditPageProps) => {
             <ButtonAtom
               buttonStyle="yellow"
               text="수정"
-              type="button"
+              type="submit"
               width="fixed"
-              onClick={() => setIsEditModalOpen(true)}
             />
           </div>
         </div>

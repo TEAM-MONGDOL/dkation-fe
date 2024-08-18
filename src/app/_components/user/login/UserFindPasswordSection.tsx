@@ -28,7 +28,7 @@ const UserFindPasswordSection = ({
   const [verificationError, setVerificationError] = useState<string | null>(
     null,
   );
-  const [verificationTime, setVerificationTime] = useState(180);
+  const [verificationTime, setVerificationTime] = useState(300);
   const [modalContent, setModalContent] = useState<{
     desc: string;
     onClick: () => void;
@@ -104,7 +104,23 @@ const UserFindPasswordSection = ({
   useEffect(() => {
     if (isEmailSent) {
       const timer = setInterval(() => {
-        setVerificationTime((prev) => prev - 1);
+        setVerificationTime((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            setModalContent({
+              desc: '인증 시간이 만료되었습니다. 이메일을 다시 전송해주세요.',
+              onClick: () => {
+                setModalContent(null);
+                setIsEmailSent(false); // 이메일 재전송 가능하도록 상태 초기화
+                setVerificationCode(''); // 인증 코드 초기화
+                setVerificationTime(300); // 인증 시간 초기화
+              },
+              buttonText: '확인',
+            });
+            return 0;
+          }
+          return prev - 1;
+        });
       }, 1000);
 
       return () => clearInterval(timer);
@@ -272,7 +288,7 @@ const UserFindPasswordSection = ({
         )}
       </div>
       {modalContent !== null && (
-        <UserModalAtom onClose={() => setModalContent(null)}>
+        <UserModalAtom onClose={() => {}}>
           <div className="flex flex-col items-center justify-center gap-y-10">
             <p>{modalContent.desc}</p>
             <UserButtonAtom

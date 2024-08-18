@@ -1,8 +1,8 @@
 'use client';
 
+import { useEffect, useMemo, useState } from 'react';
 import TitleBarModule from '@/_components/common/modules/TitleBarModule';
 import FilteringButtonAtom from '@/_components/common/atoms/FilteringButtonAtom';
-import { useState } from 'react';
 import TableContainer from '@/_components/common/containers/TableContainer';
 import { useRouter } from 'next/navigation';
 import PaginationModule from '@/_components/common/modules/PaginationModule';
@@ -20,12 +20,8 @@ import { useGetAdminWkReviewListQuery } from '@/_hooks/admin/useGetAdminWkReview
 import { StarRateEmptyIcon, StarRateIcon } from '@/_assets/icons';
 import Image from 'next/image';
 import { reviewOrderList } from '@/_types/adminType';
+import { useGetWkPlaceListQuery } from '@/_hooks/admin/useGetWkPlaceListQuery';
 
-// 워케이션 장소 목록 api가져와서 변경
-const placeOrderList = {
-  '201': 'Region 1',
-  '202': 'Region 2',
-};
 const AdminWorkationReviewsPage = () => {
   const [isFilteringBarOpen, setIsFilteringBarOpen] = useState(false);
   const router = useRouter();
@@ -44,10 +40,11 @@ const AdminWorkationReviewsPage = () => {
     endPoint: number;
   }>({
     order: 'DESC',
-    type: Object.keys(placeOrderList),
+    type: [],
     startPoint: 0,
     endPoint: 5,
   });
+
   const getSortField = (order: string) => {
     if (order === 'STARASC' || order === 'STARDESC') {
       return `starRating,${order === 'STARASC' ? 'DESC' : 'ASC'}`;
@@ -55,15 +52,8 @@ const AdminWorkationReviewsPage = () => {
     return `lastModifiedAt,${order}`;
   };
 
-  const refreshHandler = () => {
-    setParam({
-      ...param,
-      order: 'RECENT',
-      type: Object.keys(placeOrderList),
-    });
-  };
   const { data, isLoading, isError } = useGetAdminWkReviewListQuery({
-    wktPlaceFilter: param.type.join(','),
+    wktPlaceFilter: param.type.length > 0 ? param.type.join(',') : undefined,
     minRating: param.startPoint,
     maxRating: param.endPoint,
     pageParam: {
@@ -72,6 +62,42 @@ const AdminWorkationReviewsPage = () => {
       sort: getSortField(param.order),
     },
   });
+
+  const {
+    data: placeData,
+    isLoading: isPlaceLoading,
+    isError: isPlaceError,
+  } = useGetWkPlaceListQuery({
+    pageParam: {
+      page: 1,
+      size: 100,
+    },
+  });
+  const placeOptions = useMemo(() => {
+    return (
+      placeData?.wktPlaceInfos.map((place) => ({
+        id: place.id.toString(),
+        place: place.place,
+      })) || []
+    );
+  }, [placeData]);
+
+  const refreshHandler = () => {
+    setParam({
+      ...param,
+      order: 'DESC',
+      type: placeOptions.map((option) => option.id),
+    });
+  };
+  useEffect(() => {
+    if (placeOptions.length > 0 && param.type.length === 0) {
+      setParam((prevParam) => ({
+        ...prevParam,
+        type: placeOptions.map((option) => option.id),
+      }));
+    }
+  }, [placeOptions]);
+
   return (
     <div className="flex flex-col">
       <div className="mb-9 flex items-center justify-between">
@@ -85,17 +111,19 @@ const AdminWorkationReviewsPage = () => {
           </TableHeaderAtom>
           <TableHeaderAtom width="150px">평점</TableHeaderAtom>
           <TableHeaderAtom>워케이션</TableHeaderAtom>
-          <TableHeaderAtom width="100px">작성자</TableHeaderAtom>
-          <TableHeaderAtom width="150px">등록일</TableHeaderAtom>
+          <TableHeaderAtom width="100px">작성일자</TableHeaderAtom>
+          <TableHeaderAtom width="150px">최종수정일</TableHeaderAtom>
           <TableHeaderAtom width="100px">상태</TableHeaderAtom>
           <TableHeaderAtom width="160px" isLast />
         </TableHeaderModule>
         <tbody>
-          {!data ? (
-            isLoading ? (
+          {param.type.length === 0 ? (
+            <EmptyContainer colSpan={7} />
+          ) : !data ? (
+            isLoading || isPlaceLoading ? (
               <EmptyContainer colSpan={7} text="loading" />
             ) : (
-              <EmptyContainer colSpan={7} text="no data" />
+              <EmptyContainer colSpan={7} />
             )
           ) : data.pageInfo.totalElements <= 0 ? (
             <EmptyContainer colSpan={7} />
@@ -145,15 +173,16 @@ const AdminWorkationReviewsPage = () => {
           )}
         </tbody>
       </TableContainer>
-      {data && data.pageInfo.totalPages > 0 && (
-        <div className="mt-6 flex justify-center">
-          <PaginationModule
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            totalPages={1}
-          />
-        </div>
-      )}
+      {param.type.length === 0 ||
+        (data && data.pageInfo.totalPages > 0 && (
+          <div className="mt-6 flex justify-center">
+            <PaginationModule
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              totalPages={1}
+            />
+          </div>
+        ))}
       <FilteringBarContainer
         isOpen={isFilteringBarOpen}
         setIsOpen={setIsFilteringBarOpen}
@@ -168,7 +197,7 @@ const AdminWorkationReviewsPage = () => {
         <hr />
         <CheckboxContainer
           title="지역"
-          options={Object.entries(placeOrderList) as [string, string][]}
+          options={placeOptions.map(({ id, place }) => [id, place])}
           selectedOptions={param.type}
           setSelectedOptions={(type: string[]) => setParam({ ...param, type })}
         />

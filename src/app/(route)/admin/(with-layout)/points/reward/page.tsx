@@ -1,5 +1,6 @@
 'use client';
 
+import FilteringButtonAtom from '@/_components/common/atoms/FilteringButtonAtom';
 import ShowDetailButtonAtom from '@/_components/common/atoms/ShowDetailButtonAtom';
 import TableBodyAtom from '@/_components/common/atoms/TableBodyAtom';
 import TableHeaderAtom from '@/_components/common/atoms/TableHeaderAtom';
@@ -107,11 +108,7 @@ const AdminPointsRewardPage = () => {
     <section className="flex w-full flex-col gap-y-10 overflow-y-auto">
       <div className="flex w-full items-center justify-between gap-x-10">
         <TitleBarModule title="포인트 지급 내역" />
-        <SearchingBoxModule
-          placeholder="이름을 검색하세요."
-          filter
-          onClick={() => setIsFilteringBarOpen(true)}
-        />
+        <FilteringButtonAtom onClick={() => setIsFilteringBarOpen(true)} />
       </div>
       <TableContainer minWidth="1000px">
         <TableHeaderModule>
@@ -151,7 +148,7 @@ const AdminPointsRewardPage = () => {
                 <TableBodyAtom>{item.pointTitle}</TableBodyAtom>
                 <TableBodyAtom>
                   {item.name}
-                  {item.count > 1 && ` 외 ${item.count}`}
+                  {item.count > 1 && ` 외 ${item.count - 1}`}
                 </TableBodyAtom>
                 <TableBodyAtom>
                   {dayjs(item.supplyTime).format('YYYY.MM.DD')}

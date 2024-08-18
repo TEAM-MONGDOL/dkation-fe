@@ -537,7 +537,10 @@ export const pointApplyTypeList: PointApplyType[] = [
   'DECLINED',
 ];
 
-export const pointApplyTypeConvertList: { [key in PointApplyType]: string } = {
+export const pointApplyTypeConvertList: {
+  [key in PointApplyType | string]: string;
+} = {
+  'PENDING,APPROVED,DECLINED': '전체',
   PENDING: '대기',
   APPROVED: '승인',
   DECLINED: '반려',
@@ -569,7 +572,7 @@ export const noticeTypeConverter: { [key in NoticeType]: string } = {
   EVENT: '이벤트 안내',
 };
 
-export type ResultType = 'DESC' | 'PERCENTAGEDESC' | 'PERCENTAGEASC';
+export type ResultType = 'ASC' | 'PERCENTAGEDESC' | 'PERCENTAGEASC';
 
 export type WktStatusType = 'PLANNED' | 'ONGOING' | 'CLOSED';
 
@@ -665,6 +668,13 @@ export const membersOrderList: Record<string, string> = {
   'pointQuantity,ASC': '보유 포인트 낮은순',
 };
 
+export const wkHistoryOrderList: Record<string, string> = {
+  'createdAt,DESC': '최신순',
+  'createdAt,ASC': '오래된순',
+  'usedPoint,DESC': '베팅 포인트 높은순',
+  'usedPoint,ASC': '베팅 포인트 낮은순',
+};
+
 export const rewardOrderList: Record<string, string> = {
   'createdAt,DESC': '최신순',
   'createdAt,ASC': '오래된순',
@@ -688,9 +698,9 @@ export const pointRewardList: { [key in PointRewardType]: string } = {
 };
 
 export const resultOrderList: { [key in ResultType]: string } = {
-  DESC: '가나다 순',
+  ASC: '가나다 순',
   PERCENTAGEASC: '확률 높은 순',
-  PERCENTAGEDESC: '확률 은 순',
+  PERCENTAGEDESC: '확률 낮은 순',
 };
 
 export const noticeList: { [key in NoticeType]: string } = {
