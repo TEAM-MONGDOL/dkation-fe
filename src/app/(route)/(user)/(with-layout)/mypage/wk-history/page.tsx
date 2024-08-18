@@ -252,6 +252,7 @@ const UserWkHistoryPage = () => {
             {data.pages.map((page) =>
               page.applyInfoList.map((wkt) => (
                 <WorkationCard
+                  refetch={refetch}
                   applyId={wkt.applyId}
                   accountId={accountId}
                   reviewId={wkt.reviewId}

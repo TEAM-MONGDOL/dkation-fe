@@ -52,5 +52,6 @@ export const useGetMyWktHistoryQuery = ({
             sort: pageable.sort,
           };
     },
+    refetchOnMount: true,
   });
 };

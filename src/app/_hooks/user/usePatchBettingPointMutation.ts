@@ -8,28 +8,32 @@ export const usePatchBettingPointMutation = ({
   errorCallback,
 }: {
   applyId: number;
-  successCallback?: () => void;
+  successCallback?: (usedPoint: number) => void;
   errorCallback?: (error: Error) => void;
 }) => {
   const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async ({ usedPoint }: { usedPoint: number }) => {
-      const res = await api.patch(`/api/apply/${applyId}`, {
-        usedPoint,
-      });
-      return res.data.data;
+      const res = await api.patch(`/api/apply/${applyId}`, { usedPoint });
+      return usedPoint; // 클라이언트에서 사용된 usedPoint 반환
     },
-    onSuccess: () => {
+    onSuccess: (usedPoint) => {
+      console.log('Updated usedPoint:', usedPoint);
       queryClient.invalidateQueries({
         queryKey: [useGetMyWktHistoryQueryKey, applyId],
       });
       queryClient.refetchQueries({
         queryKey: [useGetMyWktHistoryQueryKey, applyId],
       });
-      successCallback && successCallback();
+      if (successCallback) {
+        successCallback(usedPoint);
+      }
     },
     onError: (error: Error) => {
-      errorCallback && errorCallback(error);
+      if (errorCallback) {
+        errorCallback(error);
+      }
     },
   });
 };
