@@ -12,10 +12,7 @@ const NavBarContainer = () => {
       <NavModule
         icon={PersonIcon}
         title="회원 관리"
-        contents={[
-          { content: '회원 목록', route: '/admin/members' },
-          { content: '배너 목록', route: '/admin/notices/banner' },
-        ]}
+        contents={[{ content: '회원 목록', route: '/admin/members' }]}
       />
       <hr className="h-[0.5px] border-0 bg-stroke-100 opacity-50" />
       <NavModule
@@ -47,7 +44,10 @@ const NavBarContainer = () => {
         plusContents={[
           { content: '공지사항 등록', route: '/admin/notices/new' },
         ]}
-        contents={[{ content: '공지사항 목록', route: '/admin/notices' }]}
+        contents={[
+          { content: '배너 목록', route: '/admin/notices/banner' },
+          { content: '공지사항 목록', route: '/admin/notices' },
+        ]}
       />
     </div>
   );
