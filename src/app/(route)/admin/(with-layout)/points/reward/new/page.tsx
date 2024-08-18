@@ -20,7 +20,7 @@ import { usePostPointSupplyMutation } from '@/_hooks/admin/usePostPointSupplyMut
 import { MemberType } from '@/_types/adminType';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import AdminLoading from '@/_components/admin/adminLoading';
 import { departmentList } from '@/_types/commonType';
 
@@ -45,6 +45,11 @@ const AdminPointsRewardNewPage = () => {
     department: selectedOptions.join(','),
     pageable: { page: 1, size: 100, sort: 'name,ASC' },
   });
+
+  useEffect(() => {
+    console.log('selectedRequest', selectedRequest);
+    console.log('MemberList', memberList);
+  }, [selectedRequest]);
 
   const {
     data: policyList,
@@ -191,7 +196,12 @@ const AdminPointsRewardNewPage = () => {
                         <TableBodyModule key={member.accountId}>
                           <TableBodyAtom
                             isFirst
-                            isBoolean={selectedRequest.includes(member)}
+                            isBoolean={
+                              !!selectedRequest.find(
+                                (request) =>
+                                  request.accountId === member.accountId,
+                              )
+                            }
                             onClickBoolean={() => [
                               setSelectedRequest((prev) =>
                                 prev.includes(member)
