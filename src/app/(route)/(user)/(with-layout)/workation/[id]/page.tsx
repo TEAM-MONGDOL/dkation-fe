@@ -147,14 +147,16 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
           </div>
           <UserButtonAtom
             onClick={() =>
-              dayjs().isAfter(dayjs(data.applyEndDate).endOf('day')) ||
-              dayjs().isBefore(dayjs(data.applyStartDate)) ||
-              userData.memberType === 'PENALTY' ||
-              router.push(`/workation/${id}/apply`)
+              data.isApplied
+                ? router.push('/mypage/wk-history')
+                : dayjs().isAfter(dayjs(data.applyEndDate).endOf('day')) ||
+                  dayjs().isBefore(dayjs(data.applyStartDate)) ||
+                  userData.memberType === 'PENALTY' ||
+                  router.push(`/workation/${id}/apply`)
             }
             className={`ml-auto mt-auto rounded-[8px] ${(dayjs().isAfter(dayjs(data.applyEndDate).endOf('day')) && 'cursor-default') || dayjs().isBefore(dayjs(data.applyStartDate)) || (userData.memberType === 'PENALTY' && 'cursor-default')}`}
-            buttonStyle={`${dayjs().isAfter(dayjs(data.applyEndDate).endOf('day')) || dayjs().isBefore(dayjs(data.applyStartDate)) || userData.memberType === 'PENALTY' ? 'red' : 'black'}`}
-            text={`${userData.memberType === 'PENALTY' ? '페널티 기간' : dayjs().isBefore(dayjs(data.applyStartDate)) ? '모집 예정' : dayjs().isAfter(dayjs(data.applyEndDate).endOf('day')) ? '모집 마감' : '응모하기'}`}
+            buttonStyle={`${dayjs().isAfter(dayjs(data.applyEndDate).endOf('day')) || dayjs().isBefore(dayjs(data.applyStartDate)) || userData.memberType === 'PENALTY' ? 'red' : data.isApplied ? 'lightGray' : 'black'}`}
+            text={`${userData.memberType === 'PENALTY' ? '페널티 기간' : data.isApplied ? '응모 완료' : dayjs().isBefore(dayjs(data.applyStartDate)) ? '모집 예정' : dayjs().isAfter(dayjs(data.applyEndDate).endOf('day')) ? '모집 마감' : '응모하기'}`}
             type="button"
             size="md"
           />
