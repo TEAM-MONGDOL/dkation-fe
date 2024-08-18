@@ -20,7 +20,7 @@ import { usePostPointSupplyMutation } from '@/_hooks/admin/usePostPointSupplyMut
 import { MemberType } from '@/_types/adminType';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import AdminLoading from '@/_components/admin/adminLoading';
 import { departmentList } from '@/_types/commonType';
 
@@ -45,11 +45,6 @@ const AdminPointsRewardNewPage = () => {
     department: selectedOptions.join(','),
     pageable: { page: 1, size: 100, sort: 'name,ASC' },
   });
-
-  useEffect(() => {
-    console.log('selectedRequest', selectedRequest);
-    console.log('MemberList', memberList);
-  }, [selectedRequest]);
 
   const {
     data: policyList,
