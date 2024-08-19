@@ -21,5 +21,6 @@ export const useGetWkPlaceListQuery = ({
       });
       return workationPlaceListSchema.parse(res.data.data);
     },
+    refetchOnMount: true,
   });
 };

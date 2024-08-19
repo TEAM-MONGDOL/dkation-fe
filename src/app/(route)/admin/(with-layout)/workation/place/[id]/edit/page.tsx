@@ -17,6 +17,7 @@ import { Address, useDaumPostcodePopup } from 'react-daum-postcode';
 import { useGetKakaoAdddress } from '@/_hooks/admin/useGetKakaoAddress';
 import AdminLoading from '@/_components/admin/adminLoading';
 import NetworkError from '@/_components/common/networkError';
+import KakaoMapContainer from '@/_components/common/containers/KakaoMapContainer';
 
 interface WkPlaceEditProps {
   params: { id: number };
@@ -97,6 +98,12 @@ const AdminWorkationPlaceEditPage = ({ params }: WkPlaceEditProps) => {
     }));
   };
 
+  const handleAddressClick = () => {
+    open({
+      onComplete: handleComplete,
+    });
+  };
+
   const { data: kakaoAddress } = useGetKakaoAdddress({
     address: originAddress,
   });
@@ -165,8 +172,9 @@ const AdminWorkationPlaceEditPage = ({ params }: WkPlaceEditProps) => {
           subtitle="주소"
           placeholder="주소를 입력하세요."
           value={values.address}
-          onChange={handleChange}
+          status="cursor"
           name="address"
+          onClick={() => handleAddressClick()}
         />
       </div>
       <div className="flex w-full gap-7">
@@ -184,6 +192,12 @@ const AdminWorkationPlaceEditPage = ({ params }: WkPlaceEditProps) => {
           onChange={() => {}}
         />
       </div>
+      {kakaoAddress && (
+        <KakaoMapContainer
+          latitude={kakaoAddress.documents[0].y}
+          longitude={kakaoAddress.documents[0].x}
+        />
+      )}
       <div className="flex flex-col gap-4 py-7">
         {values.fileInfos.length > 0 && (
           <div className="py-2">
