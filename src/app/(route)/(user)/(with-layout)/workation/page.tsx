@@ -83,10 +83,6 @@ const Workation = () => {
     }
   }, [placeOptions]);
 
-  useEffect(() => {
-    console.log(selectedState);
-  }, [selectedState]);
-
   const updateParam = useCallback(() => {
     setParam((prev) => ({
       ...prev,
