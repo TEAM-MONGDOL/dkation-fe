@@ -36,6 +36,7 @@ const WkReviewInfo = ({
               <div className="mb-1 flex">
                 {[...Array(rating)].map((_, index) => (
                   <Image
+                    // eslint-disable-next-line react/no-array-index-key
                     key={`star-filled-${index}`}
                     src={StarRateIcon}
                     alt="StarRateIcon"
@@ -43,6 +44,7 @@ const WkReviewInfo = ({
                 ))}
                 {[...Array(5 - rating)].map((_, index) => (
                   <Image
+                    // eslint-disable-next-line react/no-array-index-key
                     key={`star-filled-${index}`}
                     src={StarRateEmptyIcon}
                     alt="StarRateEmptyIcon"
