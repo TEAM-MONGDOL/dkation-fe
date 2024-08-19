@@ -132,8 +132,9 @@ const Workation = () => {
   };
 
   const { data, isLoading, isError } = useGetWkListQuery({
-    status: param.status.join(','),
-    wktPlaceIdList: param.places.join(','),
+    status: param.status.length > 0 ? param.status.join(',') : undefined,
+    wktPlaceIdList:
+      param.places.length > 0 ? param.places.join(',') : undefined,
     wktStartDate: param.startDate || null,
     wktEndDate: param.endDate || null,
     pageParam: {
@@ -187,7 +188,7 @@ const Workation = () => {
   }
 
   return (
-    <div className="">
+    <div>
       <UserHeaderContainers
         title="워케이션"
         content="워케이션(Workation)을 통해 업무의 효율과 재충전의 기회를 놓치지 마세요!"
@@ -246,11 +247,13 @@ const Workation = () => {
         />
       </div>
       <div className="mt-10 px-40">
-        {!data ? (
+        {param.status.length === 0 || param.places.length === 0 ? (
+          <EmptyContainer notTable />
+        ) : !data ? (
           isLoading ? (
             <EmptyContainer text="loading" notTable />
           ) : (
-            <EmptyContainer text="no data" notTable />
+            <EmptyContainer notTable />
           )
         ) : data.pageInfo.totalElements <= 0 ? (
           <EmptyContainer notTable />
