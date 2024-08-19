@@ -135,7 +135,9 @@ const AdminPointsRewardPage = () => {
           ) : (
             data.pointSupplyList.map((item, index) => (
               <TableBodyModule key={item.id}>
-                <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
+                <TableBodyAtom isFirst>
+                  {(currentPage - 1) * 10 + index + 1}
+                </TableBodyAtom>
                 <TableBodyAtom
                   color={
                     item.pointSupplyType === 'GROUP'

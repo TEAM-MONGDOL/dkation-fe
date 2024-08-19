@@ -131,7 +131,9 @@ const AdminMembersListPage = () => {
           ) : (
             data.memberInfos.map((item, index) => (
               <TableBodyModule key={item.accountId}>
-                <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
+                <TableBodyAtom isFirst>
+                  {(currentPage - 1) * 10 + index + 1}
+                </TableBodyAtom>
                 <TableBodyAtom>{item.name}</TableBodyAtom>
                 <TableBodyAtom>{item.accountId}</TableBodyAtom>
                 <TableBodyAtom>{item.department}</TableBodyAtom>

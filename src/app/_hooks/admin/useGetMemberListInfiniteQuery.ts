@@ -23,7 +23,14 @@ export const useGetMemberListInifiniteQuery = ({
     queryFn: async ({ pageParam = pageable }) => {
       const { page, size, sort } = pageParam; // Destructure page, size, and sort from pageParam
       const res = await api.get('/api/member', {
-        params: { name: searchText, department, page, size, sort }, // Ensure the sort parameter is passed here
+        params: {
+          name: searchText,
+          department,
+          isPenalty: true,
+          page,
+          size,
+          sort,
+        }, // Ensure the sort parameter is passed here
       });
       return memberListSchema.parse(res.data.data);
     },
