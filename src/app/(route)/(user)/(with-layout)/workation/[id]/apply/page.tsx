@@ -83,17 +83,20 @@ const UserWkApplyPage = ({ params }: Props) => {
   };
 
   return (
-    <section>
-      <div className="">
-        <div className="flex h-[450px] justify-center gap-16 bg-primary/5 px-36 py-12">
-          <Image
-            src={data?.files[0].url || ''}
-            alt="place"
-            width={530}
-            height={1}
-            className="rounded-lg"
-          />
-          <div className="ml-auto pr-16 pt-52">
+    <section className="flex w-full flex-col">
+      <div className="flex w-full flex-col">
+        <div className="flex h-[450px] w-full justify-center gap-16 bg-primary/5 px-28 py-12 xl:px-36">
+          <div className="mt-auto w-2/5">
+            <Image
+              src={data?.files[0].url || ''}
+              alt="place"
+              layout="responsive"
+              width={686}
+              height={374}
+              className="rounded-lg"
+            />
+          </div>
+          <div className="ml-auto pt-52 xl:pr-16">
             <p className="text-2">{data?.title}</p>
             <p className="mb-4 text-h1 font-semibold">{data?.place}</p>
             <div className="flex gap-2">
@@ -102,7 +105,7 @@ const UserWkApplyPage = ({ params }: Props) => {
                 src={LocationIcon}
                 alt="LocationIcon"
               />
-              <p className="text-2">주소 : {data?.address}</p>
+              <p className="break-keep text-2">주소 : {data?.address}</p>
             </div>
           </div>
         </div>
@@ -113,8 +116,8 @@ const UserWkApplyPage = ({ params }: Props) => {
           endDate={dayjs(data?.endDate).format('YYYY.MM.DD')}
         />
       </div>
-      <div className="mb-48 mt-28 flex items-center justify-between px-60">
-        <div>
+      <div className="mb-48 mt-28 flex items-center justify-between gap-x-10 px-40 xl:px-60">
+        <div className="flex shrink-0 flex-col">
           <p className="mb-10 text-h2 font-semibold">나의 당첨 확률</p>
           <div className="flex items-end justify-center gap-10 rounded-[17px] border border-[#E5CD07] bg-gradient-to-r from-primary/5 to-primary/60 px-9 pb-2.5">
             <p className="text-[78px] font-bold">
@@ -123,34 +126,36 @@ const UserWkApplyPage = ({ params }: Props) => {
             <p className="mb-5 text-h3 text-[#E5CD07]">±{pointData?.error}%</p>
           </div>
         </div>
-        <div className="mt-20 flex flex-col gap-2">
-          <div className="flex items-center gap-12">
-            <p className="text-1">내 포인트</p>
-            <input
-              value={Number(myPointData?.pointQuantity)}
-              className="h-12 w-[225px] cursor-not-allowed rounded-[4px] border pl-4"
-              type="number"
-              readOnly
-            />
+        <div className="mt-40 flex flex-col gap-12 xl:mt-20 xl:flex-row">
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-12">
+              <p className="w-[120px] shrink-0 text-1">내 포인트</p>
+              <input
+                value={Number(myPointData?.pointQuantity)}
+                className="h-12 w-[225px] cursor-not-allowed rounded-[4px] border pl-4"
+                type="number"
+                readOnly
+              />
+            </div>
+            <div className="flex w-full items-center gap-12 overflow-visible">
+              <p className="w-[120px] shrink-0 text-1">배팅 포인트</p>
+              <input
+                className="h-12 w-[225px] shrink-0 rounded-[4px] border pl-4 outline-0"
+                placeholder="0"
+                value={point > 0 ? point : ''}
+                onChange={handlePointChange}
+                type="number"
+              />
+            </div>
           </div>
-          <div className="flex items-center gap-7">
-            <p className="text-1">배팅 포인트</p>
-            <input
-              className="h-12 w-[225px] rounded-[4px] border pl-4 outline-0"
-              placeholder="0"
-              value={point > 0 ? point : ''}
-              onChange={handlePointChange}
-              type="number"
-            />
-            <UserButtonAtom
-              className="rounded-[8px]"
-              text="신청하기"
-              size="md"
-              buttonStyle="black"
-              onClick={handlePostApplyWk}
-              type="submit"
-            />
-          </div>
+          <UserButtonAtom
+            className="ml-auto mt-auto shrink-0 rounded-lg"
+            text="신청하기"
+            size="md"
+            buttonStyle="black"
+            onClick={handlePostApplyWk}
+            type="submit"
+          />
         </div>
       </div>
     </section>
