@@ -192,12 +192,8 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
         <div ref={resultRef}>
           <WkResultInfo id={id} />
         </div>
-        {reviewData.reviewInfosForWkt.map((review) => (
-          <div
-            className="flex flex-col gap-10 pt-16"
-            ref={reviewRef}
-            key={review.id}
-          >
+        <div className="flex flex-col gap-10 pt-16" ref={reviewRef}>
+          {reviewData.reviewInfosForWkt[0]?.wktTitle && (
             <UserFilteringSectionContainer
               orderOption={{
                 onClickOrder: () => {
@@ -216,6 +212,9 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
                 },
               }}
             />
+          )}
+
+          {reviewData.reviewInfosForWkt.map((review) => (
             <WkReviewInfo
               key={review.wktTitle}
               title={review.wktTitle}
@@ -225,8 +224,8 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
               contents={review.contents}
               rating={review.rating}
             />
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );
