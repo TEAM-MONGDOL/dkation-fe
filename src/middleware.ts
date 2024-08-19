@@ -56,18 +56,12 @@ export async function middleware(request: NextRequest) {
   const session = await getSessionFromRequest(request);
 
   if (request.nextUrl.pathname.startsWith('/login')) {
-    console.log('call middleware - /login');
-
     return withoutAuth(request, session);
   }
 
   if (request.nextUrl.pathname.startsWith('/admin')) {
-    console.log('call middleware - /admin');
-
     return withAdmin(request, session);
   }
-
-  console.log('call middleware - others');
 
   return withAuth(request, session);
 }
