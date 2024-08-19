@@ -230,7 +230,7 @@ const Slider = ({ id }: { id: number }) => {
                       backgroundColor: isWinner
                         ? '#FBD501'
                         : member.accountId === userId
-                          ? '#FDE000'
+                          ? '#FFFFFF'
                           : 'transparent',
                     }}
                     onMouseEnter={() =>
