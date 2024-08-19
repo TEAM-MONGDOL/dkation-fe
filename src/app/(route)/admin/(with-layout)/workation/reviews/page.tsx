@@ -130,7 +130,9 @@ const AdminWorkationReviewsPage = () => {
           ) : (
             data.reviewList.map((item, order) => (
               <TableBodyModule key={item.id}>
-                <TableBodyAtom isFirst>{order + 1}</TableBodyAtom>
+                <TableBodyAtom isFirst>
+                  {(currentPage - 1) * 10 + order + 1}
+                </TableBodyAtom>
                 <TableBodyAtom>
                   <div className="flex justify-center">
                     {[...Array(item.rating)].map((_, index) => (

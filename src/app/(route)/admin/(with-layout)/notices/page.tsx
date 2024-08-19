@@ -142,7 +142,9 @@ const NoticesListPage = () => {
           ) : (
             data.announcementInfos.map((item, index) => (
               <TableBodyModule key={item.id}>
-                <TableBodyAtom isFirst>{index + 1}</TableBodyAtom>
+                <TableBodyAtom isFirst>
+                  {(currentPage - 1) * 10 + index + 1}
+                </TableBodyAtom>
                 <TableBodyAtom>
                   {noticeTypeConverter[item.announcementType]}
                 </TableBodyAtom>

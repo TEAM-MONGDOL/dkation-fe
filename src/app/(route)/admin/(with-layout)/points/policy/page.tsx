@@ -94,7 +94,9 @@ const AdminPointsPolicyPage = () => {
           ) : (
             data.pointPolicyList.map((item, idx) => (
               <TableBodyModule key={item.id}>
-                <TableBodyAtom isFirst>{idx + 1}</TableBodyAtom>
+                <TableBodyAtom isFirst>
+                  {(page - 1) * 10 + idx + 1}
+                </TableBodyAtom>
                 <TableBodyAtom>
                   <div className="line-clamp-2 w-full text-start">
                     {item.policyTitle}
