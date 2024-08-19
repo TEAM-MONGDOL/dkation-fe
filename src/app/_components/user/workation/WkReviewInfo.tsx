@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { StarRateEmptyIcon, StarRateIcon } from '@/_assets/icons';
-import UserFilteringSectionContainer from '@/_components/user/common/containers/UserFilteringSectionContainer';
 import { ReviewInfo } from '@/_constants/common';
 import dayjs from 'dayjs';
 
@@ -31,16 +30,20 @@ const WkReviewInfo = ({
           <div className="my-5 flex items-center">
             <p className="mr-4 text-h3 font-semibold">{reviewer}</p>
             <p className="text-4 text-sub-200">
-              {department} + {title}
+              {department} · {title}
             </p>
             <div className="ml-auto flex flex-col justify-center">
               <div className="mb-1 flex">
                 {[...Array(rating)].map((_, index) => (
-                  <Image key={rating} src={StarRateIcon} alt="StarRateIcon" />
+                  <Image
+                    key={`star-filled-${index}`}
+                    src={StarRateIcon}
+                    alt="StarRateIcon"
+                  />
                 ))}
                 {[...Array(5 - rating)].map((_, index) => (
                   <Image
-                    key={rating}
+                    key={`star-filled-${index}`}
                     src={StarRateEmptyIcon}
                     alt="StarRateEmptyIcon"
                   />

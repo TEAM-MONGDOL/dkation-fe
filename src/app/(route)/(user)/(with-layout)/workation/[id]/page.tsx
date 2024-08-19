@@ -213,7 +213,6 @@ const UserWkDetailPage = ({ params }: UserWkDetailProps) => {
               }}
             />
           )}
-
           {reviewData.reviewInfosForWkt.map((review) => (
             <WkReviewInfo
               key={review.wktTitle}

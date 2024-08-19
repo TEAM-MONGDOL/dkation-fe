@@ -56,7 +56,7 @@ const handler = NextAuth({
           accountId: extendedUser.id,
           isAdmin: extendedUser.isAdmin,
           accessToken: extendedUser.accessToken,
-          expiredAt: dayjs().add(10, 'minute').valueOf(), // 밀리초 단위로 수정
+          expiredAt: dayjs().add(30, 'minute').valueOf(), // 밀리초 단위로 수정
         };
 
         return token;
@@ -73,11 +73,12 @@ const handler = NextAuth({
         const { accessToken } = res.data.data;
         if (!accessToken) {
           signOut();
+          throw new Error('로그인 정보가 만료되었습니다. 다시 로그인해주세요.');
         }
         console.log('new access token:', accessToken);
 
         token.accessToken = accessToken;
-        token.expiredAt = dayjs().add(10, 'minute').valueOf();
+        token.expiredAt = dayjs().add(30, 'minute').valueOf();
 
         return token;
       }
@@ -101,7 +102,7 @@ const handler = NextAuth({
   },
   session: {
     strategy: 'jwt',
-    maxAge: 60 * 10, // 10 minutes
+    maxAge: 60 * 30, // 30 minutes
   },
   secret: process.env.NEXTAUTH_SECRET,
 });
