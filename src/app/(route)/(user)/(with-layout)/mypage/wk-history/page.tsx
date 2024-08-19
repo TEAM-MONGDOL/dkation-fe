@@ -268,7 +268,7 @@ const UserWkHistoryPage = () => {
                   endDate={wkt.endDate}
                   bettingPoint={wkt.bettingPoint}
                   applyStatusType={wkt.applyStatusType}
-                  waitingNumber={wkt.waitNumber}
+                  waitingNumber={wkt.waitNumber || undefined}
                   onClick={() =>
                     handleCardClick(wkt.applyStatusType, wkt.wktId)
                   }

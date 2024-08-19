@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { StarRateIcon } from '@/_assets/icons';
+import { StarRateEmptyIcon, StarRateIcon } from '@/_assets/icons';
 import UserFilteringSectionContainer from '@/_components/user/common/containers/UserFilteringSectionContainer';
 import { ReviewInfo } from '@/_constants/common';
 import dayjs from 'dayjs';
@@ -35,11 +35,16 @@ const WkReviewInfo = ({
             </p>
             <div className="ml-auto flex flex-col justify-center">
               <div className="mb-1 flex">
-                <Image src={StarRateIcon} alt="StarRateIcon" />
-                <Image src={StarRateIcon} alt="StarRateIcon" />
-                <Image src={StarRateIcon} alt="StarRateIcon" />
-                <Image src={StarRateIcon} alt="StarRateIcon" />
-                <Image src={StarRateIcon} alt="StarRateIcon" />
+                {[...Array(rating)].map((_, index) => (
+                  <Image key={rating} src={StarRateIcon} alt="StarRateIcon" />
+                ))}
+                {[...Array(5 - rating)].map((_, index) => (
+                  <Image
+                    key={rating}
+                    src={StarRateEmptyIcon}
+                    alt="StarRateEmptyIcon"
+                  />
+                ))}
               </div>
               <p>
                 {rating}점({ReviewInfo[rating as keyof typeof ReviewInfo]})

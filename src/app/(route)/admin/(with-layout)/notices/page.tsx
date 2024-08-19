@@ -74,6 +74,8 @@ const NoticesListPage = () => {
     },
   });
 
+  const isNoticeTypeSelected = param.noticeType.length > 0;
+
   return (
     <section className="w-full">
       <div className="mb-12 flex items-center justify-between">
@@ -119,6 +121,7 @@ const NoticesListPage = () => {
           endDatePlaceholder="마감일 선택"
         />
       </FilteringBarContainer>
+
       <TableContainer minWidth="1000px">
         <TableHeaderModule>
           <TableHeaderAtom isFirst width="80px">
@@ -131,7 +134,9 @@ const NoticesListPage = () => {
         </TableHeaderModule>
 
         <tbody>
-          {!data ? (
+          {!isNoticeTypeSelected ? (
+            <EmptyContainer colSpan={5} />
+          ) : !data ? (
             isLoading ? (
               <EmptyContainer colSpan={5} text="loading" />
             ) : (
@@ -162,8 +167,9 @@ const NoticesListPage = () => {
           )}
         </tbody>
       </TableContainer>
+
       <div className="relative mt-8">
-        {data && data.pageInfo.totalElements > 0 && (
+        {isNoticeTypeSelected && data && data.pageInfo.totalElements > 0 && (
           <div className="flex justify-center">
             <PaginationModule
               currentPage={currentPage}
