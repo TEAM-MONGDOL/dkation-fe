@@ -5,7 +5,6 @@ import UserTabBarModule from '@/_components/user/common/modules/UserTabBarModule
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import Image from 'next/image';
 import UserTextLabelAtom from '@/_components/user/common/atoms/UserTextLabelAtom';
-import UserStateFilteringContainer from '@/_components/user/common/containers/UserStateFilteringContainer';
 import UserPlaceFilteringContainer from '@/_components/user/common/containers/UserPlaceFilteringContainer';
 import UserFilteringSectionContainer from '@/_components/user/common/containers/UserFilteringSectionContainer';
 import dayjs from 'dayjs';
@@ -17,6 +16,7 @@ import UserDatePickerContainer from '@/_components/user/common/containers/UserDa
 import { useRouter } from 'next/navigation';
 import UserLoading from '@/_components/user/userLoading';
 import NetworkError from '@/_components/common/networkError';
+import UserWktStateFilteringContainer from '@/_components/user/common/containers/UserWktStateFilteringContainer';
 
 const Workation = () => {
   const router = useRouter();
@@ -42,7 +42,11 @@ const Workation = () => {
     startDate: null,
     endDate: null,
   });
-  const [selectedState, setSelectedState] = useState<string>('ONGOING');
+  const [selectedState, setSelectedState] = useState<string[]>([
+    'PLANNED',
+    'ONGOING',
+    'CLOSED',
+  ]);
   const [selectedSpace, setSelectedSpace] = useState<string[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<string>('createdAt,DESC');
   const [selectedTag, setSelectedTag] = useState<DatePickerTagType>('ALL');
@@ -82,7 +86,7 @@ const Workation = () => {
   const updateParam = useCallback(() => {
     setParam((prev) => ({
       ...prev,
-      status: [selectedState],
+      status: [...selectedState],
       places: placeOptions
         .filter((place) => selectedSpace.includes(place.place))
         .map((place) => place.id.toString()),
@@ -124,12 +128,13 @@ const Workation = () => {
     setSelectedTag('ALL');
     setStartDate(null);
     setEndDate(null);
-    setSelectedState('ONGOING');
+    setSelectedState(['ONGOING', 'PLANNED', 'CLOSED']);
   };
 
   const { data, isLoading, isError } = useGetWkListQuery({
-    status: param.status.join(','),
-    wktPlaceIdList: param.places.join(','),
+    status: param.status.length > 0 ? param.status.join(',') : undefined,
+    wktPlaceIdList:
+      param.places.length > 0 ? param.places.join(',') : undefined,
     wktStartDate: param.startDate || null,
     wktEndDate: param.endDate || null,
     pageParam: {
@@ -183,7 +188,7 @@ const Workation = () => {
   }
 
   return (
-    <div className="">
+    <div>
       <UserHeaderContainers
         title="워케이션"
         content="워케이션(Workation)을 통해 업무의 효율과 재충전의 기회를 놓치지 마세요!"
@@ -210,10 +215,9 @@ const Workation = () => {
                   endDate={endDate}
                   setEndDate={setEndDate}
                 />
-                <UserStateFilteringContainer
-                  type="WKT"
-                  selectedOption={selectedState}
-                  onClickOption={setSelectedState}
+                <UserWktStateFilteringContainer
+                  selectedOptions={selectedState}
+                  onClickOptions={setSelectedState}
                 />
                 <UserPlaceFilteringContainer
                   places={placeOptions.map((place) => place.place)}
@@ -243,11 +247,13 @@ const Workation = () => {
         />
       </div>
       <div className="mt-10 px-40">
-        {!data ? (
+        {param.status.length === 0 || param.places.length === 0 ? (
+          <EmptyContainer notTable />
+        ) : !data ? (
           isLoading ? (
             <EmptyContainer text="loading" notTable />
           ) : (
-            <EmptyContainer text="no data" notTable />
+            <EmptyContainer notTable />
           )
         ) : data.pageInfo.totalElements <= 0 ? (
           <EmptyContainer notTable />
