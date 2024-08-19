@@ -126,7 +126,7 @@ const UserWkApplyPage = ({ params }: Props) => {
             <p className="mb-5 text-h3 text-[#E5CD07]">±{pointData?.error}%</p>
           </div>
         </div>
-        <div className="mt-40 flex flex-col gap-12 xl:mt-20 xl:flex-row">
+        <div className="mt-48 flex flex-col gap-12 xl:mt-20 xl:flex-row">
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-12">
               <p className="w-[120px] shrink-0 text-1">내 포인트</p>
