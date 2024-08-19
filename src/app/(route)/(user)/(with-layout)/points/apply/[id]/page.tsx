@@ -76,10 +76,12 @@ const PointsApplyDetailPage = ({ params }: PointsApplyDetailPageProps) => {
             leftTitle="신청일"
             leftContent={dateConverter(data.createdAt)}
           />
-          <UserArticleRowAtom
-            leftTitle="심사일"
-            leftContent={dateConverter(data.reviewTime || '-')}
-          />
+          {data.applyType !== 'PENDING' && (
+            <UserArticleRowAtom
+              leftTitle="심사일"
+              leftContent={dateConverter(data.reviewTime || '-')}
+            />
+          )}
           <div className="flex w-full flex-col py-5">
             {data.fileInfo && (
               <FileModule
