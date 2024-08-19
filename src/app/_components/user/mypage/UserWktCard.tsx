@@ -94,10 +94,15 @@ const WorkationCard = ({
   };
 
   const handleBettingPointChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (Number(e.target.value) <= (memberData?.pointQuantity || 0)) {
+    if (
+      Number(e.target.value) <=
+      (memberData?.pointQuantity || 0) + currentBettingPoint
+    ) {
       setNewBettingPoint(e.target.value);
     } else {
-      alert(`${memberData?.pointQuantity}포인트 이하로 입력하세요.`);
+      alert(
+        `${(memberData?.pointQuantity || 0) + currentBettingPoint}포인트 이하로 입력하세요.`,
+      );
     }
   };
 
@@ -221,11 +226,10 @@ const WorkationCard = ({
                 <p className="w-[120px] text-end text-2">내 포인트</p>
                 <input
                   type="number"
-                  value={memberData?.pointQuantity}
+                  value={(memberData?.pointQuantity || 0) + currentBettingPoint}
                   readOnly
                   onChange={handleBettingPointChange}
                   className="h-12 w-52 rounded border border-sub-100/50 px-3 text-end focus:outline-none"
-                  placeholder="새로운 포인트 입력"
                   min="0"
                 />
               </div>
