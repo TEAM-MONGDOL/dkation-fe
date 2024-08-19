@@ -5,7 +5,6 @@ import UserTabBarModule from '@/_components/user/common/modules/UserTabBarModule
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import Image from 'next/image';
 import UserTextLabelAtom from '@/_components/user/common/atoms/UserTextLabelAtom';
-import UserStateFilteringContainer from '@/_components/user/common/containers/UserStateFilteringContainer';
 import UserPlaceFilteringContainer from '@/_components/user/common/containers/UserPlaceFilteringContainer';
 import UserFilteringSectionContainer from '@/_components/user/common/containers/UserFilteringSectionContainer';
 import dayjs from 'dayjs';
@@ -17,6 +16,7 @@ import UserDatePickerContainer from '@/_components/user/common/containers/UserDa
 import { useRouter } from 'next/navigation';
 import UserLoading from '@/_components/user/userLoading';
 import NetworkError from '@/_components/common/networkError';
+import UserWktStateFilteringContainer from '@/_components/user/common/containers/UserWktStateFilteringContainer';
 
 const Workation = () => {
   const router = useRouter();
@@ -42,7 +42,11 @@ const Workation = () => {
     startDate: null,
     endDate: null,
   });
-  const [selectedState, setSelectedState] = useState<string>('ONGOING');
+  const [selectedState, setSelectedState] = useState<string[]>([
+    'PLANNED',
+    'ONGOING',
+    'CLOSED',
+  ]);
   const [selectedSpace, setSelectedSpace] = useState<string[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<string>('createdAt,DESC');
   const [selectedTag, setSelectedTag] = useState<DatePickerTagType>('ALL');
@@ -79,10 +83,14 @@ const Workation = () => {
     }
   }, [placeOptions]);
 
+  useEffect(() => {
+    console.log(selectedState);
+  }, [selectedState]);
+
   const updateParam = useCallback(() => {
     setParam((prev) => ({
       ...prev,
-      status: [selectedState],
+      status: [...selectedState],
       places: placeOptions
         .filter((place) => selectedSpace.includes(place.place))
         .map((place) => place.id.toString()),
@@ -124,7 +132,7 @@ const Workation = () => {
     setSelectedTag('ALL');
     setStartDate(null);
     setEndDate(null);
-    setSelectedState('ONGOING');
+    setSelectedState(['ONGOING', 'PLANNED', 'CLOSED']);
   };
 
   const { data, isLoading, isError } = useGetWkListQuery({
@@ -210,10 +218,9 @@ const Workation = () => {
                   endDate={endDate}
                   setEndDate={setEndDate}
                 />
-                <UserStateFilteringContainer
-                  type="WKT"
-                  selectedOption={selectedState}
-                  onClickOption={setSelectedState}
+                <UserWktStateFilteringContainer
+                  selectedOptions={selectedState}
+                  onClickOptions={setSelectedState}
                 />
                 <UserPlaceFilteringContainer
                   places={placeOptions.map((place) => place.place)}
