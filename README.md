@@ -5,10 +5,13 @@
   <img src="src/app/_assets/images/logo.png" alt="dkation_logo" />
 </div>
 
+<br />
+
 ## ✍🏻 프로젝트 개요
 
 워케이션은 Work와 Vacation의 합성어로, 회사 직원들이 업무와 휴식을 동시에 즐길 수 있도록 돕는 복지 제도입니다. 이 서비스는 직원들에게 주어진 포인트를 활용하여 워케이션 참여 기회를 베팅하고, 랜덤 추첨을 통해 당첨자를 선정하는 시스템입니다.
 
+<br />
 
 ## 🧑🏻‍💻 배포 정보
 
@@ -20,6 +23,7 @@
 | Test ID |                                  dkadmin123                                   |                                 eunzzzzzz1                                  |
 | Test PW |                                     12345                                     |                                    12345                                    |
 
+<br />
 
 ## ⚙️ 기술 스택
 
@@ -39,6 +43,7 @@
                   <img src="https://img.shields.io/badge/Next.js-000000?style=flat&logo=Next.js&logoColor=white"/>
                   <img src="https://img.shields.io/badge/typescript-1572B6?style=flat&logo=typescript&logoColor=000000"/>
                   <img src="https://img.shields.io/badge/tailwindcss-1252B6?style=flat&logo=tailwindcss&logoColor=white"/>
+                  <img src="https://img.shields.io/badge/axios-5A29E4?style=flat&logo=axios&logoColor="/>
                   <img src="https://img.shields.io/badge/react--query-FF4154?style=flat&logo=react-query&logoColor=000000"/>
                   <img src="https://img.shields.io/badge/zod-F8F8FF?style=flat&logo=zod&logoColor=3E67B1"/>
                   <img src="https://img.shields.io/badge/NextAuth-483d8b?style=flat&logo=NextAuth&logoColor=000000"/>
