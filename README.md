@@ -114,15 +114,6 @@ $ git clone https://github.com/TEAM-MONGDOL/dkation-fe.git
 $ cd dkation-fe
 ```
 
-### 2. .env.local 추가
-```bash
-NEXT_PUBLIC_SERVER_URL=http://210.109.53.168:8080
-NEXTAUTH_SECRET=kUp1byNb0kKEXOiTgT7Sw0DlT0toOykEt1u/vgwxAWg=
-NEXTAUTH_URL=http://localhost:3000
-NEXT_PUBLIC_KAKAO_API_KEY=ce3f0cff684353522017918a797cdbf3
-SENTRY_AUTH_TOKEN=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
-```
-
 ### 2. 실행
 
 ```bash
